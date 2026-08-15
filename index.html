@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BRKLIVE19 - Cricket Scoreboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800;14..32,900&display=swap" rel="stylesheet" />
+    
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- ===== TOAST ===== -->
+    <div id="toast" class="toast"></div>
+
+    <!-- ===== LOGIN MODAL ===== -->
+    <div class="modal-overlay" id="loginModal">
+        <div class="modal-content">
+            <h2>LOGIN PAGE</h2>
+            <div class="form-group">
+                <label>USERNAME</label>
+                <input type="text" id="loginUsername" placeholder="Enter username" />
+            </div>
+            <div class="form-group">
+                <label>PASSWORD</label>
+                <input type="password" id="loginPassword" placeholder="Enter password" />
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-primary" id="loginSubmitBtn">LOGIN</button>
+                <button class="btn btn-secondary" id="loginCancelBtn">CANCEL</button>
+            </div>
+            <div class="register-link">
+                Don't have an account? <a id="showRegisterLink">Register Here</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== REGISTER MODAL ===== -->
+    <div class="modal-overlay" id="registerModal">
+        <div class="modal-content">
+            <h2>📝 REGISTER</h2>
+            <div class="form-group">
+                <label>Full Name</label>
+                <input type="text" id="registerFullName" placeholder="Enter your full name" />
+            </div>
+            <div class="form-group">
+                <label>Username</label>
+                <input type="text" id="registerUsername" placeholder="Choose a username" />
+            </div>
+            <div class="form-group">
+                <label>Email</label>
+                <input type="email" id="registerEmail" placeholder="Enter your email" />
+            </div>
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" id="registerPassword" placeholder="Create a password" />
+            </div>
+            <div class="form-group">
+                <label>Confirm Password</label>
+                <input type="password" id="registerConfirmPassword" placeholder="Confirm your password" />
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-primary" id="registerSubmitBtn">REGISTER</button>
+                <button class="btn btn-secondary" id="registerCancelBtn">CANCEL</button>
+            </div>
+            <div class="register-link">
+                Already have an account? <a id="showLoginLink">Login Here</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== START MATCH POPUP ===== -->
+    <div class="modal-overlay" id="startMatchModal">
+        <div class="modal-content">
+            <h2>🏏 Start Match</h2>
+            <p style="text-align:center;color:var(--text-secondary);margin-bottom:16px;">Select striker, non‑striker and bowler for the first innings.</p>
+            <div class="form-group">
+                <label>Striker</label>
+                <input type="text" id="startStriker" placeholder="Striker name" />
+                <div style="margin-top:4px;font-size:12px;color:var(--text-muted);">Suggestions from XI:</div>
+                <div class="player-list-select" id="startStrikerSuggestions"></div>
+            </div>
+            <div class="form-group">
+                <label>Non‑Striker</label>
+                <input type="text" id="startNonStriker" placeholder="Non‑Striker name" />
+                <div class="player-list-select" id="startNonStrikerSuggestions"></div>
+            </div>
+            <div class="form-group">
+                <label>Bowler</label>
+                <input type="text" id="startBowler" placeholder="Bowler name" />
+                <div class="player-list-select" id="startBowlerSuggestions"></div>
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-primary" id="startMatchConfirmBtn">Start Match</button>
+                <button class="btn btn-secondary" id="startMatchCancelBtn">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== WICKET POPUP ===== -->
+    <div class="modal-overlay" id="wicketModal">
+        <div class="modal-content">
+            <h2>🪓 Wicket! New Batsman</h2>
+            <p style="text-align:center;color:var(--text-secondary);margin-bottom:16px;">Select the new batsman to come in.</p>
+            <div class="form-group">
+                <label>New Batsman</label>
+                <input type="text" id="newBatsmanInput" placeholder="Enter batsman name" />
+                <div style="margin-top:4px;font-size:12px;color:var(--text-muted);">Select from XI:</div>
+                <div class="player-list-select" id="newBatsmanSuggestions"></div>
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-primary" id="wicketConfirmBtn">Confirm</button>
+                <button class="btn btn-secondary" id="wicketCancelBtn">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== OVER COMPLETE POPUP ===== -->
+    <div class="modal-overlay" id="overCompleteModal">
+        <div class="modal-content" style="text-align:center;">
+            <h2>🔚 Over Complete!</h2>
+            <p style="color:var(--text-secondary);margin:16px 0;">Strike has been automatically swapped.</p>
+            <div class="modal-actions" style="justify-content:center;">
+                <button class="btn btn-primary" id="overCompleteOkBtn">OK</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== INNINGS COMPLETE POPUP ===== -->
+    <div class="modal-overlay" id="inningsCompleteModal">
+        <div class="modal-content" style="text-align:center;">
+            <h2>🏏 Innings Complete!</h2>
+            <p style="color:var(--text-secondary);margin:16px 0;">The innings has ended. Start the next innings?</p>
+            <div class="modal-actions" style="justify-content:center;">
+                <button class="btn btn-primary" id="startSecondInningsBtn">Start Next Innings</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== BOWLER CHANGE MODAL ===== -->
+    <div class="modal-overlay" id="bowlerChangeModal">
+        <div class="modal-content">
+            <h2>🔄 Change Bowler</h2>
+            <p style="text-align:center;color:var(--text-secondary);margin-bottom:16px;">Select the new bowler for the next over.</p>
+            <div class="form-group">
+                <label>New Bowler</label>
+                <input type="text" id="newBowlerInput" placeholder="Enter bowler name" />
+                <div style="margin-top:4px;font-size:12px;color:var(--text-muted);">Suggestions from bowling team:</div>
+                <div class="player-list-select" id="newBowlerSuggestions"></div>
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-primary" id="bowlerConfirmBtn">Confirm</button>
+                <button class="btn btn-secondary" id="bowlerCancelBtn">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== 2ND INNINGS SETUP MODAL ===== -->
+    <div class="modal-overlay" id="secondInningsModal">
+        <div class="modal-content">
+            <h2>🏏 Start 2nd Innings</h2>
+            <p style="text-align:center;color:var(--text-secondary);margin-bottom:16px;">Select striker, non‑striker and bowler for the second innings.</p>
+            <div class="form-group">
+                <label>Striker</label>
+                <input type="text" id="secondStriker" placeholder="Striker name" />
+                <div style="margin-top:4px;font-size:12px;color:var(--text-muted);">Suggestions from XI:</div>
+                <div class="player-list-select" id="secondStrikerSuggestions"></div>
+            </div>
+            <div class="form-group">
+                <label>Non‑Striker</label>
+                <input type="text" id="secondNonStriker" placeholder="Non‑Striker name" />
+                <div class="player-list-select" id="secondNonStrikerSuggestions"></div>
+            </div>
+            <div class="form-group">
+                <label>Bowler</label>
+                <input type="text" id="secondBowler" placeholder="Bowler name" />
+                <div class="player-list-select" id="secondBowlerSuggestions"></div>
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-primary" id="secondInningsConfirmBtn">Start 2nd Innings</button>
+                <button class="btn btn-secondary" id="secondInningsCancelBtn">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== MATCH COMPLETE MODAL ===== -->
+    <div class="modal-overlay" id="matchCompleteModal">
+        <div class="modal-content" style="text-align:center;">
+            <h2 id="matchCompleteTitle">🏆 Match Complete!</h2>
+            <p style="color:var(--text-secondary);margin:16px 0;font-size:20px;" id="matchCompleteMessage">Winner: Team</p>
+            <div class="modal-actions" style="justify-content:center;">
+                <button class="btn btn-primary" id="matchCompleteOkBtn">OK</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== APP WRAP ===== -->
+    <div class="app-wrap">
+
+        <!-- ===== TOPBAR ===== -->
+        <header class="topbar">
+            <div class="logo-area">
+                <div class="logo-icon">BRK<span>LIVE19</span></div>
+                <span class="logo-badge">LITE</span>
+            </div>
+            <nav class="topbar-nav" id="mainNav">
+                <a href="#" data-page="home" class="active">Home</a>
+                <a href="#" data-page="tournament">Tournament</a>
+                <a href="#" data-page="about">About</a>
+                <a href="#" data-page="contact">Contact</a>
+            </nav>
+            <div class="topbar-right">
+                <span class="storage-indicator">📦 Storage: <strong id="storageCount">554</strong>/10000 kb</span>
+                <button class="btn-login" id="loginBtn">Log in</button>
+            </div>
+        </header>
+
+        <!-- ===== HOME PAGE ===== -->
+        <section class="page active" id="page-home">
+            <div class="home-hero">
+                <h1>Welcome To BRKLIVE19</h1>
+                <div class="sub">The Ultimate Cricket Scoreboard For Live Telecasts</div>
+                <div class="lite-tag">⭐ Lite Version</div>
+            </div>
+            <div class="home-features">
+                <div class="feature-card"><div class="icon">🏏</div><h4>Live Scoring</h4><p>Real-time cricket scoreboard with ball-by-ball tracking</p></div>
+                <div class="feature-card"><div class="icon">🏆</div><h4>Tournament Management</h4><p>Create and manage multiple matches with full scoring</p></div>
+                <div class="feature-card"><div class="icon">📺</div><h4>Broadcast Ready</h4><p>Optimized for OBS, vMix, PRISM, and Camera Fi</p></div>
+                <div class="feature-card"><div class="icon">📊</div><h4>Player Stats</h4><p>Track runs, wickets, and individual player performance</p></div>
+            </div>
+            <div class="compat-badges">
+                <span class="badge-text"><span class="icon">🎥</span> vMix</span>
+                <span class="badge-text"><span class="icon">🖥️</span> OBS</span>
+                <span class="badge-text"><span class="icon">📺</span> PRISM</span>
+                <span class="badge-text"><span class="icon">📷</span> Camera Fi</span>
+                <span class="badge-text"><span class="icon">🔗</span> Browser Source</span>
+            </div>
+            <div class="flex-center mt-20">
+                <button class="btn btn-primary" data-nav="tournament">🏆 Go to Tournament</button>
+                <button class="btn btn-secondary" data-nav="about">ℹ️ About</button>
+            </div>
+        </section>
+
+        <!-- ===== TOURNAMENT PAGE ===== -->
+        <section class="page" id="page-tournament">
+            <div class="tournament-header">
+                <h2>🏆 Tournament</h2>
+                <div class="links">
+                    <a href="#" id="scoreboardLinksLink">📋 Scoreboard Links</a>
+                    <a href="#" id="howToUseLink">❓ How To Use?</a>
+                    <a href="#" id="otherSportsLink">⚽ Other Sports</a>
+                </div>
+            </div>
+            <div class="tournament-body" id="tournamentBody">
+
+                <!-- ===== CREATE TOURNAMENT SECTION ===== -->
+                <div class="create-tournament-section">
+                    <h4>📋 CREATE TOURNAMENT</h4>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Tournament Name</label>
+                            <input type="text" id="tournamentName" placeholder="e.g. World Cup 2026" />
+                        </div>
+                        <div class="form-group">
+                            <label>Venue</label>
+                            <input type="text" id="tournamentVenue" placeholder="e.g. Melbourne Cricket Ground" />
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Tournament Type</label>
+                            <select id="tournamentType">
+                                <option value="t20">T20</option>
+                                <option value="odi">ODI</option>
+                                <option value="test">Test</option>
+                                <option value="thehundred">The Hundred</option>
+                                <option value="league">League</option>
+                                <option value="knockout">Knockout</option>
+                            </select>
+                        </div>
+                        <div class="form-group" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+                            <div>
+                                <label>Start Date</label>
+                                <input type="date" id="tournamentStartDate" />
+                            </div>
+                            <div>
+                                <label>End Date</label>
+                                <input type="date" id="tournamentEndDate" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <button class="btn btn-primary" id="createTournamentBtn">🏏 Create Tournament</button>
+                    </div>
+                </div>
+
+                <!-- ===== TOURNAMENT LIST ===== -->
+                <div class="tournament-list-container" id="tournamentListContainer">
+                    <h4>📌 Tournaments</h4>
+                    <div class="tournament-grid" id="tournamentGrid">
+                        <div class="empty-state" style="grid-column:1/-1;padding:20px 0;">
+                            <div class="icon" style="font-size:32px;">🏏</div>
+                            <p style="font-size:14px;">No tournaments created yet</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ===== MATCH SETUP FORM ===== -->
+                <div class="match-setup-form" id="matchSetupForm">
+                    <h4>⚙️ MATCH SETUP</h4>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Tournament</label>
+                            <select id="matchTournamentSelect">
+                                <option value="">— Select Tournament —</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Match No.</label>
+                            <input type="number" id="matchNo" value="1" min="1" />
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group"><label>Team A Name</label><input type="text" id="teamAName" value="India" placeholder="e.g. India" /></div>
+                        <div class="form-group"><label>Team B Name</label><input type="text" id="teamBName" value="Australia" placeholder="e.g. Australia" /></div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group"><label>Match Type</label>
+                            <select id="matchType">
+                                <option value="t20">T20</option>
+                                <option value="odi">ODI</option>
+                                <option value="test">Test</option>
+                                <option value="thehundred">The Hundred</option>
+                                <option value="local">Local</option>
+                                <option value="domestic">Domestic</option>
+                                <option value="international">International</option>
+                                <option value="friendly">Friendly</option>
+                                <option value="tournament">Tournament</option>
+                            </select>
+                        </div>
+                        <div class="form-group"><label>Overs per Innings</label><input type="number" id="maxOvers" value="20" min="1" max="50" /></div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group"><label>Toss Winner</label>
+                            <select id="tossWinner">
+                                <option value="teamA">Team A</option>
+                                <option value="teamB">Team B</option>
+                                <option value="none">—</option>
+                            </select>
+                        </div>
+                        <div class="form-group"><label>Batting First</label>
+                            <select id="battingFirst">
+                                <option value="teamA">Team A</option>
+                                <option value="teamB">Team B</option>
+                            </select>
+                        </div>
+                    </div>
+                    <!-- Player XI section -->
+                    <div class="xi-section">
+                        <h3 style="font-size:16px;font-weight:700;margin-bottom:12px;color:var(--text-secondary);">👥 Player XI</h3>
+                        <div class="xi-grid">
+                            <div class="xi-group">
+                                <h4 id="xiTeamALabel">Team A XI</h4>
+                                <div class="xi-input-row">
+                                    <input type="text" id="xiTeamAInput" placeholder="Player name" />
+                                    <button id="addXiTeamA">Add</button>
+                                </div>
+                                <div class="xi-list" id="xiTeamAList"></div>
+                                <div class="xi-bulk">
+                                    <textarea id="xiTeamABulk" placeholder="Bulk add (comma separated)"></textarea>
+                                    <button id="bulkXiTeamA">Add Bulk</button>
+                                </div>
+                            </div>
+                            <div class="xi-group">
+                                <h4 id="xiTeamBLabel">Team B XI</h4>
+                                <div class="xi-input-row">
+                                    <input type="text" id="xiTeamBInput" placeholder="Player name" />
+                                    <button id="addXiTeamB">Add</button>
+                                </div>
+                                <div class="xi-list" id="xiTeamBList"></div>
+                                <div class="xi-bulk">
+                                    <textarea id="xiTeamBBulk" placeholder="Bulk add (comma separated)"></textarea>
+                                    <button id="bulkXiTeamB">Add Bulk</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-actions" style="margin-top:16px;">
+                        <button class="btn btn-primary" id="createTournamentMatchBtn">🏏 Create Match</button>
+                        <button class="btn btn-secondary" id="resetMatchSetupBtn">🔄 Reset</button>
+                    </div>
+                    <div style="margin-top:12px;font-size:12px;color:var(--text-muted);">Note: Your data will be available on this device only</div>
+                </div>
+
+                <!-- ===== MATCH LIST ===== -->
+                <div id="matchListContainer">
+                    <div class="empty-state" id="emptyMatchState">
+                        <div class="icon">🏏</div>
+                        <p>No Matches Created</p>
+                        <span class="text-muted" style="font-size:13px;">Use the form above to create a new match.</span>
+                    </div>
+                </div>
+
+                <!-- ===== MATCH DETAIL VIEW ===== -->
+                <div id="matchDetailView" class="match-detail-view hidden">
+                    <button class="btn btn-sm btn-secondary" id="backToMatchListBtn" style="margin-bottom:16px;">← Back to Matches</button>
+
+                    <!-- Tabs -->
+                    <div class="match-tabs">
+                        <button class="btn active" data-tab="live" id="tabLiveBtn">🏏 Live Score</button>
+                        <button class="btn" data-tab="scorecard" id="tabScorecardBtn">📊 Scorecard</button>
+                        <button class="btn" data-tab="stream" id="tabStreamBtn">📺 Stream View</button>
+                        <button class="btn" data-tab="summary" id="tabSummaryBtn">📋 Match Summary</button>
+                    </div>
+
+                    <!-- Live Score Tab -->
+                    <div class="tab-content active" id="tabLive">
+                        <div class="live-scoreboard" id="tourLiveScoreboard">
+                            <div class="match-header">
+                                <div class="target-top" id="tourTargetTop"></div>
+                                <span class="team-name" id="tourBattingTeamName">Team A</span>
+                                <span class="match-type" id="tourMatchTypeDisplay">T20</span>
+                            </div>
+                            <div class="batsmen-grid">
+                                <div class="batsman-card">
+                                    <span class="name" id="tourBatsman1Name">Batsman 1</span>
+                                    <div class="stats"><span class="runs" id="tourBatsman1Runs">0</span><span class="balls" id="tourBatsman1Balls">(0)</span></div>
+                                </div>
+                                <div class="batsman-card">
+                                    <span class="name" id="tourBatsman2Name">Batsman 2</span>
+                                    <div class="stats"><span class="runs" id="tourBatsman2Runs">0</span><span class="balls" id="tourBatsman2Balls">(0)</span></div>
+                                </div>
+                            </div>
+                            <div class="total-score">
+                                <span class="score" id="tourTotalScore">0 <small>/ 0</small></span>
+                                <span class="overs" id="tourTotalOvers">0.0 ov</span>
+                                <div class="target-display" id="tourTargetDisplay"></div>
+                            </div>
+                            <div class="bowler-info">
+                                <span>Bowler: <span class="bowler-name" id="tourBowlerName">—</span></span>
+                                <span id="tourBowlerFigures">0-0 (0.0)</span>
+                            </div>
+                            <div class="over-tracker-mini" id="tourOverTrackerMini"></div>
+                        </div>
+
+                        <div class="live-controller">
+                            <div class="ctrl-row">
+                                <button class="ctrl-btn" id="tourCtrlSwapBatter">🔄 Swap Batter</button>
+                                <button class="ctrl-btn" id="tourCtrlRetireBatter">🚶 Retire Batter</button>
+                                <button class="ctrl-btn" id="tourCtrlChangeBowler">🔄 Change Bowler</button>
+                                <button class="ctrl-btn primary" id="tourCtrlDefault">Default</button>
+                                <button class="ctrl-btn" id="tourCtrlMiniScore">Mini-Score</button>
+                                <button class="ctrl-btn" id="tourCtrlTourName">Tour Name</button>
+                            </div>
+                            <div class="ctrl-row">
+                                <button class="ctrl-btn" id="tourCtrlB1">B1</button>
+                                <button class="ctrl-btn" id="tourCtrlB2">B2</button>
+                                <button class="ctrl-btn" id="tourCtrlBowler">Bowler</button>
+                                <button class="ctrl-btn" id="tourCtrlBatting">Batting</button>
+                                <button class="ctrl-btn" id="tourCtrlBowling">Bowling</button>
+                                <button class="ctrl-btn" id="tourCtrlPP">PP+</button>
+                                <button class="ctrl-btn danger" id="tourCtrlEndInning">END Inning</button>
+                                <button class="ctrl-btn" id="tourCtrlUndo">UNDO</button>
+                            </div>
+                            <div class="ctrl-row">
+                                <button class="ctrl-btn run-btn" data-tour-runs="0">0</button>
+                                <button class="ctrl-btn run-btn" data-tour-runs="1">1</button>
+                                <button class="ctrl-btn run-btn" data-tour-runs="2">2</button>
+                                <button class="ctrl-btn run-btn" data-tour-runs="3">3</button>
+                                <button class="ctrl-btn four-btn" data-tour-runs="4">4</button>
+                                <button class="ctrl-btn six-btn" data-tour-runs="6">6</button>
+                            </div>
+                            <div class="ctrl-row">
+                                <button class="ctrl-btn wide" data-tour-extra="wide">Wide</button>
+                                <button class="ctrl-btn noball" data-tour-extra="noball">No Ball</button>
+                                <button class="ctrl-btn bye" data-tour-extra="bye">Byes</button>
+                                <button class="ctrl-btn legbye" data-tour-extra="legbye">Leg Byes</button>
+                                <button class="ctrl-btn wicket" id="tourWicketBtn">Wicket 🏀</button>
+                            </div>
+                            <div class="ctrl-row">
+                                <button class="ctrl-btn success" id="tourEndOverBtn">🔚 End Over</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Scorecard Tab -->
+                    <div class="tab-content" id="tabScorecard">
+                        <div class="scorecard-container">
+                            <div class="scorecard-section">
+                                <h4>🏏 Batting</h4>
+                                <table id="battingTable">
+                                    <thead><tr><th>Batsman</th><th>R</th><th>B</th><th>4s</th><th>6s</th><th>SR</th></tr></thead>
+                                    <tbody id="battingBody"></tbody>
+                                </table>
+                            </div>
+                            <div class="scorecard-section">
+                                <h4>🎯 Bowling</h4>
+                                <table id="bowlingTable">
+                                    <thead><tr><th>Bowler</th><th>O</th><th>M</th><th>R</th><th>W</th><th>Econ</th></tr></thead>
+                                    <tbody id="bowlingBody"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Stream View Tab - Transparent Overlay -->
+                    <div class="tab-content" id="tabStream">
+                        <div class="stream-scoreboard-view" id="streamScoreboard">
+                            <div class="sb-overlay-glass">
+                                <div class="sb-header">
+                                    <span class="match-label" id="streamMatchLabel">🏏 India vs Australia • T20</span>
+                                    <span><span class="live-dot"></span> LIVE</span>
+                                </div>
+                                <div class="sb-teams">
+                                    <div class="sb-team">
+                                        <div class="name" id="streamTeamA">India</div>
+                                        <div class="score" id="streamScoreA">0 <small>/ 0</small></div>
+                                        <div class="overs" id="streamOversA">(0.0 ov)</div>
+                                    </div>
+                                    <div class="sb-vs">VS</div>
+                                    <div class="sb-team">
+                                        <div class="name" id="streamTeamB">Australia</div>
+                                        <div class="score" id="streamScoreB">0 <small>/ 0</small></div>
+                                        <div class="overs" id="streamOversB">(0.0 ov)</div>
+                                    </div>
+                                </div>
+                                <div class="sb-extra">
+                                    <span>Batsman: <strong id="streamBatsman">—</strong></span>
+                                    <span>Bowler: <strong id="streamBowler">—</strong></span>
+                                    <span>Run Rate: <strong id="streamRR">0.00</strong></span>
+                                    <span>Overs: <strong id="streamOversTotal">0.0</strong></span>
+                                </div>
+                                <div class="sb-batsmen">
+                                    <div><span class="label">Striker</span> <span class="value" id="streamStriker">—</span></div>
+                                    <div><span class="label">Non-Striker</span> <span class="value" id="streamNonStriker">—</span></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="view-actions">
+                            <button class="btn btn-primary" id="copyStreamUrl">📋 Copy Stream URL</button>
+                            <button class="btn btn-secondary" id="fullscreenView">⛶ Fullscreen</button>
+                            <button class="btn btn-secondary" id="refreshScoreboard">🔄 Refresh</button>
+                        </div>
+                    </div>
+
+                    <!-- Match Summary Tab -->
+                    <div class="tab-content" id="tabSummary">
+                        <div class="match-summary-container" id="matchSummaryContainer">
+                            <!-- Dynamic content rendered by JavaScript -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== ABOUT PAGE ===== -->
+        <section class="page" id="page-about">
+            <h2 style="font-size:28px;font-weight:800;margin-bottom:6px;">ℹ️ About BRKLIVE19</h2>
+            <p class="text-muted" style="margin-bottom:24px;">The ultimate cricket scoreboard for live telecasts.</p>
+            <div style="background:var(--card-bg);border-radius:var(--radius);padding:30px;border:1px solid var(--card-border);max-width:700px;">
+                <p style="line-height:1.8;color:var(--text-secondary);"><strong style="color:#fff;">BRKLIVE19</strong> is a professional cricket scoreboard application designed for live telecasts, streaming, and broadcast production. Built with modern web technologies, it provides real-time scoring, over tracking, and a clean scoreboard overlay compatible with OBS, vMix, PRISM, and Camera Fi.</p>
+                <p style="line-height:1.8;color:var(--text-secondary);margin-top:12px;"><strong style="color:#fff;">Version:</strong> Lite 2.0<br /><strong style="color:#fff;">Compatibility:</strong> All modern browsers, OBS Browser Source, vMix Web Input<br /><strong style="color:#fff;">Data:</strong> Local storage for match persistence</p>
+                <div style="margin-top:18px;display:flex;gap:12px;flex-wrap:wrap;"><button class="btn btn-sm btn-secondary">📄 Privacy Policy</button><button class="btn btn-sm btn-secondary">📜 Terms & Conditions</button><button class="btn btn-sm btn-secondary">🔄 Refund Policy</button></div>
+            </div>
+        </section>
+
+        <!-- ===== CONTACT PAGE ===== -->
+        <section class="page" id="page-contact">
+            <h2 style="font-size:28px;font-weight:800;margin-bottom:6px;">📬 Contact</h2>
+            <p class="text-muted" style="margin-bottom:24px;">Get in touch with the BRKLIVE19 team.</p>
+            <div style="background:var(--card-bg);border-radius:var(--radius);padding:30px;border:1px solid var(--card-border);max-width:600px;">
+                <div class="form-group"><label>Your Name</label><input type="text" placeholder="John Doe" /></div>
+                <div class="form-group"><label>Email</label><input type="email" placeholder="john@example.com" /></div>
+                <div class="form-group"><label>Message</label><textarea rows="4" style="width:100%;padding:12px 18px;border-radius:var(--radius-sm);background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);color:#fff;font-size:15px;outline:none;resize:vertical;font-family:var(--font);"></textarea></div>
+                <button class="btn btn-primary">📤 Send Message</button>
+                <div style="margin-top:18px;padding-top:18px;border-top:1px solid rgba(255,255,255,0.04);">
+                    <p class="text-muted" style="font-size:14px;">
+                        📧 <strong>brklive19@gmail.com</strong><br />
+                        📞 <strong>+91-7077522416</strong>
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== FOOTER ===== -->
+        <footer class="footer">
+            <div class="copy">© 2026 BRKLIVE19. All rights reserved.</div>
+            <div class="footer-links">
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms and Conditions</a>
+                <a href="#">Refund Policy</a>
+                <a href="#" onclick="navigate('contact')">Contact</a>
+            </div>
+            <div style="font-size:12px;color:var(--text-muted);">
+                📧 brklive19@gmail.com | 📞 +91-7077522416
+            </div>
+        </footer>
+    </div>
+
+    
+    <script src="script.js"></script>
+</body>
+</html>
