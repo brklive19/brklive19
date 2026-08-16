@@ -1,402 +1,572 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<meta name="viewport"
-content="width=device-width, initial-scale=1.0">
-
-<title>BRKLIVE19 Scorer</title>
+<title>BRKLIVE19 Cricket Scorer</title>
 
 <style>
-
 * {
     box-sizing: border-box;
 }
 
 body {
     margin: 0;
-    padding: 20px;
+    padding: 15px;
     background: #111;
     color: white;
     font-family: Arial, sans-serif;
-    text-align: center;
 }
 
 h1 {
-    margin-top: 10px;
+    text-align: center;
+    margin: 5px 0 15px;
 }
 
-#status {
-    margin: 15px;
-    color: #00ff66;
+.status {
+    text-align: center;
+    padding: 10px;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    background: #333;
+}
+
+.connected {
+    background: #075e32;
+}
+
+.disconnected {
+    background: #8b0000;
+}
+
+.card {
+    background: #1d1d1d;
+    border-radius: 12px;
+    padding: 15px;
+    margin-bottom: 15px;
+}
+
+.card h2 {
+    margin-top: 0;
+    font-size: 20px;
+}
+
+input {
+    width: 100%;
+    padding: 13px;
+    margin: 6px 0;
+    border: none;
+    border-radius: 8px;
+    background: #333;
+    color: white;
+    font-size: 17px;
+}
+
+.score {
+    text-align: center;
+    font-size: 55px;
     font-weight: bold;
+    margin: 10px 0;
 }
 
-#score {
-    font-size: 60px;
-    font-weight: bold;
-    margin-top: 20px;
-}
-
-#overs {
-    font-size: 24px;
-    margin: 10px 0 30px;
+.overs {
+    text-align: center;
+    font-size: 22px;
+    margin-bottom: 15px;
 }
 
 .buttons {
-    max-width: 500px;
-    margin: auto;
-
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-
-    gap: 12px;
+    gap: 10px;
 }
 
 button {
     border: none;
-    border-radius: 12px;
-
-    padding: 20px 10px;
-
-    font-size: 25px;
+    border-radius: 10px;
+    padding: 16px 8px;
+    font-size: 20px;
     font-weight: bold;
-
-    background: #333;
     color: white;
+    background: #333;
 }
 
 button:active {
     transform: scale(0.95);
 }
 
+.run {
+    background: #1769aa;
+}
+
 .wicket {
-    grid-column: span 3;
-    background: #d00000;
+    background: #b00020;
+}
+
+.extra {
+    background: #7b4f00;
 }
 
 .reset {
-    margin-top: 20px;
     background: #555;
-    font-size: 18px;
 }
 
+.save {
+    width: 100%;
+    background: #008f4c;
+    margin-top: 12px;
+}
+
+.small {
+    font-size: 14px;
+    color: #bbb;
+}
 </style>
-
 </head>
-
 
 <body>
 
-<h1>🏏 BRKLIVE19</h1>
+<h1>🏏 BRKLIVE19 SCORER</h1>
 
-<div id="status">
-Connecting to Firebase...
+<div id="connection" class="status disconnected">
+    Connecting to Firebase...
 </div>
 
-<div id="score">
-0/0
+<!-- MATCH INFORMATION -->
+<div class="card">
+
+<h2>Match Information</h2>
+
+<input id="teamA" placeholder="Team A">
+<input id="teamB" placeholder="Team B">
+
 </div>
 
-<div id="overs">
-Overs: 0.0
+
+<!-- SCORE -->
+<div class="card">
+
+<h2>Live Score</h2>
+
+<div id="score" class="score">
+    0/0
 </div>
 
+<div id="overs" class="overs">
+    Overs: 0.0
+</div>
 
 <div class="buttons">
 
-<button onclick="addRun(1)">
-1
-</button>
+<button class="run" onclick="addRun(0)">0</button>
+<button class="run" onclick="addRun(1)">1</button>
+<button class="run" onclick="addRun(2)">2</button>
 
-<button onclick="addRun(2)">
-2
-</button>
+<button class="run" onclick="addRun(3)">3</button>
+<button class="run" onclick="addRun(4)">4</button>
+<button class="run" onclick="addRun(6)">6</button>
 
-<button onclick="addRun(3)">
-3
-</button>
+<button class="extra" onclick="addWide()">WIDE</button>
+<button class="extra" onclick="addNoBall()">NO BALL</button>
+<button class="wicket" onclick="addWicket()">WICKET</button>
 
-<button onclick="addRun(4)">
-4
-</button>
+</div>
 
-<button onclick="addRun(5)">
-5
-</button>
-
-<button onclick="addRun(6)">
-6
-</button>
-
-<button
-class="wicket"
-onclick="addWicket()">
-
-WICKET
-
+<button class="reset" style="width:100%;margin-top:10px"
+onclick="resetScore()">
+RESET SCORE
 </button>
 
 </div>
 
 
-<button
-class="reset"
-onclick="resetMatch()">
+<!-- MANUAL OVERS -->
+<div class="card">
 
-RESET MATCH
+<h2>Overs</h2>
 
+<p class="small">
+You can manually enter the over number if required.
+Example: 2.4
+</p>
+
+<input
+id="manualOvers"
+type="text"
+placeholder="Example: 2.4"
+onchange="manualOvers()"
+>
+
+</div>
+
+
+<!-- BATSMEN -->
+<div class="card">
+
+<h2>Batsmen</h2>
+
+<input id="batsman1" placeholder="Striker">
+<input id="batsman1Runs" type="number" placeholder="Striker Runs">
+
+<input id="batsman2" placeholder="Non-Striker">
+<input id="batsman2Runs" type="number" placeholder="Non-Striker Runs">
+
+</div>
+
+
+<!-- BOWLER -->
+<div class="card">
+
+<h2>Bowler</h2>
+
+<input id="bowler" placeholder="Bowler Name">
+
+<input
+id="bowlerOvers"
+placeholder="Bowler Overs e.g. 2.4"
+>
+
+<input
+id="bowlerRuns"
+type="number"
+placeholder="Bowler Runs"
+>
+
+<input
+id="bowlerWickets"
+type="number"
+placeholder="Bowler Wickets"
+>
+
+</div>
+
+
+<button class="save" onclick="saveData()">
+💾 SAVE / UPDATE OVERLAY
 </button>
 
 
+<p class="small" style="text-align:center;margin-top:20px">
+BRKLIVE19 Live Cricket Scorer
+</p>
+
+
+<!-- FIREBASE -->
+
 <script type="module">
 
-/* ==================================================
-   FIREBASE
-   ================================================== */
-
-import {
-    initializeApp
-}
-from
-"https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
-
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
 import {
     getDatabase,
     ref,
-    set
+    set,
+    onValue
 }
-from
-"https://www.gstatic.com/firebasejs/12.6.0/firebase-database.js";
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
 
-/* ==================================================
-   PASTE YOUR FIREBASE CONFIG HERE
-   ================================================== */
+/* =====================================================
+   FIREBASE CONFIGURATION
+   =====================================================
+
+   REPLACE THE VALUES BELOW WITH YOUR FIREBASE
+   WEB APP CONFIGURATION.
+===================================================== */
 
 const firebaseConfig = {
-    apiKey: "AIzaSyBLWq1bqJ32F2cg3mqYQ0uwXcS3zvTA3A4",
+
+    apiKey: "PASTE_YOUR_API_KEY",
+
     authDomain: "brklive19-2bab4.firebaseapp.com",
-    databaseURL: "https://brklive19-2bab4-default-rtdb.asia-southeast1.firebasedatabase.app",
+
+    databaseURL: "PASTE_YOUR_DATABASE_URL",
+
     projectId: "brklive19-2bab4",
+
     storageBucket: "brklive19-2bab4.firebasestorage.app",
+
     messagingSenderId: "294058533898",
-    appId: "1:294058533898:web:4996705937e969939cabf3",
-    measurementId: "G-RW18E7LVEX"
-  };
+
+    appId: "PASTE_YOUR_APP_ID"
+
+};
 
 
-/* ==================================================
-   START FIREBASE
-   ================================================== */
+/* START FIREBASE */
 
-const app =
-initializeApp(firebaseConfig);
+const app = initializeApp(firebaseConfig);
 
+const database = getDatabase(app);
 
-const database =
-getDatabase(app);
+const scoreRef = ref(database, "liveScore");
 
 
-/* ==================================================
-   SCORE VARIABLES
-   ================================================== */
+/* SCORE VARIABLES */
 
-let runs = 0;
-
+let totalRuns = 0;
 let wickets = 0;
-
 let balls = 0;
 
-
-/* ==================================================
-   SHOW SCORE ON PHONE
-   ================================================== */
-
-function showScore() {
-
-    document.getElementById("score")
-        .innerText =
-        runs + "/" + wickets;
+let overDisplay = "0.0";
 
 
-    let over =
-        Math.floor(balls / 6);
+/* FIREBASE CONNECTION TEST */
 
+onValue(
+    scoreRef,
+    (snapshot) => {
 
-    let ball =
-        balls % 6;
+        document.getElementById("connection").innerText =
+            "🟢 Firebase Connected";
 
+        document.getElementById("connection")
+            .className = "status connected";
 
-    document.getElementById("overs")
-        .innerText =
-        "Overs: " +
-        over +
-        "." +
-        ball;
+        const data = snapshot.val();
 
-}
+        if (data) {
 
+            totalRuns = data.runs || 0;
 
-/* ==================================================
-   SEND SCORE TO FIREBASE
-   ================================================== */
+            wickets = data.wickets || 0;
 
-async function sendScore() {
+            balls = data.balls || 0;
 
-    const scoreRef =
-        ref(
-            database,
-            "matches/test-match"
-        );
+            overDisplay =
+                data.overs || calculateOvers();
 
-
-    await set(
-        scoreRef,
-        {
-
-            teamA: "TEAM A",
-
-            teamB: "TEAM B",
-
-            runs: runs,
-
-            wickets: wickets,
-
-            balls: balls
+            updateScreen();
 
         }
-    );
+
+    },
+
+    (error) => {
+
+        console.log(error);
+
+        document.getElementById("connection").innerText =
+            "🔴 Firebase Connection Error";
+
+        document.getElementById("connection")
+            .className = "status disconnected";
+
+    }
+);
 
 
-    document.getElementById("status")
-        .innerText =
-        "🟢 LIVE - Score sent";
+/* ADD RUN */
 
+window.addRun = function(run) {
+
+    totalRuns += run;
+
+    balls++;
+
+    overDisplay = calculateOvers();
+
+    updateScreen();
+
+};
+
+
+/* WIDE */
+
+window.addWide = function() {
+
+    totalRuns++;
+
+    updateScreen();
+
+};
+
+
+/* NO BALL */
+
+window.addNoBall = function() {
+
+    totalRuns++;
+
+    updateScreen();
+
+};
+
+
+/* WICKET */
+
+window.addWicket = function() {
+
+    if (wickets < 10) {
+
+        wickets++;
+
+    }
+
+    balls++;
+
+    overDisplay = calculateOvers();
+
+    updateScreen();
+
+};
+
+
+/* CALCULATE OVERS */
+
+function calculateOvers() {
+
+    const over =
+        Math.floor(balls / 6);
+
+    const ball =
+        balls % 6;
+
+    return over + "." + ball;
+}
+
+
+/* UPDATE SCREEN */
+
+function updateScreen() {
+
+    document.getElementById("score").innerText =
+        totalRuns + "/" + wickets;
+
+    document.getElementById("overs").innerText =
+        "Overs: " + overDisplay;
 
 }
 
 
-/* ==================================================
-   RUN BUTTON
-   ================================================== */
+/* MANUAL OVERS */
 
-window.addRun =
-async function(run) {
+window.manualOvers = function() {
 
-    runs =
-    runs + run;
+    const value =
+        document.getElementById("manualOvers").value;
 
-    balls =
-    balls + 1;
+    if (value !== "") {
 
+        overDisplay = value;
 
-    showScore();
-
-
-    try {
-
-        await sendScore();
-
-    }
-
-    catch(error) {
-
-        console.log(error);
-
-        document.getElementById("status")
-            .innerText =
-            "🔴 Firebase Error";
+        updateScreen();
 
     }
 
 };
 
 
-/* ==================================================
-   WICKET BUTTON
-   ================================================== */
+/* SAVE DATA TO FIREBASE */
 
-window.addWicket =
-async function() {
+window.saveData = function() {
 
-    wickets =
-    wickets + 1;
+    const data = {
 
-    balls =
-    balls + 1;
+        teamA:
+            document.getElementById("teamA").value,
+
+        teamB:
+            document.getElementById("teamB").value,
+
+        runs:
+            totalRuns,
+
+        wickets:
+            wickets,
+
+        balls:
+            balls,
+
+        overs:
+            overDisplay,
+
+        batsman1:
+            document.getElementById("batsman1").value,
+
+        batsman1Runs:
+            Number(
+                document.getElementById("batsman1Runs").value
+            ) || 0,
+
+        batsman2:
+            document.getElementById("batsman2").value,
+
+        batsman2Runs:
+            Number(
+                document.getElementById("batsman2Runs").value
+            ) || 0,
+
+        bowler:
+            document.getElementById("bowler").value,
+
+        bowlerOvers:
+            document.getElementById("bowlerOvers").value,
+
+        bowlerRuns:
+            Number(
+                document.getElementById("bowlerRuns").value
+            ) || 0,
+
+        bowlerWickets:
+            Number(
+                document.getElementById("bowlerWickets").value
+            ) || 0,
+
+        updatedAt:
+            Date.now()
+
+    };
 
 
-    showScore();
+    set(scoreRef, data)
 
+    .then(() => {
 
-    try {
+        alert("✅ Score updated successfully!");
 
-        await sendScore();
+    })
 
-    }
+    .catch((error) => {
 
-    catch(error) {
+        console.error(error);
 
-        console.log(error);
+        alert(
+            "❌ Error saving score: " +
+            error.message
+        );
 
-        document.getElementById("status")
-            .innerText =
-            "🔴 Firebase Error";
-
-    }
+    });
 
 };
 
 
-/* ==================================================
-   RESET
-   ================================================== */
+/* RESET */
 
-window.resetMatch =
-async function() {
+window.resetScore = function() {
 
-    runs = 0;
+    const confirmReset =
+        confirm(
+            "Reset the entire score?"
+        );
+
+    if (!confirmReset) return;
+
+    totalRuns = 0;
 
     wickets = 0;
 
     balls = 0;
 
+    overDisplay = "0.0";
 
-    showScore();
-
-
-    try {
-
-        await sendScore();
-
-    }
-
-    catch(error) {
-
-        console.log(error);
-
-        document.getElementById("status")
-            .innerText =
-            "🔴 Firebase Error";
-
-    }
+    updateScreen();
 
 };
-
-
-/* ==================================================
-   FIRST DISPLAY
-   ================================================== */
-
-showScore();
 
 </script>
 
 </body>
-
 </html>
