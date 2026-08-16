@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>BRKLIVE19 Overlay</title>
+
+
+<style>
+
+html,
+body {
+
+    margin: 0;
+
+    padding: 0;
+
+    width: 100%;
+
+    height: 100%;
+
+    background: transparent;
+
+    overflow: hidden;
+
+}
+
+
+.scoreboard {
+
+    position: absolute;
+
+    left: 3%;
+
+    right: 3%;
+
+    bottom: 5%;
+
+    padding: 15px 20px;
+
+    border-radius: 15px;
+
+    background: rgba(0,0,0,0.80);
+
+    color: white;
+
+    font-family: Arial, sans-serif;
+
+}
+
+
+.top {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+}
+
+
+.team {
+
+    font-size: 22px;
+
+    font-weight: bold;
+
+}
+
+
+.score {
+
+    font-size: 42px;
+
+    font-weight: bold;
+
+}
+
+
+.overs {
+
+    font-size: 18px;
+
+}
+
+
+.live {
+
+    color: red;
+
+    font-weight: bold;
+
+    font-size: 15px;
+
+}
+
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<div class="scoreboard">
+
+
+    <div class="top">
+
+
+        <div>
+
+            <div
+            id="teamA"
+            class="team">
+
+            TEAM A
+
+            </div>
+
+
+            <div
+            id="teamB"
+            class="overs">
+
+            vs TEAM B
+
+            </div>
+
+        </div>
+
+
+        <div
+        id="score"
+        class="score">
+
+        0/0
+
+        </div>
+
+
+        <div
+        id="overs"
+        class="overs">
+
+        0.0 OV
+
+        </div>
+
+
+        <div
+        class="live">
+
+        🔴 LIVE
+
+        </div>
+
+
+    </div>
+
+
+</div>
+
+
+
+<script type="module">
+
+
+/* ==================================================
+   FIREBASE
+   ================================================== */
+
+import {
+    initializeApp
+}
+from
+"https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
+
+
+import {
+    getDatabase,
+    ref,
+    onValue
+}
+from
+"https://www.gstatic.com/firebasejs/12.6.0/firebase-database.js";
+
+
+/* ==================================================
+   PASTE THE SAME FIREBASE CONFIG HERE
+   ================================================== */
+
+const firebaseConfig = {
+    apiKey: "AIzaSyBLWq1bqJ32F2cg3mqYQ0uwXcS3zvTA3A4",
+    authDomain: "brklive19-2bab4.firebaseapp.com",
+    databaseURL: "https://brklive19-2bab4-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "brklive19-2bab4",
+    storageBucket: "brklive19-2bab4.firebasestorage.app",
+    messagingSenderId: "294058533898",
+    appId: "1:294058533898:web:4996705937e969939cabf3",
+    measurementId: "G-RW18E7LVEX"
+  };
+
+/* ==================================================
+   START FIREBASE
+   ================================================== */
+
+const app =
+initializeApp(firebaseConfig);
+
+
+const database =
+getDatabase(app);
+
+
+/* ==================================================
+   FIND MATCH
+   ================================================== */
+
+const scoreRef =
+ref(
+    database,
+    "matches/test-match"
+);
+
+
+/* ==================================================
+   WATCH LIVE SCORE
+   ================================================== */
+
+onValue(
+
+    scoreRef,
+
+    function(snapshot) {
+
+
+        const data =
+        snapshot.val();
+
+
+        if (!data) {
+
+            return;
+
+        }
+
+
+        document.getElementById("teamA")
+            .innerText =
+            data.teamA;
+
+
+        document.getElementById("teamB")
+            .innerText =
+            "vs " + data.teamB;
+
+
+        document.getElementById("score")
+            .innerText =
+            data.runs +
+            "/" +
+            data.wickets;
+
+
+        let over =
+        Math.floor(
+            data.balls / 6
+        );
+
+
+        let ball =
+        data.balls % 6;
+
+
+        document.getElementById("overs")
+            .innerText =
+            over +
+            "." +
+            ball +
+            " OV";
+
+
+    }
+
+);
+
+
+</script>
+
+
+</body>
+
+</html>
