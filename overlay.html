@@ -111,35 +111,13 @@ body {
     <div class="top">
 
         <div>
-
-            <div
-                id="teamA"
-                class="team">
-                TEAM A
-            </div>
-
-            <div
-                id="teamB"
-                class="vs">
-                vs TEAM B
-            </div>
-
+            <div id="teamA" class="team">TEAM A</div>
+            <div id="teamB" class="vs">vs TEAM B</div>
         </div>
 
+        <div id="score" class="score">0/0</div>
 
-        <div
-            id="score"
-            class="score">
-            0/0
-        </div>
-
-
-        <div
-            id="overs"
-            class="overs">
-            0.0 OV
-        </div>
-
+        <div id="overs" class="overs">0.0 OV</div>
 
         <div class="live">
             🔴 LIVE
@@ -147,8 +125,119 @@ body {
 
     </div>
 
-</div>
 
+    <!-- BATSMEN -->
+
+    <div class="batting">
+
+        <div class="batsman">
+
+            <span class="bat-icon">🏏</span>
+
+            <span id="batsman1">
+                Striker
+            </span>
+
+            <strong>
+                <span id="batsman1Runs">0</span>
+                (<span id="batsman1Balls">0</span>)
+            </strong>
+
+            <span class="bat-stats">
+                4s: <span id="batsman1Fours">0</span>
+                |
+                6s: <span id="batsman1Sixes">0</span>
+            </span>
+
+        </div>
+
+
+        <div class="batsman">
+
+            <span class="bat-icon">🏏</span>
+
+            <span id="batsman2">
+                Non-Striker
+            </span>
+
+            <strong>
+                <span id="batsman2Runs">0</span>
+                (<span id="batsman2Balls">0</span>)
+            </strong>
+
+            <span class="bat-stats">
+                4s: <span id="batsman2Fours">0</span>
+                |
+                6s: <span id="batsman2Sixes">0</span>
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <!-- BOWLER -->
+
+    <div class="bowling">
+
+        <span>🎯</span>
+
+        <strong id="bowler">
+            Bowler
+        </strong>
+
+        <span>
+            <span id="bowlerOvers">0.0</span> O
+        </span>
+
+        <span>
+            <span id="bowlerRuns">0</span> R
+        </span>
+
+        <span>
+            <span id="bowlerWickets">0</span> W
+        </span>
+
+        <span>
+            ECO:
+            <span id="bowlerEconomy">0.00</span>
+        </span>
+
+    </div>
+
+
+    <!-- MATCH INFORMATION -->
+
+    <div class="match-info">
+
+        <span>
+            CRR:
+            <strong id="currentRunRate">0.00</strong>
+        </span>
+
+        <span>
+            RRR:
+            <strong id="requiredRunRate">0.00</strong>
+        </span>
+
+        <span>
+            TARGET:
+            <strong id="target">-</strong>
+        </span>
+
+        <span>
+            OVER:
+            <strong id="currentOver">0.0</strong>
+        </span>
+
+        <span>
+            EXTRAS:
+            <strong id="extras">0</strong>
+        </span>
+
+    </div>
+
+</div>
 
 <script type="module">
 
