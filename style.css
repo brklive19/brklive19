@@ -1856,3 +1856,55 @@
             margin-bottom: 12px;
             opacity: 0.5;
         }
+
+.batting {
+    margin-top: 12px;
+    border-top: 1px solid rgba(255,255,255,0.15);
+    padding-top: 10px;
+}
+
+.batsman {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 5px 0;
+    font-size: 14px;
+}
+
+.batsman strong {
+    font-size: 15px;
+}
+
+.bat-stats {
+    color: rgba(255,255,255,0.7);
+    font-size: 12px;
+}
+
+.bowling {
+    margin-top: 10px;
+    padding-top: 8px;
+    border-top: 1px solid rgba(255,255,255,0.15);
+
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    font-size: 13px;
+}
+
+.match-info {
+    margin-top: 10px;
+    padding-top: 8px;
+
+    border-top: 1px solid rgba(255,255,255,0.15);
+
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+
+    font-size: 12px;
+}
+
+.match-info strong {
+    font-size: 13px;
+}
