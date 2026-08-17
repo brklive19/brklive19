@@ -351,6 +351,76 @@ onValue(
             (data.overs || "0.0") +
             " OV";
 
+          /* BATSMAN 1 */
+
+document.getElementById("batsman1").innerText =
+    data.batsman1 || "Striker";
+
+document.getElementById("batsman1Runs").innerText =
+    data.batsman1Runs || 0;
+
+document.getElementById("batsman1Balls").innerText =
+    data.batsman1Balls || 0;
+
+document.getElementById("batsman1Fours").innerText =
+    data.batsman1Fours || 0;
+
+document.getElementById("batsman1Sixes").innerText =
+    data.batsman1Sixes || 0;
+
+
+/* BATSMAN 2 */
+
+document.getElementById("batsman2").innerText =
+    data.batsman2 || "Non-Striker";
+
+document.getElementById("batsman2Runs").innerText =
+    data.batsman2Runs || 0;
+
+document.getElementById("batsman2Balls").innerText =
+    data.batsman2Balls || 0;
+
+document.getElementById("batsman2Fours").innerText =
+    data.batsman2Fours || 0;
+
+document.getElementById("batsman2Sixes").innerText =
+    data.batsman2Sixes || 0;
+
+
+/* BOWLER */
+
+document.getElementById("bowler").innerText =
+    data.bowler || "Bowler";
+
+document.getElementById("bowlerOvers").innerText =
+    data.bowlerOvers || "0.0";
+
+document.getElementById("bowlerRuns").innerText =
+    data.bowlerRuns || 0;
+
+document.getElementById("bowlerWickets").innerText =
+    data.bowlerWickets || 0;
+
+document.getElementById("bowlerEconomy").innerText =
+    Number(data.bowlerEconomy || 0).toFixed(2);
+
+
+/* MATCH INFORMATION */
+
+document.getElementById("currentRunRate").innerText =
+    Number(data.currentRunRate || 0).toFixed(2);
+
+document.getElementById("requiredRunRate").innerText =
+    Number(data.requiredRunRate || 0).toFixed(2);
+
+document.getElementById("target").innerText =
+    data.target || "-";
+
+document.getElementById("currentOver").innerText =
+    data.currentOver || "0.0";
+
+document.getElementById("extras").innerText =
+    data.extras || 0;
     },
 
     function(error) {
