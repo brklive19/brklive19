@@ -2,714 +2,205 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>BRKLIVE19 Cricket Scorer</title>
-
 <style>
-* {
-    box-sizing: border-box;
-}
-
-body {
-    margin: 0;
-    padding: 15px;
-    background: #111;
-    color: white;
-    font-family: Arial, sans-serif;
-}
-
-h1 {
-    text-align: center;
-    margin: 5px 0 15px;
-}
-
-.status {
-    text-align: center;
-    padding: 10px;
-    margin-bottom: 15px;
-    border-radius: 8px;
-    background: #333;
-}
-
-.connected {
-    background: #075e32;
-}
-
-.disconnected {
-    background: #8b0000;
-}
-
-.card {
-    background: #1d1d1d;
-    border-radius: 12px;
-    padding: 15px;
-    margin-bottom: 15px;
-}
-
-.card h2 {
-    margin-top: 0;
-    font-size: 20px;
-}
-
-input {
-    width: 100%;
-    padding: 13px;
-    margin: 6px 0;
-    border: none;
-    border-radius: 8px;
-    background: #333;
-    color: white;
-    font-size: 17px;
-}
-
-.score {
-    text-align: center;
-    font-size: 55px;
-    font-weight: bold;
-    margin: 10px 0;
-}
-
-.overs {
-    text-align: center;
-    font-size: 22px;
-    margin-bottom: 15px;
-}
-
-.buttons {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 10px;
-}
-
-button {
-    border: none;
-    border-radius: 10px;
-    padding: 16px 8px;
-    font-size: 20px;
-    font-weight: bold;
-    color: white;
-    background: #333;
-}
-
-button:active {
-    transform: scale(0.95);
-}
-
-.run {
-    background: #1769aa;
-}
-
-.wicket {
-    background: #b00020;
-}
-
-.extra {
-    background: #7b4f00;
-}
-
-.reset {
-    background: #555;
-}
-
-.save {
-    width: 100%;
-    background: #008f4c;
-    margin-top: 12px;
-}
-
-.small {
-    font-size: 14px;
-    color: #bbb;
-}
+*{box-sizing:border-box}body{margin:0;padding:12px;background:#101114;color:#fff;font-family:Arial,sans-serif}
+h1{text-align:center;font-size:24px;margin:6px 0 12px}.status{padding:10px;text-align:center;border-radius:8px;margin-bottom:10px;background:#333}
+.connected{background:#075e32}.disconnected{background:#8b0000}.card{background:#1d1f23;border-radius:12px;padding:14px;margin-bottom:12px}
+.card h2{margin:0 0 10px;font-size:19px}input,select,textarea{width:100%;padding:12px;margin:5px 0;border:1px solid #444;border-radius:8px;background:#303238;color:#fff;font-size:16px}
+textarea{min-height:150px;resize:vertical}.grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px}.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.buttons{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.score{text-align:center;font-size:48px;font-weight:900}.overs{text-align:center;font-size:20px;margin-bottom:8px}
+.button{border:0;border-radius:9px;padding:14px 5px;font-size:18px;font-weight:700;color:#fff;background:#333}.run{background:#1769aa}.extra{background:#7b4f00}
+.wicket{background:#b00020}.save{width:100%;background:#008f4c}.secondary{background:#555}.start{background:#0a8f55}.small{font-size:13px;color:#aaa}
+.modal{display:none;position:fixed;z-index:99;inset:0;background:rgba(0,0,0,.82);padding:20px;align-items:center;justify-content:center}.modal.show{display:flex}
+.modalBox{width:100%;max-width:520px;background:#202226;border-radius:14px;padding:18px;max-height:90vh;overflow:auto}.close{float:right;background:#555;border:0;color:#fff;border-radius:8px;padding:7px 11px}
+.notice{background:#26313b;border-left:4px solid #39a7ff;padding:10px;margin:8px 0;border-radius:6px}
+@media(max-width:500px){.grid2,.grid3{grid-template-columns:1fr}.score{font-size:42px}}
 </style>
 </head>
-
 <body>
-
 <h1>🏏 BRKLIVE19 SCORER</h1>
+<div id="connection" class="status disconnected">Connecting to Firebase...</div>
 
-<div id="connection" class="status disconnected">
-    Connecting to Firebase...
-</div>
-
-<!-- MATCH INFORMATION -->
 <div class="card">
-
-<h2>Match Information</h2>
-
-<input id="teamA" placeholder="Team A">
-<input id="teamB" placeholder="Team B">
-
+<h2>1️⃣ Tournament & Venue</h2>
+<input id="tournamentName" placeholder="Tournament Name">
+<input id="venue" placeholder="Venue / Ground">
 </div>
 
-
-<!-- SCORE -->
 <div class="card">
-
-<h2>Live Score</h2>
-
-<div id="score" class="score">
-    0/0
+<h2>2️⃣ Create Match</h2>
+<input id="matchName" placeholder="Match Name / Match No. e.g. Final">
+<div class="grid2"><input id="teamA" placeholder="Team A"><input id="teamB" placeholder="Team B"></div>
 </div>
 
-<div id="overs" class="overs">
-    Overs: 0.0
+<div class="card">
+<h2>3️⃣ Toss & Innings</h2>
+<div class="grid2">
+<select id="tossWinner"><option value="">Toss Winner</option><option value="A">Team A</option><option value="B">Team B</option></select>
+<select id="tossDecision"><option value="">Decision</option><option value="bat">Bat</option><option value="bowl">Bowl</option></select>
+</div>
+<input id="maxOvers" type="number" min="1" placeholder="Overs per innings e.g. 6">
 </div>
 
+<div class="card">
+<h2>4️⃣ Playing XI</h2>
+<p class="small">Enter one player per line, up to 11 players per team.</p>
+<div class="grid2">
+<div><h3>Team A XI</h3><textarea id="teamAXI" placeholder="Player 1&#10;Player 2&#10;Player 3&#10;...&#10;Player 11"></textarea></div>
+<div><h3>Team B XI</h3><textarea id="teamBXI" placeholder="Player 1&#10;Player 2&#10;Player 3&#10;...&#10;Player 11"></textarea></div>
+</div>
+</div>
+
+<div class="card">
+<h2>5️⃣ Start Match</h2>
+<div id="matchStatus" class="notice">Match not started.</div>
+<button class="button start" style="width:100%" onclick="openStartPopup()">▶ START MATCH / SELECT PLAYERS</button>
+</div>
+
+<div class="card">
+<h2>🏏 Live Score</h2>
+<div id="score" class="score">0/0</div>
+<div id="overs" class="overs">Overs: 0.0</div>
 <div class="buttons">
-
-<button class="run" onclick="addRun(0)">0</button>
-<button class="run" onclick="addRun(1)">1</button>
-<button class="run" onclick="addRun(2)">2</button>
-
-<button class="run" onclick="addRun(3)">3</button>
-<button class="run" onclick="addRun(4)">4</button>
-<button class="run" onclick="addRun(6)">6</button>
-
-<button class="extra" onclick="addWide()">WIDE</button>
-<button class="extra" onclick="addNoBall()">NO BALL</button>
-<button class="wicket" onclick="addWicket()">WICKET</button>
-
+<button class="button run" onclick="addRun(0)">0</button><button class="button run" onclick="addRun(1)">1</button><button class="button run" onclick="addRun(2)">2</button>
+<button class="button run" onclick="addRun(3)">3</button><button class="button run" onclick="addRun(4)">4</button><button class="button run" onclick="addRun(6)">6</button>
+<button class="button extra" onclick="addWide()">WIDE</button><button class="button extra" onclick="addNoBall()">NO BALL</button><button class="button wicket" onclick="addWicket()">WICKET</button>
+</div>
+<div class="grid2" style="margin-top:8px"><button class="button secondary" onclick="undoLast()">↩ UNDO</button><button class="button secondary" onclick="resetScore()">RESET SCORE</button></div>
 </div>
 
-<button class="reset" style="width:100%;margin-top:10px"
-onclick="resetScore()">
-RESET SCORE
-</button>
-
-</div>
-
-
-<!-- MANUAL OVERS -->
 <div class="card">
-
-<h2>Overs</h2>
-
-<p class="small">
-You can manually enter the over number if required.
-Example: 2.4
-</p>
-
-<input
-id="manualOvers"
-type="text"
-placeholder="Example: 2.4"
-onchange="manualOvers()"
->
-
+<h2>👥 Current Players</h2>
+<div class="grid2"><input id="batsman1" placeholder="Striker Name"><input id="batsman2" placeholder="Non-Striker Name"></div>
+<div class="grid2"><input id="batsman1Runs" type="number" placeholder="Striker Runs"><input id="batsman2Runs" type="number" placeholder="Non-Striker Runs"></div>
+<div class="grid2"><input id="batsman1Balls" type="number" placeholder="Striker Balls"><input id="batsman2Balls" type="number" placeholder="Non-Striker Balls"></div>
+<div class="grid2"><input id="batsman1Fours" type="number" placeholder="Striker 4s"><input id="batsman2Fours" type="number" placeholder="Non-Striker 4s"></div>
+<div class="grid2"><input id="batsman1Sixes" type="number" placeholder="Striker 6s"><input id="batsman2Sixes" type="number" placeholder="Non-Striker 6s"></div>
 </div>
 
-<!-- BATSMEN -->
 <div class="card">
-
-<h2>Batsmen</h2>
-
-<h3>Striker</h3>
-
-<input id="batsman1" placeholder="Striker Name">
-
-<input
-id="batsman1Runs"
-type="number"
-placeholder="Runs"
->
-
-<input
-id="batsman1Balls"
-type="number"
-placeholder="Balls"
->
-
-<input
-id="batsman1Fours"
-type="number"
-placeholder="4s"
->
-
-<input
-id="batsman1Sixes"
-type="number"
-placeholder="6s"
->
-
-<h3>Non-Striker</h3>
-
-<input id="batsman2" placeholder="Non-Striker Name">
-
-<input
-id="batsman2Runs"
-type="number"
-placeholder="Runs"
->
-
-<input
-id="batsman2Balls"
-type="number"
-placeholder="Balls"
->
-
-<input
-id="batsman2Fours"
-type="number"
-placeholder="4s"
->
-
-<input
-id="batsman2Sixes"
-type="number"
-placeholder="6s"
->
-
+<h2>🎯 Bowler</h2>
+<input id="bowler" placeholder="Bowler Name">
+<div class="grid3"><input id="bowlerOvers" placeholder="Overs e.g. 2.4"><input id="bowlerRuns" type="number" placeholder="Runs"><input id="bowlerWickets" type="number" placeholder="Wickets"></div>
+<input id="bowlerEconomy" type="number" step="0.01" placeholder="Economy">
 </div>
 
-<!-- BOWLER -->
 <div class="card">
-
-<h2>Bowler</h2>
-
-<input
-id="bowler"
-placeholder="Bowler Name"
->
-
-<input
-id="bowlerOvers"
-placeholder="Overs e.g. 2.4"
->
-
-<input
-id="bowlerRuns"
-type="number"
-placeholder="Runs"
->
-
-<input
-id="bowlerWickets"
-type="number"
-placeholder="Wickets"
->
-
-<input
-id="bowlerEconomy"
-type="number"
-step="0.01"
-placeholder="Economy"
->
-
-</div>
-<!-- MATCH INFORMATION -->
-<div class="card">
-
-<h2>Match Information</h2>
-
-<input
-id="currentRunRate"
-type="number"
-step="0.01"
-placeholder="Current Run Rate"
->
-
-<input
-id="requiredRunRate"
-type="number"
-step="0.01"
-placeholder="Required Run Rate"
->
-
-<input
-id="target"
-type="number"
-placeholder="Target"
->
-
-<input
-id="currentOver"
-placeholder="Current Over e.g. 5.3"
->
-
-<input
-id="extras"
-type="number"
-placeholder="Extras"
->
-
+<h2>📊 Match Data</h2>
+<div class="grid3"><input id="currentRunRate" type="number" step="0.01" placeholder="CRR"><input id="requiredRunRate" type="number" step="0.01" placeholder="RRR"><input id="target" type="number" placeholder="Target"></div>
+<div class="grid3"><input id="currentOver" placeholder="Current Over"><input id="extras" type="number" placeholder="Extras"><input id="innings" type="number" value="1" min="1" max="2" placeholder="Innings"></div>
 </div>
 
-<button class="save" onclick="saveData()">
-💾 SAVE / UPDATE OVERLAY
-</button>
+<button class="button save" onclick="saveData(true)">💾 SAVE NOW</button>
+<p class="small" style="text-align:center">BRKLIVE19 Live Cricket Scorer • Auto-save enabled</p>
 
-
-<p class="small" style="text-align:center;margin-top:20px">
-BRKLIVE19 Live Cricket Scorer
-</p>
-
-
-<!-- FIREBASE -->
+<div id="startModal" class="modal">
+<div class="modalBox">
+<button class="close" onclick="closeStartPopup()">✕</button>
+<h2>▶ Start Match</h2>
+<div id="popupInfo" class="notice"></div>
+<label>Striker</label><select id="startStriker"></select>
+<label>Non-Striker</label><select id="startNonStriker"></select>
+<label>Fast Bowler / Bowler</label><select id="startBowler"></select>
+<button class="button start" style="width:100%;margin-top:10px" onclick="confirmStartMatch()">START LIVE MATCH</button>
+</div></div>
 
 <script type="module">
+import {initializeApp} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import {getDatabase,ref,set,onValue} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
-import { initializeApp }
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+const firebaseConfig={
+apiKey:"AIzaSyBLWq1bqJ32F2cg3mqYQ0uwXcS3zvTA3A4",
+authDomain:"brklive19-2bab4.firebaseapp.com",
+databaseURL:"https://brklive19-2bab4-default-rtdb.asia-southeast1.firebasedatabase.app",
+projectId:"brklive19-2bab4",storageBucket:"brklive19-2bab4.firebasestorage.app",
+messagingSenderId:"294058533898",appId:"1:294058533898:web:4996705937e969939cabf3",
+measurementId:"G-RW18E7LVEX"};
 
-import {
-    getDatabase,
-    ref,
-    set,
-    onValue
+const app=initializeApp(firebaseConfig),db=getDatabase(app),scoreRef=ref(db,"liveScore");
+const $=id=>document.getElementById(id), val=id=>$(id).value, num=id=>Number(val(id))||0;
+let state={runs:0,wickets:0,balls:0,extras:0,history:[],started:false,innings:1,maxOvers:6,battingTeam:"A",bowlingTeam:"B",bowlerBalls:0,bowlerRuns:0,bowlerWickets:0};
+let saveTimer=null;
+
+function teamName(side){return side==="A"?(val("teamA")||"TEAM A"):(val("teamB")||"TEAM B")}
+function xi(side){return val(side==="A"?"teamAXI":"teamBXI").split(/\n|,/).map(x=>x.trim()).filter(Boolean).slice(0,11)}
+function legalOvers(){return Math.floor(state.balls/6)+"."+(state.balls%6)}
+function rates(){const c=state.balls?state.runs/state.balls*6:0,total=(num("maxOvers")||state.maxOvers||6)*6,rem=Math.max(total-state.balls,0),t=num("target"),r=t>state.runs&&rem?(t-state.runs)/rem*6:0;return{crr:+c.toFixed(2),rrr:+r.toFixed(2)}}
+
+function collect(){
+const r=rates();
+return {
+tournamentName:val("tournamentName"),venue:val("venue"),matchName:val("matchName"),
+teamA:val("teamA"),teamB:val("teamB"),tossWinner:val("tossWinner"),tossDecision:val("tossDecision"),
+maxOvers:num("maxOvers")||6,teamAXI:xi("A"),teamBXI:xi("B"),started:state.started,innings:state.innings,
+battingTeam:state.battingTeam,bowlingTeam:state.bowlingTeam,runs:state.runs,wickets:state.wickets,
+balls:state.balls,overs:legalOvers(),batsman1:val("batsman1"),batsman2:val("batsman2"),
+batsman1Runs:num("batsman1Runs"),batsman2Runs:num("batsman2Runs"),
+batsman1Balls:num("batsman1Balls"),batsman2Balls:num("batsman2Balls"),
+batsman1Fours:num("batsman1Fours"),batsman2Fours:num("batsman2Fours"),
+batsman1Sixes:num("batsman1Sixes"),batsman2Sixes:num("batsman2Sixes"),
+bowler:val("bowler"),bowlerOvers:legalOvers(),bowlerRuns:state.bowlerRuns,bowlerWickets:state.bowlerWickets,
+bowlerEconomy:state.bowlerBalls?+(state.bowlerRuns/(state.bowlerBalls/6)).toFixed(2):0,
+currentRunRate:r.crr,requiredRunRate:r.rrr,target:num("target"),currentOver:legalOvers(),extras:state.extras,
+updatedAt:Date.now()};
 }
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
-
-
-/* =====================================================
-   FIREBASE CONFIGURATION
-   =====================================================
-
-   REPLACE THE VALUES BELOW WITH YOUR FIREBASE
-   WEB APP CONFIGURATION.
-===================================================== */
-
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = {
-  apiKey: "AIzaSyBLWq1bqJ32F2cg3mqYQ0uwXcS3zvTA3A4",
-  authDomain: "brklive19-2bab4.firebaseapp.com",
-  databaseURL: "https://brklive19-2bab4-default-rtdb.asia-southeast1.firebasedatabase.app",
-  projectId: "brklive19-2bab4",
-  storageBucket: "brklive19-2bab4.firebasestorage.app",
-  messagingSenderId: "294058533898",
-  appId: "1:294058533898:web:4996705937e969939cabf3",
-  measurementId: "G-RW18E7LVEX"
-};
-
-
-/* START FIREBASE */
-
-const app = initializeApp(firebaseConfig);
-
-const database = getDatabase(app);
-
-const scoreRef = ref(database, "liveScore");
-
-
-/* SCORE VARIABLES */
-
-let totalRuns = 0;
-let wickets = 0;
-let balls = 0;
-
-let overDisplay = "0.0";
-
-
-/* FIREBASE CONNECTION TEST */
-
-onValue(
-    scoreRef,
-    (snapshot) => {
-
-        document.getElementById("connection").innerText =
-            "🟢 Firebase Connected";
-
-        document.getElementById("connection")
-            .className = "status connected";
-
-        const data = snapshot.val();
-
-        if (data) {
-
-            totalRuns = data.runs || 0;
-
-            wickets = data.wickets || 0;
-
-            balls = data.balls || 0;
-
-            overDisplay =
-                data.overs || calculateOvers();
-
-            updateScreen();
-
-        }
-
-    },
-
-    (error) => {
-
-        console.log(error);
-
-        document.getElementById("connection").innerText =
-            "🔴 Firebase Connection Error";
-
-        document.getElementById("connection")
-            .className = "status disconnected";
-
-    }
-);
-
-
-/* ADD RUN */
-
-window.addRun = function(run) {
-
-    totalRuns += run;
-
-    balls++;
-
-    overDisplay = calculateOvers();
-
-    updateScreen();
-
-};
-
-
-/* WIDE */
-
-window.addWide = function() {
-
-    totalRuns++;
-
-    updateScreen();
-
-};
-
-
-/* NO BALL */
-
-window.addNoBall = function() {
-
-    totalRuns++;
-
-    updateScreen();
-
-};
-
-
-/* WICKET */
-
-window.addWicket = function() {
-
-    if (wickets < 10) {
-
-        wickets++;
-
-    }
-
-    balls++;
-
-    overDisplay = calculateOvers();
-
-    updateScreen();
-
-};
-
-
-/* CALCULATE OVERS */
-
-function calculateOvers() {
-
-    const over =
-        Math.floor(balls / 6);
-
-    const ball =
-        balls % 6;
-
-    return over + "." + ball;
-}
-
-
-/* UPDATE SCREEN */
-
-function updateScreen() {
-
-    document.getElementById("score").innerText =
-        totalRuns + "/" + wickets;
-
-    document.getElementById("overs").innerText =
-        "Overs: " + overDisplay;
-
-}
-
-
-/* MANUAL OVERS */
-
-window.manualOvers = function() {
-
-    const value =
-        document.getElementById("manualOvers").value;
-
-    if (value !== "") {
-
-        overDisplay = value;
-
-        updateScreen();
-
-    }
-
-};
-
-
-/* SAVE DATA TO FIREBASE */
-
-window.saveData = function() {
-
-    const data = {
-
-        teamA:
-            document.getElementById("teamA").value,
-
-        teamB:
-            document.getElementById("teamB").value,
-
-        runs:
-            totalRuns,
-
-        wickets:
-            wickets,
-
-        balls:
-            balls,
-
-        overs:
-            overDisplay,
-
-        batsman1:
-            document.getElementById("batsman1").value,
-
-        batsman1Runs:
-            Number(
-                document.getElementById("batsman1Runs").value
-            ) || 0,
-
-        batsman2:
-            document.getElementById("batsman2").value,
-
-        batsman2Runs:
-            Number(
-                document.getElementById("batsman2Runs").value
-            ) || 0,
-
-        batsman1Balls:
-    Number(
-        document.getElementById("batsman1Balls").value
-    ) || 0,
-
-batsman1Fours:
-    Number(
-        document.getElementById("batsman1Fours").value
-    ) || 0,
-
-batsman1Sixes:
-    Number(
-        document.getElementById("batsman1Sixes").value
-    ) || 0,
-
-batsman2Balls:
-    Number(
-        document.getElementById("batsman2Balls").value
-    ) || 0,
-
-batsman2Fours:
-    Number(
-        document.getElementById("batsman2Fours").value
-    ) || 0,
-
-batsman2Sixes:
-    Number(
-        document.getElementById("batsman2Sixes").value
-    ) || 0,
-        bowler:
-            document.getElementById("bowler").value,
-
-        bowlerOvers:
-            document.getElementById("bowlerOvers").value,
-
-        bowlerRuns:
-            Number(
-                document.getElementById("bowlerRuns").value
-            ) || 0,
-
-        bowlerWickets:
-            Number(
-                document.getElementById("bowlerWickets").value
-            ) || 0,
-         
-        bowlerEconomy:
-            Number(
-                document.getElementById("bowlerEconomy").value
-    ) || 0,
-        currentRunRate:
-    Number(
-        document.getElementById("currentRunRate").value
-    ) || 0,
-
-requiredRunRate:
-    Number(
-        document.getElementById("requiredRunRate").value
-    ) || 0,
-
-target:
-    Number(
-        document.getElementById("target").value
-    ) || 0,
-
-currentOver:
-    document.getElementById("currentOver").value,
-
-extras:
-    Number(
-        document.getElementById("extras").value
-    ) || 0,
-        updatedAt:
-            Date.now()
-
-    };
-
-
-    set(scoreRef, data)
-
-    .then(() => {
-
-        alert("✅ Score updated successfully!");
-
-    })
-
-    .catch((error) => {
-
-        console.error(error);
-
-        alert(
-            "❌ Error saving score: " +
-            error.message
-        );
-
-    });
-
-};
-
-
-/* RESET */
-
-window.resetScore = function() {
-
-    const confirmReset =
-        confirm(
-            "Reset the entire score?"
-        );
-
-    if (!confirmReset) return;
-
-    totalRuns = 0;
-
-    wickets = 0;
-
-    balls = 0;
-
-    overDisplay = "0.0";
-
-    updateScreen();
-
-};
-
+async function write(show=false){try{await set(scoreRef,collect());if(show)alert("✅ Score saved and overlay updated");}catch(e){alert("❌ Save error: "+e.message)}}
+function autoSave(){clearTimeout(saveTimer);saveTimer=setTimeout(()=>write(false),350)}
+window.saveData=show=>write(show);
+
+function fill(id,list){$(id).innerHTML='<option value="">Select player</option>'+list.map(x=>'<option>'+x.replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))+'</option>').join("")}
+window.openStartPopup=function(){
+if(!val("teamA")||!val("teamB"))return alert("Enter Team A and Team B first.");
+if(!xi("A").length||!xi("B").length)return alert("Add Playing XI for both teams first.");
+if(!val("tossWinner")||!val("tossDecision"))return alert("Complete the toss first.");
+state.maxOvers=num("maxOvers")||6;
+state.battingTeam=val("tossDecision")==="bat"?val("tossWinner"):(val("tossWinner")==="A"?"B":"A");
+state.bowlingTeam=state.battingTeam==="A"?"B":"A";
+$("popupInfo").textContent=teamName(state.battingTeam)+" batting • "+teamName(state.bowlingTeam)+" bowling • "+state.maxOvers+" overs";
+fill("startStriker",xi(state.battingTeam));fill("startNonStriker",xi(state.battingTeam));fill("startBowler",xi(state.bowlingTeam));
+$("startModal").classList.add("show")};
+window.closeStartPopup=()=>$("startModal").classList.remove("show");
+window.confirmStartMatch=function(){
+const s=val("startStriker"),n=val("startNonStriker"),b=val("startBowler");
+if(!s||!n||!b)return alert("Select striker, non-striker and bowler.");
+if(s===n)return alert("Striker and non-striker must be different.");
+$("batsman1").value=s;$("batsman2").value=n;$("bowler").value=b;state.started=true;
+$("matchStatus").textContent="🟢 LIVE: "+teamName(state.battingTeam)+" batting, "+teamName(state.bowlingTeam)+" bowling";
+$("startModal").classList.remove("show");updateUI();write(true)};
+
+function saveHistory(){
+const ids=["tournamentName","venue","matchName","teamA","teamB","tossWinner","tossDecision","maxOvers","teamAXI","teamBXI","batsman1","batsman2","batsman1Runs","batsman2Runs","batsman1Balls","batsman2Balls","batsman1Fours","batsman2Fours","batsman1Sixes","batsman2Sixes","bowler","target","extras"];
+state.history.push({state:{...state,history:[]},inputs:Object.fromEntries(ids.map(id=>[id,val(id)]))});if(state.history.length>20)state.history.shift()}
+function restore(h){state={...h.state,history:state.history};Object.entries(h.inputs).forEach(([id,v])=>$(id).value=v);updateUI()}
+window.undoLast=function(){const h=state.history.pop();if(h){restore(h);write(false)}};
+
+function rotate(){const a=val("batsman1"),b=val("batsman2");$("batsman1").value=b;$("batsman2").value=a}
+function updateUI(){$("score").textContent=state.runs+"/"+state.wickets;$("overs").textContent="Overs: "+legalOvers();$("currentOver").value=legalOvers();const r=rates();$("currentRunRate").value=r.crr;$("requiredRunRate").value=r.rrr;$("bowlerOvers").value=legalOvers();$("bowlerRuns").value=state.bowlerRuns;$("bowlerWickets").value=state.bowlerWickets;$("bowlerEconomy").value=state.bowlerBalls?+(state.bowlerRuns/(state.bowlerBalls/6)).toFixed(2):0}
+
+window.addRun=function(run){
+if(!state.started)return alert("Start the match first.");saveHistory();
+$("batsman1Runs").value=num("batsman1Runs")+run;$("batsman1Balls").value=num("batsman1Balls")+1;
+if(run===4)$("batsman1Fours").value=num("batsman1Fours")+1;if(run===6)$("batsman1Sixes").value=num("batsman1Sixes")+1;
+state.runs+=run;state.balls++;state.bowlerBalls++;state.bowlerRuns+=run;if(run%2)rotate();if(state.balls%6===0)rotate();updateUI();autoSave()};
+
+window.addWide=function(){if(!state.started)return alert("Start the match first.");saveHistory();state.runs++;state.extras++;state.bowlerRuns++;$("extras").value=state.extras;updateUI();autoSave()};
+window.addNoBall=function(){if(!state.started)return alert("Start the match first.");saveHistory();state.runs++;state.extras++;state.bowlerRuns++;$("extras").value=state.extras;updateUI();autoSave()};
+
+window.addWicket=function(){
+if(!state.started)return alert("Start the match first.");saveHistory();state.wickets++;state.balls++;state.bowlerBalls++;state.bowlerWickets++;
+$("batsman1Balls").value=num("batsman1Balls")+1;updateUI();autoSave();
+setTimeout(()=>{const used=[val("batsman1"),val("batsman2")],list=xi(state.battingTeam).filter(p=>!used.includes(p));
+if(list.length&&state.wickets<10){fill("startStriker",list);$("startNonStriker").value=val("batsman2");$("startBowler").value=val("bowler");$("popupInfo").textContent="WICKET — select the new batsman";$("startModal").classList.add("show")}},100)};
+
+window.resetScore=function(){if(!confirm("Reset current innings score?"))return;state.runs=state.wickets=state.balls=state.extras=state.bowlerBalls=state.bowlerRuns=state.bowlerWickets=0;["batsman1Runs","batsman2Runs","batsman1Balls","batsman2Balls","batsman1Fours","batsman2Fours","batsman1Sixes","batsman2Sixes","extras"].forEach(id=>$(id).value=0);updateUI();autoSave()};
+
+const autoIds=["tournamentName","venue","matchName","teamA","teamB","tossWinner","tossDecision","maxOvers","teamAXI","teamBXI","batsman1","batsman2","batsman1Runs","batsman2Runs","batsman1Balls","batsman2Balls","batsman1Fours","batsman2Fours","batsman1Sixes","batsman2Sixes","bowler","bowlerOvers","bowlerRuns","bowlerWickets","bowlerEconomy","currentRunRate","requiredRunRate","target","currentOver","extras","innings"];
+autoIds.forEach(id=>$(id).addEventListener("input",autoSave));
+
+onValue(scoreRef,snap=>{const d=snap.val();$("connection").textContent="🟢 Firebase Connected";$("connection").className="status connected";if(d&&d.started)$("matchStatus").textContent="🟢 LIVE: "+(d.teamA||"TEAM A")+" vs "+(d.teamB||"TEAM B")+" • Innings "+(d.innings||1)});
+updateUI();
 </script>
-
 </body>
 </html>
