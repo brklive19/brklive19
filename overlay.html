@@ -6,182 +6,161 @@
 <meta charset="UTF-8">
 
 <meta name="viewport"
-content="width=device-width, initial-scale=1.0">
+      content="width=device-width, initial-scale=1.0">
 
-<title>BRKLIVE19 Overlay</title>
-
+<title>BRKLIVE19 Live Overlay</title>
 
 <style>
 
 html,
 body {
-
     margin: 0;
-
     padding: 0;
-
     width: 100%;
-
     height: 100%;
-
-    background: transparent;
-
+    background: transparent !important;
     overflow: hidden;
-
 }
 
+body {
+    font-family: Arial, sans-serif;
+}
 
 .scoreboard {
-
     position: absolute;
-
     left: 3%;
-
     right: 3%;
-
     bottom: 5%;
 
-    padding: 15px 20px;
+    padding: 14px 20px;
 
     border-radius: 15px;
 
-    background: rgba(0,0,0,0.80);
+    background: rgba(0, 0, 0, 0.78);
 
     color: white;
-
-    font-family: Arial, sans-serif;
-
 }
-
 
 .top {
-
     display: flex;
-
     align-items: center;
-
     justify-content: space-between;
-
+    gap: 15px;
 }
-
 
 .team {
-
     font-size: 22px;
-
-    font-weight: bold;
-
+    font-weight: 700;
 }
 
+.vs {
+    font-size: 13px;
+    color: rgba(255,255,255,0.65);
+    margin-top: 3px;
+}
 
 .score {
-
     font-size: 42px;
-
-    font-weight: bold;
-
+    font-weight: 900;
 }
-
 
 .overs {
-
-    font-size: 18px;
-
+    font-size: 17px;
+    font-weight: 600;
 }
-
 
 .live {
-
-    color: red;
-
-    font-weight: bold;
-
-    font-size: 15px;
-
+    color: #ff3333;
+    font-size: 13px;
+    font-weight: 800;
+    white-space: nowrap;
 }
 
+@media (max-width: 500px) {
+
+    .scoreboard {
+        padding: 10px 12px;
+    }
+
+    .team {
+        font-size: 16px;
+    }
+
+    .score {
+        font-size: 30px;
+    }
+
+    .overs {
+        font-size: 13px;
+    }
+
+    .live {
+        font-size: 10px;
+    }
+
+}
 
 </style>
 
 </head>
 
-
 <body>
-
 
 <div class="scoreboard">
 
-
     <div class="top">
-
 
         <div>
 
             <div
-            id="teamA"
-            class="team">
-
-            TEAM A
-
+                id="teamA"
+                class="team">
+                TEAM A
             </div>
-
 
             <div
-            id="teamB"
-            class="overs">
-
-            vs TEAM B
-
+                id="teamB"
+                class="vs">
+                vs TEAM B
             </div>
 
         </div>
 
 
         <div
-        id="score"
-        class="score">
-
-        0/0
-
+            id="score"
+            class="score">
+            0/0
         </div>
 
 
         <div
-        id="overs"
-        class="overs">
-
-        0.0 OV
-
+            id="overs"
+            class="overs">
+            0.0 OV
         </div>
 
 
-        <div
-        class="live">
-
-        🔴 LIVE
-
+        <div class="live">
+            🔴 LIVE
         </div>
-
 
     </div>
-
 
 </div>
 
 
-
 <script type="module">
-
 
 /* ==================================================
    FIREBASE
-   ================================================== */
+================================================== */
 
 import {
     initializeApp
 }
 from
-"https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
+"https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
 
 import {
@@ -190,50 +169,64 @@ import {
     onValue
 }
 from
-"https://www.gstatic.com/firebasejs/12.6.0/firebase-database.js";
+"https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
 
 /* ==================================================
-   PASTE THE SAME FIREBASE CONFIG HERE
-   ================================================== */
+   FIREBASE CONFIG
+   USE THE EXACT SAME CONFIG AS scorer.html
+================================================== */
 
 const firebaseConfig = {
-    apiKey: "AIzaSyBLWq1bqJ32F2cg3mqYQ0uwXcS3zvTA3A4",
-    authDomain: "brklive19-2bab4.firebaseapp.com",
-    databaseURL: "https://brklive19-2bab4-default-rtdb.asia-southeast1.firebasedatabase.app",
-    projectId: "brklive19-2bab4",
-    storageBucket: "brklive19-2bab4.firebasestorage.app",
-    messagingSenderId: "294058533898",
-    appId: "1:294058533898:web:4996705937e969939cabf3",
-    measurementId: "G-RW18E7LVEX"
-  };
+
+    apiKey: "PASTE_THE_SAME_API_KEY",
+
+    authDomain:
+        "PASTE_THE_SAME_AUTH_DOMAIN",
+
+    databaseURL:
+        "PASTE_THE_SAME_DATABASE_URL",
+
+    projectId:
+        "PASTE_THE_SAME_PROJECT_ID",
+
+    storageBucket:
+        "PASTE_THE_SAME_STORAGE_BUCKET",
+
+    messagingSenderId:
+        "PASTE_THE_SAME_MESSAGING_SENDER_ID",
+
+    appId:
+        "PASTE_THE_SAME_APP_ID"
+
+};
+
 
 /* ==================================================
    START FIREBASE
-   ================================================== */
+================================================== */
 
 const app =
-initializeApp(firebaseConfig);
-
+    initializeApp(firebaseConfig);
 
 const database =
-getDatabase(app);
+    getDatabase(app);
 
 
 /* ==================================================
-   FIND MATCH
-   ================================================== */
+   LIVE SCORE LOCATION
+================================================== */
 
 const scoreRef =
-ref(
-    database,
-    "matches/test-match"
-);
+    ref(
+        database,
+        "liveScore"
+    );
 
 
 /* ==================================================
-   WATCH LIVE SCORE
-   ================================================== */
+   RECEIVE LIVE SCORE
+================================================== */
 
 onValue(
 
@@ -241,60 +234,60 @@ onValue(
 
     function(snapshot) {
 
-
         const data =
-        snapshot.val();
+            snapshot.val();
 
 
         if (!data) {
-
             return;
-
         }
 
 
+        /* TEAM A */
+
         document.getElementById("teamA")
             .innerText =
-            data.teamA;
+            data.teamA || "TEAM A";
 
+
+        /* TEAM B */
 
         document.getElementById("teamB")
             .innerText =
-            "vs " + data.teamB;
+            "vs " +
+            (data.teamB || "TEAM B");
 
+
+        /* SCORE */
 
         document.getElementById("score")
             .innerText =
-            data.runs +
+            (data.runs || 0) +
             "/" +
-            data.wickets;
+            (data.wickets || 0);
 
 
-        let over =
-        Math.floor(
-            data.balls / 6
-        );
-
-
-        let ball =
-        data.balls % 6;
-
+        /* OVERS */
 
         document.getElementById("overs")
             .innerText =
-            over +
-            "." +
-            ball +
+            (data.overs || "0.0") +
             " OV";
 
+    },
+
+    function(error) {
+
+        console.log(
+            "Firebase error:",
+            error
+        );
 
     }
 
 );
 
-
 </script>
-
 
 </body>
 
