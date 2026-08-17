@@ -1,49 +1,17 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>BRKLIVE19 Live Overlay</title>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>BRKLIVE19 V3 Overlay</title>
 <style>
-html,body{margin:0;padding:0;width:100%;height:100%;background:transparent!important;overflow:hidden;font-family:Arial,sans-serif}
-.scoreboard{position:absolute;left:3%;right:3%;bottom:5%;padding:13px 20px;border-radius:15px;background:rgba(0,0,0,.80);color:#fff}
-.top{display:flex;align-items:center;justify-content:space-between;gap:14px}.team{font-size:22px;font-weight:800}.vs{font-size:13px;color:#bbb;margin-top:3px}
-.score{font-size:42px;font-weight:900}.overs{font-size:17px;font-weight:700}.live{color:#ff3333;font-size:13px;font-weight:800;white-space:nowrap}
-.meta{font-size:12px;color:#ccc;margin:5px 0 7px}.batting,.bowling,.match-info{font-size:14px;line-height:1.55}.batsman{display:inline-block;margin-right:18px}.bat-icon{margin-right:4px}
-.batting strong,.bowling strong,.match-info strong{font-weight:900}.match-info{margin-top:2px}.winner{color:#ffd54a}
-@media(max-width:700px){.scoreboard{left:2%;right:2%;bottom:3%;padding:10px 13px}.team{font-size:16px}.score{font-size:30px}.overs{font-size:13px}.live{font-size:10px}.meta,.batting,.bowling,.match-info{font-size:11px}.batsman{margin-right:8px}}
-</style>
-</head>
-<body>
-<div class="scoreboard">
-<div class="top">
-<div><div id="teamA" class="team">TEAM A</div><div id="teamB" class="vs">vs TEAM B</div></div>
-<div id="score" class="score">0/0</div><div id="overs" class="overs">0.0 OV</div><div class="live">🔴 LIVE</div>
-</div>
-<div class="meta"><span id="tournament">BRKLIVE19</span> • <span id="matchName">Match</span> • 📍 <span id="venue">Venue</span></div>
-<div class="meta">🏏 <span id="battingTeam">TEAM A</span> batting • 🎯 <span id="bowlingTeam">TEAM B</span> bowling • Toss: <span id="toss">-</span> • <span id="innings">Innings 1</span></div>
-<div class="batting">
-<div class="batsman">🏏 <span id="batsman1">Striker</span> <strong><span id="batsman1Runs">0</span> (<span id="batsman1Balls">0</span>)</strong> 4s:<span id="batsman1Fours">0</span> 6s:<span id="batsman1Sixes">0</span></div>
-<div class="batsman">🏏 <span id="batsman2">Non-Striker</span> <strong><span id="batsman2Runs">0</span> (<span id="batsman2Balls">0</span>)</strong> 4s:<span id="batsman2Fours">0</span> 6s:<span id="batsman2Sixes">0</span></div>
-</div>
-<div class="bowling">🎯 <strong id="bowler">Bowler</strong> <span id="bowlerOvers">0.0</span> O • <span id="bowlerRuns">0</span> R • <span id="bowlerWickets">0</span> W • ECO: <span id="bowlerEconomy">0.00</span></div>
-<div class="match-info">CRR: <strong id="currentRunRate">0.00</strong> • RRR: <strong id="requiredRunRate">0.00</strong> • TARGET: <strong id="target">-</strong> • OVER: <strong id="currentOver">0.0</strong> • EXTRAS: <strong id="extras">0</strong></div>
-</div>
-
-<script type="module">
-import {initializeApp} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import {getDatabase,ref,onValue} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
-const firebaseConfig={apiKey:"AIzaSyBLWq1bqJ32F2cg3mqYQ0uwXcS3zvTA3A4",authDomain:"brklive19-2bab4.firebaseapp.com",databaseURL:"https://brklive19-2bab4-default-rtdb.asia-southeast1.firebasedatabase.app",projectId:"brklive19-2bab4",storageBucket:"brklive19-2bab4.firebasestorage.app",messagingSenderId:"294058533898",appId:"1:294058533898:web:4996705937e969939cabf3",measurementId:"G-RW18E7LVEX"};
-const db=getDatabase(initializeApp(firebaseConfig)),r=ref(db,"liveScore"),$=id=>document.getElementById(id);
-onValue(r,s=>{const d=s.val();if(!d)return;
-$("teamA").textContent=d.teamA||"TEAM A";$("teamB").textContent="vs "+(d.teamB||"TEAM B");$("score").textContent=(d.runs||0)+"/"+(d.wickets||0);$("overs").textContent=(d.overs||"0.0")+" OV";
-$("tournament").textContent=d.tournamentName||"BRKLIVE19";$("matchName").textContent=d.matchName||"Match";$("venue").textContent=d.venue||"Venue";
-$("battingTeam").textContent=d.battingTeam==="B"?(d.teamB||"TEAM B"):(d.teamA||"TEAM A");$("bowlingTeam").textContent=d.bowlingTeam==="A"?(d.teamA||"TEAM A"):(d.teamB||"TEAM B");
-$("toss").textContent=d.tossWinner?((d.tossWinner==="A"?d.teamA:d.teamB)||"")+(d.tossDecision?" won, chose to "+d.tossDecision:""):"-";$("innings").textContent="Innings "+(d.innings||1);
-["batsman1","batsman2","bowler"].forEach(id=>$(id).textContent=d[id]||$(id).textContent);
-["batsman1Runs","batsman2Runs","batsman1Balls","batsman2Balls","batsman1Fours","batsman2Fours","batsman1Sixes","batsman2Sixes","bowlerOvers","bowlerRuns","bowlerWickets","currentOver","extras","target"].forEach(id=>$(id).textContent=d[id]??0);
-$("bowlerEconomy").textContent=Number(d.bowlerEconomy||0).toFixed(2);$("currentRunRate").textContent=Number(d.currentRunRate||0).toFixed(2);$("requiredRunRate").textContent=Number(d.requiredRunRate||0).toFixed(2);
-});
-</script>
-</body>
-</html>
+:root{--c1:#00d9ff;--c2:#086cff;--bg1:#06111f;--bg2:#0b1d3c;--txt:#fff;--muted:#c6d2e9;--accent:#ffcf33}*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;background:transparent!important;overflow:hidden;font-family:Arial,sans-serif;color:var(--txt)}body{display:flex;align-items:flex-end;justify-content:center;padding:2.5vw}.panel{width:min(1600px,96vw);padding:16px 22px;border-radius:22px;background:linear-gradient(100deg,var(--bg1),var(--bg2));border:2px solid color-mix(in srgb,var(--c1) 60%,transparent);box-shadow:0 0 25px color-mix(in srgb,var(--c1) 30%,transparent),inset 0 0 30px #0008}.top{display:grid;grid-template-columns:1.2fr 1fr 1.2fr;align-items:center;gap:14px}.teams{font-size:clamp(18px,2vw,34px);font-weight:900}.vs{color:var(--muted);font-size:.5em;margin-top:4px}.score{text-align:center;font-size:clamp(42px,5vw,78px);font-weight:1000}.overs{text-align:center;font-size:clamp(16px,1.5vw,25px);font-weight:900}.live{text-align:right;color:#ff334f;font-weight:900}.info{font-size:clamp(11px,1.05vw,18px);color:var(--muted);margin-top:7px}.players{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:9px}.player{padding:7px 10px;border-radius:12px;background:#0005}.player strong{font-size:1.15em}.bowler{margin-top:8px;padding:7px 10px;border-radius:12px;background:#0005}.stats{margin-top:8px;font-weight:800}.hide{display:none}.summaryGrid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:10px}.card{padding:10px;background:#0005;border-radius:12px}.modeMini .players,.modeMini .bowler,.modeMini .info,.modeMini .stats{display:none}.modeBatsmen .bowler,.modeBatsmen .stats{display:none}.modeBowler .players{display:none}.modeBowler .stats{display:block}.modeSummary .players{display:none}.modeSummary .bowler{display:none}.modeScorecard .players,.modeScorecard .bowler{display:none}.modeScorecard .summaryGrid{display:grid}.modeScorecard .stats{display:none}@media(max-width:700px){.panel{padding:10px 12px;border-radius:14px}.top{grid-template-columns:1fr 1fr 1fr;gap:6px}.players{gap:6px}.player{padding:5px}.info{font-size:10px}}
+</style></head><body><div id="panel" class="panel"><div class="top"><div><div id="teamA" class="teams">TEAM A</div><div id="teamB" class="vs">vs TEAM B</div></div><div><div id="score" class="score">0/0</div><div id="overs" class="overs">0.0 OV</div></div><div id="live" class="live">🔴 LIVE</div></div><div id="info" class="info">BRKLIVE19 • Match • Venue</div><div class="players"><div class="player">🏏 <span id="b1">Striker</span> <strong id="b1s">0 (0)</strong> <span id="b1f">4s 0 • 6s 0</span></div><div class="player">🏏 <span id="b2">Non-Striker</span> <strong id="b2s">0 (0)</strong> <span id="b2f">4s 0 • 6s 0</span></div></div><div class="bowler">🎯 <b id="bo">Bowler</b> • <span id="bos">0.0 O • 0 R • 0 W • Eco 0.00</span></div><div class="stats">CRR <b id="crr">0.00</b> • RRR <b id="rrr">0.00</b> • TARGET <b id="target">—</b> • EXTRAS <b id="extras">0</b></div><div class="summaryGrid"><div class="card">🏏 <b id="batTeam">TEAM A</b> batting<br><span id="innings">Innings 1</span></div><div class="card">🎯 <b id="bowlTeam">TEAM B</b> bowling<br>Theme: <span id="themeName">Blue</span></div></div></div>
+<script type="module">import{initializeApp}from'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';import{getDatabase,ref,onValue}from'https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js';
+const firebaseConfig = {
+  apiKey: "AIzaSyBLWq1bqJ32F2cg3mqYQ0uwXcS3zvTA3A4",
+  authDomain: "brklive19-2bab4.firebaseapp.com",
+  databaseURL: "https://brklive19-2bab4-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "brklive19-2bab4",
+  storageBucket: "brklive19-2bab4.firebasestorage.app",
+  messagingSenderId: "294058533898",
+  appId: "1:294058533898:web:4996705937e969939cabf3",
+  measurementId: "G-RW18E7LVEX"
+};
+const db=getDatabase(initializeApp(firebaseConfig)),r=ref(db,'liveScore'),$=id=>document.getElementById(id);function ov(b){return Math.floor((b||0)/6)+'.'+((b||0)%6)}function fmt(x){return Number(x||0).toFixed(2)}function team(d,s){return s==='A'?(d.teamA||'TEAM A'):(d.teamB||'TEAM B')}function stats(d,name){return d.batters?.[name]||{runs:0,balls:0,fours:0,sixes:0}}function bst(d,name){return d.bowlers?.[name]||{balls:0,runs:0,wickets:0}}function theme(t){let m={blue:['#00d9ff','#086cff','#06111f','#0b1d3c','Blue'],neon:['#ff18e8','#7b2cff','#190022','#30003f','Neon'],green:['#38ff6d','#00a85a','#031a0e','#063c21','Green'],gold:['#ffe35c','#ff8a00','#201400','#4a2600','Gold'],red:['#ff3158','#ff6a00','#21030a','#4a0712','Red Pro'],rainbow:['#00eaff','#ff16d1','#061a25','#28103d','Rainbow']}[t]||null;if(m){document.documentElement.style.setProperty('--c1',m[0]);document.documentElement.style.setProperty('--c2',m[1]);document.documentElement.style.setProperty('--bg1',m[2]);document.documentElement.style.setProperty('--bg2',m[3]);$('themeName').textContent=m[4]}}
+onValue(r,s=>{const d=s.val();if(!d)return;const a=stats(d,d.b1||d.batsman1),b=stats(d,d.b2||d.batsman2),bo=bst(d,d.bowler);$('teamA').textContent=d.teamA||'TEAM A';$('teamB').textContent='vs '+(d.teamB||'TEAM B');$('score').textContent=(d.runs||0)+'/'+(d.wickets||0);$('overs').textContent=ov(d.legalBalls??d.balls)+' OV';$('info').textContent=(d.tournament||d.tournamentName||'BRKLIVE19')+' • '+(d.matchName||'Match')+' • 📍 '+(d.venue||'Venue');$('b1').textContent=d.b1||d.batsman1||'Striker';$('b2').textContent=d.b2||d.batsman2||'Non-Striker';$('b1s').textContent=`${a.runs??d.batsman1Runs??0} (${a.balls??d.batsman1Balls??0})`;$('b2s').textContent=`${b.runs??d.batsman2Runs??0} (${b.balls??d.batsman2Balls??0})`;$('b1f').textContent=`4s ${a.fours??0} • 6s ${a.sixes??0}`;$('b2f').textContent=`4s ${b.fours??0} • 6s ${b.sixes??0}`;$('bo').textContent=d.bowler||'Bowler';$('bos').textContent=`${ov(bo.balls)} O • ${bo.runs} R • ${bo.wickets} W • Eco ${bo.balls?fmt(bo.runs/(bo.balls/6)):'0.00'}`;$('crr').textContent=fmt(d.currentRunRate);$('rrr').textContent=fmt(d.requiredRunRate);$('target').textContent=d.target||'—';$('extras').textContent=d.extras||0;$('batTeam').textContent=team(d,d.battingTeam||'A');$('bowlTeam').textContent=team(d,d.bowlingTeam||'B');$('innings').textContent='Innings '+(d.innings||1);theme(d.theme||'blue');$('panel').className='panel mode'+({default:'Default',mini:'Mini',batsmen:'Batsmen',bowler:'Bowler',summary:'Summary',scorecard:'Scorecard'}[d.mode||'default']||'Default')});</script></body></html>
