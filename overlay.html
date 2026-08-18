@@ -1,17 +1,1180 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>BRKLIVE19 V3 Overlay</title>
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BRKLIVE19 Live Overlay</title>
+
 <style>
-:root{--c1:#00d9ff;--c2:#086cff;--bg1:#06111f;--bg2:#0b1d3c;--txt:#fff;--muted:#c6d2e9;--accent:#ffcf33}*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;background:transparent!important;overflow:hidden;font-family:Arial,sans-serif;color:var(--txt)}body{display:flex;align-items:flex-end;justify-content:center;padding:2.5vw}.panel{width:min(1600px,96vw);padding:16px 22px;border-radius:22px;background:linear-gradient(100deg,var(--bg1),var(--bg2));border:2px solid color-mix(in srgb,var(--c1) 60%,transparent);box-shadow:0 0 25px color-mix(in srgb,var(--c1) 30%,transparent),inset 0 0 30px #0008}.top{display:grid;grid-template-columns:1.2fr 1fr 1.2fr;align-items:center;gap:14px}.teams{font-size:clamp(18px,2vw,34px);font-weight:900}.vs{color:var(--muted);font-size:.5em;margin-top:4px}.score{text-align:center;font-size:clamp(42px,5vw,78px);font-weight:1000}.overs{text-align:center;font-size:clamp(16px,1.5vw,25px);font-weight:900}.live{text-align:right;color:#ff334f;font-weight:900}.info{font-size:clamp(11px,1.05vw,18px);color:var(--muted);margin-top:7px}.players{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:9px}.player{padding:7px 10px;border-radius:12px;background:#0005}.player strong{font-size:1.15em}.bowler{margin-top:8px;padding:7px 10px;border-radius:12px;background:#0005}.stats{margin-top:8px;font-weight:800}.hide{display:none}.summaryGrid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:10px}.card{padding:10px;background:#0005;border-radius:12px}.modeMini .players,.modeMini .bowler,.modeMini .info,.modeMini .stats{display:none}.modeBatsmen .bowler,.modeBatsmen .stats{display:none}.modeBowler .players{display:none}.modeBowler .stats{display:block}.modeSummary .players{display:none}.modeSummary .bowler{display:none}.modeScorecard .players,.modeScorecard .bowler{display:none}.modeScorecard .summaryGrid{display:grid}.modeScorecard .stats{display:none}@media(max-width:700px){.panel{padding:10px 12px;border-radius:14px}.top{grid-template-columns:1fr 1fr 1fr;gap:6px}.players{gap:6px}.player{padding:5px}.info{font-size:10px}}
-</style></head><body><div id="panel" class="panel"><div class="top"><div><div id="teamA" class="teams">TEAM A</div><div id="teamB" class="vs">vs TEAM B</div></div><div><div id="score" class="score">0/0</div><div id="overs" class="overs">0.0 OV</div></div><div id="live" class="live">🔴 LIVE</div></div><div id="info" class="info">BRKLIVE19 • Match • Venue</div><div class="players"><div class="player">🏏 <span id="b1">Striker</span> <strong id="b1s">0 (0)</strong> <span id="b1f">4s 0 • 6s 0</span></div><div class="player">🏏 <span id="b2">Non-Striker</span> <strong id="b2s">0 (0)</strong> <span id="b2f">4s 0 • 6s 0</span></div></div><div class="bowler">🎯 <b id="bo">Bowler</b> • <span id="bos">0.0 O • 0 R • 0 W • Eco 0.00</span></div><div class="stats">CRR <b id="crr">0.00</b> • RRR <b id="rrr">0.00</b> • TARGET <b id="target">—</b> • EXTRAS <b id="extras">0</b></div><div class="summaryGrid"><div class="card">🏏 <b id="batTeam">TEAM A</b> batting<br><span id="innings">Innings 1</span></div><div class="card">🎯 <b id="bowlTeam">TEAM B</b> bowling<br>Theme: <span id="themeName">Blue</span></div></div></div>
-<script type="module">import{initializeApp}from'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';import{getDatabase,ref,onValue}from'https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js';
+:root{
+  --c1:#00d9ff;
+  --c2:#086cff;
+  --bg1:#06111f;
+  --bg2:#0b1d3c;
+  --txt:#fff;
+  --muted:#c6d2e9;
+  --accent:#ffcf33;
+  --good:#20e070;
+}
+
+*{box-sizing:border-box}
+
+html,body{
+  margin:0;
+  width:100%;
+  height:100%;
+  background:transparent!important;
+  overflow:hidden;
+  font-family:Arial,Helvetica,sans-serif;
+  color:var(--txt);
+}
+
+body{
+  display:flex;
+  align-items:flex-end;
+  justify-content:center;
+  padding:2.2vw;
+}
+
+/* MAIN LOWER THIRD */
+.overlay{
+  width:min(1750px,96vw);
+  border-radius:18px;
+  overflow:hidden;
+  background:
+    linear-gradient(105deg,var(--bg1),var(--bg2));
+  border:2px solid var(--c1);
+  box-shadow:
+    0 0 25px color-mix(in srgb,var(--c1) 45%,transparent),
+    inset 0 0 30px #0008;
+}
+
+/* TOP INFORMATION */
+.matchInfo{
+  text-align:center;
+  padding:5px 12px;
+  background:#0008;
+  color:var(--muted);
+  font-size:clamp(10px,1vw,16px);
+  font-weight:bold;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+/* MAIN ROW */
+.mainRow{
+  display:grid;
+  grid-template-columns:1.25fr 2.2fr 1.25fr;
+  align-items:stretch;
+  min-height:105px;
+}
+
+/* LEFT TEAM */
+.leftTeam{
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  padding:8px 18px;
+  background:linear-gradient(90deg,#0008,transparent);
+}
+
+.teamName{
+  font-size:clamp(18px,2vw,32px);
+  font-weight:900;
+  text-transform:uppercase;
+}
+
+.batsman{
+  margin-top:5px;
+  font-size:clamp(12px,1.2vw,19px);
+  font-weight:bold;
+  color:#fff;
+}
+
+.batsman span{
+  color:var(--muted);
+  font-weight:normal;
+}
+
+.active{
+  color:var(--accent);
+}
+
+/* CENTER */
+.center{
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  position:relative;
+  padding:7px 10px;
+  background:
+    radial-gradient(circle,#183a70 0,#081224 70%);
+  border-left:1px solid #ffffff25;
+  border-right:1px solid #ffffff25;
+}
+
+.scoreLine{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.shortName{
+  font-size:clamp(17px,1.8vw,29px);
+  font-weight:900;
+  color:var(--accent);
+}
+
+.score{
+  font-size:clamp(40px,4.8vw,72px);
+  line-height:.95;
+  font-weight:1000;
+  letter-spacing:-2px;
+}
+
+.overs{
+  margin-top:4px;
+  font-size:clamp(14px,1.35vw,22px);
+  font-weight:900;
+}
+
+.crr{
+  margin-top:3px;
+  color:var(--muted);
+  font-size:clamp(10px,1vw,15px);
+}
+
+/* RIGHT TEAM */
+.rightTeam{
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:flex-end;
+  text-align:right;
+  padding:8px 18px;
+  background:linear-gradient(270deg,#0008,transparent);
+}
+
+.bowler{
+  margin-top:5px;
+  font-size:clamp(12px,1.2vw,18px);
+  font-weight:bold;
+}
+
+.bowlerStats{
+  color:var(--muted);
+  font-size:clamp(10px,1vw,15px);
+  margin-top:3px;
+}
+
+/* BALL BY BALL */
+.ballRow{
+  min-height:35px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:5px;
+  padding:4px 8px;
+  background:#0009;
+  border-top:1px solid #ffffff18;
+}
+
+.ball{
+  min-width:25px;
+  height:25px;
+  padding:0 6px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:50%;
+  background:#26324b;
+  font-size:12px;
+  font-weight:900;
+}
+
+.ball.run1{background:#1769aa}
+.ball.run2{background:#168a9b}
+.ball.run3{background:#5d4aa8}
+.ball.run4{background:#008f5a}
+.ball.run6{background:#d17c00;color:#111}
+.ball.dot{background:#39445a}
+.ball.wicket{background:#c51636}
+.ball.extra{background:#7d35b5}
+.ball.wide{background:#b46b00}
+.ball.noball{background:#d22c62}
+
+/* STATUS */
+.status{
+  position:absolute;
+  top:5px;
+  right:8px;
+  color:#ff3158;
+  font-size:10px;
+  font-weight:900;
+}
+
+/* THEMES */
+.theme-neon{
+  --c1:#ff18e8;
+  --c2:#7b2cff;
+  --bg1:#190022;
+  --bg2:#30003f;
+  --accent:#ff7df3;
+}
+
+.theme-green{
+  --c1:#38ff6d;
+  --c2:#00a85a;
+  --bg1:#031a0e;
+  --bg2:#063c21;
+  --accent:#7cff9e;
+}
+
+.theme-gold{
+  --c1:#ffe35c;
+  --c2:#ff8a00;
+  --bg1:#201400;
+  --bg2:#4a2600;
+  --accent:#ffe35c;
+}
+
+.theme-red{
+  --c1:#ff3158;
+  --c2:#ff6a00;
+  --bg1:#21030a;
+  --bg2:#4a0712;
+  --accent:#ff728c;
+}
+
+.theme-rainbow{
+  --c1:#00eaff;
+  --c2:#ff16d1;
+  --bg1:#061a25;
+  --bg2:#28103d;
+  --accent:#fff;
+}
+
+/* MOBILE */
+@media(max-width:750px){
+
+  body{
+    padding:1.5vw;
+  }
+
+  .overlay{
+    border-radius:12px;
+  }
+
+  .mainRow{
+    grid-template-columns:1fr 1.5fr 1fr;
+    min-height:85px;
+  }
+
+  .leftTeam,
+  .rightTeam{
+    padding:5px 8px;
+  }
+
+  .center{
+    padding:5px;
+  }
+
+  .batsman,
+  .bowlerStats{
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+  }
+
+  .ballRow{
+    gap:3px;
+  }
+
+  .ball{
+    min-width:21px;
+    height:21px;
+    font-size:10px;
+  }
+}
+
+/* HIDE OVERLAY WHEN MODE IS MINI */
+.mode-mini .batsman,
+.mode-mini .bowler,
+.mode-mini .ballRow,
+.mode-mini .crr,
+.mode-mini .matchInfo{
+  display:none;
+}
+
+.mode-mini .mainRow{
+  min-height:65px;
+}
+
+/* BOWLER MODE */
+.mode-bowler .batsman{
+  display:none;
+}
+
+/* SUMMARY MODE */
+.mode-summary .batsman{
+  display:none;
+}
+
+</style>
+</head>
+
+<body>
+
+<div id="overlay" class="overlay">
+
+  <!-- MATCH INFORMATION -->
+  <div class="matchInfo" id="matchInfo">
+    BRKLIVE19 • MATCH • VENUE
+  </div>
+
+  <!-- MAIN LOWER THIRD -->
+  <div class="mainRow">
+
+    <!-- LEFT -->
+    <div class="leftTeam">
+
+      <div class="teamName" id="battingTeam">
+        TEAM A
+      </div>
+
+      <div class="batsman">
+        <span class="active">★</span>
+        <span id="striker">
+          Striker
+        </span>
+        <span id="strikerScore">
+          0 (0)
+        </span>
+      </div>
+
+      <div class="batsman">
+        <span id="nonStriker">
+          Non-Striker
+        </span>
+        <span id="nonStrikerScore">
+          0 (0)
+        </span>
+      </div>
+
+    </div>
+
+
+    <!-- CENTER -->
+    <div class="center">
+
+      <div class="status">
+        🔴 LIVE
+      </div>
+
+      <div class="scoreLine">
+
+        <div
+          class="shortName"
+          id="shortName">
+          TEAM A
+        </div>
+
+        <div
+          class="score"
+          id="score">
+          0/0
+        </div>
+
+      </div>
+
+      <div
+        class="overs"
+        id="overs">
+        0.0 OV
+      </div>
+
+      <div
+        class="crr"
+        id="runRate">
+        CRR 0.00
+      </div>
+
+    </div>
+
+
+    <!-- RIGHT -->
+    <div class="rightTeam">
+
+      <div
+        class="teamName"
+        id="bowlingTeam">
+        TEAM B
+      </div>
+
+      <div
+        class="bowler"
+        id="bowler">
+        Bowler
+      </div>
+
+      <div
+        class="bowlerStats"
+        id="bowlerStats">
+        0.0 O • 0 R • 0 W • Eco 0.00
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- BALL BY BALL -->
+  <div
+    class="ballRow"
+    id="ballRow">
+
+    <div class="ball dot">0</div>
+
+  </div>
+
+</div>
+
+
+<script type="module">
+
+import {
+  initializeApp
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+import {
+  getDatabase,
+  ref,
+  onValue
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+
+/* =========================
+   FIREBASE CONFIG
+========================= */
+
 const firebaseConfig = {
-  apiKey: "AIzaSyBLWq1bqJ32F2cg3mqYQ0uwXcS3zvTA3A4",
-  authDomain: "brklive19-2bab4.firebaseapp.com",
-  databaseURL: "https://brklive19-2bab4-default-rtdb.asia-southeast1.firebasedatabase.app",
-  projectId: "brklive19-2bab4",
-  storageBucket: "brklive19-2bab4.firebasestorage.app",
-  messagingSenderId: "294058533898",
-  appId: "1:294058533898:web:4996705937e969939cabf3",
-  measurementId: "G-RW18E7LVEX"
+
+  apiKey:
+    "AIzaSyBLWq1bqJ32F2cg3mqYQ0uwXcS3zvTA3A4",
+
+  authDomain:
+    "brklive19-2bab4.firebaseapp.com",
+
+  databaseURL:
+    "https://brklive19-2bab4-default-rtdb.asia-southeast1.firebasedatabase.app",
+
+  projectId:
+    "brklive19-2bab4",
+
+  storageBucket:
+    "brklive19-2bab4.firebasestorage.app",
+
+  messagingSenderId:
+    "294058533898",
+
+  appId:
+    "1:294058533898:web:4996705937e969939cabf3",
+
+  measurementId:
+    "G-RW18E7LVEX"
+
 };
-const db=getDatabase(initializeApp(firebaseConfig)),r=ref(db,'liveScore'),$=id=>document.getElementById(id);function ov(b){return Math.floor((b||0)/6)+'.'+((b||0)%6)}function fmt(x){return Number(x||0).toFixed(2)}function team(d,s){return s==='A'?(d.teamA||'TEAM A'):(d.teamB||'TEAM B')}function stats(d,name){return d.batters?.[name]||{runs:0,balls:0,fours:0,sixes:0}}function bst(d,name){return d.bowlers?.[name]||{balls:0,runs:0,wickets:0}}function theme(t){let m={blue:['#00d9ff','#086cff','#06111f','#0b1d3c','Blue'],neon:['#ff18e8','#7b2cff','#190022','#30003f','Neon'],green:['#38ff6d','#00a85a','#031a0e','#063c21','Green'],gold:['#ffe35c','#ff8a00','#201400','#4a2600','Gold'],red:['#ff3158','#ff6a00','#21030a','#4a0712','Red Pro'],rainbow:['#00eaff','#ff16d1','#061a25','#28103d','Rainbow']}[t]||null;if(m){document.documentElement.style.setProperty('--c1',m[0]);document.documentElement.style.setProperty('--c2',m[1]);document.documentElement.style.setProperty('--bg1',m[2]);document.documentElement.style.setProperty('--bg2',m[3]);$('themeName').textContent=m[4]}}
-onValue(r,s=>{const d=s.val();if(!d)return;const a=stats(d,d.b1||d.batsman1),b=stats(d,d.b2||d.batsman2),bo=bst(d,d.bowler);$('teamA').textContent=d.teamA||'TEAM A';$('teamB').textContent='vs '+(d.teamB||'TEAM B');$('score').textContent=(d.runs||0)+'/'+(d.wickets||0);$('overs').textContent=ov(d.legalBalls??d.balls)+' OV';$('info').textContent=(d.tournament||d.tournamentName||'BRKLIVE19')+' • '+(d.matchName||'Match')+' • 📍 '+(d.venue||'Venue');$('b1').textContent=d.b1||d.batsman1||'Striker';$('b2').textContent=d.b2||d.batsman2||'Non-Striker';$('b1s').textContent=`${a.runs??d.batsman1Runs??0} (${a.balls??d.batsman1Balls??0})`;$('b2s').textContent=`${b.runs??d.batsman2Runs??0} (${b.balls??d.batsman2Balls??0})`;$('b1f').textContent=`4s ${a.fours??0} • 6s ${a.sixes??0}`;$('b2f').textContent=`4s ${b.fours??0} • 6s ${b.sixes??0}`;$('bo').textContent=d.bowler||'Bowler';$('bos').textContent=`${ov(bo.balls)} O • ${bo.runs} R • ${bo.wickets} W • Eco ${bo.balls?fmt(bo.runs/(bo.balls/6)):'0.00'}`;$('crr').textContent=fmt(d.currentRunRate);$('rrr').textContent=fmt(d.requiredRunRate);$('target').textContent=d.target||'—';$('extras').textContent=d.extras||0;$('batTeam').textContent=team(d,d.battingTeam||'A');$('bowlTeam').textContent=team(d,d.bowlingTeam||'B');$('innings').textContent='Innings '+(d.innings||1);theme(d.theme||'blue');$('panel').className='panel mode'+({default:'Default',mini:'Mini',batsmen:'Batsmen',bowler:'Bowler',summary:'Summary',scorecard:'Scorecard'}[d.mode||'default']||'Default')});</script></body></html>
+
+
+/* =========================
+   FIREBASE
+========================= */
+
+const app = initializeApp(firebaseConfig);
+
+const db = getDatabase(app);
+
+const liveRef = ref(db,"liveScore");
+
+
+/* =========================
+   HELPERS
+========================= */
+
+const $ = id =>
+  document.getElementById(id);
+
+
+function oversFromBalls(balls){
+
+  balls = Number(balls || 0);
+
+  return (
+    Math.floor(balls / 6)
+    + "."
+    + (balls % 6)
+  );
+
+}
+
+
+function teamName(data,side){
+
+  if(side === "A"){
+
+    return data.teamA || "TEAM A";
+
+  }
+
+  return data.teamB || "TEAM B";
+
+}
+
+
+function batterStats(data,name){
+
+  return (
+    data.batters &&
+    data.batters[name]
+  ) || {
+
+    runs:0,
+    balls:0,
+    fours:0,
+    sixes:0,
+    out:false
+
+  };
+
+}
+
+
+function bowlerStats(data,name){
+
+  return (
+    data.bowlers &&
+    data.bowlers[name]
+  ) || {
+
+    balls:0,
+    runs:0,
+    wickets:0
+
+  };
+
+}
+
+
+function number(value){
+
+  return Number(value || 0);
+
+}
+
+
+/* =========================
+   SHORT TEAM NAME
+========================= */
+
+function getShortName(name){
+
+  if(!name){
+
+    return "TEAM";
+
+  }
+
+  const words =
+    String(name)
+      .trim()
+      .split(/\s+/);
+
+  if(words.length === 1){
+
+    return words[0]
+      .substring(0,6)
+      .toUpperCase();
+
+  }
+
+  return words
+    .map(x => x[0])
+    .join("")
+    .substring(0,5)
+    .toUpperCase();
+
+}
+
+
+/* =========================
+   THEME
+========================= */
+
+function applyTheme(theme){
+
+  const overlay =
+    $("overlay");
+
+  overlay.classList.remove(
+    "theme-neon",
+    "theme-green",
+    "theme-gold",
+    "theme-red",
+    "theme-rainbow"
+  );
+
+  if(theme === "neon"){
+
+    overlay.classList.add(
+      "theme-neon"
+    );
+
+  }
+
+  else if(theme === "green"){
+
+    overlay.classList.add(
+      "theme-green"
+    );
+
+  }
+
+  else if(theme === "gold"){
+
+    overlay.classList.add(
+      "theme-gold"
+    );
+
+  }
+
+  else if(theme === "red"){
+
+    overlay.classList.add(
+      "theme-red"
+    );
+
+  }
+
+  else if(theme === "rainbow"){
+
+    overlay.classList.add(
+      "theme-rainbow"
+    );
+
+  }
+
+}
+
+
+/* =========================
+   MODE
+========================= */
+
+function applyMode(mode){
+
+  const overlay =
+    $("overlay");
+
+  overlay.classList.remove(
+    "mode-mini",
+    "mode-bowler",
+    "mode-summary"
+  );
+
+  if(mode === "mini"){
+
+    overlay.classList.add(
+      "mode-mini"
+    );
+
+  }
+
+  else if(mode === "bowler"){
+
+    overlay.classList.add(
+      "mode-bowler"
+    );
+
+  }
+
+  else if(mode === "summary"){
+
+    overlay.classList.add(
+      "mode-summary"
+    );
+
+  }
+
+}
+
+
+/* =========================
+   BALL DISPLAY
+========================= */
+
+function showBallHistory(data){
+
+  const row =
+    $("ballRow");
+
+  row.innerHTML = "";
+
+  let events =
+    Array.isArray(data.events)
+      ? data.events
+      : [];
+
+  /*
+     Show latest 8 scoring events.
+  */
+
+  events =
+    events.slice(-8);
+
+
+  if(events.length === 0){
+
+    const ball =
+      document.createElement("div");
+
+    ball.className =
+      "ball dot";
+
+    ball.textContent = "0";
+
+    row.appendChild(ball);
+
+    return;
+
+  }
+
+
+  events.forEach(event => {
+
+    let text =
+      String(event);
+
+    let value = "0";
+
+    let cls = "dot";
+
+
+    /* RUN */
+
+    const runMatch =
+      text.match(/(\d+)\s*run/i);
+
+    if(runMatch){
+
+      value =
+        runMatch[1];
+
+      const r =
+        Number(value);
+
+      if(r === 0){
+
+        cls = "dot";
+
+      }
+
+      else if(r === 1){
+
+        cls = "run1";
+
+      }
+
+      else if(r === 2){
+
+        cls = "run2";
+
+      }
+
+      else if(r === 3){
+
+        cls = "run3";
+
+      }
+
+      else if(r === 4){
+
+        cls = "run4";
+
+      }
+
+      else if(r === 6){
+
+        cls = "run6";
+
+      }
+
+    }
+
+
+    /* WIDE */
+
+    if(/wide/i.test(text)){
+
+      cls = "wide";
+
+      const m =
+        text.match(/wide\s*:\s*(\d+)/i);
+
+      value =
+        m ? "WD "+m[1] : "WD";
+
+    }
+
+
+    /* NO BALL */
+
+    if(/noball|no ball/i.test(text)){
+
+      cls = "noball";
+
+      const m =
+        text.match(/(?:noball|no ball)\s*:\s*(\d+)/i);
+
+      value =
+        m ? "NB "+m[1] : "NB";
+
+    }
+
+
+    /* BYE */
+
+    if(/bye/i.test(text) &&
+       !/legbye|leg bye/i.test(text)){
+
+      cls = "extra";
+
+      const m =
+        text.match(/bye\s*:\s*(\d+)/i);
+
+      value =
+        m ? "B "+m[1] : "B";
+
+    }
+
+
+    /* LEG BYE */
+
+    if(/legbye|leg bye/i.test(text)){
+
+      cls = "extra";
+
+      const m =
+        text.match(/(?:legbye|leg bye)\s*:\s*(\d+)/i);
+
+      value =
+        m ? "LB "+m[1] : "LB";
+
+    }
+
+
+    /* WICKET */
+
+    if(/wicket/i.test(text)){
+
+      cls = "wicket";
+
+      value = "W";
+
+    }
+
+
+    const ball =
+      document.createElement("div");
+
+    ball.className =
+      "ball " + cls;
+
+    ball.textContent =
+      value;
+
+    row.appendChild(ball);
+
+  });
+
+}
+
+
+/* =========================
+   FIREBASE LISTENER
+========================= */
+
+onValue(
+  liveRef,
+  snapshot => {
+
+    const data =
+      snapshot.val();
+
+    if(!data){
+
+      return;
+
+    }
+
+
+    /* =====================
+       TEAMS
+    ===================== */
+
+    const battingTeam =
+      teamName(
+        data,
+        data.battingTeam || "A"
+      );
+
+    const bowlingTeam =
+      teamName(
+        data,
+        data.bowlingTeam || "B"
+      );
+
+
+    $("battingTeam")
+      .textContent =
+      battingTeam;
+
+    $("bowlingTeam")
+      .textContent =
+      bowlingTeam;
+
+
+    $("shortName")
+      .textContent =
+      getShortName(
+        battingTeam
+      );
+
+
+    /* =====================
+       SCORE
+    ===================== */
+
+    $("score")
+      .textContent =
+      number(data.runs)
+      + "/"
+      + number(data.wickets);
+
+
+    const balls =
+      number(
+        data.legalBalls ??
+        data.balls
+      );
+
+
+    $("overs")
+      .textContent =
+      oversFromBalls(balls)
+      + " OV";
+
+
+    /* =====================
+       CRR
+    ===================== */
+
+    let crr =
+      number(
+        data.currentRunRate
+      );
+
+    if(!crr && balls > 0){
+
+      crr =
+        number(data.runs)
+        /
+        (balls / 6);
+
+    }
+
+
+    $("runRate")
+      .textContent =
+      "CRR "
+      + crr.toFixed(2);
+
+
+    /* =====================
+       BATTERS
+    ===================== */
+
+    const striker =
+      data.b1 ||
+      data.batsman1 ||
+      data.striker ||
+      "Striker";
+
+
+    const nonStriker =
+      data.b2 ||
+      data.batsman2 ||
+      data.nonStriker ||
+      "Non-Striker";
+
+
+    const b1 =
+      batterStats(
+        data,
+        striker
+      );
+
+
+    const b2 =
+      batterStats(
+        data,
+        nonStriker
+      );
+
+
+    $("striker")
+      .textContent =
+      striker;
+
+
+    $("nonStriker")
+      .textContent =
+      nonStriker;
+
+
+    $("strikerScore")
+      .textContent =
+      number(
+        b1.runs ??
+        data.batsman1Runs
+      )
+      + " ("
+      + number(
+        b1.balls ??
+        data.batsman1Balls
+      )
+      + ")";
+
+
+    $("nonStrikerScore")
+      .textContent =
+      number(
+        b2.runs ??
+        data.batsman2Runs
+      )
+      + " ("
+      + number(
+        b2.balls ??
+        data.batsman2Balls
+      )
+      + ")";
+
+
+    /* =====================
+       BOWLER
+    ===================== */
+
+    const bowler =
+      data.bowler ||
+      "Bowler";
+
+
+    const bowlerData =
+      bowlerStats(
+        data,
+        bowler
+      );
+
+
+    $("bowler")
+      .textContent =
+      bowler;
+
+
+    const eco =
+      bowlerData.balls > 0
+        ?
+        bowlerData.runs /
+        (bowlerData.balls / 6)
+        :
+        0;
+
+
+    $("bowlerStats")
+      .textContent =
+      oversFromBalls(
+        bowlerData.balls
+      )
+      + " O • "
+      + number(
+        bowlerData.runs
+      )
+      + " R • "
+      + number(
+        bowlerData.wickets
+      )
+      + " W • Eco "
+      + eco.toFixed(2);
+
+
+    /* =====================
+       MATCH INFO
+    ===================== */
+
+    const tournament =
+      data.tournament ||
+      data.tournamentName ||
+      "BRKLIVE19";
+
+
+    const match =
+      data.matchName ||
+      "Match";
+
+
+    const venue =
+      data.venue ||
+      "Venue";
+
+
+    $("matchInfo")
+      .textContent =
+      tournament
+      + " • "
+      + match
+      + " • 📍 "
+      + venue;
+
+
+    /* =====================
+       BALL HISTORY
+    ===================== */
+
+    showBallHistory(data);
+
+
+    /* =====================
+       THEME
+    ===================== */
+
+    applyTheme(
+      data.theme || "blue"
+    );
+
+
+    /* =====================
+       MODE
+    ===================== */
+
+    applyMode(
+      data.mode || "default"
+    );
+
+  }
+);
+
+</script>
+
+</body>
+</html>
