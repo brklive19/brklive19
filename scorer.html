@@ -1336,3 +1336,2232 @@ SET BATTER
 
 
 <script type="module">
+  /* =========================================================
+   BRKLIVE19 V4 SCORER — PART 2
+   Firebase + Scoring Engine
+========================================================= */
+
+import {
+  initializeApp
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+import {
+  getDatabase,
+  ref,
+  set,
+  onValue
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+
+/* =========================================================
+   FIREBASE
+========================================================= */
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBLWq1bqJ32F2cg3mqYQ0uwXcS3zvTA3A4",
+  authDomain: "brklive19-2bab4.firebaseapp.com",
+  databaseURL: "https://brklive19-2bab4-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "brklive19-2bab4",
+  storageBucket: "brklive19-2bab4.firebasestorage.app",
+  messagingSenderId: "294058533898",
+  appId: "1:294058533898:web:4996705937e969939cabf3",
+  measurementId: "G-RW18E7LVEX"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+const liveRef = ref(db, "liveScore");
+
+
+/* =========================================================
+   HELPERS
+========================================================= */
+
+const $ = id => document.getElementById(id);
+
+const num = value => Number(value) || 0;
+
+function escapeHTML(value) {
+  return String(value ?? "").replace(/[&<>"']/g, c => ({
+    "&":"&amp;",
+    "<":"&lt;",
+    ">":"&gt;",
+    '"':"&quot;",
+    "'":"&#39;"
+  }[c]));
+}
+
+function teamName(side) {
+  return side === "A"
+    ? (S.teamA || "TEAM A")
+    : (S.teamB || "TEAM B");
+}
+
+function players(side) {
+  return side === "A" ? S.xiA : S.xiB;
+}
+
+function oversText(balls) {
+  balls = num(balls);
+  return Math.floor(balls / 6) + "." + (balls % 6);
+}
+
+function legalBallsRemaining() {
+  return Math.max(
+    (S.maxOvers * 6) - S.legalBalls,
+    0
+  );
+}
+
+function battingStats(name) {
+
+  if (!name) {
+    return {
+      runs:0,
+      balls:0,
+      fours:0,
+      sixes:0,
+      out:false
+    };
+  }
+
+  if (!S.batters[name]) {
+
+    S.batters[name] = {
+      runs:0,
+      balls:0,
+      fours:0,
+      sixes:0,
+      out:false
+    };
+
+  }
+
+  return S.batters[name];
+}
+
+function bowlingStats(name) {
+
+  if (!name) {
+    return {
+      balls:0,
+      runs:0,
+      wickets:0
+    };
+  }
+
+  if (!S.bowlers[name]) {
+
+    S.bowlers[name] = {
+      balls:0,
+      runs:0,
+      wickets:0
+    };
+
+  }
+
+  return S.bowlers[name];
+}
+
+
+/* =========================================================
+   DEFAULT STATE
+========================================================= */
+
+function createDefaultState() {
+
+  return {
+
+    version:4,
+
+    started:false,
+
+    innings:1,
+
+    battingTeam:"A",
+    bowlingTeam:"B",
+
+    runs:0,
+    wickets:0,
+
+    legalBalls:0,
+
+    extras:0,
+
+    extraDetail:{
+      wide:0,
+      noball:0,
+      bye:0,
+      legbye:0
+    },
+
+    history:[],
+    events:[],
+
+    batters:{},
+    bowlers:{},
+
+    striker:"",
+    nonStriker:"",
+    bowler:"",
+
+    target:0,
+
+    maxOvers:6,
+
+    theme:"blue",
+    mode:"default",
+
+    tournament:"",
+    venue:"",
+    matchName:"",
+
+    teamA:"",
+    teamB:"",
+
+    tossWinner:"",
+    tossDecision:"",
+
+    xiA:[],
+    xiB:[],
+
+    firstInnings:{
+      team:"",
+      runs:0,
+      wickets:0,
+      balls:0,
+      extras:0
+    },
+
+    secondInningsStarted:false,
+
+    broadcast:{
+      type:"",
+      text:"",
+      active:false
+    },
+
+    customLower:{
+      text:"",
+      active:false
+    }
+
+  };
+
+}
+
+let S = createDefaultState();
+
+let syncing = false;
+let extraType = "wide";
+
+
+/* =========================================================
+   HISTORY / UNDO
+========================================================= */
+
+function snapshot() {
+
+  return JSON.stringify({
+    ...S,
+    history:[]
+  });
+
+}
+
+function pushHistory() {
+
+  S.history = S.history || [];
+
+  S.history.push(snapshot());
+
+  if (S.history.length > 20) {
+    S.history.shift();
+  }
+
+}
+
+
+/* =========================================================
+   SAVE TO FIREBASE
+========================================================= */
+
+async function save() {
+
+  syncing = true;
+
+  const strikerStats = battingStats(S.striker);
+  const nonStats = battingStats(S.nonStriker);
+  const bowlerStatsNow = bowlingStats(S.bowler);
+
+  const data = {
+
+    ...S,
+
+    history:[],
+
+    updatedAt:Date.now(),
+
+    /* Overlay-compatible values */
+
+    b1:S.striker,
+    b2:S.nonStriker,
+
+    batsman1:S.striker,
+    batsman2:S.nonStriker,
+
+    batsman1Runs:strikerStats.runs,
+    batsman2Runs:nonStats.runs,
+
+    batsman1Balls:strikerStats.balls,
+    batsman2Balls:nonStats.balls,
+
+    batsman1Fours:strikerStats.fours,
+    batsman2Fours:nonStats.fours,
+
+    batsman1Sixes:strikerStats.sixes,
+    batsman2Sixes:nonStats.sixes,
+
+    bowler:S.bowler,
+
+    bowlerOvers:S.bowler
+      ? oversText(bowlerStatsNow.balls)
+      : "0.0",
+
+    bowlerRuns:S.bowler
+      ? bowlerStatsNow.runs
+      : 0,
+
+    bowlerWickets:S.bowler
+      ? bowlerStatsNow.wickets
+      : 0,
+
+    overs:oversText(S.legalBalls),
+
+    currentOver:oversText(S.legalBalls),
+
+    currentRunRate:currentRunRate(),
+
+    requiredRunRate:requiredRunRate(),
+
+    ballsRemaining:legalBallsRemaining(),
+
+    runsToWin:runsToWin(),
+
+    target:S.target,
+
+    battingTeam:S.battingTeam,
+
+    bowlingTeam:S.bowlingTeam,
+
+    teamAScore:
+      S.battingTeam === "A"
+        ? S.runs
+        : S.firstInnings.runs,
+
+    teamBScore:
+      S.battingTeam === "B"
+        ? S.runs
+        : S.firstInnings.runs
+
+  };
+
+  await set(liveRef, data);
+
+  syncing = false;
+
+}
+
+
+/* =========================================================
+   CALCULATIONS
+========================================================= */
+
+function currentRunRate() {
+
+  if (!S.legalBalls) return 0;
+
+  return Number(
+    (S.runs / (S.legalBalls / 6)).toFixed(2)
+  );
+
+}
+
+function runsToWin() {
+
+  if (S.innings !== 2 || !S.target) {
+    return 0;
+  }
+
+  return Math.max(
+    S.target - S.runs,
+    0
+  );
+
+}
+
+function requiredRunRate() {
+
+  if (S.innings !== 2 || !S.target) {
+    return 0;
+  }
+
+  const runs = runsToWin();
+  const balls = legalBallsRemaining();
+
+  if (runs <= 0 || balls <= 0) {
+    return 0;
+  }
+
+  return Number(
+    ((runs / balls) * 6).toFixed(2)
+  );
+
+}
+
+
+/* =========================================================
+   SETUP FORM
+========================================================= */
+
+function getXI(id) {
+
+  return $(id)
+    .value
+    .split(/\n|,/)
+    .map(x => x.trim())
+    .filter(Boolean)
+    .slice(0,11);
+
+}
+
+function setSetupFromForm() {
+
+  S.tournament =
+    $("tournament").value.trim();
+
+  S.venue =
+    $("venue").value.trim();
+
+  S.matchName =
+    $("matchName").value.trim();
+
+  S.teamA =
+    $("teamA").value.trim();
+
+  S.teamB =
+    $("teamB").value.trim();
+
+  S.maxOvers =
+    num($("maxOvers").value) || 6;
+
+  S.tossWinner =
+    $("tossWinner").value;
+
+  S.tossDecision =
+    $("tossDecision").value;
+
+  S.xiA =
+    getXI("xiA");
+
+  S.xiB =
+    getXI("xiB");
+
+}
+
+window.saveSetup = async function() {
+
+  setSetupFromForm();
+
+  await save();
+
+  alert(
+    "✅ Match setup saved!\n\nFirebase Auto-Save is ON."
+  );
+
+  render();
+
+};
+
+
+/* =========================================================
+   START MATCH
+========================================================= */
+
+window.openStart = function() {
+
+  setSetupFromForm();
+
+  if (
+    !S.teamA ||
+    !S.teamB ||
+    S.xiA.length < 2 ||
+    S.xiB.length < 2 ||
+    !S.tossWinner ||
+    !S.tossDecision
+  ) {
+
+    alert(
+      "Please enter Team A, Team B, both Playing XI and Toss details first."
+    );
+
+    return;
+  }
+
+
+  /*
+     FIRST INNINGS
+  */
+
+  if (S.innings === 1) {
+
+    S.battingTeam =
+      S.tossDecision === "bat"
+        ? S.tossWinner
+        : (S.tossWinner === "A" ? "B" : "A");
+
+  }
+
+
+  S.bowlingTeam =
+    S.battingTeam === "A"
+      ? "B"
+      : "A";
+
+
+  const batList =
+    players(S.battingTeam);
+
+  const bowlList =
+    players(S.bowlingTeam);
+
+
+  options(
+    "startStriker",
+    batList
+  );
+
+  options(
+    "startNon",
+    batList
+  );
+
+  options(
+    "startBowler",
+    bowlList
+  );
+
+
+  $("startInfo").textContent =
+    `${teamName(S.battingTeam)} batting • ` +
+    `${teamName(S.bowlingTeam)} bowling • ` +
+    `${S.maxOvers} overs`;
+
+
+  openModal("startModal");
+
+};
+
+
+/* =========================================================
+   SELECT STARTING PLAYERS
+========================================================= */
+
+window.confirmStart = async function() {
+
+  const striker =
+    $("startStriker").value;
+
+  const non =
+    $("startNon").value;
+
+  const bowler =
+    $("startBowler").value;
+
+
+  if (
+    !striker ||
+    !non ||
+    !bowler
+  ) {
+
+    alert(
+      "Select striker, non-striker and bowler."
+    );
+
+    return;
+  }
+
+
+  if (striker === non) {
+
+    alert(
+      "Striker and Non-Striker must be different."
+    );
+
+    return;
+  }
+
+
+  S.started = true;
+
+  S.striker = striker;
+  S.nonStriker = non;
+  S.bowler = bowler;
+
+
+  battingStats(striker);
+  battingStats(non);
+  bowlingStats(bowler);
+
+
+  S.events.push(
+    `START: ${striker} & ${non} vs ${bowler}`
+  );
+
+
+  closeModal("startModal");
+
+  await save();
+
+  render();
+
+};
+
+
+/* =========================================================
+   OPTIONS
+========================================================= */
+
+function options(id, list, selected="") {
+
+  $(id).innerHTML =
+    `<option value="">Select</option>` +
+
+    list.map(player => {
+
+      const safe =
+        escapeHTML(player);
+
+      return `
+        <option value="${safe}"
+          ${player === selected ? "selected" : ""}>
+          ${safe}
+        </option>
+      `;
+
+    }).join("");
+
+}
+
+
+/* =========================================================
+   SWAP BATTERS
+========================================================= */
+
+function swapBatters() {
+
+  [
+    S.striker,
+    S.nonStriker
+  ] = [
+    S.nonStriker,
+    S.striker
+  ];
+
+}
+
+
+/* =========================================================
+   LEGAL BALL
+========================================================= */
+
+function addLegalBall() {
+
+  S.legalBalls++;
+
+  if (S.bowler) {
+    bowlingStats(S.bowler).balls++;
+  }
+
+}
+
+
+/* =========================================================
+   CHECK OVER
+========================================================= */
+
+function checkOver() {
+
+  if (
+    S.legalBalls > 0 &&
+    S.legalBalls % 6 === 0
+  ) {
+
+    /*
+       End of innings
+    */
+
+    if (
+      S.legalBalls >=
+      S.maxOvers * 6
+    ) {
+
+      finishInnings();
+
+      return;
+    }
+
+
+    /*
+       End of over:
+       automatically swap batters
+    */
+
+    swapBatters();
+
+
+    S.events.push(
+      `OVER ${oversText(S.legalBalls)} COMPLETE`
+    );
+
+
+    /*
+       Open new bowler popup
+    */
+
+    setTimeout(() => {
+
+      if (S.started) {
+        openBowler(true);
+      }
+
+    }, 200);
+
+  }
+
+}
+
+
+/* =========================================================
+   NORMAL RUNS
+========================================================= */
+
+window.scoreRuns = async function(runs) {
+
+  if (!S.started) {
+
+    alert(
+      "Start the match first."
+    );
+
+    return;
+  }
+
+
+  pushHistory();
+
+
+  const batter =
+    battingStats(S.striker);
+
+  const bowler =
+    bowlingStats(S.bowler);
+
+
+  batter.runs += runs;
+
+  batter.balls++;
+
+
+  if (runs === 4) {
+    batter.fours++;
+  }
+
+  if (runs === 6) {
+    batter.sixes++;
+  }
+
+
+  S.runs += runs;
+
+  bowler.runs += runs;
+
+
+  addLegalBall();
+
+
+  /*
+     Automatic batter movement
+     1 / 3 / 5 = swap
+  */
+
+  if (runs % 2 === 1) {
+    swapBatters();
+  }
+
+
+  /*
+     Broadcast animation
+  */
+
+  if (runs === 4) {
+    activateBroadcast("FOUR");
+  }
+
+  else if (runs === 6) {
+    activateBroadcast("SIX");
+  }
+
+
+  S.events.push(
+    `${oversText(S.legalBalls)} — ${runs} run`
+  );
+
+
+  checkMatchResult();
+
+  if (S.started) {
+    checkOver();
+  }
+
+
+  await save();
+
+  render();
+
+};
+
+
+/* =========================================================
+   EXTRA RUNS
+========================================================= */
+
+window.openExtra = function(type) {
+
+  if (!S.started) {
+
+    alert(
+      "Start the match first."
+    );
+
+    return;
+  }
+
+
+  extraType = type;
+
+
+  const title = {
+
+    wide:"↔ WIDE — Additional Runs",
+
+    noball:"🚫 NO BALL — Additional Runs",
+
+    bye:"➰ BYE RUNS",
+
+    legbye:"🦵 LEG BYE RUNS"
+
+  };
+
+
+  $("extraTitle").textContent =
+    title[type] || "Additional Runs";
+
+
+  openModal("extraModal");
+
+};
+
+
+window.confirmExtra = async function(total) {
+
+  closeModal("extraModal");
+
+  pushHistory();
+
+
+  const bowler =
+    bowlingStats(S.bowler);
+
+
+  S.extras += total;
+
+  S.extraDetail[extraType] += total;
+
+  S.runs += total;
+
+
+  /*
+     Wide / No Ball
+     = illegal delivery
+  */
+
+  if (
+    extraType === "wide" ||
+    extraType === "noball"
+  ) {
+
+    bowler.runs += total;
+
+
+    if (total % 2 === 1) {
+      swapBatters();
+    }
+
+
+    S.events.push(
+      `${extraType.toUpperCase()} — ${total}`
+    );
+
+  }
+
+
+  /*
+     Bye / Leg Bye
+     = legal delivery
+  */
+
+  else {
+
+    addLegalBall();
+
+
+    if (total % 2 === 1) {
+      swapBatters();
+    }
+
+
+    S.events.push(
+      `${extraType.toUpperCase()} — ${total}`
+    );
+
+
+    checkOver();
+
+  }
+
+
+  checkMatchResult();
+
+  await save();
+
+  render();
+
+};
+
+
+/* =========================================================
+   WICKET
+========================================================= */
+
+window.openWicket = function() {
+
+  if (!S.started) {
+
+    alert(
+      "Start the match first."
+    );
+
+    return;
+  }
+
+
+  options(
+    "dismissed",
+    [
+      S.striker,
+      S.nonStriker
+    ].filter(Boolean)
+  );
+
+
+  $("runoutRuns").value = 0;
+
+
+  openModal("wicketModal");
+
+};
+
+
+window.confirmWicket = async function() {
+
+  const dismissed =
+    $("dismissed").value;
+
+  const type =
+    $("dismissType").value;
+
+  const runs =
+    Math.max(
+      0,
+      Math.min(
+        6,
+        num($("runoutRuns").value)
+      )
+    );
+
+
+  if (!dismissed) {
+    return;
+  }
+
+
+  closeModal("wicketModal");
+
+  pushHistory();
+
+
+  const batter =
+    battingStats(dismissed);
+
+  const bowler =
+    bowlingStats(S.bowler);
+
+
+  /*
+     Run Out runs
+  */
+
+  if (
+    type === "Run Out" &&
+    runs > 0
+  ) {
+
+    S.runs += runs;
+
+    batter.runs += runs;
+
+    bowler.runs += runs;
+
+
+    if (runs % 2 === 1) {
+      swapBatters();
+    }
+
+  }
+
+
+  batter.balls++;
+
+  batter.out = true;
+
+  S.wickets++;
+
+
+  addLegalBall();
+
+
+  if (type !== "Run Out") {
+    bowler.wickets++;
+  }
+
+
+  S.events.push(
+    `WICKET — ${dismissed} (${type})`
+  );
+
+
+  activateBroadcast(
+    type === "Run Out"
+      ? "RUN OUT"
+      : "WICKET"
+  );
+
+
+  checkMatchResult();
+
+
+  if (S.started) {
+    checkOver();
+  }
+
+
+  await save();
+
+  render();
+
+
+  /*
+     Ask for new batsman
+  */
+
+  if (
+    S.started &&
+    S.wickets < 10 &&
+    S.legalBalls < S.maxOvers * 6
+  ) {
+
+    setTimeout(() => {
+
+      newBatter(dismissed);
+
+    }, 300);
+
+  }
+
+};
+
+
+/* =========================================================
+   NEW BATTER
+========================================================= */
+
+window.newBatter = function(dismissed="") {
+
+  const occupied = [
+    S.striker,
+    S.nonStriker
+  ].filter(Boolean);
+
+
+  const list =
+    players(S.battingTeam)
+      .filter(player =>
+        !occupied.includes(player)
+      )
+      .filter(player =>
+        !battingStats(player).out
+      );
+
+
+  if (!list.length) {
+
+    alert(
+      "No unused batsman available."
+    );
+
+    return;
+  }
+
+
+  options(
+    "newBatter",
+    list
+  );
+
+
+  S._dismissed =
+    dismissed;
+
+
+  openModal("batterModal");
+
+};
+
+
+window.confirmBatter = async function() {
+
+  const batter =
+    $("newBatter").value;
+
+
+  if (!batter) {
+    return;
+  }
+
+
+  /*
+     If dismissed player was striker,
+     replace striker.
+
+     Otherwise replace non-striker.
+  */
+
+  const dismissed =
+    S._dismissed;
+
+
+  if (
+    dismissed &&
+    dismissed === S.nonStriker
+  ) {
+
+    S.nonStriker =
+      batter;
+
+  }
+
+  else {
+
+    S.striker =
+      batter;
+
+  }
+
+
+  delete S._dismissed;
+
+
+  battingStats(batter);
+
+
+  closeModal("batterModal");
+
+
+  await save();
+
+  render();
+
+};
+
+
+/* =========================================================
+   BOWLER
+========================================================= */
+
+window.openBowler = function(force=false) {
+
+  if (!S.started) {
+
+    alert(
+      "Start the match first."
+    );
+
+    return;
+  }
+
+
+  const list =
+    players(S.bowlingTeam)
+      .filter(player =>
+        player !== S.bowler
+      );
+
+
+  if (!list.length) {
+
+    alert(
+      "No other bowler available."
+    );
+
+    return;
+  }
+
+
+  options(
+    "newBowler",
+    list
+  );
+
+
+  $("bowlerInfo").textContent =
+    force
+      ? `Over ${oversText(S.legalBalls)} complete — select the next bowler.`
+      : "Select a new bowler.";
+
+
+  openModal("bowlerModal");
+
+};
+
+
+window.confirmBowler = async function() {
+
+  const bowler =
+    $("newBowler").value;
+
+
+  if (!bowler) {
+    return;
+  }
+
+
+  S.bowler =
+    bowler;
+
+
+  bowlingStats(bowler);
+
+
+  closeModal("bowlerModal");
+
+
+  await save();
+
+  render();
+
+};
+
+
+/* =========================================================
+   INNINGS MANAGEMENT
+========================================================= */
+
+async function finishInnings() {
+
+  if (!S.started) {
+    return;
+  }
+
+
+  S.started = false;
+
+
+  /*
+     Save first innings
+  */
+
+  if (S.innings === 1) {
+
+    S.firstInnings = {
+
+      team:S.battingTeam,
+
+      runs:S.runs,
+
+      wickets:S.wickets,
+
+      balls:S.legalBalls,
+
+      extras:S.extras
+
+    };
+
+
+    /*
+       Target = first innings score + 1
+    */
+
+    S.target =
+      S.runs + 1;
+
+
+    S.events.push(
+      `🏁 INNINGS 1 COMPLETE — ${S.runs}/${S.wickets}`
+    );
+
+
+    await save();
+
+    render();
+
+
+    /*
+       Ask user to start second innings
+    */
+
+    setTimeout(() => {
+
+      if (
+        confirm(
+          `🏏 FIRST INNINGS COMPLETE!\n\n` +
+          `${teamName(S.battingTeam)} scored ${S.runs}/${S.wickets}.\n\n` +
+          `Target for ${teamName(
+            S.battingTeam === "A" ? "B" : "A"
+          )}: ${S.target}\n\n` +
+          `Start 2nd innings?`
+        )
+      ) {
+
+        startSecondInnings();
+
+      }
+
+    },300);
+
+  }
+
+  else {
+
+    /*
+       Second innings completed
+    */
+
+    S.events.push(
+      `🏁 MATCH COMPLETE — ${S.runs}/${S.wickets}`
+    );
+
+
+    await save();
+
+    render();
+
+
+    alert(
+      "🏆 MATCH COMPLETE!"
+    );
+
+  }
+
+}
+
+
+window.endInnings = async function() {
+
+  if (!S.started) {
+
+    alert(
+      "No live innings is running."
+    );
+
+    return;
+  }
+
+
+  if (
+    confirm(
+      "End this innings now?"
+    )
+  ) {
+
+    await finishInnings();
+
+  }
+
+};
+
+
+/* =========================================================
+   START SECOND INNINGS
+========================================================= */
+
+async function startSecondInnings() {
+
+  /*
+     Change innings
+  */
+
+  S.innings = 2;
+
+  S.secondInningsStarted = true;
+
+
+  /*
+     Swap teams
+  */
+
+  S.battingTeam =
+    S.firstInnings.team === "A"
+      ? "B"
+      : "A";
+
+
+  S.bowlingTeam =
+    S.battingTeam === "A"
+      ? "B"
+      : "A";
+
+
+  /*
+     Reset current innings
+  */
+
+  S.runs = 0;
+
+  S.wickets = 0;
+
+  S.legalBalls = 0;
+
+  S.extras = 0;
+
+
+  S.extraDetail = {
+    wide:0,
+    noball:0,
+    bye:0,
+    legbye:0
+  };
+
+
+  S.batters = {};
+
+  S.bowlers = {};
+
+  S.striker = "";
+
+  S.nonStriker = "";
+
+  S.bowler = "";
+
+
+  S.started = false;
+
+
+  S.events.push(
+    `▶ SECOND INNINGS — Target ${S.target}`
+  );
+
+
+  await save();
+
+  render();
+
+
+  /*
+     Open player selection
+  */
+
+  setTimeout(
+    openStart,
+    300
+  );
+
+}
+
+
+/* =========================================================
+   MATCH RESULT
+========================================================= */
+
+function checkMatchResult() {
+
+  /*
+     Second innings reaches target
+  */
+
+  if (
+    S.innings === 2 &&
+    S.target > 0 &&
+    S.runs >= S.target
+  ) {
+
+    S.started = false;
+
+
+    const wicketsLeft =
+      10 - S.wickets;
+
+
+    S.events.push(
+      `🏆 ${teamName(S.battingTeam)} WON BY ${wicketsLeft} WICKETS`
+    );
+
+
+    setTimeout(() => {
+
+      alert(
+        `🏆 ${teamName(S.battingTeam)} WON!\n\n`  +
+        `Target: ${S.target}\n` +
+        `Score: ${S.runs}/${S.wickets}`
+      );
+
+    },100);
+
+
+    return true;
+
+  }
+
+
+  /*
+     All wickets
+  */
+
+  if (
+    S.innings === 2 &&
+    S.wickets >= 10
+  ) {
+
+    finishInnings();
+
+    return true;
+
+  }
+
+
+  /*
+     Overs completed
+  */
+
+  if (
+    S.innings === 2 &&
+    S.legalBalls >= S.maxOvers * 6
+  ) {
+
+    if (S.runs < S.target) {
+
+      const margin =
+        S.target - 1 - S.runs;
+
+
+      S.started = false;
+
+
+      S.events.push(
+        `🏆 ${teamName(S.firstInnings.team)} WON BY ${margin} RUNS`
+      );
+
+
+      setTimeout(() => {
+
+        alert(
+          `🏆 ${teamName(S.firstInnings.team)} WON BY ${margin} RUNS`
+        );
+
+      },100);
+
+
+      return true;
+
+    }
+
+  }
+
+
+  return false;
+
+}
+
+
+/* =========================================================
+   BROADCAST EVENTS
+========================================================= */
+
+async function activateBroadcast(type) {
+
+  S.broadcast = {
+
+    type:type,
+
+    text:type,
+
+    active:true
+
+  };
+
+
+  await save();
+
+
+  /*
+     Automatically remove after 3 seconds
+  */
+
+  setTimeout(async () => {
+
+    if (
+      S.broadcast &&
+      S.broadcast.type === type
+    ) {
+
+      S.broadcast.active = false;
+
+      await save();
+
+      render();
+
+    }
+
+  },3000);
+
+}
+
+
+window.broadcastEvent = async function(type) {
+
+  if (!S.started) {
+
+    alert(
+      "Start the match first."
+    );
+
+    return;
+  }
+
+
+  await activateBroadcast(type);
+
+  render();
+
+};
+
+
+/* =========================================================
+   CUSTOM LOWER THIRD
+========================================================= */
+
+window.showCustomLower = async function() {
+
+  const text =
+    $("customLowerText").value.trim();
+
+
+  if (!text) {
+
+    alert(
+      "Enter a lower-third message first."
+    );
+
+    return;
+  }
+
+
+  S.customLower = {
+
+    text:text,
+
+    active:true
+
+  };
+
+
+  $("lowerPreview").textContent =
+    text;
+
+
+  await save();
+
+  render();
+
+};
+
+
+window.hideCustomLower = async function() {
+
+  S.customLower = {
+
+    text:"",
+
+    active:false
+
+  };
+
+
+  $("lowerPreview").textContent =
+    "Preview";
+
+
+  await save();
+
+  render();
+
+};
+
+
+/* =========================================================
+   MODAL
+========================================================= */
+
+function openModal(id) {
+
+  $(id).classList.add("show");
+
+}
+
+window.closeModal = function(id) {
+
+  $(id).classList.remove("show");
+
+};
+
+
+/* =========================================================
+   UNDO
+========================================================= */
+
+window.undo = async function() {
+
+  if (
+    !S.history ||
+    !S.history.length
+  ) {
+
+    alert(
+      "Nothing to undo."
+    );
+
+    return;
+  }
+
+
+  const previous =
+    S.history.pop();
+
+
+  const restored =
+    JSON.parse(previous);
+
+
+  restored.history =
+    S.history;
+
+
+  S = {
+    ...createDefaultState(),
+    ...restored
+  };
+
+
+  await save();
+
+  render();
+
+};
+
+
+/* =========================================================
+   MODE / THEME
+========================================================= */
+
+window.setMode = async function(mode) {
+
+  S.mode = mode;
+
+  await save();
+
+  render();
+
+};
+
+
+window.setTheme = async function(theme) {
+
+  S.theme = theme;
+
+  await save();
+
+  render();
+
+};
+
+
+/* =========================================================
+   SAVE NOW
+========================================================= */
+
+window.saveNow = async function() {
+
+  setSetupFromForm();
+
+  await save();
+
+  alert(
+    "✅ Saved!\n\nOverlay has been updated."
+  );
+
+};
+
+
+/* =========================================================
+   RENDER CONTROLLER
+========================================================= */
+
+function render() {
+
+  /*
+     Firebase status
+  */
+
+  $("status").textContent =
+    "🟢 Firebase Connected • Auto-Save ON";
+
+  $("status").className =
+    "status ok";
+
+
+  /*
+     Match status
+  */
+
+  if (S.started) {
+
+    $("matchStatus").textContent =
+      `🟢 LIVE — ${teamName(S.battingTeam)} ` +
+      `${S.runs}/${S.wickets} ` +
+      `(${oversText(S.legalBalls)}) • ` +
+      `${S.striker || "—"} / ` +
+      `${S.nonStriker || "—"} • ` +
+      `${S.bowler || "—"}`;
+
+  }
+
+  else {
+
+    if (S.innings === 2) {
+
+      $("matchStatus").textContent =
+        `⏸ SECOND INNINGS READY • ` +
+        `Target ${S.target}`;
+
+    }
+
+    else {
+
+      $("matchStatus").textContent =
+        "⏸ Match not started";
+
+    }
+
+  }
+
+
+  /*
+     Score
+  */
+
+  $("liveScore").textContent =
+    `${S.runs}/${S.wickets}`;
+
+
+  $("liveOvers").textContent =
+    `${oversText(S.legalBalls)} OV`;
+
+
+  /*
+     Target / chase box
+  */
+
+  if (S.innings === 2 && S.target) {
+
+    const need =
+      runsToWin();
+
+    const balls =
+      legalBallsRemaining();
+
+
+    if (need <= 0) {
+
+      $("targetText").innerHTML =
+        `🏆 <b>TARGET REACHED!</b>`;
+
+    }
+
+    else {
+
+      $("targetText").innerHTML =
+        `<b>TO WIN ${need} RUNS FROM ${balls} BALLS</b>`;
+    }
+
+  }
+
+  else {
+
+    $("targetText").textContent =
+      "FIRST INNINGS";
+
+  }
+
+
+  /*
+     Meta
+  */
+
+  $("liveMeta").textContent =
+    `${teamName(S.battingTeam)} batting • ` +
+    `${teamName(S.bowlingTeam)} bowling • ` +
+    `Innings ${S.innings}`;
+
+
+  /*
+     CRR / RRR
+  */
+
+  $("crr").textContent =
+    currentRunRate().toFixed(2);
+
+
+  $("rrr").textContent =
+    requiredRunRate().toFixed(2);
+
+
+  $("extras").textContent =
+    S.extras;
+
+
+  /*
+     Batters
+  */
+
+  const b1 =
+    battingStats(S.striker);
+
+  const b2 =
+    battingStats(S.nonStriker);
+
+  const bow =
+    bowlingStats(S.bowler);
+
+
+  $("b1label").textContent =
+    "🏏 " +
+    (S.striker || "Striker");
+
+
+  $("b1stat").textContent =
+    `${b1.runs} (${b1.balls}) • ` +
+    `4s ${b1.fours} • ` +
+    `6s ${b1.sixes}`;
+
+
+  $("b2stat").textContent =
+    `${S.nonStriker || "Non-Striker"}: ` +
+    `${b2.runs} (${b2.balls}) • ` +
+    `4s ${b2.fours} • ` +
+    `6s ${b2.sixes}`;
+
+
+  /*
+     Bowler
+  */
+
+  $("bowlerLabel").textContent =
+    "🎯 " +
+    (S.bowler || "Bowler");
+
+
+  $("bowlerStat").textContent =
+    `${oversText(bow.balls)} O • ` +
+    `${bow.runs} R • ` +
+    `${bow.wickets} W • ` +
+    `Eco ${
+      bow.balls
+        ? (bow.runs / (bow.balls / 6)).toFixed(2)
+        : "0.00"
+    }`;
+
+
+  /*
+     Scorecard
+  */
+
+  $("scorecard").innerHTML = `
+
+    <b>
+      ${escapeHTML(teamName(S.battingTeam))}
+    </b>
+
+    ${S.runs}/${S.wickets}
+
+    (${oversText(S.legalBalls)})
+
+    <br><br>
+
+    <b>Innings:</b>
+    ${S.innings}
+
+    <br>
+
+    <b>Extras:</b>
+    ${S.extras}
+
+    — W ${S.extraDetail.wide}
+
+    — NB ${S.extraDetail.noball}
+
+    — B ${S.extraDetail.bye}
+
+    — LB ${S.extraDetail.legbye}
+
+    <br>
+
+    <b>Target:</b>
+    ${S.target || "—"}
+
+    <br>
+
+    <b>CRR:</b>
+    ${currentRunRate().toFixed(2)}
+
+    •
+    <b>RRR:</b>
+    ${requiredRunRate().toFixed(2)}
+
+    <hr>
+
+    ${S.events
+      .slice(-15)
+      .reverse()
+      .map(event =>
+        `<div>${escapeHTML(event)}</div>`
+      )
+      .join("")
+    }
+
+  `;
+
+
+  /*
+     Overlay URL
+  */
+
+  $("overlayUrl").textContent =
+    location.origin +
+    location.pathname.replace(
+      /\/[^/]*$/,
+      "/overlay.html"
+    );
+
+
+  /*
+     Put saved setup back into fields
+  */
+
+  if (!syncing) {
+
+    $("tournament").value =
+      S.tournament || "";
+
+    $("venue").value =
+      S.venue || "";
+
+    $("matchName").value =
+      S.matchName || "";
+
+    $("teamA").value =
+      S.teamA || "";
+
+    $("teamB").value =
+      S.teamB || "";
+
+    $("maxOvers").value =
+      S.maxOvers || 6;
+
+    $("tossWinner").value =
+      S.tossWinner || "";
+
+    $("tossDecision").value =
+      S.tossDecision || "";
+
+    $("xiA").value =
+      (S.xiA || []).join("\n");
+
+    $("xiB").value =
+      (S.xiB || []).join("\n");
+
+  }
+
+
+  /*
+     Lower-third preview
+  */
+
+  if (
+    S.customLower &&
+    S.customLower.active
+  ) {
+
+    $("lowerPreview").textContent =
+      S.customLower.text;
+
+  }
+
+  else {
+
+    $("lowerPreview").textContent =
+      "Preview";
+
+  }
+
+
+  /*
+     Active theme
+  */
+
+  document
+    .querySelectorAll(".theme")
+    .forEach(button => {
+
+      button.classList.toggle(
+        "active",
+        button.dataset.theme === S.theme
+      );
+
+    });
+
+}
+
+
+/* =========================================================
+   FIREBASE REAL-TIME LISTENER
+========================================================= */
+
+onValue(
+  liveRef,
+  snapshotData => {
+
+    const data =
+      snapshotData.val();
+
+
+    if (!data) {
+
+      render();
+
+      return;
+
+    }
+
+
+    if (syncing) {
+      return;
+    }
+
+
+    S = {
+      ...createDefaultState(),
+      ...data,
+
+      extraDetail:
+        data.extraDetail || {
+          wide:0,
+          noball:0,
+          bye:0,
+          legbye:0
+        },
+
+      batters:
+        data.batters || {},
+
+      bowlers:
+        data.bowlers || {},
+
+      history:
+        data.history || [],
+
+      firstInnings:
+        data.firstInnings ||
+        createDefaultState().firstInnings,
+
+      broadcast:
+        data.broadcast ||
+        createDefaultState().broadcast,
+
+      customLower:
+        data.customLower ||
+        createDefaultState().customLower
+
+    };
+
+
+    render();
+
+  },
+
+  error => {
+
+    console.error(
+      "Firebase error:",
+      error
+    );
+
+
+    $("status").textContent =
+      "🔴 Firebase connection error";
+
+    $("status").className =
+      "status";
+
+  }
+);
+
+
+/* =========================================================
+   INITIAL RENDER
+========================================================= */
+
+$("overlayUrl").textContent =
+  location.origin +
+  location.pathname.replace(
+    /\/[^/]*$/,
+    "/overlay.html"
+  );
+
+
+render();
+
+</script>
+
+</body>
+</html>
