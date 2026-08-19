@@ -3,18 +3,19 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>BRKLIVE19 TV Overlay</title>
+<title>BRKLIVE19 V4 Overlay</title>
 
 <style>
 :root{
-  --blue:#0756c9;
-  --blue2:#092878;
-  --pink:#f0189b;
-  --yellow:#f1d400;
-  --white:#fff;
-  --dark:#07133d;
-  --light:#eef5ff;
-  --muted:#dce6ff;
+  --c1:#00eaff;
+  --c2:#006eff;
+  --bg:#06101d;
+  --panel:#0b1930;
+  --text:#fff;
+  --muted:#b9c9e5;
+  --gold:#ffd12f;
+  --green:#20e070;
+  --red:#ff3158;
 }
 
 *{
@@ -28,6 +29,7 @@ html,body{
   background:transparent!important;
   overflow:hidden;
   font-family:Arial,Helvetica,sans-serif;
+  color:var(--text);
 }
 
 body{
@@ -37,761 +39,662 @@ body{
   padding:2.2vw;
 }
 
-/* ==============================
-   MAIN OVERLAY
-============================== */
+/* MAIN LOWER THIRD */
 
-#overlay{
-  width:96vw;
-  max-width:1900px;
-  min-height:105px;
-  display:grid;
-  grid-template-columns:
-    0.72fr
-    1.55fr
-    1.05fr
-    1.55fr
-    0.72fr;
-
+.overlay{
+  width:min(1800px,96vw);
   position:relative;
-
-  background:#fff;
-
-  border-radius:2px;
-
-  box-shadow:
-    0 5px 25px #0009;
-}
-
-/* ==============================
-   LEFT TEAM
-============================== */
-
-.teamLeft{
-  position:relative;
-
-  display:flex;
-  align-items:center;
-  justify-content:center;
+  border-radius:18px;
+  overflow:hidden;
 
   background:
     linear-gradient(
-      100deg,
-      #009dd5,
-      #0781bd
+      110deg,
+      rgba(3,12,25,.98),
+      rgba(8,28,58,.98),
+      rgba(4,12,24,.98)
     );
 
-  color:#fff;
+  border:2px solid var(--c1);
 
-  font-size:clamp(17px,2vw,32px);
-  font-weight:1000;
-
-  text-transform:uppercase;
-
-  overflow:hidden;
+  box-shadow:
+    0 0 18px color-mix(in srgb,var(--c1) 45%,transparent),
+    0 0 45px rgba(0,0,0,.8);
 }
 
-/* diagonal decoration */
+/* TOP LINE */
 
-.teamLeft:after{
-  content:"";
-
-  position:absolute;
-
-  right:-23px;
-  top:-20px;
-
-  width:45px;
-  height:150px;
-
-  background:#101f68;
-
-  transform:rotate(17deg);
-
-  z-index:1;
+.topLine{
+  height:5px;
+  background:linear-gradient(
+    90deg,
+    var(--c1),
+    var(--c2),
+    var(--gold),
+    var(--c1)
+  );
 }
 
-.teamLeft span{
-  position:relative;
-  z-index:2;
+/* MAIN ROW */
+
+.mainRow{
+  display:grid;
+  grid-template-columns:
+    1.15fr
+    1.55fr
+    1fr
+    1.45fr
+    1.15fr;
+
+  align-items:stretch;
+  min-height:105px;
 }
 
-/* ==============================
-   BATSMEN
-============================== */
+/* TEAM */
 
-.batsmen{
-  position:relative;
-
+.team{
   display:flex;
   flex-direction:column;
   justify-content:center;
-
-  padding:7px 16px;
-
-  color:#fff;
-
-  background:
-    linear-gradient(
-      90deg,
-      #0b2472,
-      #101b65
-    );
-
-  overflow:hidden;
+  padding:10px 16px;
+  background:linear-gradient(
+    90deg,
+    rgba(0,0,0,.45),
+    transparent
+  );
 }
 
-.batsmanRow{
-  height:43px;
-
-  display:grid;
-
-  grid-template-columns:
-    1fr
-    45px
-    45px;
-
-  align-items:center;
-
-  border-bottom:1px solid #ffffff1c;
+.team.right{
+  text-align:right;
+  background:linear-gradient(
+    270deg,
+    rgba(0,0,0,.45),
+    transparent
+  );
 }
 
-.batsmanRow:last-child{
-  border-bottom:0;
-}
-
-.batsmanName{
-  font-size:clamp(13px,1.25vw,22px);
+.teamName{
+  font-size:clamp(18px,2vw,34px);
   font-weight:900;
+  text-transform:uppercase;
+}
 
+.teamShort{
+  font-size:12px;
+  color:var(--muted);
+  margin-top:3px;
+}
+
+/* BATTERS */
+
+.batters{
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  padding:8px 12px;
+  border-left:1px solid #ffffff20;
+  border-right:1px solid #ffffff20;
+}
+
+.batter{
+  display:grid;
+  grid-template-columns:12px 1fr auto;
+  align-items:center;
+  gap:7px;
+  min-height:34px;
+  padding:3px 6px;
+  border-radius:7px;
+}
+
+.batter.striker{
+  background:linear-gradient(
+    90deg,
+    rgba(0,234,255,.25),
+    transparent
+  );
+}
+
+.strikeDot{
+  width:8px;
+  height:8px;
+  border-radius:50%;
+  background:transparent;
+}
+
+.striker .strikeDot{
+  background:var(--gold);
+  box-shadow:0 0 8px var(--gold);
+}
+
+.batterName{
+  font-size:clamp(14px,1.4vw,23px);
+  font-weight:800;
   white-space:nowrap;
-
   overflow:hidden;
-
   text-overflow:ellipsis;
 }
 
-.strikerMark{
-  color:#ffe000;
-  margin-right:4px;
-}
-
-.batsmanRuns{
-  text-align:center;
-
-  color:#ffe000;
-
-  font-size:clamp(16px,1.5vw,25px);
-
-  font-weight:1000;
-}
-
-.batsmanBalls{
-  text-align:center;
-
-  font-size:clamp(12px,1.1vw,18px);
-
+.batterScore{
+  font-size:clamp(15px,1.5vw,25px);
   font-weight:900;
 }
 
-/* ==============================
-   CENTER SCORE
-============================== */
+.batterBalls{
+  color:var(--muted);
+  font-size:11px;
+  margin-left:3px;
+}
+
+/* SCORE BOX */
 
 .scoreBox{
-  position:relative;
-
   display:flex;
   flex-direction:column;
-
-  align-items:center;
   justify-content:center;
+  align-items:center;
 
-  background:#fff;
+  background:
+    linear-gradient(
+      145deg,
+      rgba(0,100,255,.65),
+      rgba(0,20,60,.95)
+    );
 
-  color:#10154c;
+  border-left:2px solid var(--c1);
+  border-right:2px solid var(--c1);
 
-  border-left:1px solid #ddd;
-  border-right:1px solid #ddd;
-}
-
-.matchName{
-  position:absolute;
-
-  top:5px;
-
-  width:100%;
-
-  text-align:center;
-
-  font-size:clamp(11px,1vw,17px);
-
-  font-weight:900;
-
-  color:#20215d;
+  padding:7px;
 }
 
 .score{
-  margin-top:10px;
-
-  min-width:130px;
-
-  padding:3px 15px;
-
-  text-align:center;
-
-  border-radius:8px;
-
-  background:
-    linear-gradient(
-      90deg,
-      #ee159a,
-      #f31992
-    );
-
-  color:#fff;
-
-  font-size:clamp(27px,3.2vw,52px);
-
+  font-size:clamp(32px,4vw,62px);
   line-height:1;
-
   font-weight:1000;
-
-  box-shadow:
-    0 3px 8px #c7007755;
+  letter-spacing:-2px;
 }
 
-.scoreOvers{
-  margin-top:3px;
-
-  font-size:clamp(13px,1.3vw,22px);
-
+.overs{
+  margin-top:5px;
+  font-size:clamp(13px,1.4vw,22px);
   font-weight:900;
+  color:#d9e8ff;
 }
 
-.rateRow{
-  position:absolute;
-
-  bottom:4px;
-
-  width:100%;
-
-  display:flex;
-
-  justify-content:center;
-
-  gap:22px;
-
-  font-size:clamp(10px,0.9vw,15px);
-
-  font-weight:900;
-}
-
-/* ==============================
-   BOWLER
-============================== */
-
-.bowlerBox{
-  position:relative;
-
-  display:flex;
-  flex-direction:column;
-
-  justify-content:center;
-
-  padding:7px 15px;
-
-  color:#fff;
-
-  background:
-    linear-gradient(
-      90deg,
-      #111d69,
-      #071d67
-    );
-
-  overflow:hidden;
-}
-
-.bowlerName{
-  font-size:clamp(14px,1.4vw,23px);
-
-  font-weight:1000;
-
-  white-space:nowrap;
-
-  overflow:hidden;
-
-  text-overflow:ellipsis;
-}
-
-.bowlerFigures{
+.target{
   margin-top:3px;
-
-  font-size:clamp(11px,1vw,17px);
-
-  color:#fff;
-
+  color:var(--gold);
+  font-size:12px;
   font-weight:800;
 }
 
-/* ==============================
-   BALLS
-============================== */
+/* BOWLER */
+
+.bowlerBox{
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  padding:9px 14px;
+}
+
+.bowlerTitle{
+  color:var(--muted);
+  font-size:11px;
+  text-transform:uppercase;
+}
+
+.bowlerName{
+  font-size:clamp(16px,1.6vw,27px);
+  font-weight:900;
+  margin:2px 0;
+}
+
+.bowlerStats{
+  font-size:12px;
+  font-weight:700;
+}
+
+.economy{
+  color:var(--gold);
+}
+
+/* BALL HISTORY */
 
 .ballRow{
-  position:absolute;
-
-  left:0;
-  right:0;
-
-  bottom:0;
-
-  height:29px;
-
   display:flex;
-
   align-items:center;
-
-  justify-content:flex-start;
-
-  gap:4px;
-
-  padding-left:15px;
-}
-
-.ball{
-  width:25px;
-  height:25px;
-
-  border-radius:50%;
-
-  display:flex;
-
-  align-items:center;
-  justify-content:center;
-
-  color:#fff;
-
-  font-size:12px;
-
-  font-weight:1000;
-
-  box-shadow:
-    0 1px 3px #0008;
-}
-
-.ball1{
-  background:#1475c9;
-}
-
-.ball2{
-  background:#078bc4;
-}
-
-.ball3{
-  background:#6848ba;
-}
-
-.ball4{
-  background:#07995b;
-}
-
-.ball5{
-  background:#1594c7;
-}
-
-.ball6{
-  background:#ec9d00;
-}
-
-.ballDot{
-  background:#213d82;
-}
-
-.ballW{
-  background:#e21c42;
-}
-
-.ballExtra{
-  background:#8d3cb8;
-}
-
-.ballWide{
-  background:#c87900;
-}
-
-.ballNB{
-  background:#db2677;
-}
-
-/* ==============================
-   RIGHT TEAM
-============================== */
-
-.teamRight{
-  position:relative;
-
-  display:flex;
-
-  align-items:center;
-
-  justify-content:center;
-
-  background:
-    linear-gradient(
-      100deg,
-      #f2d500,
-      #d9c000
-    );
-
-  color:#111;
-
-  font-size:clamp(17px,2vw,32px);
-
-  font-weight:1000;
-
-  text-transform:uppercase;
-
+  gap:5px;
+  padding:5px 12px 8px;
+  border-top:1px solid #ffffff18;
   overflow:hidden;
 }
 
-.teamRight:before{
-  content:"";
-
-  position:absolute;
-
-  left:-23px;
-  top:-20px;
-
-  width:45px;
-  height:150px;
-
-  background:#101f68;
-
-  transform:rotate(-17deg);
+.ballTitle{
+  font-size:10px;
+  color:var(--muted);
+  margin-right:4px;
 }
 
-.teamRight span{
-  position:relative;
-  z-index:2;
+.ball{
+  min-width:25px;
+  height:25px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:50%;
+  background:#263552;
+  font-size:11px;
+  font-weight:900;
 }
 
-/* ==============================
-   LIVE
-============================== */
+.ball.four{
+  background:#087cff;
+  box-shadow:0 0 8px #087cff99;
+}
 
-.liveDot{
+.ball.six{
+  background:#a000ff;
+  box-shadow:0 0 9px #a000ff99;
+}
+
+.ball.wicket{
+  background:var(--red);
+  box-shadow:0 0 9px #ff315899;
+}
+
+.ball.extra{
+  background:#c98500;
+  color:#111;
+}
+
+/* TO WIN */
+
+.toWin{
   position:absolute;
+  left:50%;
+  transform:translateX(-50%);
+  bottom:100%;
+  margin-bottom:8px;
 
-  right:6px;
-  top:5px;
+  padding:7px 18px;
+  border-radius:10px;
 
-  color:#ff2348;
+  background:rgba(3,10,22,.96);
+  border:1px solid var(--gold);
 
-  font-size:9px;
+  color:#fff;
+  font-size:13px;
+  font-weight:900;
 
+  box-shadow:0 0 15px #0008;
+}
+
+.toWin b{
+  color:var(--gold);
+}
+
+/* CUSTOM LOWER THIRD */
+
+.customLower{
+  position:absolute;
+  left:50%;
+  transform:translateX(-50%);
+  bottom:calc(100% + 55px);
+
+  display:none;
+
+  min-width:300px;
+  max-width:80%;
+
+  padding:9px 22px;
+
+  border-radius:10px;
+  border:2px solid var(--c1);
+
+  background:linear-gradient(
+    90deg,
+    rgba(4,13,28,.98),
+    rgba(10,30,60,.98)
+  );
+
+  text-align:center;
+  font-size:16px;
+  font-weight:900;
+}
+
+.customLower.show{
+  display:block;
+}
+
+/* ANIMATION MESSAGE */
+
+.animation{
+  position:fixed;
+  inset:0;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  pointer-events:none;
+  z-index:50;
+}
+
+.animation.show{
+  display:flex;
+}
+
+.animText{
+  font-size:clamp(70px,12vw,190px);
   font-weight:1000;
+  text-transform:uppercase;
+
+  text-shadow:
+    0 0 10px #fff,
+    0 0 30px var(--c1),
+    0 0 70px var(--c2);
+
+  animation:pop .9s ease forwards;
 }
 
-/* ==============================
-   THEME COLORS
-============================== */
-
-.theme-neon .teamLeft{
-  background:linear-gradient(100deg,#8b00ff,#40107d);
+@keyframes pop{
+  0%{
+    opacity:0;
+    transform:scale(.2) rotate(-8deg);
+  }
+  30%{
+    opacity:1;
+    transform:scale(1.15) rotate(2deg);
+  }
+  70%{
+    opacity:1;
+    transform:scale(1);
+  }
+  100%{
+    opacity:0;
+    transform:scale(1.2);
+  }
 }
 
-.theme-neon .batsmen,
-.theme-neon .bowlerBox{
-  background:linear-gradient(90deg,#250044,#40107d);
+.animFour .animText{
+  color:#00d9ff;
 }
 
-.theme-neon .score{
-  background:linear-gradient(90deg,#ff1493,#8b00ff);
+.animSix .animText{
+  color:#d000ff;
 }
 
-.theme-neon .teamRight{
-  background:linear-gradient(100deg,#ff19d4,#a500d9);
-  color:#fff;
+.animWicket .animText{
+  color:#ff3158;
 }
 
-.theme-green .teamLeft{
-  background:linear-gradient(100deg,#009b55,#006d3d);
+.animFreeHit .animText{
+  color:#ffd12f;
 }
 
-.theme-green .batsmen,
-.theme-green .bowlerBox{
-  background:linear-gradient(90deg,#063f26,#00633b);
+.animHat .animText{
+  color:#20e070;
 }
 
-.theme-green .score{
-  background:linear-gradient(90deg,#00a85a,#20e070);
+/* HIDE */
+
+.hidden{
+  display:none!important;
 }
 
-.theme-green .teamRight{
-  background:linear-gradient(100deg,#62d66f,#13a84b);
-}
+/* MOBILE */
 
-.theme-gold .teamLeft{
-  background:linear-gradient(100deg,#bd7600,#744500);
-}
+@media(max-width:800px){
 
-.theme-gold .batsmen,
-.theme-gold .bowlerBox{
-  background:linear-gradient(90deg,#382000,#654000);
-}
-
-.theme-gold .score{
-  background:linear-gradient(90deg,#ffb300,#d47b00);
-}
-
-.theme-gold .teamRight{
-  background:linear-gradient(100deg,#ffe45c,#ffb000);
-}
-
-.theme-red .teamLeft{
-  background:linear-gradient(100deg,#bd1232,#69081c);
-}
-
-.theme-red .batsmen,
-.theme-red .bowlerBox{
-  background:linear-gradient(90deg,#36030d,#620817);
-}
-
-.theme-red .score{
-  background:linear-gradient(90deg,#ff3158,#c90035);
-}
-
-.theme-red .teamRight{
-  background:linear-gradient(100deg,#ff5b35,#d81c2e);
-  color:#fff;
-}
-
-.theme-rainbow .score{
-  background:
-    linear-gradient(
-      90deg,
-      #00cfff,
-      #7b2cff,
-      #ff1493
-    );
-}
-
-/* ==============================
-   MOBILE
-============================== */
-
-@media(max-width:700px){
-
-  body{
-    padding:1vw;
+  .overlay{
+    width:97vw;
+    border-radius:12px;
   }
 
-  #overlay{
-    width:98vw;
-
+  .mainRow{
     grid-template-columns:
-      .65fr
-      1.4fr
+      .9fr
+      1.3fr
       1fr
-      1.4fr
-      .65fr;
-
-    min-height:75px;
+      1.2fr
+      .9fr;
+    min-height:82px;
   }
 
-  .batsmen{
-    padding:4px 6px;
+  .team{
+    padding:6px;
   }
 
-  .batsmanRow{
-    height:31px;
-
-    grid-template-columns:
-      1fr
-      28px
-      28px;
+  .teamName{
+    font-size:13px;
   }
 
-  .ballRow{
-    display:none;
+  .teamShort{
+    font-size:8px;
+  }
+
+  .batters{
+    padding:4px;
+  }
+
+  .batterName{
+    font-size:11px;
+  }
+
+  .batterScore{
+    font-size:12px;
+  }
+
+  .batterBalls{
+    font-size:8px;
   }
 
   .score{
-    min-width:75px;
-
-    padding:3px 7px;
+    font-size:28px;
   }
 
-  .rateRow{
-    gap:8px;
+  .overs{
+    font-size:11px;
   }
 
   .bowlerBox{
-    padding:4px 7px;
+    padding:5px;
   }
 
+  .bowlerName{
+    font-size:12px;
+  }
+
+  .bowlerStats{
+    font-size:8px;
+  }
+
+  .ballRow{
+    padding:4px;
+  }
+
+  .ball{
+    min-width:19px;
+    height:19px;
+    font-size:8px;
+  }
+
+  .ballTitle{
+    display:none;
+  }
 }
-
-/* ==============================
-   HIDE FOR MINI MODE
-============================== */
-
-.mode-mini .batsmen,
-.mode-mini .bowlerFigures,
-.mode-mini .ballRow,
-.mode-mini .rateRow{
-  display:none;
-}
-
-.mode-mini #overlay{
-  min-height:55px;
-}
-
 </style>
 </head>
 
 <body>
 
-<div id="overlay">
+<div id="overlay" class="overlay">
 
-  <!-- LEFT TEAM -->
-  <div class="teamLeft">
-    <span id="batTeam">INDIA</span>
+  <div class="topLine"></div>
+
+  <div id="toWin" class="toWin">
+    TO WIN <b id="winRuns">—</b>
+    RUNS FROM <b id="winBalls">—</b> BALLS
   </div>
 
+  <div id="customLower" class="customLower"></div>
 
-  <!-- BATTERS -->
-  <div class="batsmen">
+  <div class="mainRow">
 
-    <div class="batsmanRow">
+    <!-- BATTING TEAM -->
 
-      <div class="batsmanName">
-        <span class="strikerMark">⚡</span>
-        <span id="striker">STRIKER</span>
+    <div class="team">
+
+      <div id="batTeam" class="teamName">
+        TEAM A
       </div>
 
-      <div class="batsmanRuns" id="strikerRuns">
-        0
-      </div>
-
-      <div class="batsmanBalls" id="strikerBalls">
-        0
+      <div id="batShort" class="teamShort">
+        BATTING
       </div>
 
     </div>
 
 
-    <div class="batsmanRow">
+    <!-- BATTERS -->
 
-      <div class="batsmanName">
-        <span id="nonStriker">
-          NON-STRIKER
+    <div class="batters">
+
+      <div id="batter1" class="batter striker">
+
+        <span class="strikeDot"></span>
+
+        <span id="b1name" class="batterName">
+          Striker
+        </span>
+
+        <span>
+          <b id="b1runs">0</b>
+          <span class="batterBalls">
+            (<span id="b1balls">0</span>)
+          </span>
+        </span>
+
+      </div>
+
+
+      <div id="batter2" class="batter">
+
+        <span class="strikeDot"></span>
+
+        <span id="b2name" class="batterName">
+          Non-Striker
+        </span>
+
+        <span>
+          <b id="b2runs">0</b>
+          <span class="batterBalls">
+            (<span id="b2balls">0</span>)
+          </span>
+        </span>
+
+      </div>
+
+    </div>
+
+
+    <!-- SCORE -->
+
+    <div class="scoreBox">
+
+      <div id="score" class="score">
+        0/0
+      </div>
+
+      <div id="overs" class="overs">
+        0.0 OV
+      </div>
+
+      <div id="target" class="target">
+        TARGET —
+      </div>
+
+    </div>
+
+
+    <!-- BOWLER -->
+
+    <div class="bowlerBox">
+
+      <div class="bowlerTitle">
+        CURRENT BOWLER
+      </div>
+
+      <div id="bowler" class="bowlerName">
+        Bowler
+      </div>
+
+      <div id="bowlerStats" class="bowlerStats">
+        0.0 O • 0 R • 0 W
+        <span class="economy">
+          Eco 0.00
         </span>
       </div>
 
-      <div class="batsmanRuns" id="nonRuns">
-        0
+    </div>
+
+
+    <!-- BOWLING TEAM -->
+
+    <div class="team right">
+
+      <div id="bowlTeam" class="teamName">
+        TEAM B
       </div>
 
-      <div class="batsmanBalls" id="nonBalls">
-        0
+      <div class="teamShort">
+        BOWLING
       </div>
 
     </div>
 
-
-    <!-- BALLS UNDER BATTERS -->
-    <div
-      class="ballRow"
-      id="ballRow">
-    </div>
-
   </div>
 
 
-  <!-- CENTER SCORE -->
-  <div class="scoreBox">
+  <!-- BALL BY BALL -->
 
-    <div
-      class="matchName"
-      id="matchName">
-      AUS v IND
-    </div>
+  <div class="ballRow">
 
-    <div
-      class="score"
-      id="score">
-      0-0
-    </div>
-
-    <div
-      class="scoreOvers"
-      id="overs">
-      0.0 (0)
-    </div>
-
-    <div class="rateRow">
-
-      <span>
-        CRR:
-        <b id="crr">0.00</b>
-      </span>
-
-      <span>
-        RRR:
-        <b id="rrr">0.00</b>
-      </span>
-
-    </div>
-
-  </div>
-
-
-  <!-- BOWLER -->
-  <div class="bowlerBox">
-
-    <div class="liveDot">
-      ● LIVE
-    </div>
-
-    <div
-      class="bowlerName"
-      id="bowler">
-      BOWLER
-    </div>
-
-    <div
-      class="bowlerFigures"
-      id="bowlerFigures">
-      0.0 O • 0 R • 0 W
-    </div>
-
-  </div>
-
-
-  <!-- RIGHT TEAM -->
-  <div class="teamRight">
-
-    <span id="bowlTeam">
-      AUSTRALIA
+    <span class="ballTitle">
+      THIS OVER
     </span>
+
+    <div id="balls">
+      <span class="ball">—</span>
+    </div>
 
   </div>
 
 </div>
 
 
+<!-- ANIMATION -->
+
+<div id="animation" class="animation">
+
+  <div id="animText" class="animText">
+    FOUR!
+  </div>
+
+</div>
+
+
 <script type="module">
+  const firebaseConfig = {
+  apiKey: "AIzaSyBLWq1bqJ32F2cg3mqYQ0uwXcS3zvTA3A4",
+  authDomain: "brklive19-2bab4.firebaseapp.com",
+  databaseURL: "https://brklive19-2bab4-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "brklive19-2bab4",
+  storageBucket: "brklive19-2bab4.firebasestorage.app",
+  messagingSenderId: "294058533898",
+  appId: "1:294058533898:web:4996705937e969939cabf3",
+  measurementId: "G-RW18E7LVEX"
+};
 
-/* ========================================
-   FIREBASE
-======================================== */
-
-import {
-  initializeApp
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { initializeApp }
+  from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
 import {
   getDatabase,
@@ -799,672 +702,604 @@ import {
   onValue
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+const liveRef = ref(db, "liveScore");
 
-const firebaseConfig = {
+const $ = id => document.getElementById(id);
 
-  apiKey:
-    "AIzaSyBLWq1bqJ32F2cg3mqYQ0uwXcS3zvTA3A4",
-
-  authDomain:
-    "brklive19-2bab4.firebaseapp.com",
-
-  databaseURL:
-    "https://brklive19-2bab4-default-rtdb.asia-southeast1.firebasedatabase.app",
-
-  projectId:
-    "brklive19-2bab4",
-
-  storageBucket:
-    "brklive19-2bab4.firebasestorage.app",
-
-  messagingSenderId:
-    "294058533898",
-
-  appId:
-    "1:294058533898:web:4996705937e969939cabf3",
-
-  measurementId:
-    "G-RW18E7LVEX"
-
-};
+let previousRuns = 0;
+let previousWickets = 0;
+let previousBalls = 0;
+let previousEventsLength = 0;
 
 
-const app =
-  initializeApp(firebaseConfig);
-
-const db =
-  getDatabase(app);
-
-const liveRef =
-  ref(db,"liveScore");
-
-
-/* ========================================
+/* =========================
    HELPERS
-======================================== */
-
-const $ =
-  id => document.getElementById(id);
-
+========================= */
 
 function num(v){
-
-  return Number(v || 0);
-
+  return Number(v) || 0;
 }
 
-
-function overs(balls){
-
+function oversFromBalls(balls){
   balls = num(balls);
-
-  return (
-    Math.floor(balls / 6)
-    + "."
-    + (balls % 6)
-  );
-
+  return Math.floor(balls / 6) + "." + (balls % 6);
 }
 
-
-function getTeam(data,side){
-
+function teamName(data, side){
   if(side === "A"){
-
     return data.teamA || "TEAM A";
-
   }
 
   return data.teamB || "TEAM B";
-
 }
 
-
-function getBattingStats(data,name){
+function batterStats(data, name){
 
   if(
     data.batters &&
     name &&
     data.batters[name]
   ){
-
     return data.batters[name];
-
   }
 
   return {
-    runs:0,
-    balls:0,
-    fours:0,
-    sixes:0
+    runs: 0,
+    balls: 0,
+    fours: 0,
+    sixes: 0
   };
-
 }
 
-
-function getBowlerStats(data,name){
+function bowlerStats(data, name){
 
   if(
     data.bowlers &&
     name &&
     data.bowlers[name]
   ){
-
     return data.bowlers[name];
-
   }
 
   return {
-    balls:0,
-    runs:0,
-    wickets:0
+    balls: 0,
+    runs: 0,
+    wickets: 0
   };
-
 }
 
 
-/* ========================================
-   SHORT NAME
-======================================== */
+/* =========================
+   TARGET / REQUIRED RUNS
+========================= */
 
-function shortName(name){
+function updateTarget(data){
 
-  if(!name){
+  const target = num(data.target);
 
-    return "TEAM";
+  if(!target || num(data.innings) !== 2){
 
+    $("target").textContent = "TARGET —";
+
+    $("toWin").style.display = "none";
+
+    return;
   }
 
-  const words =
-    String(name)
-      .trim()
-      .split(/\s+/);
+  const runs = num(data.runs);
+  const legalBalls = num(data.legalBalls);
 
-  if(words.length === 1){
+  const runsNeeded = Math.max(target - runs, 0);
 
-    return words[0]
-      .substring(0,7)
-      .toUpperCase();
+  const maxBalls =
+    num(data.maxOvers) * 6;
+
+  const ballsRemaining =
+    Math.max(maxBalls - legalBalls, 0);
+
+  $("target").textContent =
+    "TARGET " + target;
+
+  if(runsNeeded > 0){
+
+    $("winRuns").textContent =
+      runsNeeded;
+
+    $("winBalls").textContent =
+      ballsRemaining;
+
+    $("toWin").style.display = "block";
+
+  }else{
+
+    $("toWin").style.display = "none";
 
   }
-
-  return words
-    .map(word => word[0])
-    .join("")
-    .substring(0,6)
-    .toUpperCase();
-
 }
 
 
-/* ========================================
-   BALL HISTORY
-======================================== */
+/* =========================
+   BALL DISPLAY
+========================= */
 
-function drawBalls(data){
+function getBallValue(event){
 
-  const row =
-    $("ballRow");
+  const text =
+    String(event || "").toLowerCase();
 
-  row.innerHTML = "";
+  if(text.includes("wicket"))
+    return {
+      value:"W",
+      className:"wicket"
+    };
+
+  if(text.includes("six"))
+    return {
+      value:"6",
+      className:"six"
+    };
+
+  if(text.includes("4 run") ||
+     text.includes("4 run") ||
+     text === "4")
+    return {
+      value:"4",
+      className:"four"
+    };
+
+  if(text.includes("wide"))
+    return {
+      value:"Wd",
+      className:"extra"
+    };
+
+  if(text.includes("noball") ||
+     text.includes("no ball"))
+    return {
+      value:"Nb",
+      className:"extra"
+    };
+
+  if(text.includes("legbye"))
+    return {
+      value:"Lb",
+      className:"extra"
+    };
+
+  if(text.includes("bye"))
+    return {
+      value:"B",
+      className:"extra"
+    };
+
+  const match =
+    text.match(/(\d+)\s*run/);
+
+  if(match){
+
+    const r = Number(match[1]);
+
+    if(r === 4)
+      return {
+        value:"4",
+        className:"four"
+      };
+
+    if(r === 6)
+      return {
+        value:"6",
+        className:"six"
+      };
+
+    return {
+      value:String(r),
+      className:""
+    };
+  }
+
+  return {
+    value:"•",
+    className:""
+  };
+}
+
+
+function renderBalls(data){
+
+  const container = $("balls");
+
+  container.innerHTML = "";
 
   const events =
     Array.isArray(data.events)
-      ? data.events.slice(-6)
+      ? data.events
       : [];
 
-  events.forEach(event => {
+  const lastEvents =
+    events.slice(-6);
 
-    let text =
-      String(event);
+  if(!lastEvents.length){
 
-    let value = "0";
-    let cls = "ballDot";
+    const x =
+      document.createElement("span");
 
+    x.className = "ball";
+    x.textContent = "—";
 
-    /* NORMAL RUN */
+    container.appendChild(x);
 
-    const run =
-      text.match(/(\d+)\s*run/i);
+    return;
+  }
 
-    if(run){
+  lastEvents.forEach(event => {
 
-      const r =
-        Number(run[1]);
+    const info =
+      getBallValue(event);
 
-      value = r;
+    const x =
+      document.createElement("span");
 
-      if(r === 0){
-        cls = "ballDot";
-      }
+    x.className =
+      "ball " + info.className;
 
-      else if(r === 1){
-        cls = "ball1";
-      }
+    x.textContent =
+      info.value;
 
-      else if(r === 2){
-        cls = "ball2";
-      }
-
-      else if(r === 3){
-        cls = "ball3";
-      }
-
-      else if(r === 4){
-        cls = "ball4";
-      }
-
-      else if(r === 5){
-        cls = "ball5";
-      }
-
-      else if(r === 6){
-        cls = "ball6";
-      }
-
-    }
-
-
-    /* WICKET */
-
-    if(/WICKET/i.test(text)){
-
-      value = "W";
-      cls = "ballW";
-
-    }
-
-
-    /* WIDE */
-
-    if(/wide/i.test(text)){
-
-      const m =
-        text.match(/wide\s*:\s*(\d+)/i);
-
-      value =
-        m ? "WD" : "WD";
-
-      cls = "ballWide";
-
-    }
-
-
-    /* NO BALL */
-
-    if(
-      /noball/i.test(text) ||
-      /no ball/i.test(text)
-    ){
-
-      value = "NB";
-      cls = "ballNB";
-
-    }
-
-
-    /* BYE */
-
-    if(
-      /bye/i.test(text) &&
-      !/legbye/i.test(text) &&
-      !/leg bye/i.test(text)
-    ){
-
-      value = "B";
-      cls = "ballExtra";
-
-    }
-
-
-    /* LEG BYE */
-
-    if(
-      /legbye/i.test(text) ||
-      /leg bye/i.test(text)
-    ){
-
-      value = "LB";
-      cls = "ballExtra";
-
-    }
-
-
-    const div =
-      document.createElement("div");
-
-    div.className =
-      "ball " + cls;
-
-    div.textContent =
-      value;
-
-    row.appendChild(div);
+    container.appendChild(x);
 
   });
 
 }
 
 
-/* ========================================
-   THEME
-======================================== */
+/* =========================
+   ANIMATIONS
+========================= */
 
-function theme(data){
+function showAnimation(type){
 
-  const overlay =
-    $("overlay");
+  const animation =
+    $("animation");
 
-  overlay.classList.remove(
-    "theme-neon",
-    "theme-green",
-    "theme-gold",
-    "theme-red",
-    "theme-rainbow"
-  );
+  const text =
+    $("animText");
 
-  const t =
-    data.theme || "blue";
+  animation.className =
+    "animation";
 
-  if(t === "neon"){
-    overlay.classList.add("theme-neon");
+  let message = "";
+
+  if(type === "four"){
+    message = "FOUR!";
+    animation.classList.add("show","animFour");
   }
 
-  if(t === "green"){
-    overlay.classList.add("theme-green");
+  if(type === "six"){
+    message = "SIX!";
+    animation.classList.add("show","animSix");
   }
 
-  if(t === "gold"){
-    overlay.classList.add("theme-gold");
+  if(type === "wicket"){
+    message = "WICKET!";
+    animation.classList.add("show","animWicket");
   }
 
-  if(t === "red"){
-    overlay.classList.add("theme-red");
+  if(type === "freehit"){
+    message = "FREE HIT!";
+    animation.classList.add("show","animFreeHit");
   }
 
-  if(t === "rainbow"){
-    overlay.classList.add("theme-rainbow");
+  if(type === "hattrick"){
+    message = "HAT-TRICK BALL!";
+    animation.classList.add("show","animHat");
   }
 
+  text.textContent = message;
+
+  setTimeout(() => {
+
+    animation.className =
+      "animation";
+
+  },1000);
 }
 
 
-/* ========================================
-   MODE
-======================================== */
+/* =========================
+   DETECT SCORE ANIMATION
+========================= */
 
-function mode(data){
+function detectAnimation(data){
 
-  const overlay =
-    $("overlay");
+  const runs =
+    num(data.runs);
 
-  overlay.classList.remove(
-    "mode-mini"
-  );
+  const wickets =
+    num(data.wickets);
 
-  if(data.mode === "mini"){
+  const balls =
+    num(data.legalBalls);
 
-    overlay.classList.add(
-      "mode-mini"
+  if(
+    runs > previousRuns &&
+    Array.isArray(data.events)
+  ){
+
+    const event =
+      data.events[data.events.length - 1];
+
+    const text =
+      String(event || "").toLowerCase();
+
+    if(
+      text.includes("6 run") ||
+      text.includes("six")
+    ){
+
+      showAnimation("six");
+
+    }else if(
+      text.includes("4 run") ||
+      text.includes("four")
+    ){
+
+      showAnimation("four");
+
+    }
+
+  }
+
+  if(wickets > previousWickets){
+
+    showAnimation("wicket");
+
+  }
+
+  /*
+    Free hit / hat trick can be sent
+    from scorer.html using event text.
+  */
+
+  if(Array.isArray(data.events)){
+
+    const last =
+      String(
+        data.events[data.events.length - 1] || ""
+      ).toLowerCase();
+
+    if(last.includes("free hit")){
+
+      showAnimation("freehit");
+
+    }
+
+    if(last.includes("hat-trick") ||
+       last.includes("hattrick")){
+
+      showAnimation("hattrick");
+
+    }
+
+  }
+
+  previousRuns = runs;
+  previousWickets = wickets;
+  previousBalls = balls;
+}
+
+
+/* =========================
+   CUSTOM LOWER THIRD
+========================= */
+
+function customLowerThird(data){
+
+  const box =
+    $("customLower");
+
+  const message =
+    data.customLowerThird ||
+    data.lowerThird ||
+    data.customMessage ||
+    "";
+
+  if(!message){
+
+    box.classList.remove("show");
+    box.textContent = "";
+
+    return;
+  }
+
+  box.textContent =
+    message;
+
+  box.classList.add("show");
+}
+
+
+/* =========================
+   FIREBASE LIVE UPDATE
+========================= */
+
+onValue(liveRef, snapshot => {
+
+  const data =
+    snapshot.val();
+
+  if(!data)
+    return;
+
+
+  /* TEAM */
+
+  const battingSide =
+    data.battingTeam || "A";
+
+  const bowlingSide =
+    data.bowlingTeam ||
+    (battingSide === "A" ? "B" : "A");
+
+
+  $("batTeam").textContent =
+    teamName(data, battingSide);
+
+  $("bowlTeam").textContent =
+    teamName(data, bowlingSide);
+
+
+  /* BATTERS */
+
+  const striker =
+    data.b1 ||
+    data.batsman1 ||
+    data.striker ||
+    "Striker";
+
+  const nonStriker =
+    data.b2 ||
+    data.batsman2 ||
+    data.nonStriker ||
+    "Non-Striker";
+
+
+  const b1 =
+    batterStats(data, striker);
+
+  const b2 =
+    batterStats(data, nonStriker);
+
+
+  $("b1name").textContent =
+    striker;
+
+  $("b2name").textContent =
+    nonStriker;
+
+
+  $("b1runs").textContent =
+    num(
+      b1.runs ??
+      data.batsman1Runs
     );
 
-  }
+  $("b1balls").textContent =
+    num(
+      b1.balls ??
+      data.batsman1Balls
+    );
 
-}
 
+  $("b2runs").textContent =
+    num(
+      b2.runs ??
+      data.batsman2Runs
+    );
 
-/* ========================================
-   FIREBASE LIVE UPDATE
-======================================== */
+  $("b2balls").textContent =
+    num(
+      b2.balls ??
+      data.batsman2Balls
+    );
 
-onValue(
-  liveRef,
-  snapshot => {
 
-    const data =
-      snapshot.val();
+  /* STRIKER INDICATOR */
 
-    if(!data){
+  $("batter1").classList.remove("striker");
+  $("batter2").classList.remove("striker");
 
-      return;
+  if(
+    striker &&
+    striker !== "Striker"
+  ){
 
-    }
-
-
-    /* ==============================
-       TEAMS
-    ============================== */
-
-    const batting =
-      getTeam(
-        data,
-        data.battingTeam || "A"
-      );
-
-    const bowling =
-      getTeam(
-        data,
-        data.bowlingTeam || "B"
-      );
-
-
-    $("batTeam")
-      .textContent =
-      batting;
-
-
-    $("bowlTeam")
-      .textContent =
-      bowling;
-
-
-    /* ==============================
-       BATTERS
-    ============================== */
-
-    const striker =
-      data.striker ||
-      data.b1 ||
-      data.batsman1 ||
-      "STRIKER";
-
-
-    const nonStriker =
-      data.nonStriker ||
-      data.b2 ||
-      data.batsman2 ||
-      "NON-STRIKER";
-
-
-    const strikerData =
-      getBattingStats(
-        data,
-        striker
-      );
-
-
-    const nonData =
-      getBattingStats(
-        data,
-        nonStriker
-      );
-
-
-    $("striker")
-      .textContent =
-      striker;
-
-
-    $("nonStriker")
-      .textContent =
-      nonStriker;
-
-
-    $("strikerRuns")
-      .textContent =
-      num(
-        strikerData.runs
-      );
-
-
-    $("strikerBalls")
-      .textContent =
-      num(
-        strikerData.balls
-      );
-
-
-    $("nonRuns")
-      .textContent =
-      num(
-        nonData.runs
-      );
-
-
-    $("nonBalls")
-      .textContent =
-      num(
-        nonData.balls
-      );
-
-
-    /* ==============================
-       SCORE
-    ============================== */
-
-    const runs =
-      num(data.runs);
-
-    const wickets =
-      num(data.wickets);
-
-    $("score")
-      .textContent =
-      runs + "-" + wickets;
-
-
-    const legalBalls =
-      num(
-        data.legalBalls ??
-        data.balls
-      );
-
-
-    $("overs")
-      .textContent =
-      overs(legalBalls)
-      + " ("
-      + legalBalls
-      + ")";
-
-
-    /* ==============================
-       MATCH NAME
-    ============================== */
-
-    const match =
-      data.matchName ||
-      (
-        shortName(batting)
-        + " v "
-        + shortName(bowling)
-      );
-
-
-    $("matchName")
-      .textContent =
-      match;
-
-
-    /* ==============================
-       CRR
-    ============================== */
-
-    let crr =
-      num(
-        data.currentRunRate
-      );
-
-    if(
-      !crr &&
-      legalBalls > 0
-    ){
-
-      crr =
-        runs /
-        (legalBalls / 6);
-
-    }
-
-
-    $("crr")
-      .textContent =
-      crr.toFixed(2);
-
-
-    /* ==============================
-       RRR
-    ============================== */
-
-    let rrr =
-      num(
-        data.requiredRunRate
-      );
-
-    if(
-      !rrr &&
-      data.target &&
-      legalBalls <
-      num(data.maxOvers) * 6
-    ){
-
-      const remaining =
-        num(data.maxOvers) * 6
-        - legalBalls;
-
-      const runsNeeded =
-        num(data.target) - runs;
-
-      if(
-        remaining > 0 &&
-        runsNeeded > 0
-      ){
-
-        rrr =
-          runsNeeded /
-          (remaining / 6);
-
-      }
-
-    }
-
-
-    $("rrr")
-      .textContent =
-      rrr.toFixed(2);
-
-
-    /* ==============================
-       BOWLER
-    ============================== */
-
-    const bowler =
-      data.bowler ||
-      "BOWLER";
-
-
-    const bowlerData =
-      getBowlerStats(
-        data,
-        bowler
-      );
-
-
-    $("bowler")
-      .textContent =
-      bowler;
-
-
-    $("bowlerFigures")
-      .textContent =
-      overs(
-        bowlerData.balls
-      )
-      + " O • "
-      + num(
-        bowlerData.runs
-      )
-      + " R • "
-      + num(
-        bowlerData.wickets
-      )
-      + " W";
-
-
-    /* ==============================
-       BALLS
-    ============================== */
-
-    drawBalls(data);
-
-
-    /* ==============================
-       THEME
-    ============================== */
-
-    theme(data);
-
-
-    /* ==============================
-       MODE
-    ============================== */
-
-    mode(data);
+    $("batter1").classList.add("striker");
 
   }
 
-);
 
+  /* SCORE */
+
+  const runs =
+    num(data.runs);
+
+  const wickets =
+    num(data.wickets);
+
+  $("score").textContent =
+    runs + "/" + wickets;
+
+
+  /* OVERS */
+
+  const legalBalls =
+    num(
+      data.legalBalls ??
+      data.balls
+    );
+
+  $("overs").textContent =
+    oversFromBalls(legalBalls) +
+    " OV";
+
+
+  /* BOWLER */
+
+  const bowler =
+    data.bowler ||
+    "Bowler";
+
+  const bo =
+    bowlerStats(data, bowler);
+
+
+  $("bowler").textContent =
+    bowler;
+
+
+  const eco =
+    bo.balls
+      ? (
+          bo.runs /
+          (bo.balls / 6)
+        ).toFixed(2)
+      : "0.00";
+
+
+  $("bowlerStats").innerHTML =
+    oversFromBalls(bo.balls) +
+    " O • " +
+    num(bo.runs) +
+    " R • " +
+    num(bo.wickets) +
+    " W " +
+    '<span class="economy">Eco ' +
+    eco +
+    "</span>";
+
+
+  /* TARGET */
+
+  updateTarget(data);
+
+
+  /* BALLS */
+
+  renderBalls(data);
+
+
+  /* CUSTOM MESSAGE */
+
+  customLowerThird(data);
+
+
+  /* ANIMATION */
+
+  detectAnimation(data);
+
+});
 </script>
 
 </body>
