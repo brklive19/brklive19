@@ -16,11 +16,13 @@ body{display:flex;align-items:flex-end;justify-content:center;padding:2.4vw 3vw}
 
 /* ===== MAIN REFERENCE-STYLE LOWER THIRD ===== */
 .overlay{
-  width:min(1760px,96vw);position:relative;overflow:visible;
-}
-.overlay.hidden{display:none}
+  width:min(1760px,calc(100vw - 80px));
+  max-width:1760px;
+  position:relative;
+  overflow:visible;
   filter:drop-shadow(0 10px 18px rgba(0,0,0,.5));
 }
+.overlay.hidden{display:none}
 .frame{position:relative;height:142px;overflow:hidden;background:var(--navy);box-shadow:0 0 0 1px #ffffff30 inset}
 .frame:before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(0,0,0,.08),rgba(255,255,255,.03) 50%,rgba(0,0,0,.12));pointer-events:none}
 
@@ -86,11 +88,62 @@ body{display:flex;align-items:flex-end;justify-content:center;padding:2.4vw 3vw}
 .banner.player{background:linear-gradient(90deg,#101f63,#4b1d88);border-color:var(--yellow)}
 
 /* custom lower third */
-.custom{position:absolute;left:0;right:0;bottom:0;height:142px;padding:0 30px;border-radius:0;background:linear-gradient(135deg,#071a58,#102875);border:2px solid var(--cyan2);font-size:clamp(22px,3vw,52px);font-weight:1000;white-space:normal;display:none;align-items:center;justify-content:center;text-align:center;z-index:40;box-shadow:0 10px 30px #0008;text-transform:uppercase}
-.custom.pos-upper{bottom:calc(100% + 155px)}
-.custom.pos-middle{bottom:calc(100% + 82px)}
-.custom.pos-lower{bottom:calc(100% + 9px)}
+.custom{position:fixed;left:50%;bottom:18px;transform:translateX(-50%) translateZ(25px);width:min(1500px,90vw);min-height:70px;height:auto;padding:14px 30px;border-radius:12px;background:linear-gradient(135deg,#071a58,#102875);border:2px solid var(--cyan2);font-size:clamp(22px,3vw,52px);font-weight:1000;white-space:normal;display:none;align-items:center;justify-content:center;text-align:center;z-index:80;box-shadow:0 10px 30px #0008;text-transform:uppercase}
+.custom.pos-upper,.custom.pos-middle,.custom.pos-lower{bottom:18px}
 .custom.show{display:flex}
+
+/* Broadcast footer target / chase information */
+.targetFooter{
+  position:fixed;
+  left:50%;
+  bottom:18px;
+  transform:translateX(-50%);
+  width:min(1100px,92vw);
+  min-height:52px;
+  padding:10px 24px;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  background:linear-gradient(90deg,#071a58f2,#102875f2);
+  border:2px solid var(--cyan2);
+  border-radius:12px;
+  box-shadow:0 10px 35px #000b,0 0 20px #00d9ff22;
+  color:#fff;
+  font-size:clamp(18px,2vw,34px);
+  font-weight:1000;
+  text-transform:uppercase;
+  letter-spacing:.4px;
+  z-index:70;
+}
+.targetFooter.show{display:flex}
+
+/* Full-screen second innings announcement */
+.secondInningsPopup{
+  position:fixed;
+  inset:0;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:30px;
+  background:rgba(2,5,18,.72);
+  backdrop-filter:blur(7px);
+  z-index:90;
+}
+.secondInningsPopup.show{display:flex}
+.secondInningsBox{
+  width:min(900px,88vw);
+  padding:38px 44px;
+  text-align:center;
+  background:linear-gradient(145deg,#071a58,#102875 55%,#250d58);
+  border:3px solid var(--cyan2);
+  border-radius:24px;
+  box-shadow:0 25px 90px #000d,0 0 35px #00d9ff33;
+}
+.secondInningsBox .small{font-size:clamp(16px,1.5vw,24px);font-weight:800;color:var(--muted);letter-spacing:1px}
+.secondInningsBox h2{margin:10px 0 14px;font-size:clamp(34px,5vw,72px);color:#fff;text-shadow:0 0 24px #00d9ff55}
+.secondInningsTarget{font-size:clamp(28px,4vw,58px);font-weight:1000;color:var(--yellow);margin:10px 0}
+.secondInningsTeams{font-size:clamp(18px,2vw,30px);font-weight:900;margin-top:10px}
 .overlay.customMode .frame{visibility:hidden}
 
 /* animations */
@@ -132,8 +185,14 @@ body{display:flex;align-items:flex-end;justify-content:center;padding:2.4vw 3vw}
 .theme-redblack{--cyan:#ff365f;--cyan2:#ff9bb0;--navy:#180914;--navy2:#3a0c20;--yellow:#ffd44f}
 @keyframes sweep{0%,65%{transform:translateX(-120%)}80%,100%{transform:translateX(120%)}}
 
+/* 1920x1080 broadcast canvas: always centered and inside safe margins */
+@media(min-width:901px){
+  body{align-items:flex-end;justify-content:center;padding:0 40px 34px}
+  .overlay{width:min(1760px,calc(100vw - 80px));margin:0 auto}
+}
+
 @media(max-width:900px){
- body{padding:1vw}.frame{height:92px}.teamPanel{padding:0 10px}.teamPanel .teamName{font-size:13px}.content{left:16%;right:16%;grid-template-columns:31% 30% 39%}.batters{padding:4px 7px}.batter{gap:3px}.strike{font-size:10px}.batterName{font-size:9px}.batterScore b{font-size:14px}.batterScore span{font-size:8px}.matchTitle{font-size:9px}.scorePill{font-size:24px;padding:5px 8px}.scoreMeta{font-size:8px;gap:10px}.crrRrr{font-size:7px;gap:10px}.bowlerPanel{padding:5px 7px}.bowlerName{font-size:10px}.bowlerStats{font-size:7px}.currentOver{margin-top:4px;gap:3px}.currentOverLabel{font-size:6px}.ball{width:18px;height:18px;flex-basis:18px;font-size:7px}.live{font-size:7px}.target{top:-20px;padding:4px 8px;font-size:7px}}
+ body{padding:1vw}.frame{height:92px}.teamPanel{padding:0 10px}.teamPanel .teamName{font-size:13px}.content{left:16%;right:16%;grid-template-columns:31% 30% 39%}.batters{padding:4px 7px}.batter{gap:3px}.strike{font-size:10px}.batterName{font-size:9px}.batterScore b{font-size:14px}.batterScore span{font-size:8px}.matchTitle{font-size:9px}.scorePill{font-size:24px;padding:5px 8px}.scoreMeta{font-size:8px;gap:10px}.crrRrr{font-size:7px;gap:10px}.bowlerPanel{padding:5px 7px}.bowlerName{font-size:10px}.bowlerStats{font-size:7px}.currentOver{margin-top:4px;gap:3px}.currentOverLabel{font-size:6px}.ball{width:18px;height:18px;flex-basis:18px;font-size:7px}.live{font-size:7px}.target{top:-20px;padding:4px 8px;font-size:7px}.targetFooter{bottom:8px;width:94vw;min-height:34px;padding:6px 10px;font-size:13px}.secondInningsPopup{padding:14px}.secondInningsBox{width:92vw;padding:24px 18px;border-radius:18px}}
 </style>
 </head>
 <body>
@@ -146,6 +205,16 @@ body{display:flex;align-items:flex-end;justify-content:center;padding:2.4vw 3vw}
   <div id="bannerResult" class="banner result"></div>
   <div id="custom" class="custom"></div>
   <div id="scorecard" class="scorecard"></div>
+  <div id="targetFooter" class="targetFooter"></div>
+  <div id="secondInningsPopup" class="secondInningsPopup">
+    <div class="secondInningsBox">
+      <div class="small">🏏 FIRST INNINGS COMPLETE</div>
+      <h2>SECOND INNINGS</h2>
+      <div id="secondInningsTeams" class="secondInningsTeams"></div>
+      <div class="secondInningsTarget">TARGET <span id="secondInningsTarget">—</span></div>
+      <div id="secondInningsNeed" class="small"></div>
+    </div>
+  </div>
 
   <div class="frame">
     <div class="teamPanel left"><div id="batTeam" class="teamName">TEAM A</div></div>
@@ -226,7 +295,41 @@ function renderBalls(data){
 function calcCRR(d){const balls=num(d.legalBalls);return balls?(num(d.runs)/(balls/6)).toFixed(2):"0.00"}
 function calcRRR(d){if(num(d.innings)!==2||!num(d.target))return"0.00";const need=Math.max(num(d.target)-num(d.runs),0),left=Math.max(num(d.maxOvers)*6-num(d.legalBalls),0);return need&&left?((need/left)*6).toFixed(2):"0.00"}
 
-function updateTarget(d){const target=num(d.target),second=num(d.innings)===2;if(target&&second){$("targetTop").style.display="block";$("targetValue").textContent=target}else $("targetTop").style.display="none"}
+let secondInningsPopupShown=false;
+
+function updateTarget(d){
+  const target=num(d.target);
+  const second=num(d.innings)===2;
+  const ballsLeft=Math.max(num(d.maxOvers)*6-num(d.legalBalls),0);
+  const need=Math.max(target-num(d.runs),0);
+
+  if(target&&second){
+    $("targetTop").style.display="block";
+    $("targetValue").textContent=target;
+    $("targetFooter").textContent=`TO WIN NEED ${need} RUNS FROM ${ballsLeft} BALLS`;
+    $("targetFooter").classList.add("show");
+  }else{
+    $("targetTop").style.display="none";
+    $("targetFooter").classList.remove("show");
+  }
+
+  // First innings is complete when a target has been calculated but the
+  // scorer has not switched to innings 2 yet. Show the announcement on-air.
+  const firstComplete = num(d.innings)===1 && target>0 && d.firstInnings && num(d.firstInnings.runs)>=0 && d.secondInningsStarted!==true;
+  const popup=$("secondInningsPopup");
+  if(firstComplete){
+    const firstTeam=teamName(d,d.firstInnings.team||d.battingTeam);
+    const chaseTeam=teamName(d,d.firstInnings.team==="A"?"B":"A");
+    $("secondInningsTeams").textContent=`${firstTeam} scored ${num(d.firstInnings.runs)}/${num(d.firstInnings.wickets)} • ${chaseTeam} to bat`;
+    $("secondInningsTarget").textContent=target;
+    $("secondInningsNeed").textContent=`${chaseTeam} NEEDS ${target} RUNS TO WIN`;
+    popup.classList.add("show");
+    secondInningsPopupShown=true;
+  }else{
+    popup.classList.remove("show");
+    secondInningsPopupShown=false;
+  }
+}
 
 function showAnimation(type){
   const a=$("animation"),t=$("animText");
@@ -264,7 +367,25 @@ function detectAnimation(d){
 }
 
 function setPositionClass(el,position){el.classList.remove("pos-upper","pos-middle","pos-lower");el.classList.add("pos-"+(position||"lower"));}
-function customLower(d){const c=d.customLower||{};const message=c.active?c.text:(typeof d.customLowerThird==="string"?d.customLowerThird:"");const box=$("custom");const root=$("overlay");const pos=((d.overlay||{}).positions||{}).custom||"upper";setPositionClass(box,pos);root.classList.toggle("customMode",!!message);if(message){box.textContent=message;box.classList.add("show")}else{box.textContent="";box.classList.remove("show");root.classList.remove("customMode")}}
+function customLower(d){
+  const c=d.customLower||{};
+  const message=c.active?c.text:(typeof d.customLowerThird==="string"?d.customLowerThird:"");
+  const box=$("custom");
+  const root=$("overlay");
+  const pos=((d.overlay||{}).positions||{}).custom||"lower";
+  setPositionClass(box,pos);
+  root.classList.toggle("customMode",!!message);
+  if(message){
+    box.textContent=message;
+    box.classList.add("show");
+    box.style.bottom=(num(d.innings)===2 && num(d.target))?"86px":"18px";
+  }else{
+    box.textContent="";
+    box.classList.remove("show");
+    box.style.bottom="18px";
+    root.classList.remove("customMode");
+  }
+}
 
 function bannerText(d){
   const t=d.overlay||{};
