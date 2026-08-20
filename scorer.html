@@ -112,6 +112,8 @@ textarea{
   gap:8px;
 }
 
+.positionGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.positionGrid>div{background:#0d1526;border:1px solid #ffffff12;border-radius:12px;padding:12px}@media(max-width:700px){.positionGrid{grid-template-columns:1fr}}
+
 .btn{
   width:100%;
   border:0;
@@ -357,8 +359,6 @@ Colourful Live Cricket Controller • Firebase Auto-Save
 <div id="status" class="status">
 Connecting to Firebase...
 </div>
-
-
 <!-- ================================
      MATCH SETUP
 ================================ -->
@@ -506,6 +506,11 @@ onclick="saveSetup()">
 
 </button>
 
+<div class="g2" style="margin-top:8px">
+<button class="btn dark" onclick="resetMatch()">♻️ RESET MATCH</button>
+<button class="btn wick" onclick="resetLiveScoreOnly()">🗑 RESET LIVE SCORE</button>
+</div>
+
 </div>
 
 
@@ -565,147 +570,63 @@ NEW BATTER
 </div>
 
 
-<!-- ================================
-     OVERLAY CONTROL
-================================ -->
-
-<div class="card">
-
-<h2>📺 Overlay Controls</h2>
-
-<div class="g3">
-
-<button
-class="btn blue"
-onclick="setMode('default')">
-
-DEFAULT
-
-</button>
-
-<button
-class="btn special"
-onclick="setMode('mini')">
-
-MINI SCORE
-
-</button>
-
-<button
-class="btn blue"
-onclick="setMode('batsmen')">
-
-B1 + B2
-
-</button>
-
-</div>
-
-
-<div class="g3" style="margin-top:8px">
-
-<button
-class="btn good"
-onclick="setMode('bowler')">
-
-BOWLER
-
-</button>
-
-<button
-class="btn gold"
-onclick="setMode('summary')">
-
-SUMMARY
-
-</button>
-
-<button
-class="btn dark"
-onclick="setMode('scorecard')">
-
-SCORECARD
-
-</button>
-
-</div>
-
-<p class="mini">
-Overlay:
-<b id="overlayUrl"></b>
-</p>
-
-</div>
 
 
 <!-- ================================
-     THEMES
+     OVERLAY CONTROLLER — SAME PAGE
 ================================ -->
-
 <div class="card">
+<h2>📺 Overlay Controller</h2>
+<div class="mini">All scoring and overlay controls are on this page and use the same Firebase <b>liveScore</b> record.</div>
 
-<h2>🎨 Overlay Themes</h2>
-
+<h3 style="color:var(--cyan);margin-top:14px">🎨 3D Overlay Theme</h3>
 <div class="themeGrid">
-
-<button
-class="theme"
-data-theme="blue"
-onclick="setTheme('blue')">
-
-🔵 BLUE SPORTS
-
-</button>
-
-<button
-class="theme"
-data-theme="neon"
-onclick="setTheme('neon')">
-
-🟣 NEON
-
-</button>
-
-<button
-class="theme"
-data-theme="green"
-onclick="setTheme('green')">
-
-🟢 CRICKET GREEN
-
-</button>
-
-<button
-class="theme"
-data-theme="gold"
-onclick="setTheme('gold')">
-
-🟡 GOLD
-
-</button>
-
-<button
-class="theme"
-data-theme="red"
-onclick="setTheme('red')">
-
-🔴 RED PRO
-
-</button>
-
-<button
-class="theme"
-data-theme="rainbow"
-onclick="setTheme('rainbow')">
-
-🌈 RAINBOW
-
-</button>
-
+<button class="theme" onclick="setTheme('blue')">🔵 BLUE SPORTS</button>
+<button class="theme" onclick="setTheme('neon')">🟣 NEON 3D</button>
+<button class="theme" onclick="setTheme('green')">🟢 CRICKET GREEN</button>
+<button class="theme" onclick="setTheme('gold')">🟡 GOLD ELITE</button>
+<button class="theme" onclick="setTheme('red')">🔴 RED PRO</button>
+<button class="theme" onclick="setTheme('rainbow')">🌈 RAINBOW</button>
+<button class="theme" onclick="setTheme('glass')">🪟 GLASS 3D</button>
+<button class="theme" onclick="setTheme('carbon')">⬛ CARBON</button>
+<button class="theme" onclick="setTheme('stadium')">🏟 STADIUM</button>
+<button class="theme" onclick="setTheme('aurora')">🌌 AURORA</button>
+<button class="theme" onclick="setTheme('metallic')">⚙️ METALLIC</button>
+<button class="theme" onclick="setTheme('redblack')">🔥 RED BLACK</button>
 </div>
 
+<h3 style="color:var(--cyan);margin-top:14px">🖥 Overlay Mode</h3>
+<div class="g4">
+<button class="btn blue" onclick="setMode('default')">DEFAULT</button>
+<button class="btn special" onclick="setMode('mini')">MINI</button>
+<button class="btn custom" onclick="setMode('batsmen')">B1 + B2</button>
+<button class="btn good" onclick="setMode('bowler')">BOWLER</button>
+<button class="btn freehit" onclick="setMode('summary')">SUMMARY</button>
+<button class="btn dark" onclick="setMode('scorecard')">SCORECARD</button>
 </div>
 
+<h3 style="color:var(--cyan);margin-top:14px">🏷️ Banners & Player Graphics</h3>
+<div class="g4">
+<button class="btn special" onclick="toggleOverlayBanner('tournament')">🏆 TOURNAMENT</button>
+<button class="btn blue" onclick="toggleOverlayBanner('venue')">📍 VENUE</button>
+<button class="btn custom" onclick="toggleOverlayBanner('match')">⚔️ MATCH</button>
+<button class="btn good" onclick="toggleOverlayBanner('toss')">🪙 TOSS</button>
+<button class="btn custom" onclick="togglePlayerLower('b1')">👤 B1 SCORE</button>
+<button class="btn custom" onclick="togglePlayerLower('b2')">👤 B2 SCORE</button>
+<button class="btn dark" onclick="hidePlayerLower()">HIDE PLAYER</button>
+<button class="btn dark" onclick="toggleOverlayBanner('result')">🏆 RESULT</button>
+</div>
+
+<h3 style="color:var(--cyan);margin-top:14px">🎬 Animation Controls</h3>
+<div class="g4">
+<button class="btn freehit" onclick="broadcastEvent('FREE HIT')">🟡 FREE HIT</button>
+<button class="btn hattrick" onclick="broadcastEvent('HAT-TRICK BALL')">🟢 HAT-TRICK</button>
+<button class="btn run" onclick="broadcastEvent('FOUR')">🔵 FOUR</button>
+<button class="btn special" onclick="broadcastEvent('SIX')">🟣 SIX</button>
+<button class="btn wick" onclick="broadcastEvent('WICKET')">🔴 WICKET</button>
+<button class="btn wick" onclick="broadcastEvent('RUN OUT')">🏃 RUN OUT</button>
+</div>
+</div>
 
 <!-- ================================
      LIVE SCORE
@@ -1335,6 +1256,20 @@ SET BATTER
 </div>
 
 
+<!-- ================================
+     SECOND INNINGS PROMPT
+================================ -->
+<div id="secondInningsModal" class="modal">
+  <div class="modalBox" style="text-align:center">
+    <button class="close" onclick="closeModal('secondInningsModal')">✕</button>
+    <div style="font-size:52px">🏏</div>
+    <h2>FIRST INNINGS COMPLETE</h2>
+    <p class="mini" id="secondInningsSummary"></p>
+    <button class="btn good" style="width:100%;margin-top:12px" onclick="confirmStartSecondInnings()">▶ START 2ND INNINGS</button>
+    <button class="btn dark" style="width:100%;margin-top:8px" onclick="closeModal('secondInningsModal')">START LATER</button>
+  </div>
+</div>
+
 <script type="module">
   /* =========================================================
    BRKLIVE19 V4 SCORER — PART 2
@@ -1544,6 +1479,21 @@ function createDefaultState() {
     customLower:{
       text:"",
       active:false
+    },
+
+    overlay:{
+      showTournament:false,
+      showVenue:false,
+      showMatch:false,
+      showToss:false,
+      showResult:false,
+      positions:{tournament:"upper",match:"middle",toss:"middle",custom:"upper"},
+      scoreVisible:true,
+      playerLower:{
+        active:false,
+        slot:"",
+        player:""
+      }
     }
 
   };
@@ -1666,7 +1616,18 @@ async function save() {
 
   };
 
-  await set(liveRef, data);
+  try {
+    await set(liveRef, data);
+  } catch (error) {
+    console.error('Firebase save failed:', error);
+    syncing = false;
+    const status = $('status');
+    if (status) {
+      status.textContent = '🔴 Firebase save failed: ' + (error?.message || error);
+      status.className = 'status';
+    }
+    throw error;
+  }
 
   syncing = false;
 
@@ -2106,11 +2067,11 @@ window.scoreRuns = async function(runs) {
   */
 
   if (runs === 4) {
-    activateBroadcast("FOUR");
+    await activateBroadcast("FOUR");
   }
 
   else if (runs === 6) {
-    activateBroadcast("SIX");
+    await activateBroadcast("SIX");
   }
 
 
@@ -2362,7 +2323,7 @@ window.confirmWicket = async function() {
   );
 
 
-  activateBroadcast(
+  await activateBroadcast(
     type === "Run Out"
       ? "RUN OUT"
       : "WICKET"
@@ -2642,22 +2603,11 @@ async function finishInnings() {
     */
 
     setTimeout(() => {
-
-      if (
-        confirm(
-          `🏏 FIRST INNINGS COMPLETE!\n\n` +
-          `${teamName(S.battingTeam)} scored ${S.runs}/${S.wickets}.\n\n` +
-          `Target for ${teamName(
-            S.battingTeam === "A" ? "B" : "A"
-          )}: ${S.target}\n\n` +
-          `Start 2nd innings?`
-        )
-      ) {
-
-        startSecondInnings();
-
-      }
-
+      const nextTeam = teamName(S.battingTeam === "A" ? "B" : "A");
+      $("secondInningsSummary").innerHTML =
+        `<b>${escapeHTML(teamName(S.battingTeam))}</b> scored <b>${S.runs}/${S.wickets}</b><br>` +
+        `Target for <b>${escapeHTML(nextTeam)}</b>: <b>${S.target}</b>`;
+      openModal("secondInningsModal");
     },300);
 
   }
@@ -2715,6 +2665,11 @@ window.endInnings = async function() {
 /* =========================================================
    START SECOND INNINGS
 ========================================================= */
+
+window.confirmStartSecondInnings = async function(){
+  closeModal("secondInningsModal");
+  await startSecondInnings();
+};
 
 async function startSecondInnings() {
 
@@ -2910,43 +2865,28 @@ function checkMatchResult() {
 
 async function activateBroadcast(type) {
 
+  const eventId = String(Date.now()) + "-" + Math.random().toString(36).slice(2,8);
+
   S.broadcast = {
-
     type:type,
-
     text:type,
-
-    active:true
-
+    active:true,
+    id:eventId,
+    eventId:eventId
   };
-
 
   await save();
 
-
-  /*
-     Automatically remove after 3 seconds
-  */
-
   setTimeout(async () => {
-
-    if (
-      S.broadcast &&
-      S.broadcast.type === type
-    ) {
-
-      S.broadcast.active = false;
-
-      await save();
-
+    if (S.broadcast && S.broadcast.id === eventId) {
+      S.broadcast = { ...S.broadcast, active:false };
+      try { await save(); } catch(e) { console.error(e); }
       render();
-
     }
+  }, 1200);
 
-  },3000);
-
+  return eventId;
 }
-
 
 window.broadcastEvent = async function(type) {
 
@@ -2964,6 +2904,59 @@ window.broadcastEvent = async function(type) {
 
   render();
 
+};
+
+
+/* =========================================================
+   OVERLAY BANNER / PLAYER CONTROLS
+========================================================= */
+
+function ensureOverlayState(){
+  if(!S.overlay) S.overlay={};
+  S.overlay={
+    showTournament:!!S.overlay.showTournament,
+    showVenue:!!S.overlay.showVenue,
+    showMatch:!!S.overlay.showMatch,
+    showToss:!!S.overlay.showToss,
+    showResult:!!S.overlay.showResult,
+    positions:S.overlay.positions||{tournament:"upper",match:"middle",toss:"middle",custom:"upper"},
+    scoreVisible: S.overlay.scoreVisible !== false,
+    playerLower:S.overlay.playerLower||{active:false,slot:"",player:""}
+  };
+}
+
+window.toggleOverlayBanner = async function(type){
+  ensureOverlayState();
+  const key = type === "tournament" ? "showTournament" :
+              type === "venue" ? "showVenue" :
+              type === "match" ? "showMatch" :
+              type === "result" ? "showResult" : "showToss";
+  S.overlay[key] = !S.overlay[key];
+  await save();
+  render();
+};
+
+window.togglePlayerLower = async function(which){
+  ensureOverlayState();
+  const name = which === "b1" ? (S.striker || "") : (S.nonStriker || "");
+  if(!name){
+    alert(which === "b1" ? "B1 / striker is not selected yet." : "B2 / non-striker is not selected yet.");
+    return;
+  }
+  if(S.overlay.playerLower.active && S.overlay.playerLower.slot === which){
+    S.overlay.playerLower={active:false,slot:"",player:""};
+  }else{
+    S.overlay.playerLower={active:true,slot:which,player:name};
+  }
+  await save();
+  render();
+};
+
+window.hidePlayerLower = async function(){
+  ensureOverlayState();
+  S.overlay.playerLower={active:false,slot:"",player:""};
+  await save();
+  render();
 };
 
 
@@ -3028,6 +3021,31 @@ window.hideCustomLower = async function() {
 
 };
 
+
+window.setOverlayPosition = async function(type, position){
+  ensureOverlayState();
+  if(!S.overlay.positions) S.overlay.positions={tournament:"upper",match:"middle",toss:"middle",custom:"upper"};
+  if(!(type in S.overlay.positions)) return;
+  S.overlay.positions[type]=position;
+  await save();
+  render();
+};
+
+window.resetMatch = async function(){
+  if(!confirm("Reset the complete match, score, innings and overlay settings?")) return;
+  const keep={theme:S.theme};
+  S=createDefaultState();
+  S.theme=keep.theme||"blue";
+  await save();
+  location.reload();
+};
+
+window.resetLiveScoreOnly = async function(){
+  if(!confirm("Reset the live score and innings while keeping team/match setup?")) return;
+  const keep={tournament:S.tournament,venue:S.venue,matchName:S.matchName,teamA:S.teamA,teamB:S.teamB,maxOvers:S.maxOvers,tossWinner:S.tossWinner,tossDecision:S.tossDecision,xiA:S.xiA,xiB:S.xiB,theme:S.theme,overlay:S.overlay};
+  S=createDefaultState(); Object.assign(S,keep);
+  await save(); render();
+};
 
 /* =========================================================
    MODAL
@@ -3095,13 +3113,17 @@ window.undo = async function() {
 ========================================================= */
 
 window.setMode = async function(mode) {
-
+  if(mode === "default"){
+    ensureOverlayState();
+    S.overlay.scoreVisible = S.overlay.scoreVisible === false;
+    S.mode = "default";
+    await save();
+    render();
+    return;
+  }
   S.mode = mode;
-
   await save();
-
   render();
-
 };
 
 
@@ -3445,6 +3467,8 @@ function render() {
   }
 
 
+  ensureOverlayState();
+
   /*
      Active theme
   */
@@ -3520,7 +3544,16 @@ onValue(
 
       customLower:
         data.customLower ||
-        createDefaultState().customLower
+        createDefaultState().customLower,
+
+      overlay:{
+        ...createDefaultState().overlay,
+        ...(data.overlay || {}),
+        playerLower:{
+          ...createDefaultState().overlay.playerLower,
+          ...((data.overlay || {}).playerLower || {})
+        }
+      }
 
     };
 
