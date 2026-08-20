@@ -350,6 +350,7 @@ textarea{
 
 <body>
 
+<div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-bottom:10px;"><a href="./index.html" id="backToIndexLink" onclick="window.location.href='./index.html'; return false;" style="display:inline-block;padding:10px 16px;border:1px solid var(--line);border-radius:10px;color:var(--text);text-decoration:none;background:#11182a;">← Home / Tournament</a></div>
 <h1>🏏 BRKLIVE19 V4</h1>
 
 <div class="sub">
@@ -1501,6 +1502,36 @@ function createDefaultState() {
 }
 
 let S = createDefaultState();
+
+// Load a match created from index.html into this scorer.
+function loadMatchBridge() {
+  try {
+    const raw = localStorage.getItem('brklive19_score_bridge');
+    if (!raw) return false;
+    const b = JSON.parse(raw);
+    if (!b || (!b.teamA && !b.teamB)) return false;
+    S.tournament = b.tournament || '';
+    S.venue = b.venue || '';
+    S.matchName = b.matchName || '';
+    S.teamA = b.teamA || 'Team A';
+    S.teamB = b.teamB || 'Team B';
+    S.maxOvers = Number(b.maxOvers) || 20;
+    S.tossWinner = b.tossWinner || '';
+    S.tossDecision = b.tossDecision || 'bat';
+    S.xiA = Array.isArray(b.xiA) ? b.xiA : [];
+    S.xiB = Array.isArray(b.xiB) ? b.xiB : [];
+    S.started = false;
+    S.innings = 1;
+    S.runs = 0; S.wickets = 0; S.legalBalls = 0; S.extras = 0;
+    S.history = []; S.events = []; S.batters = {}; S.bowlers = {};
+    S.striker = ''; S.nonStriker = ''; S.bowler = ''; S.target = 0;
+    return true;
+  } catch (e) {
+    console.error('Match bridge error:', e);
+    return false;
+  }
+}
+
 
 let syncing = false;
 let extraType = "wide";
@@ -3592,7 +3623,25 @@ $("overlayUrl").textContent =
   );
 
 
+const bridgedMatch = loadMatchBridge();
 render();
+if (bridgedMatch) {
+  setTimeout(() => {
+    try {
+      // Populate the setup form and immediately open the starting-player dialog.
+      $('tournament').value = S.tournament;
+      $('venue').value = S.venue;
+      $('matchName').value = S.matchName;
+      $('teamA').value = S.teamA;
+      $('teamB').value = S.teamB;
+      $('maxOvers').value = S.maxOvers;
+      $('tossWinner').value = S.tossWinner;
+      $('tossDecision').value = S.tossDecision;
+      renderSetupLists?.();
+      window.openStart();
+    } catch (e) { console.error('Could not open scoring controls:', e); }
+  }, 150);
+}
 
 </script>
 
