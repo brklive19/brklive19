@@ -1277,16 +1277,30 @@ SET BATTER
    Firebase + Scoring Engine
 ========================================================= */
 
-import {
-  initializeApp
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-
-import {
-  getDatabase,
-  ref,
-  set,
-  onValue
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+let initializeApp, getDatabase, ref, set, onValue;
+let firebaseReady = false;
+try {
+  const firebaseApp = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js");
+  const firebaseDb = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js");
+  initializeApp = firebaseApp.initializeApp;
+  getDatabase = firebaseDb.getDatabase;
+  ref = firebaseDb.ref;
+  set = firebaseDb.set;
+  onValue = firebaseDb.onValue;
+  firebaseReady = true;
+} catch (e) {
+  console.warn("Firebase unavailable; using local scorer storage.", e);
+  initializeApp = () => null;
+  getDatabase = () => null;
+  ref = (_db, path) => ({ path });
+  set = async (_ref, data) => localStorage.setItem("brklive19_local_liveScore", JSON.stringify(data));
+  onValue = (_ref, callback, errorCallback) => {
+    try {
+      const raw = localStorage.getItem("brklive19_local_liveScore");
+      callback({ val: () => raw ? JSON.parse(raw) : null });
+    } catch (err) { if (typeof errorCallback === "function") errorCallback(err); }
+  };
+}
 
 
 /* =========================================================
@@ -1304,9 +1318,9 @@ const firebaseConfig = {
   measurementId: "G-RW18E7LVEX"
 };
 
-const app = initializeApp(firebaseConfig);
-const db = getDatabase(app);
-const liveRef = ref(db, "liveScore");
+const app = firebaseReady ? initializeApp(firebaseConfig) : null;
+const db = firebaseReady ? getDatabase(app) : null;
+const liveRef = firebaseReady && db ? ref(db, "liveScore") : null;
 
 
 /* =========================================================
@@ -1568,6 +1582,12 @@ function pushHistory() {
 ========================================================= */
 
 async function save() {
+
+  if (!firebaseReady || !liveRef) {
+    syncing = false;
+    try { localStorage.setItem("brklive19_liveScore", JSON.stringify(S)); } catch (e) {}
+    return;
+  }
 
   syncing = true;
 
@@ -3196,8 +3216,7 @@ function render() {
      Firebase status
   */
 
-  $("status").textContent =
-    "🟢 Firebase Connected • Auto-Save ON";
+  $("status").textContent = firebaseReady ? "🟢 Firebase Connected • Auto-Save ON" : "🟡 Local Mode • Auto-Save ON";
 
   $("status").className =
     "status ok";
@@ -3637,8 +3656,8 @@ if (bridgedMatch) {
       $('maxOvers').value = S.maxOvers;
       $('tossWinner').value = S.tossWinner;
       $('tossDecision').value = S.tossDecision;
-      renderSetupLists?.();
-      window.openStart();
+      if (typeof window.renderSetupLists === "function") window.renderSetupLists();
+      if (typeof window.openStart === "function") window.openStart();
     } catch (e) { console.error('Could not open scoring controls:', e); }
   }, 150);
 }
