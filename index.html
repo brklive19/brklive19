@@ -210,6 +210,7 @@
                 <a href="#" data-page="tournament">Tournament</a>
                 <a href="#" data-page="about">About</a>
                 <a href="#" data-page="contact">Contact</a>
+                <a href="./score.html" id="scorerNavLink" onclick="window.location.href='./score.html'; return false;">Scorer</a>
             </nav>
             <div class="topbar-right">
                 <span class="storage-indicator">📦 Storage: <strong id="storageCount">554</strong>/10000 kb</span>
@@ -240,6 +241,7 @@
             <div class="flex-center mt-20">
                 <button class="btn btn-primary" data-nav="tournament">🏆 Go to Tournament</button>
                 <button class="btn btn-secondary" data-nav="about">ℹ️ About</button>
+                <a class="btn btn-primary" href="./score.html" id="openScorerBtn" onclick="window.location.href='./score.html'; return false;" style="text-decoration:none;display:inline-flex;align-items:center;justify-content:center;">🏏 Open Scorer</a>
             </div>
         </section>
 
@@ -255,8 +257,16 @@
             </div>
             <div class="tournament-body" id="tournamentBody">
 
+                <div class="workflow-actions">
+                    <button class="btn btn-primary" id="openCreateTournamentBtn">🏏 Create Tournament</button>
+                    <span class="workflow-hint">Create a tournament, then tap its card to create a match.</span>
+                </div>
+
                 <!-- ===== CREATE TOURNAMENT SECTION ===== -->
-                <div class="create-tournament-section">
+                <div class="modal-overlay workflow-modal" id="createTournamentModal">
+                    <div class="modal-content workflow-modal-content">
+                        <button class="workflow-close" id="closeCreateTournamentBtn" type="button">×</button>
+                        <div class="create-tournament-section">
                     <h4>📋 CREATE TOURNAMENT</h4>
                     <div class="form-row">
                         <div class="form-group">
@@ -295,6 +305,8 @@
                         <button class="btn btn-primary" id="createTournamentBtn">🏏 Create Tournament</button>
                     </div>
                 </div>
+                    </div>
+                </div>
 
                 <!-- ===== TOURNAMENT LIST ===== -->
                 <div class="tournament-list-container" id="tournamentListContainer">
@@ -308,8 +320,11 @@
                 </div>
 
                 <!-- ===== MATCH SETUP FORM ===== -->
-                <div class="match-setup-form" id="matchSetupForm">
-                    <h4>⚙️ MATCH SETUP</h4>
+                <div class="modal-overlay workflow-modal" id="createMatchModal">
+                    <div class="modal-content workflow-modal-content workflow-match-content">
+                        <button class="workflow-close" id="closeCreateMatchBtn" type="button">×</button>
+<div class="match-setup-form" id="matchSetupForm">
+                    <h4>⚙️ CREATE MATCH</h4>
                     <div class="form-row">
                         <div class="form-group">
                             <label>Tournament</label>
@@ -350,10 +365,10 @@
                                 <option value="none">—</option>
                             </select>
                         </div>
-                        <div class="form-group"><label>Batting First</label>
-                            <select id="battingFirst">
-                                <option value="teamA">Team A</option>
-                                <option value="teamB">Team B</option>
+                        <div class="form-group"><label>Toss Decision</label>
+                            <select id="tossDecision">
+                                <option value="bat">Bat</option>
+                                <option value="bowl">Bowl</option>
                             </select>
                         </div>
                     </div>
@@ -393,6 +408,8 @@
                     </div>
                     <div style="margin-top:12px;font-size:12px;color:var(--text-muted);">Note: Your data will be available on this device only</div>
                 </div>
+                    </div>
+                </div>
 
                 <!-- ===== MATCH LIST ===== -->
                 <div id="matchListContainer">
@@ -406,6 +423,7 @@
                 <!-- ===== MATCH DETAIL VIEW ===== -->
                 <div id="matchDetailView" class="match-detail-view hidden">
                     <button class="btn btn-sm btn-secondary" id="backToMatchListBtn" style="margin-bottom:16px;">← Back to Matches</button>
+                    <button class="btn btn-sm btn-primary" id="openFullScorerBtn" style="margin-bottom:16px;margin-left:8px;">🏏 Open Scoring Control</button>
 
                     <!-- Tabs -->
                     <div class="match-tabs">
