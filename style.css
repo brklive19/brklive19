@@ -1908,3 +1908,23 @@
 .match-info strong {
     font-size: 13px;
 }
+
+/* ===== CRICKET WORKFLOW MODALS ===== */
+.workflow-actions{display:flex;align-items:center;gap:14px;margin:8px 0 22px;padding:18px 20px;border:1px solid var(--card-border);border-radius:var(--radius);background:linear-gradient(135deg,rgba(245,197,66,.08),rgba(19,34,59,.65));}
+.workflow-actions .btn{width:auto;min-width:220px;}
+.workflow-hint{color:var(--text-secondary);font-size:13px;}
+.workflow-modal{z-index:1200;}
+.workflow-modal-content{position:relative;max-width:900px;width:min(900px,96vw);padding:28px;max-height:92vh;overflow-y:auto;}
+.workflow-match-content{max-width:1000px;}
+.workflow-close{position:absolute;right:16px;top:14px;width:36px;height:36px;border:0;border-radius:50%;background:rgba(255,255,255,.08);color:#fff;font-size:25px;line-height:1;cursor:pointer;z-index:2;}
+.workflow-close:hover{background:var(--accent);color:var(--primary);}
+.tournament-card{cursor:pointer;transition:transform .2s ease,box-shadow .2s ease;}
+.tournament-card:hover{transform:translateY(-3px);box-shadow:0 12px 30px rgba(0,0,0,.28);}
+@media(max-width:700px){.workflow-actions{align-items:stretch;flex-direction:column}.workflow-actions .btn{width:100%;}.workflow-modal-content{padding:22px 16px;}}
+
+/* ===== AUTH-FIRST EXPERIENCE ===== */
+body.auth-required .app-wrap{display:none;}
+body.auth-required{overflow:hidden;}
+body.auth-required #loginModal{display:flex;}
+body.auth-required #loginModal .modal-content{max-width:460px;}
+.auth-welcome{display:none;}
