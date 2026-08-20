@@ -197,10 +197,12 @@
                     loginBtn.textContent = 'Log Out';
                     loginBtn.classList.add('btn-logout');
                     loginBtn.classList.remove('btn-login');
+                    document.body.classList.remove('auth-required');
                 } else {
                     loginBtn.textContent = 'Log in';
                     loginBtn.classList.remove('btn-logout');
                     loginBtn.classList.add('btn-login');
+                    document.body.classList.add('auth-required');
                 }
             }
 
@@ -210,6 +212,9 @@
                     state.isLoggedIn = false;
                     saveState();
                     updateLoginUI();
+                    loginModal.classList.add('active');
+                    loginUsername.value = '';
+                    loginPassword.value = '';
                     showToast('🔒 Logged out successfully.', 'info');
                 } else {
                     loginModal.classList.add('active');
@@ -304,6 +309,9 @@
             registerConfirmPassword.addEventListener('keydown', (e) => { if (e.key === 'Enter') registerSubmitBtn.click(); });
 
             updateLoginUI();
+            if (!state.isLoggedIn) {
+                loginModal.classList.add('active');
+            }
 
             // ===== XI MANAGEMENT =====
             function renderXI() {
@@ -819,12 +827,12 @@
                 state.tournaments.forEach((t) => {
                     const matchCount = state.matches.filter(m => m.tournamentId === t.id).length;
                     html += `
-                        <div class="tournament-card">
+                        <div class="tournament-card" onclick="window.openCreateMatchForTournament('${t.id}')">
                             <div class="name">🏆 ${t.name}</div>
                             <div class="venue">📍 ${t.venue || 'Venue not set'}</div>
                             <div class="type">📋 ${t.type.toUpperCase()}</div>
                             <div class="match-count">${matchCount} matches</div>
-                            <button class="delete-tournament" onclick="window.deleteTournament('${t.id}')">Delete</button>
+                            <button class="delete-tournament" onclick="event.stopPropagation(); window.deleteTournament('${t.id}')">Delete</button>
                         </div>
                     `;
                 });
@@ -858,6 +866,32 @@
                 }
             }
 
+            // ===== WORKFLOW MODALS =====
+            const createTournamentModal = document.getElementById('createTournamentModal');
+            const createMatchModal = document.getElementById('createMatchModal');
+            const openCreateTournamentBtn = document.getElementById('openCreateTournamentBtn');
+            const closeCreateTournamentBtn = document.getElementById('closeCreateTournamentBtn');
+            const closeCreateMatchBtn = document.getElementById('closeCreateMatchBtn');
+
+            openCreateTournamentBtn?.addEventListener('click', () => createTournamentModal?.classList.add('active'));
+            closeCreateTournamentBtn?.addEventListener('click', () => createTournamentModal?.classList.remove('active'));
+            closeCreateMatchBtn?.addEventListener('click', () => createMatchModal?.classList.remove('active'));
+            [createTournamentModal, createMatchModal].forEach(modal => {
+                modal?.addEventListener('click', e => { if (e.target === modal) modal.classList.remove('active'); });
+            });
+
+            window.openCreateMatchForTournament = function(tournamentId) {
+                const tournament = getTournament(tournamentId);
+                if (!tournament) return;
+                const select = document.getElementById('matchTournamentSelect');
+                if (select) select.value = tournamentId;
+                const ta = document.getElementById('teamAName');
+                const tb = document.getElementById('teamBName');
+                if (ta) ta.value = 'Team A';
+                if (tb) tb.value = 'Team B';
+                createMatchModal?.classList.add('active');
+            };
+
             // ===== CREATE TOURNAMENT =====
             document.getElementById('createTournamentBtn').addEventListener('click', function() {
                 const name = document.getElementById('tournamentName').value.trim();
@@ -890,6 +924,7 @@
                 document.getElementById('tournamentVenue').value = '';
                 document.getElementById('tournamentStartDate').value = '';
                 document.getElementById('tournamentEndDate').value = '';
+                createTournamentModal?.classList.remove('active');
                 showToast(`✅ Tournament "${name}" created!`, 'success');
             });
 
@@ -918,7 +953,8 @@
                 const matchType = document.getElementById('matchType')?.value || 't20';
                 const maxOvers = parseInt(document.getElementById('maxOvers')?.value) || 20;
                 const tossWinner = document.getElementById('tossWinner')?.value || 'teamA';
-                const battingFirst = document.getElementById('battingFirst')?.value || 'teamA';
+                const tossDecision = document.getElementById('tossDecision')?.value || 'bat';
+                const battingFirst = tossDecision === 'bat' ? tossWinner : (tossWinner === 'teamA' ? 'teamB' : 'teamA');
 
                 if (!tournamentId) {
                     showToast('⚠️ Please select a tournament.', 'error');
@@ -937,7 +973,8 @@
                     team2: teamBName,
                     overs: maxOvers,
                     tossWinner: tossWinner === 'teamA' ? teamAName : (tossWinner === 'teamB' ? teamBName : ''),
-                    tossChoice: tossWinner === 'teamA' ? 'bat' : (tossWinner === 'teamB' ? 'bowl' : ''),
+                    tossDecision,
+                    tossChoice: tossDecision,
                     matchTied: false,
                     matchType: matchType,
                     winner: null,
@@ -969,6 +1006,7 @@
                 saveState();
                 renderMatchList();
                 renderTournaments();
+                createMatchModal?.classList.remove('active');
                 showToast(`✅ Match "${teamAName} vs ${teamBName}" created!`, 'success');
                 window.openMatchDetail(newMatch.id);
             });
@@ -1042,6 +1080,27 @@
                 }
                 showToast('🗑️ Match deleted.', 'info');
             };
+
+            // ===== OPEN FULL SCORER PAGE =====
+            function launchFullScorer(match) {
+                if (!match) return;
+                const bridge = {
+                    id: match.id,
+                    tournament: (getTournament(match.tournamentId) || {}).name || '',
+                    venue: (getTournament(match.tournamentId) || {}).venue || '',
+                    matchName: `Match ${match.matchNo || 1}`,
+                    teamA: match.team1 || 'Team A',
+                    teamB: match.team2 || 'Team B',
+                    maxOvers: Number(match.overs) || 20,
+                    tossWinner: match.tossWinner === match.team1 ? 'A' : (match.tossWinner === match.team2 ? 'B' : ''),
+                    tossDecision: match.tossDecision || 'bat',
+                    xiA: match.team1Players || [],
+                    xiB: match.team2Players || []
+                };
+                localStorage.setItem('brklive19_score_bridge', JSON.stringify(bridge));
+                localStorage.setItem('brklive19_last_match_id', match.id);
+                window.location.href = './score.html?matchId=' + encodeURIComponent(match.id);
+            }
 
             // ===== OPEN MATCH DETAIL =====
             window.openMatchDetail = function(id) {
@@ -2579,6 +2638,12 @@
                     }
                 });
             }
+
+            document.getElementById('openFullScorerBtn')?.addEventListener('click', function() {
+                const match = getMatch(state.currentMatchId);
+                if (!match) { showToast('⚠️ Please select a match first.', 'error'); return; }
+                launchFullScorer(match);
+            });
 
             // ===== BACK TO MATCH LIST =====
             document.getElementById('backToMatchListBtn')?.addEventListener('click', function() {
