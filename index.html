@@ -370,6 +370,37 @@
             background: var(--accent-hover);
             box-shadow: 0 4px 20px var(--accent-glow);
         }
+        .btn-logout {
+            padding: 6px 20px;
+            border-radius: var(--radius-sm);
+            background: var(--danger);
+            color: #fff;
+            font-weight: 600;
+            font-size: 13px;
+            transition: all 0.2s;
+        }
+        .btn-logout:hover {
+            background: #d6304a;
+        }
+        .user-badge {
+            font-size: 13px;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .user-badge .avatar {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 13px;
+            color: #fff;
+        }
 
         /* ── PAGES ── */
         .page {
@@ -507,6 +538,14 @@
             font-size: 13px;
             color: var(--text-muted);
         }
+        .selected-tournament-badge {
+            background: var(--accent);
+            color: #fff;
+            padding: 4px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+        }
 
         /* ── WORKFLOW MODAL ── */
         .workflow-modal .modal-content {
@@ -642,6 +681,7 @@
             padding: 18px 20px;
             cursor: pointer;
             transition: all 0.2s;
+            position: relative;
         }
         .tournament-card:hover {
             border-color: var(--accent);
@@ -665,6 +705,20 @@
             padding: 2px 12px;
             border-radius: 20px;
             margin-top: 6px;
+        }
+        .tournament-card .card-actions {
+            margin-top: 10px;
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .tournament-card .card-actions .btn {
+            font-size: 11px;
+            padding: 4px 12px;
+        }
+        .tournament-card.selected {
+            border-color: var(--accent);
+            background: rgba(108, 92, 231, 0.08);
         }
 
         /* ── MATCH LIST ── */
@@ -697,6 +751,7 @@
             padding: 16px 18px;
             cursor: pointer;
             transition: all 0.2s;
+            position: relative;
         }
         .match-card:hover {
             border-color: var(--accent);
@@ -738,6 +793,16 @@
         .match-card .status.pending {
             background: rgba(241, 196, 15, 0.15);
             color: var(--warning);
+        }
+        .match-card .match-actions {
+            margin-top: 8px;
+            display: flex;
+            gap: 6px;
+            justify-content: flex-end;
+        }
+        .match-card .match-actions .btn {
+            font-size: 11px;
+            padding: 2px 10px;
         }
 
         /* ── MATCH DETAIL VIEW ── */
@@ -1242,18 +1307,18 @@
     <!-- ===== LOGIN MODAL ===== -->
     <div class="modal-overlay" id="loginModal">
         <div class="modal-content">
-            <h2>LOGIN PAGE</h2>
+            <h2>🔐 LOGIN</h2>
             <div class="form-group">
-                <label>USERNAME</label>
-                <input type="text" id="loginUsername" placeholder="Enter username" />
+                <label>Username</label>
+                <input type="text" id="loginUsername" placeholder="Enter username" value="admin" />
             </div>
             <div class="form-group">
-                <label>PASSWORD</label>
-                <input type="password" id="loginPassword" placeholder="Enter password" />
+                <label>Password</label>
+                <input type="password" id="loginPassword" placeholder="Enter password" value="admin123" />
             </div>
             <div class="modal-actions">
-                <button class="btn btn-primary" id="loginSubmitBtn">LOGIN</button>
-                <button class="btn btn-secondary" id="loginCancelBtn">CANCEL</button>
+                <button class="btn btn-primary" id="loginSubmitBtn">Login</button>
+                <button class="btn btn-secondary" id="loginCancelBtn">Cancel</button>
             </div>
             <div class="register-link">
                 Don't have an account? <a id="showRegisterLink">Register Here</a>
@@ -1271,10 +1336,222 @@
             <div class="form-group"><label>Password</label><input type="password" id="registerPassword" placeholder="Create a password" /></div>
             <div class="form-group"><label>Confirm Password</label><input type="password" id="registerConfirmPassword" placeholder="Confirm your password" /></div>
             <div class="modal-actions">
-                <button class="btn btn-primary" id="registerSubmitBtn">REGISTER</button>
-                <button class="btn btn-secondary" id="registerCancelBtn">CANCEL</button>
+                <button class="btn btn-primary" id="registerSubmitBtn">Register</button>
+                <button class="btn btn-secondary" id="registerCancelBtn">Cancel</button>
             </div>
             <div class="register-link">Already have an account? <a id="showLoginLink">Login Here</a></div>
+        </div>
+    </div>
+
+    <!-- ===== CREATE TOURNAMENT MODAL ===== -->
+    <div class="modal-overlay workflow-modal" id="createTournamentModal">
+        <div class="modal-content workflow-modal-content">
+            <button class="workflow-close" id="closeCreateTournamentBtn" type="button">×</button>
+            <div class="create-tournament-section">
+                <h4>📋 CREATE TOURNAMENT</h4>
+                <div class="form-row">
+                    <div class="form-group"><label>Tournament Name</label><input type="text" id="tournamentName" placeholder="e.g. World Cup 2026" /></div>
+                    <div class="form-group"><label>Venue</label><input type="text" id="tournamentVenue" placeholder="e.g. Melbourne Cricket Ground" /></div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group"><label>Tournament Type</label>
+                        <select id="tournamentType">
+                            <option value="t20">T20</option>
+                            <option value="odi">ODI</option>
+                            <option value="test">Test</option>
+                            <option value="thehundred">The Hundred</option>
+                            <option value="league">League</option>
+                            <option value="knockout">Knockout</option>
+                        </select>
+                    </div>
+                    <div class="form-group" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+                        <div><label>Start Date</label><input type="date" id="tournamentStartDate" /></div>
+                        <div><label>End Date</label><input type="date" id="tournamentEndDate" /></div>
+                    </div>
+                </div>
+                <div class="form-actions"><button class="btn btn-primary" id="createTournamentBtn">🏏 Create Tournament</button></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== CREATE MATCH MODAL ===== -->
+    <div class="modal-overlay workflow-modal" id="createMatchModal">
+        <div class="modal-content workflow-modal-content workflow-match-content">
+            <button class="workflow-close" id="closeCreateMatchBtn" type="button">×</button>
+            <div class="match-setup-form" id="matchSetupForm">
+                <h4>⚙️ CREATE MATCH</h4>
+                <div class="form-row">
+                    <div class="form-group"><label>Tournament</label><select id="matchTournamentSelect"><option value="">— Select Tournament —</option></select></div>
+                    <div class="form-group"><label>Match No.</label><input type="number" id="matchNo" value="1" min="1" /></div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group"><label>Team A Name</label><input type="text" id="teamAName" value="India" placeholder="e.g. India" /></div>
+                    <div class="form-group"><label>Team B Name</label><input type="text" id="teamBName" value="Australia" placeholder="e.g. Australia" /></div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group"><label>Match Type</label>
+                        <select id="matchType">
+                            <option value="t20">T20</option>
+                            <option value="odi">ODI</option>
+                            <option value="test">Test</option>
+                            <option value="thehundred">The Hundred</option>
+                            <option value="local">Local</option>
+                            <option value="domestic">Domestic</option>
+                            <option value="international">International</option>
+                            <option value="friendly">Friendly</option>
+                            <option value="tournament">Tournament</option>
+                        </select>
+                    </div>
+                    <div class="form-group"><label>Overs per Innings</label><input type="number" id="maxOvers" value="20" min="1" max="50" /></div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group"><label>Toss Winner</label>
+                        <select id="tossWinner">
+                            <option value="teamA">Team A</option>
+                            <option value="teamB">Team B</option>
+                            <option value="none">—</option>
+                        </select>
+                    </div>
+                    <div class="form-group"><label>Toss Decision</label>
+                        <select id="tossDecision">
+                            <option value="bat">Bat</option>
+                            <option value="bowl">Bowl</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="xi-section">
+                    <h3 style="font-size:16px;font-weight:700;margin-bottom:12px;color:var(--text-secondary);">👥 Player XI</h3>
+                    <div class="xi-grid">
+                        <div class="xi-group">
+                            <h4 id="xiTeamALabel">Team A XI</h4>
+                            <div class="xi-input-row">
+                                <input type="text" id="xiTeamAInput" placeholder="Player name" />
+                                <button id="addXiTeamA">Add</button>
+                            </div>
+                            <div class="xi-list" id="xiTeamAList"></div>
+                            <div class="xi-bulk">
+                                <textarea id="xiTeamABulk" placeholder="Bulk add (comma separated)"></textarea>
+                                <button id="bulkXiTeamA">Add Bulk</button>
+                            </div>
+                        </div>
+                        <div class="xi-group">
+                            <h4 id="xiTeamBLabel">Team B XI</h4>
+                            <div class="xi-input-row">
+                                <input type="text" id="xiTeamBInput" placeholder="Player name" />
+                                <button id="addXiTeamB">Add</button>
+                            </div>
+                            <div class="xi-list" id="xiTeamBList"></div>
+                            <div class="xi-bulk">
+                                <textarea id="xiTeamBBulk" placeholder="Bulk add (comma separated)"></textarea>
+                                <button id="bulkXiTeamB">Add Bulk</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-actions" style="margin-top:16px;">
+                    <button class="btn btn-primary" id="createTournamentMatchBtn">🏏 Create Match</button>
+                    <button class="btn btn-secondary" id="resetMatchSetupBtn">🔄 Reset</button>
+                </div>
+                <div style="margin-top:12px;font-size:12px;color:var(--text-muted);">Note: Your data will be available on this device only</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== EDIT MATCH MODAL ===== -->
+    <div class="modal-overlay" id="editMatchModal">
+        <div class="modal-content workflow-modal-content workflow-match-content">
+            <button class="workflow-close" id="closeEditMatchBtn" type="button">×</button>
+            <div class="match-setup-form">
+                <h4>✏️ EDIT MATCH</h4>
+                <p style="font-size:13px;color:var(--text-muted);margin-bottom:14px;">Update match details. Changes will be saved immediately.</p>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Tournament</label>
+                        <select id="editMatchTournamentSelect" disabled>
+                            <option value="">— Select Tournament —</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Match No.</label>
+                        <input type="number" id="editMatchNo" value="1" min="1" disabled />
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group"><label>Team A Name</label><input type="text" id="editTeamAName" placeholder="e.g. India" /></div>
+                    <div class="form-group"><label>Team B Name</label><input type="text" id="editTeamBName" placeholder="e.g. Australia" /></div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group"><label>Match Type</label>
+                        <select id="editMatchType">
+                            <option value="t20">T20</option>
+                            <option value="odi">ODI</option>
+                            <option value="test">Test</option>
+                            <option value="thehundred">The Hundred</option>
+                            <option value="local">Local</option>
+                            <option value="domestic">Domestic</option>
+                            <option value="international">International</option>
+                            <option value="friendly">Friendly</option>
+                            <option value="tournament">Tournament</option>
+                        </select>
+                    </div>
+                    <div class="form-group"><label>Overs per Innings</label><input type="number" id="editMaxOvers" value="20" min="1" max="50" /></div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group"><label>Toss Winner</label>
+                        <select id="editTossWinner">
+                            <option value="teamA">Team A</option>
+                            <option value="teamB">Team B</option>
+                            <option value="none">—</option>
+                        </select>
+                    </div>
+                    <div class="form-group"><label>Toss Decision</label>
+                        <select id="editTossDecision">
+                            <option value="bat">Bat</option>
+                            <option value="bowl">Bowl</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="xi-section">
+                    <h3 style="font-size:16px;font-weight:700;margin-bottom:12px;color:var(--text-secondary);">👥 Player XI</h3>
+                    <div class="xi-grid">
+                        <div class="xi-group">
+                            <h4 id="editXiTeamALabel">Team A XI</h4>
+                            <div class="xi-input-row">
+                                <input type="text" id="editXiTeamAInput" placeholder="Player name" />
+                                <button id="editAddXiTeamA">Add</button>
+                            </div>
+                            <div class="xi-list" id="editXiTeamAList"></div>
+                            <div class="xi-bulk">
+                                <textarea id="editXiTeamABulk" placeholder="Bulk add (comma separated)"></textarea>
+                                <button id="editBulkXiTeamA">Add Bulk</button>
+                            </div>
+                        </div>
+                        <div class="xi-group">
+                            <h4 id="editXiTeamBLabel">Team B XI</h4>
+                            <div class="xi-input-row">
+                                <input type="text" id="editXiTeamBInput" placeholder="Player name" />
+                                <button id="editAddXiTeamB">Add</button>
+                            </div>
+                            <div class="xi-list" id="editXiTeamBList"></div>
+                            <div class="xi-bulk">
+                                <textarea id="editXiTeamBBulk" placeholder="Bulk add (comma separated)"></textarea>
+                                <button id="editBulkXiTeamB">Add Bulk</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-actions" style="margin-top:16px;display:flex;gap:10px;flex-wrap:wrap;">
+                    <button class="btn btn-primary" id="saveEditMatchBtn">💾 Save Changes</button>
+                    <button class="btn btn-secondary" id="cancelEditMatchBtn">Cancel</button>
+                </div>
+                <div style="margin-top:10px;font-size:12px;color:var(--text-muted);">⚠️ Editing a match that is in progress may affect stats. Please proceed with caution.</div>
+            </div>
         </div>
     </div>
 
@@ -1362,107 +1639,8 @@
     </div>
 
     <!-- ============================================================ -->
-    <!-- ===== EDIT MATCH MODAL ===== -->
-    <!-- ============================================================ -->
-    <div class="modal-overlay" id="editMatchModal">
-        <div class="modal-content workflow-modal-content workflow-match-content">
-            <button class="workflow-close" id="closeEditMatchBtn" type="button">×</button>
-            <div class="match-setup-form">
-                <h4>✏️ EDIT MATCH</h4>
-                <p style="font-size:13px;color:var(--text-muted);margin-bottom:14px;">Update match details. Changes will be saved immediately.</p>
-
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Tournament</label>
-                        <select id="editMatchTournamentSelect" disabled>
-                            <option value="">— Select Tournament —</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Match No.</label>
-                        <input type="number" id="editMatchNo" value="1" min="1" disabled />
-                    </div>
-                </div>
-
-                <div class="form-row">
-                    <div class="form-group"><label>Team A Name</label><input type="text" id="editTeamAName" placeholder="e.g. India" /></div>
-                    <div class="form-group"><label>Team B Name</label><input type="text" id="editTeamBName" placeholder="e.g. Australia" /></div>
-                </div>
-
-                <div class="form-row">
-                    <div class="form-group"><label>Match Type</label>
-                        <select id="editMatchType">
-                            <option value="t20">T20</option>
-                            <option value="odi">ODI</option>
-                            <option value="test">Test</option>
-                            <option value="thehundred">The Hundred</option>
-                            <option value="local">Local</option>
-                            <option value="domestic">Domestic</option>
-                            <option value="international">International</option>
-                            <option value="friendly">Friendly</option>
-                            <option value="tournament">Tournament</option>
-                        </select>
-                    </div>
-                    <div class="form-group"><label>Overs per Innings</label><input type="number" id="editMaxOvers" value="20" min="1" max="50" /></div>
-                </div>
-
-                <div class="form-row">
-                    <div class="form-group"><label>Toss Winner</label>
-                        <select id="editTossWinner">
-                            <option value="teamA">Team A</option>
-                            <option value="teamB">Team B</option>
-                            <option value="none">—</option>
-                        </select>
-                    </div>
-                    <div class="form-group"><label>Toss Decision</label>
-                        <select id="editTossDecision">
-                            <option value="bat">Bat</option>
-                            <option value="bowl">Bowl</option>
-                        </select>
-                    </div>
-                </div>
-
-                <!-- Player XI section -->
-                <div class="xi-section">
-                    <h3 style="font-size:16px;font-weight:700;margin-bottom:12px;color:var(--text-secondary);">👥 Player XI</h3>
-                    <div class="xi-grid">
-                        <div class="xi-group">
-                            <h4 id="editXiTeamALabel">Team A XI</h4>
-                            <div class="xi-input-row">
-                                <input type="text" id="editXiTeamAInput" placeholder="Player name" />
-                                <button id="editAddXiTeamA">Add</button>
-                            </div>
-                            <div class="xi-list" id="editXiTeamAList"></div>
-                            <div class="xi-bulk">
-                                <textarea id="editXiTeamABulk" placeholder="Bulk add (comma separated)"></textarea>
-                                <button id="editBulkXiTeamA">Add Bulk</button>
-                            </div>
-                        </div>
-                        <div class="xi-group">
-                            <h4 id="editXiTeamBLabel">Team B XI</h4>
-                            <div class="xi-input-row">
-                                <input type="text" id="editXiTeamBInput" placeholder="Player name" />
-                                <button id="editAddXiTeamB">Add</button>
-                            </div>
-                            <div class="xi-list" id="editXiTeamBList"></div>
-                            <div class="xi-bulk">
-                                <textarea id="editXiTeamBBulk" placeholder="Bulk add (comma separated)"></textarea>
-                                <button id="editBulkXiTeamB">Add Bulk</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="form-actions" style="margin-top:16px;display:flex;gap:10px;flex-wrap:wrap;">
-                    <button class="btn btn-primary" id="saveEditMatchBtn">💾 Save Changes</button>
-                    <button class="btn btn-secondary" id="cancelEditMatchBtn">Cancel</button>
-                </div>
-                <div style="margin-top:10px;font-size:12px;color:var(--text-muted);">⚠️ Editing a match that is in progress may affect stats. Please proceed with caution.</div>
-            </div>
-        </div>
-    </div>
-
     <!-- ===== APP WRAP ===== -->
+    <!-- ============================================================ -->
     <div class="app-wrap">
 
         <!-- ===== TOPBAR ===== -->
@@ -1480,7 +1658,14 @@
             </nav>
             <div class="topbar-right">
                 <span class="storage-indicator">📦 Storage: <strong id="storageCount">0</strong>/10000 kb</span>
-                <button class="btn-login" id="loginBtn">Log in</button>
+                <div id="authSection">
+                    <button class="btn-login" id="loginBtn">Log in</button>
+                    <div id="userBadge" style="display:none;" class="user-badge">
+                        <span class="avatar" id="userAvatar">A</span>
+                        <span id="userNameDisplay">Admin</span>
+                        <button class="btn-logout" id="logoutBtn">Logout</button>
+                    </div>
+                </div>
             </div>
         </header>
 
@@ -1525,38 +1710,8 @@
 
                 <div class="workflow-actions">
                     <button class="btn btn-primary" id="openCreateTournamentBtn">🏏 Create Tournament</button>
-                    <span class="workflow-hint">Create a tournament, then tap its card to create a match.</span>
-                </div>
-
-                <!-- ===== CREATE TOURNAMENT MODAL ===== -->
-                <div class="modal-overlay workflow-modal" id="createTournamentModal">
-                    <div class="modal-content workflow-modal-content">
-                        <button class="workflow-close" id="closeCreateTournamentBtn" type="button">×</button>
-                        <div class="create-tournament-section">
-                            <h4>📋 CREATE TOURNAMENT</h4>
-                            <div class="form-row">
-                                <div class="form-group"><label>Tournament Name</label><input type="text" id="tournamentName" placeholder="e.g. World Cup 2026" /></div>
-                                <div class="form-group"><label>Venue</label><input type="text" id="tournamentVenue" placeholder="e.g. Melbourne Cricket Ground" /></div>
-                            </div>
-                            <div class="form-row">
-                                <div class="form-group"><label>Tournament Type</label>
-                                    <select id="tournamentType">
-                                        <option value="t20">T20</option>
-                                        <option value="odi">ODI</option>
-                                        <option value="test">Test</option>
-                                        <option value="thehundred">The Hundred</option>
-                                        <option value="league">League</option>
-                                        <option value="knockout">Knockout</option>
-                                    </select>
-                                </div>
-                                <div class="form-group" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
-                                    <div><label>Start Date</label><input type="date" id="tournamentStartDate" /></div>
-                                    <div><label>End Date</label><input type="date" id="tournamentEndDate" /></div>
-                                </div>
-                            </div>
-                            <div class="form-actions"><button class="btn btn-primary" id="createTournamentBtn">🏏 Create Tournament</button></div>
-                        </div>
-                    </div>
+                    <span class="workflow-hint" id="tournamentHint">Create a tournament, then click its card to manage matches.</span>
+                    <span id="selectedTournamentBadge" class="selected-tournament-badge" style="display:none;"></span>
                 </div>
 
                 <!-- ===== TOURNAMENT LIST ===== -->
@@ -1566,112 +1721,35 @@
                         <div class="empty-state" style="grid-column:1/-1;padding:20px 0;">
                             <div class="icon" style="font-size:32px;">🏏</div>
                             <p style="font-size:14px;">No tournaments created yet</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- ===== MATCH SETUP FORM (CREATE) ===== -->
-                <div class="modal-overlay workflow-modal" id="createMatchModal">
-                    <div class="modal-content workflow-modal-content workflow-match-content">
-                        <button class="workflow-close" id="closeCreateMatchBtn" type="button">×</button>
-                        <div class="match-setup-form" id="matchSetupForm">
-                            <h4>⚙️ CREATE MATCH</h4>
-                            <div class="form-row">
-                                <div class="form-group"><label>Tournament</label><select id="matchTournamentSelect"><option value="">— Select Tournament —</option></select></div>
-                                <div class="form-group"><label>Match No.</label><input type="number" id="matchNo" value="1" min="1" /></div>
-                            </div>
-                            <div class="form-row">
-                                <div class="form-group"><label>Team A Name</label><input type="text" id="teamAName" value="India" placeholder="e.g. India" /></div>
-                                <div class="form-group"><label>Team B Name</label><input type="text" id="teamBName" value="Australia" placeholder="e.g. Australia" /></div>
-                            </div>
-                            <div class="form-row">
-                                <div class="form-group"><label>Match Type</label>
-                                    <select id="matchType">
-                                        <option value="t20">T20</option>
-                                        <option value="odi">ODI</option>
-                                        <option value="test">Test</option>
-                                        <option value="thehundred">The Hundred</option>
-                                        <option value="local">Local</option>
-                                        <option value="domestic">Domestic</option>
-                                        <option value="international">International</option>
-                                        <option value="friendly">Friendly</option>
-                                        <option value="tournament">Tournament</option>
-                                    </select>
-                                </div>
-                                <div class="form-group"><label>Overs per Innings</label><input type="number" id="maxOvers" value="20" min="1" max="50" /></div>
-                            </div>
-                            <div class="form-row">
-                                <div class="form-group"><label>Toss Winner</label>
-                                    <select id="tossWinner">
-                                        <option value="teamA">Team A</option>
-                                        <option value="teamB">Team B</option>
-                                        <option value="none">—</option>
-                                    </select>
-                                </div>
-                                <div class="form-group"><label>Toss Decision</label>
-                                    <select id="tossDecision">
-                                        <option value="bat">Bat</option>
-                                        <option value="bowl">Bowl</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="xi-section">
-                                <h3 style="font-size:16px;font-weight:700;margin-bottom:12px;color:var(--text-secondary);">👥 Player XI</h3>
-                                <div class="xi-grid">
-                                    <div class="xi-group">
-                                        <h4 id="xiTeamALabel">Team A XI</h4>
-                                        <div class="xi-input-row">
-                                            <input type="text" id="xiTeamAInput" placeholder="Player name" />
-                                            <button id="addXiTeamA">Add</button>
-                                        </div>
-                                        <div class="xi-list" id="xiTeamAList"></div>
-                                        <div class="xi-bulk">
-                                            <textarea id="xiTeamABulk" placeholder="Bulk add (comma separated)"></textarea>
-                                            <button id="bulkXiTeamA">Add Bulk</button>
-                                        </div>
-                                    </div>
-                                    <div class="xi-group">
-                                        <h4 id="xiTeamBLabel">Team B XI</h4>
-                                        <div class="xi-input-row">
-                                            <input type="text" id="xiTeamBInput" placeholder="Player name" />
-                                            <button id="addXiTeamB">Add</button>
-                                        </div>
-                                        <div class="xi-list" id="xiTeamBList"></div>
-                                        <div class="xi-bulk">
-                                            <textarea id="xiTeamBBulk" placeholder="Bulk add (comma separated)"></textarea>
-                                            <button id="bulkXiTeamB">Add Bulk</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-actions" style="margin-top:16px;">
-                                <button class="btn btn-primary" id="createTournamentMatchBtn">🏏 Create Match</button>
-                                <button class="btn btn-secondary" id="resetMatchSetupBtn">🔄 Reset</button>
-                            </div>
-                            <div style="margin-top:12px;font-size:12px;color:var(--text-muted);">Note: Your data will be available on this device only</div>
+                            <button class="btn btn-primary btn-sm" id="emptyCreateTournamentBtn">Create Tournament</button>
                         </div>
                     </div>
                 </div>
 
                 <!-- ===== MATCH LIST ===== -->
-                <div id="matchListContainer">
-                    <div class="empty-state" id="emptyMatchState">
-                        <div class="icon">🏏</div>
-                        <p>No Matches Created</p>
-                        <span class="text-muted" style="font-size:13px;">Use the form above to create a new match.</span>
+                <div id="matchListContainer" style="display:none;">
+                    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:12px;">
+                        <h4 id="matchListTitle">📋 Matches</h4>
+                        <button class="btn btn-primary btn-sm" id="createMatchFromListBtn">➕ New Match</button>
+                    </div>
+                    <div id="matchListContent">
+                        <div class="empty-state" id="emptyMatchState">
+                            <div class="icon">🏏</div>
+                            <p>No matches created yet</p>
+                            <span class="text-muted" style="font-size:13px;">Click "New Match" to create one.</span>
+                        </div>
                     </div>
                 </div>
 
                 <!-- ===== MATCH DETAIL VIEW ===== -->
                 <div id="matchDetailView" class="match-detail-view hidden">
-                    <!-- Toolbar with Edit button -->
                     <div class="match-detail-toolbar">
                         <button class="btn btn-sm btn-secondary" id="backToMatchListBtn">← Back to Matches</button>
                         <button class="btn btn-sm btn-primary" id="openFullScorerBtn">🏏 Open Scoring Control</button>
                         <button class="btn btn-sm btn-warning" id="editMatchBtn">✏️ Edit Match</button>
+                        <button class="btn btn-sm btn-danger" id="deleteMatchBtn">🗑️ Delete Match</button>
                     </div>
 
-                    <!-- Tabs -->
                     <div class="match-tabs">
                         <button class="btn active" data-tab="live" id="tabLiveBtn">📊 Scoreboard</button>
                         <button class="btn" data-tab="scorecard" id="tabScorecardBtn">📊 Scorecard</button>
@@ -1679,7 +1757,6 @@
                         <button class="btn" data-tab="summary" id="tabSummaryBtn">📋 Match Summary</button>
                     </div>
 
-                    <!-- Scoreboard Tab (Display only, no controls) -->
                     <div class="tab-content active" id="tabLive">
                         <div class="live-scoreboard" id="tourLiveScoreboard">
                             <div class="match-header">
@@ -1710,7 +1787,6 @@
                         </div>
                     </div>
 
-                    <!-- Scorecard Tab -->
                     <div class="tab-content" id="tabScorecard">
                         <div class="scorecard-container">
                             <div class="scorecard-section">
@@ -1730,7 +1806,6 @@
                         </div>
                     </div>
 
-                    <!-- Overlay Links Tab -->
                     <div class="tab-content" id="tabStream">
                         <div class="overlay-url-box">
                             <span style="font-weight:500;color:var(--text-secondary);white-space:nowrap;">🔗 Overlay URL</span>
@@ -1774,11 +1849,8 @@
                         </div>
                     </div>
 
-                    <!-- Match Summary Tab -->
                     <div class="tab-content" id="tabSummary">
-                        <div class="match-summary-container" id="matchSummaryContainer">
-                            <!-- Dynamic content rendered by JavaScript -->
-                        </div>
+                        <div class="match-summary-container" id="matchSummaryContainer"></div>
                     </div>
                 </div>
             </div>
@@ -1849,10 +1921,7 @@
             function genId() { return Date.now().toString(36) + Math.random().toString(36).slice(2, 6); }
 
             function getMatches() {
-                try {
-                    const raw = localStorage.getItem('brklive_matches');
-                    return raw ? JSON.parse(raw) : [];
-                } catch { return []; }
+                try { const raw = localStorage.getItem('brklive_matches'); return raw ? JSON.parse(raw) : []; } catch { return []; }
             }
 
             function saveMatches(matches) {
@@ -1861,10 +1930,7 @@
             }
 
             function getTournaments() {
-                try {
-                    const raw = localStorage.getItem('brklive_tournaments');
-                    return raw ? JSON.parse(raw) : [];
-                } catch { return []; }
+                try { const raw = localStorage.getItem('brklive_tournaments'); return raw ? JSON.parse(raw) : []; } catch { return []; }
             }
 
             function saveTournaments(t) {
@@ -1922,8 +1988,44 @@
                 });
             });
 
-            // ── LOGIN / REGISTER (stubs) ──
-            document.getElementById('loginBtn').addEventListener('click', () => openModal('loginModal'));
+            // ── AUTH ──
+            let currentUser = null;
+
+            function loadAuth() {
+                try {
+                    const data = localStorage.getItem('brklive_user');
+                    if (data) {
+                        currentUser = JSON.parse(data);
+                        updateAuthUI();
+                        return true;
+                    }
+                } catch {}
+                currentUser = null;
+                updateAuthUI();
+                return false;
+            }
+
+            function updateAuthUI() {
+                const loginBtn = document.getElementById('loginBtn');
+                const userBadge = document.getElementById('userBadge');
+                const userNameDisplay = document.getElementById('userNameDisplay');
+                const userAvatar = document.getElementById('userAvatar');
+
+                if (currentUser) {
+                    loginBtn.style.display = 'none';
+                    userBadge.style.display = 'flex';
+                    userNameDisplay.textContent = currentUser.fullName || currentUser.username;
+                    userAvatar.textContent = (currentUser.fullName || currentUser.username).charAt(0).toUpperCase();
+                } else {
+                    loginBtn.style.display = 'inline-block';
+                    userBadge.style.display = 'none';
+                }
+            }
+
+            document.getElementById('loginBtn').addEventListener('click', function() {
+                openModal('loginModal');
+            });
+
             document.getElementById('loginCancelBtn').addEventListener('click', () => closeModal('loginModal'));
             document.getElementById('showRegisterLink').addEventListener('click', e => {
                 e.preventDefault();
@@ -1936,42 +2038,163 @@
                 closeModal('registerModal');
                 openModal('loginModal');
             });
-            document.getElementById('loginSubmitBtn').addEventListener('click', () => {
-                toast('Logged in successfully (demo)', 'success');
-                closeModal('loginModal');
+
+            document.getElementById('loginSubmitBtn').addEventListener('click', function() {
+                const username = document.getElementById('loginUsername').value.trim();
+                const password = document.getElementById('loginPassword').value.trim();
+                if (!username || !password) { toast('Please fill all fields', 'error'); return; }
+                let users = [];
+                try { users = JSON.parse(localStorage.getItem('brklive_users') || '[]'); } catch {}
+                const found = users.find(u => u.username === username && u.password === password);
+                if (found) {
+                    currentUser = { username: found.username, fullName: found.fullName };
+                    localStorage.setItem('brklive_user', JSON.stringify(currentUser));
+                    updateAuthUI();
+                    closeModal('loginModal');
+                    toast('Welcome back ' + (found.fullName || username) + '!', 'success');
+                    return;
+                }
+                if (username === 'admin' && password === 'admin123') {
+                    currentUser = { username: 'admin', fullName: 'Admin' };
+                    localStorage.setItem('brklive_user', JSON.stringify(currentUser));
+                    updateAuthUI();
+                    closeModal('loginModal');
+                    toast('Welcome Admin!', 'success');
+                    return;
+                }
+                toast('Invalid credentials', 'error');
             });
-            document.getElementById('registerSubmitBtn').addEventListener('click', () => {
-                toast('Registered successfully (demo)', 'success');
+
+            document.getElementById('registerSubmitBtn').addEventListener('click', function() {
+                const fullName = document.getElementById('registerFullName').value.trim();
+                const username = document.getElementById('registerUsername').value.trim();
+                const email = document.getElementById('registerEmail').value.trim();
+                const password = document.getElementById('registerPassword').value;
+                const confirm = document.getElementById('registerConfirmPassword').value;
+                if (!fullName || !username || !email || !password) { toast('All fields required', 'error'); return; }
+                if (password !== confirm) { toast('Passwords do not match', 'error'); return; }
+                let users = [];
+                try { users = JSON.parse(localStorage.getItem('brklive_users') || '[]'); } catch {}
+                if (users.find(u => u.username === username)) { toast('Username already taken', 'error'); return; }
+                users.push({ fullName, username, email, password });
+                localStorage.setItem('brklive_users', JSON.stringify(users));
+                currentUser = { username, fullName };
+                localStorage.setItem('brklive_user', JSON.stringify(currentUser));
+                updateAuthUI();
                 closeModal('registerModal');
+                toast('Registered successfully!', 'success');
+            });
+
+            document.getElementById('logoutBtn').addEventListener('click', function() {
+                currentUser = null;
+                localStorage.removeItem('brklive_user');
+                updateAuthUI();
+                toast('Logged out', 'success');
             });
 
             // ── TOURNAMENT CRUD ──
+            let selectedTournamentId = null;
+
             function renderTournaments() {
                 const grid = document.getElementById('tournamentGrid');
                 const tournaments = getTournaments();
                 if (!tournaments.length) {
-                    grid.innerHTML =
-                        `<div class="empty-state" style="grid-column:1/-1;padding:20px 0;"><div class="icon" style="font-size:32px;">🏏</div><p style="font-size:14px;">No tournaments created yet</p></div>`;
+                    grid.innerHTML = `
+                        <div class="empty-state" style="grid-column:1/-1;padding:20px 0;">
+                            <div class="icon" style="font-size:32px;">🏏</div>
+                            <p style="font-size:14px;">No tournaments created yet</p>
+                            <button class="btn btn-primary btn-sm" id="emptyCreateTournamentBtn">Create Tournament</button>
+                        </div>
+                    `;
+                    document.getElementById('emptyCreateTournamentBtn')?.addEventListener('click', () => openModal(
+                        'createTournamentModal'));
                     return;
                 }
                 grid.innerHTML = tournaments.map(t => `
-                    <div class="tournament-card" data-id="${t.id}">
+                    <div class="tournament-card ${selectedTournamentId === t.id ? 'selected' : ''}" data-id="${t.id}">
                         <div class="name">${t.name}</div>
                         <div class="meta">${t.venue || '—'} • ${t.type || 'T20'}</div>
                         <div class="badge">${t.startDate || ''} — ${t.endDate || ''}</div>
                         <div style="font-size:12px;color:var(--text-muted);margin-top:6px;">${t.matchCount || 0} matches</div>
+                        <div class="card-actions">
+                            <button class="btn btn-primary btn-sm select-tournament-btn" data-id="${t.id}">📋 Select</button>
+                            <button class="btn btn-danger btn-sm delete-tournament-btn" data-id="${t.id}">🗑️</button>
+                        </div>
                     </div>
                 `).join('');
+
+                grid.querySelectorAll('.select-tournament-btn').forEach(btn => {
+                    btn.addEventListener('click', e => {
+                        e.stopPropagation();
+                        const id = btn.dataset.id;
+                        selectTournament(id);
+                    });
+                });
+
+                grid.querySelectorAll('.delete-tournament-btn').forEach(btn => {
+                    btn.addEventListener('click', e => {
+                        e.stopPropagation();
+                        const id = btn.dataset.id;
+                        if (confirm('Delete this tournament and all its matches?')) {
+                            deleteTournament(id);
+                        }
+                    });
+                });
 
                 grid.querySelectorAll('.tournament-card').forEach(card => {
                     card.addEventListener('click', () => {
                         const id = card.dataset.id;
-                        openCreateMatch(id);
+                        selectTournament(id);
                     });
                 });
+
+                if (selectedTournamentId) {
+                    const card = grid.querySelector(`.tournament-card[data-id="${selectedTournamentId}"]`);
+                    if (card) card.classList.add('selected');
+                }
             }
 
-            document.getElementById('openCreateTournamentBtn').addEventListener('click', () => openModal('createTournamentModal'));
+            function deleteTournament(id) {
+                let tournaments = getTournaments();
+                tournaments = tournaments.filter(t => t.id !== id);
+                saveTournaments(tournaments);
+                let matches = getMatches();
+                matches = matches.filter(m => m.tournamentId !== id);
+                saveMatches(matches);
+                if (selectedTournamentId === id) {
+                    selectedTournamentId = null;
+                    document.getElementById('matchListContainer').style.display = 'none';
+                    document.getElementById('matchDetailView').classList.add('hidden');
+                    document.getElementById('selectedTournamentBadge').style.display = 'none';
+                }
+                renderTournaments();
+                toast('Tournament deleted', 'success');
+            }
+
+            function selectTournament(id) {
+                selectedTournamentId = id;
+                renderTournaments();
+                const tournaments = getTournaments();
+                const t = tournaments.find(t => t.id === id);
+                if (t) {
+                    const badge = document.getElementById('selectedTournamentBadge');
+                    badge.textContent = '🏆 ' + t.name;
+                    badge.style.display = 'inline-block';
+                    document.getElementById('tournamentHint').textContent = 'Managing matches for ' + t.name;
+                    renderMatchList(id);
+                    document.getElementById('matchListContainer').style.display = 'block';
+                    document.getElementById('matchDetailView').classList.add('hidden');
+                }
+            }
+
+            document.getElementById('openCreateTournamentBtn').addEventListener('click', () => {
+                document.getElementById('tournamentName').value = '';
+                document.getElementById('tournamentVenue').value = '';
+                document.getElementById('tournamentStartDate').value = '';
+                document.getElementById('tournamentEndDate').value = '';
+                openModal('createTournamentModal');
+            });
+
             document.getElementById('closeCreateTournamentBtn').addEventListener('click', () => closeModal('createTournamentModal'));
 
             document.getElementById('createTournamentBtn').addEventListener('click', () => {
@@ -1985,24 +2208,104 @@
                 const t = { id: genId(), name, venue, type, startDate: start, endDate: end, matchCount: 0 };
                 tournaments.push(t);
                 saveTournaments(tournaments);
-                renderTournaments();
                 closeModal('createTournamentModal');
                 toast('Tournament created!', 'success');
-                document.getElementById('tournamentName').value = '';
-                document.getElementById('tournamentVenue').value = '';
-                document.getElementById('tournamentStartDate').value = '';
-                document.getElementById('tournamentEndDate').value = '';
+                renderTournaments();
+                selectTournament(t.id);
             });
+
+            // ── MATCH LIST ──
+            function renderMatchList(tournamentId) {
+                const container = document.getElementById('matchListContent');
+                const matches = getMatches().filter(m => m.tournamentId === tournamentId);
+                if (!matches.length) {
+                    container.innerHTML = `
+                        <div class="empty-state" id="emptyMatchState">
+                            <div class="icon">🏏</div>
+                            <p>No matches created yet</p>
+                            <span class="text-muted" style="font-size:13px;">Click "New Match" to create one.</span>
+                        </div>
+                    `;
+                    return;
+                }
+                container.innerHTML = `<div class="match-grid">${matches.map(m => `
+                    <div class="match-card" data-id="${m.id}">
+                        <div class="teams">${m.teamAName} <span class="vs">vs</span> ${m.teamBName}</div>
+                        <div class="meta">Match #${m.matchNo} • ${m.matchType.toUpperCase()} • ${m.maxOvers} ov</div>
+                        <span class="status ${m.status}">${m.status.toUpperCase()}</span>
+                        <div style="font-size:12px;color:var(--text-muted);margin-top:4px;">${m.totalRuns || 0}/${m.totalWickets || 0} (${m.totalOvers || 0}.0 ov)</div>
+                        <div class="match-actions">
+                            <button class="btn btn-danger btn-sm delete-match-btn" data-id="${m.id}">🗑️</button>
+                        </div>
+                    </div>
+                `).join('')}</div>`;
+
+                container.querySelectorAll('.match-card').forEach(card => {
+                    card.addEventListener('click', (e) => {
+                        if (e.target.closest('.delete-match-btn')) return;
+                        viewMatch(card.dataset.id);
+                    });
+                });
+
+                container.querySelectorAll('.delete-match-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        const id = btn.dataset.id;
+                        if (confirm('Delete this match?')) {
+                            deleteMatch(id);
+                        }
+                    });
+                });
+            }
+
+            // ── DELETE MATCH ──
+            function deleteMatch(matchId) {
+                let matches = getMatches();
+                const match = matches.find(m => m.id === matchId);
+                if (!match) { toast('Match not found', 'error'); return; }
+                const tournamentId = match.tournamentId;
+
+                matches = matches.filter(m => m.id !== matchId);
+                saveMatches(matches);
+
+                const tournaments = getTournaments();
+                const t = tournaments.find(t => t.id === tournamentId);
+                if (t) {
+                    t.matchCount = (t.matchCount || 1) - 1;
+                    if (t.matchCount < 0) t.matchCount = 0;
+                    saveTournaments(tournaments);
+                }
+
+                toast('Match deleted', 'success');
+
+                if (currentMatchId === matchId) {
+                    currentMatchId = null;
+                    document.getElementById('matchDetailView').classList.add('hidden');
+                    if (selectedTournamentId) {
+                        document.getElementById('matchListContainer').style.display = 'block';
+                        renderMatchList(selectedTournamentId);
+                    } else {
+                        document.getElementById('matchListContainer').style.display = 'none';
+                    }
+                } else {
+                    if (selectedTournamentId) {
+                        renderMatchList(selectedTournamentId);
+                    }
+                }
+                renderTournaments();
+            }
 
             // ── CREATE MATCH ──
             function openCreateMatch(tournamentId) {
                 const select = document.getElementById('matchTournamentSelect');
                 const tournaments = getTournaments();
-                select.innerHTML = '<option value="">— Select Tournament —</option>' +
-                    tournaments.map(t => `<option value="${t.id}" ${t.id === tournamentId ? 'selected' : ''}>${t.name}</option>`)
-                    .join('');
-                document.getElementById('xiTeamAList').innerHTML = '';
-                document.getElementById('xiTeamBList').innerHTML = '';
+                select.innerHTML = tournaments.map(t =>
+                    `<option value="${t.id}" ${t.id === tournamentId ? 'selected' : ''}>${t.name}</option>`
+                ).join('');
+                document.getElementById('xiTeamAList').dataset.items = JSON.stringify([]);
+                document.getElementById('xiTeamBList').dataset.items = JSON.stringify([]);
+                renderXiList('xiTeamAList');
+                renderXiList('xiTeamBList');
                 document.getElementById('xiTeamAInput').value = '';
                 document.getElementById('xiTeamBInput').value = '';
                 document.getElementById('xiTeamABulk').value = '';
@@ -2010,74 +2313,76 @@
                 document.getElementById('teamAName').value = 'India';
                 document.getElementById('teamBName').value = 'Australia';
                 document.getElementById('maxOvers').value = 20;
-                document.getElementById('matchNo').value = 1;
+                const existing = getMatches().filter(m => m.tournamentId === tournamentId);
+                document.getElementById('matchNo').value = existing.length + 1;
                 openModal('createMatchModal');
             }
 
-            document.getElementById('closeCreateMatchBtn').addEventListener('click', () => closeModal('createMatchModal'));
-
-            function setupXiManagement(prefix, listId, inputId, bulkId, addBtnId, bulkBtnId) {
+            function renderXiList(listId) {
                 const list = document.getElementById(listId);
-                const input = document.getElementById(inputId);
-                const bulk = document.getElementById(bulkId);
-                const addBtn = document.getElementById(addBtnId);
-                const bulkBtn = document.getElementById(bulkBtnId);
-
-                function render() {
-                    const items = list.dataset.items ? JSON.parse(list.dataset.items) : [];
-                    list.innerHTML = items.map(p =>
-                        `<span class="xi-tag">${p} <span class="remove" data-name="${p}">×</span></span>`
-                    ).join('');
-                    list.querySelectorAll('.remove').forEach(el => {
-                        el.addEventListener('click', () => {
-                            const name = el.dataset.name;
-                            let arr = JSON.parse(list.dataset.items || '[]');
-                            arr = arr.filter(x => x !== name);
-                            list.dataset.items = JSON.stringify(arr);
-                            render();
-                        });
+                const items = JSON.parse(list.dataset.items || '[]');
+                list.innerHTML = items.map(p =>
+                    `<span class="xi-tag">${p} <span class="remove" data-name="${p}">×</span></span>`
+                ).join('');
+                list.querySelectorAll('.remove').forEach(el => {
+                    el.addEventListener('click', () => {
+                        const name = el.dataset.name;
+                        let arr = JSON.parse(list.dataset.items || '[]');
+                        arr = arr.filter(x => x !== name);
+                        list.dataset.items = JSON.stringify(arr);
+                        renderXiList(listId);
                     });
-                }
-
-                function addItem(name) {
-                    name = name.trim();
-                    if (!name) return;
-                    let arr = JSON.parse(list.dataset.items || '[]');
-                    if (arr.includes(name)) { toast('Player already in XI', 'warning'); return; }
-                    arr.push(name);
-                    list.dataset.items = JSON.stringify(arr);
-                    render();
-                }
-
-                addBtn.addEventListener('click', () => {
-                    const val = input.value.trim();
-                    if (val) { addItem(val);
-                        input.value = ''; }
                 });
-                input.addEventListener('keydown', e => { if (e.key === 'Enter') { addBtn.click();
-                        e.preventDefault(); } });
-
-                bulkBtn.addEventListener('click', () => {
-                    const val = bulk.value.trim();
-                    if (!val) return;
-                    val.split(',').forEach(s => addItem(s.trim()));
-                    bulk.value = '';
-                });
-
-                list.dataset.items = JSON.stringify([]);
-                render();
-
-                return { addItem, getItems: () => JSON.parse(list.dataset.items || '[]'), setItems: (arr) => { list.dataset
-                            .items = JSON.stringify(arr);
-                        render(); } };
             }
 
-            const xiA = setupXiManagement('A', 'xiTeamAList', 'xiTeamAInput', 'xiTeamABulk', 'addXiTeamA', 'bulkXiTeamA');
-            const xiB = setupXiManagement('B', 'xiTeamBList', 'xiTeamBInput', 'xiTeamBBulk', 'addXiTeamB', 'bulkXiTeamB');
+            function addXiItem(listId, inputId) {
+                const list = document.getElementById(listId);
+                const input = document.getElementById(inputId);
+                const val = input.value.trim();
+                if (!val) return;
+                let arr = JSON.parse(list.dataset.items || '[]');
+                if (arr.includes(val)) { toast('Player already in XI', 'warning'); return; }
+                arr.push(val);
+                list.dataset.items = JSON.stringify(arr);
+                renderXiList(listId);
+                input.value = '';
+            }
+
+            document.getElementById('addXiTeamA').addEventListener('click', () => addXiItem('xiTeamAList', 'xiTeamAInput'));
+            document.getElementById('xiTeamAInput').addEventListener('keydown', e => { if (e.key === 'Enter') { document
+                        .getElementById('addXiTeamA').click();
+                    e.preventDefault(); } });
+            document.getElementById('addXiTeamB').addEventListener('click', () => addXiItem('xiTeamBList', 'xiTeamBInput'));
+            document.getElementById('xiTeamBInput').addEventListener('keydown', e => { if (e.key === 'Enter') { document
+                        .getElementById('addXiTeamB').click();
+                    e.preventDefault(); } });
+
+            document.getElementById('bulkXiTeamA').addEventListener('click', () => {
+                const bulk = document.getElementById('xiTeamABulk');
+                const vals = bulk.value.split(',').map(s => s.trim()).filter(Boolean);
+                const list = document.getElementById('xiTeamAList');
+                let arr = JSON.parse(list.dataset.items || '[]');
+                vals.forEach(v => { if (v && !arr.includes(v)) arr.push(v); });
+                list.dataset.items = JSON.stringify(arr);
+                renderXiList('xiTeamAList');
+                bulk.value = '';
+            });
+            document.getElementById('bulkXiTeamB').addEventListener('click', () => {
+                const bulk = document.getElementById('xiTeamBBulk');
+                const vals = bulk.value.split(',').map(s => s.trim()).filter(Boolean);
+                const list = document.getElementById('xiTeamBList');
+                let arr = JSON.parse(list.dataset.items || '[]');
+                vals.forEach(v => { if (v && !arr.includes(v)) arr.push(v); });
+                list.dataset.items = JSON.stringify(arr);
+                renderXiList('xiTeamBList');
+                bulk.value = '';
+            });
 
             document.getElementById('resetMatchSetupBtn').addEventListener('click', () => {
-                xiA.setItems([]);
-                xiB.setItems([]);
+                document.getElementById('xiTeamAList').dataset.items = JSON.stringify([]);
+                document.getElementById('xiTeamBList').dataset.items = JSON.stringify([]);
+                renderXiList('xiTeamAList');
+                renderXiList('xiTeamBList');
                 document.getElementById('teamAName').value = 'India';
                 document.getElementById('teamBName').value = 'Australia';
                 document.getElementById('maxOvers').value = 20;
@@ -2088,6 +2393,8 @@
                 toast('Form reset', 'success');
             });
 
+            document.getElementById('closeCreateMatchBtn').addEventListener('click', () => closeModal('createMatchModal'));
+
             document.getElementById('createTournamentMatchBtn').addEventListener('click', () => {
                 const tournamentId = document.getElementById('matchTournamentSelect').value;
                 const matchNo = parseInt(document.getElementById('matchNo').value) || 1;
@@ -2097,8 +2404,8 @@
                 const maxOvers = parseInt(document.getElementById('maxOvers').value) || 20;
                 const tossWinner = document.getElementById('tossWinner').value;
                 const tossDecision = document.getElementById('tossDecision').value;
-                const xiTeamA = xiA.getItems();
-                const xiTeamB = xiB.getItems();
+                const xiTeamA = JSON.parse(document.getElementById('xiTeamAList').dataset.items || '[]');
+                const xiTeamB = JSON.parse(document.getElementById('xiTeamBList').dataset.items || '[]');
 
                 if (!tournamentId) { toast('Please select a tournament', 'error'); return; }
                 if (!teamAName || !teamBName) { toast('Enter both team names', 'error'); return; }
@@ -2147,35 +2454,13 @@
 
                 closeModal('createMatchModal');
                 toast('Match created!', 'success');
-                renderMatchList(tournamentId);
                 renderTournaments();
+                if (selectedTournamentId === tournamentId) {
+                    renderMatchList(tournamentId);
+                    document.getElementById('matchListContainer').style.display = 'block';
+                }
                 viewMatch(match.id);
             });
-
-            // ── MATCH LIST ──
-            function renderMatchList(tournamentId) {
-                const container = document.getElementById('matchListContainer');
-                const matches = getMatches().filter(m => m.tournamentId === tournamentId);
-                if (!matches.length) {
-                    container.innerHTML =
-                        `<div class="empty-state" id="emptyMatchState"><div class="icon">🏏</div><p>No Matches Created</p><span class="text-muted" style="font-size:13px;">Use the form above to create a new match.</span></div>`;
-                    return;
-                }
-                container.innerHTML = `<div class="match-grid">${matches.map(m => `
-                    <div class="match-card" data-id="${m.id}">
-                        <div class="teams">${m.teamAName} <span class="vs">vs</span> ${m.teamBName}</div>
-                        <div class="meta">Match #${m.matchNo} • ${m.matchType.toUpperCase()} • ${m.maxOvers} ov</div>
-                        <span class="status ${m.status}">${m.status.toUpperCase()}</span>
-                        <div style="font-size:12px;color:var(--text-muted);margin-top:4px;">${m.totalRuns || 0}/${m.totalWickets || 0} (${m.totalOvers || 0}.0 ov)</div>
-                    </div>
-                `).join('')}</div>`;
-
-                container.querySelectorAll('.match-card').forEach(card => {
-                    card.addEventListener('click', () => {
-                        viewMatch(card.dataset.id);
-                    });
-                });
-            }
 
             // ── VIEW MATCH ──
             let currentMatchId = null;
@@ -2187,24 +2472,44 @@
                 currentMatchId = matchId;
                 document.getElementById('matchListContainer').style.display = 'none';
                 document.getElementById('matchDetailView').classList.remove('hidden');
-                document.getElementById('emptyMatchState').style.display = 'none';
                 renderMatchDetail(match);
                 updateOverlayUrl(matchId);
+                document.getElementById('editMatchBtn').style.display = 'inline-flex';
+                document.getElementById('deleteMatchBtn').style.display = 'inline-flex';
             }
 
             document.getElementById('backToMatchListBtn').addEventListener('click', () => {
                 document.getElementById('matchDetailView').classList.add('hidden');
-                document.getElementById('matchListContainer').style.display = 'block';
-                const matches = getMatches();
-                if (currentMatchId) {
-                    const m = matches.find(x => x.id === currentMatchId);
-                    if (m) renderMatchList(m.tournamentId);
+                if (selectedTournamentId) {
+                    document.getElementById('matchListContainer').style.display = 'block';
+                    renderMatchList(selectedTournamentId);
+                } else {
+                    document.getElementById('matchListContainer').style.display = 'none';
                 }
                 currentMatchId = null;
             });
 
             document.getElementById('openFullScorerBtn').addEventListener('click', () => {
                 if (currentMatchId) {
+                    // Save match bridge for scorer
+                    const matches = getMatches();
+                    const match = matches.find(m => m.id === currentMatchId);
+                    if (match) {
+                        const bridge = {
+                            tournament: match.tournamentId || '',
+                            venue: match.venue || '',
+                            matchName: match.matchName || `${match.teamAName} vs ${match.teamBName}`,
+                            teamA: match.teamAName,
+                            teamB: match.teamBName,
+                            maxOvers: match.maxOvers,
+                            tossWinner: match.tossWinner,
+                            tossDecision: match.tossDecision,
+                            xiA: match.xiTeamA || [],
+                            xiB: match.xiTeamB || [],
+                            matchId: match.id
+                        };
+                        localStorage.setItem('brklive19_score_bridge', JSON.stringify(bridge));
+                    }
                     window.location.href = `./scorer.html?match=${currentMatchId}`;
                 } else {
                     toast('No match selected', 'error');
@@ -2224,7 +2529,6 @@
                 navigator.clipboard?.writeText(input.value).then(() => {
                     toast('Overlay URL copied!', 'success');
                 }).catch(() => {
-                    // Fallback
                     input.select();
                     document.execCommand('copy');
                     toast('Overlay URL copied!', 'success');
@@ -2385,13 +2689,20 @@
                 });
             });
 
-            // ── EDIT MATCH FUNCTIONALITY ──
+            // ── EDIT MATCH ──
             document.getElementById('editMatchBtn').addEventListener('click', () => {
                 if (!currentMatchId) { toast('No match selected', 'error'); return; }
                 const matches = getMatches();
                 const match = matches.find(m => m.id === currentMatchId);
                 if (!match) { toast('Match not found', 'error'); return; }
                 openEditMatchModal(match);
+            });
+
+            document.getElementById('deleteMatchBtn').addEventListener('click', () => {
+                if (!currentMatchId) { toast('No match selected', 'error'); return; }
+                if (confirm('Delete this match permanently?')) {
+                    deleteMatch(currentMatchId);
+                }
             });
 
             function openEditMatchModal(match) {
@@ -2412,31 +2723,13 @@
                 document.getElementById('editTossWinner').value = match.tossWinner || 'none';
                 document.getElementById('editTossDecision').value = match.tossDecision || 'bat';
 
-                const xiAList = document.getElementById('editXiTeamAList');
-                const xiBList = document.getElementById('editXiTeamBList');
-                xiAList.dataset.items = JSON.stringify(match.xiTeamA || []);
-                xiBList.dataset.items = JSON.stringify(match.xiTeamB || []);
-                renderEditXi(xiAList);
-                renderEditXi(xiBList);
+                document.getElementById('editXiTeamAList').dataset.items = JSON.stringify(match.xiTeamA || []);
+                document.getElementById('editXiTeamBList').dataset.items = JSON.stringify(match.xiTeamB || []);
+                renderXiList('editXiTeamAList');
+                renderXiList('editXiTeamBList');
 
                 window._editMatchId = match.id;
                 openModal('editMatchModal');
-            }
-
-            function renderEditXi(list) {
-                const items = JSON.parse(list.dataset.items || '[]');
-                list.innerHTML = items.map(p =>
-                    `<span class="xi-tag">${p} <span class="remove" data-name="${p}">×</span></span>`
-                ).join('');
-                list.querySelectorAll('.remove').forEach(el => {
-                    el.addEventListener('click', () => {
-                        const name = el.dataset.name;
-                        let arr = JSON.parse(list.dataset.items || '[]');
-                        arr = arr.filter(x => x !== name);
-                        list.dataset.items = JSON.stringify(arr);
-                        renderEditXi(list);
-                    });
-                });
             }
 
             document.getElementById('editAddXiTeamA').addEventListener('click', () => {
@@ -2448,7 +2741,7 @@
                 if (arr.includes(val)) { toast('Player already in XI', 'warning'); return; }
                 arr.push(val);
                 list.dataset.items = JSON.stringify(arr);
-                renderEditXi(list);
+                renderXiList('editXiTeamAList');
                 input.value = '';
             });
             document.getElementById('editXiTeamAInput').addEventListener('keydown', e => {
@@ -2457,16 +2750,12 @@
             });
             document.getElementById('editBulkXiTeamA').addEventListener('click', () => {
                 const bulk = document.getElementById('editXiTeamABulk');
-                const val = bulk.value.trim();
-                if (!val) return;
+                const vals = bulk.value.split(',').map(s => s.trim()).filter(Boolean);
                 const list = document.getElementById('editXiTeamAList');
                 let arr = JSON.parse(list.dataset.items || '[]');
-                val.split(',').forEach(s => {
-                    const p = s.trim();
-                    if (p && !arr.includes(p)) arr.push(p);
-                });
+                vals.forEach(v => { if (v && !arr.includes(v)) arr.push(v); });
                 list.dataset.items = JSON.stringify(arr);
-                renderEditXi(list);
+                renderXiList('editXiTeamAList');
                 bulk.value = '';
             });
 
@@ -2479,7 +2768,7 @@
                 if (arr.includes(val)) { toast('Player already in XI', 'warning'); return; }
                 arr.push(val);
                 list.dataset.items = JSON.stringify(arr);
-                renderEditXi(list);
+                renderXiList('editXiTeamBList');
                 input.value = '';
             });
             document.getElementById('editXiTeamBInput').addEventListener('keydown', e => {
@@ -2488,16 +2777,12 @@
             });
             document.getElementById('editBulkXiTeamB').addEventListener('click', () => {
                 const bulk = document.getElementById('editXiTeamBBulk');
-                const val = bulk.value.trim();
-                if (!val) return;
+                const vals = bulk.value.split(',').map(s => s.trim()).filter(Boolean);
                 const list = document.getElementById('editXiTeamBList');
                 let arr = JSON.parse(list.dataset.items || '[]');
-                val.split(',').forEach(s => {
-                    const p = s.trim();
-                    if (p && !arr.includes(p)) arr.push(p);
-                });
+                vals.forEach(v => { if (v && !arr.includes(v)) arr.push(v); });
                 list.dataset.items = JSON.stringify(arr);
-                renderEditXi(list);
+                renderXiList('editXiTeamBList');
                 bulk.value = '';
             });
 
@@ -2539,7 +2824,7 @@
                 closeModal('editMatchModal');
                 toast('Match updated successfully!', 'success');
                 renderMatchDetail(match);
-                renderMatchList(match.tournamentId);
+                if (selectedTournamentId) renderMatchList(selectedTournamentId);
                 renderTournaments();
                 updateOverlayUrl(match.id);
             });
@@ -2547,10 +2832,13 @@
             document.getElementById('cancelEditMatchBtn').addEventListener('click', () => closeModal('editMatchModal'));
             document.getElementById('closeEditMatchBtn').addEventListener('click', () => closeModal('editMatchModal'));
 
-            // ── OVER COMPLETE OK ──
+            // ── OTHER MODALS ──
             document.getElementById('overCompleteOkBtn').addEventListener('click', () => closeModal('overCompleteModal'));
+            document.getElementById('startMatchCancelBtn').addEventListener('click', () => closeModal('startMatchModal'));
+            document.getElementById('matchCompleteOkBtn').addEventListener('click', () => closeModal('matchCompleteModal'));
+            document.getElementById('secondInningsCancelBtn').addEventListener('click', () => closeModal(
+                'secondInningsModal'));
 
-            // ── STREAM ACTIONS ──
             document.getElementById('fullscreenView').addEventListener('click', () => {
                 const el = document.getElementById('streamScoreboard');
                 if (el.requestFullscreen) el.requestFullscreen();
@@ -2565,80 +2853,13 @@
                 }
             });
 
-            // ── 2ND INNINGS ──
-            document.getElementById('startSecondInningsBtn').addEventListener('click', () => {
-                closeModal('inningsCompleteModal');
-                openModal('secondInningsModal');
-                const matches = getMatches();
-                const match = matches.find(m => m.id === currentMatchId);
-                if (!match) return;
-                const xi = match.xiTeamA;
-                ['secondStriker', 'secondNonStriker', 'secondBowler'].forEach(id => {
-                    const input = document.getElementById(id);
-                    const sugg = document.getElementById(id + 'Suggestions');
-                    if (sugg) {
-                        sugg.innerHTML = xi.map(p =>
-                            `<span class="xi-tag" style="cursor:pointer;" data-name="${p}">${p}</span>`
-                        ).join('');
-                        sugg.querySelectorAll('.xi-tag').forEach(el => {
-                            el.addEventListener('click', () => {
-                                input.value = el.dataset.name;
-                                sugg.querySelectorAll('.xi-tag').forEach(t => t.style
-                                    .background = 'rgba(108,92,231,0.15)');
-                                el.style.background = 'rgba(108,92,231,0.35)';
-                            });
-                        });
-                    }
-                });
-            });
-
-            document.getElementById('secondInningsConfirmBtn').addEventListener('click', () => {
-                const striker = document.getElementById('secondStriker').value.trim();
-                const nonStriker = document.getElementById('secondNonStriker').value.trim();
-                const bowler = document.getElementById('secondBowler').value.trim();
-                if (!striker || !nonStriker || !bowler) { toast('All fields required', 'error'); return; }
-                const matches = getMatches();
-                const match = matches.find(m => m.id === currentMatchId);
-                if (!match) return;
-                match.striker = striker;
-                match.nonStriker = nonStriker;
-                match.bowler = bowler;
-                match.totalRuns = 0;
-                match.totalWickets = 0;
-                match.totalOvers = 0;
-                match.currentOverBalls = [];
-                match.batsmenStats = {};
-                match.bowlerStats = {};
-                match.battingTeam = match.teamBName;
-                match.status = 'live';
-                saveMatches(matches);
-                closeModal('secondInningsModal');
-                renderMatchDetail(match);
-                toast('2nd Innings started!', 'success');
-            });
-
-            document.getElementById('secondInningsCancelBtn').addEventListener('click', () => closeModal(
-            'secondInningsModal'));
-
-            // ── OTHER MODALS ──
-            document.getElementById('startMatchCancelBtn').addEventListener('click', () => closeModal('startMatchModal'));
-            document.getElementById('matchCompleteOkBtn').addEventListener('click', () => closeModal('matchCompleteModal'));
-
-            // ── KEYBOARD SHORTCUTS ──
-            document.addEventListener('keydown', (e) => {
-                if (e.key === 'Escape') {
-                    document.querySelectorAll('.modal-overlay.active').forEach(m => m.classList.remove('active'));
-                }
-            });
-
-            // ── START MATCH (from modal) ──
+            // ── START MATCH ──
             document.querySelector('.live-controller .ctrl-btn.primary')?.addEventListener('click', () => {
                 if (!currentMatchId) { toast('No match selected', 'error'); return; }
                 const matches = getMatches();
                 const match = matches.find(m => m.id === currentMatchId);
                 if (!match) return;
                 if (match.striker) { toast('Match already started', 'warning'); return; }
-                const modal = document.getElementById('startMatchModal');
                 const xi = match.xiTeamA;
                 ['startStriker', 'startNonStriker', 'startBowler'].forEach(id => {
                     const input = document.getElementById(id);
@@ -2688,35 +2909,122 @@
                 toast('Match started!', 'success');
             });
 
+            // ── 2ND INNINGS ──
+            document.getElementById('startSecondInningsBtn').addEventListener('click', () => {
+                closeModal('inningsCompleteModal');
+                openModal('secondInningsModal');
+                const matches = getMatches();
+                const match = matches.find(m => m.id === currentMatchId);
+                if (!match) return;
+                const xi = match.xiTeamB || match.xiTeamA;
+                ['secondStriker', 'secondNonStriker', 'secondBowler'].forEach(id => {
+                    const input = document.getElementById(id);
+                    const sugg = document.getElementById(id + 'Suggestions');
+                    if (sugg) {
+                        sugg.innerHTML = xi.map(p =>
+                            `<span class="xi-tag" style="cursor:pointer;" data-name="${p}">${p}</span>`
+                        ).join('');
+                        sugg.querySelectorAll('.xi-tag').forEach(el => {
+                            el.addEventListener('click', () => {
+                                input.value = el.dataset.name;
+                                sugg.querySelectorAll('.xi-tag').forEach(t => t.style
+                                    .background = 'rgba(108,92,231,0.15)');
+                                el.style.background = 'rgba(108,92,231,0.35)';
+                            });
+                        });
+                    }
+                });
+            });
+
+            document.getElementById('secondInningsConfirmBtn').addEventListener('click', () => {
+                const striker = document.getElementById('secondStriker').value.trim();
+                const nonStriker = document.getElementById('secondNonStriker').value.trim();
+                const bowler = document.getElementById('secondBowler').value.trim();
+                if (!striker || !nonStriker || !bowler) { toast('All fields required', 'error'); return; }
+                const matches = getMatches();
+                const match = matches.find(m => m.id === currentMatchId);
+                if (!match) return;
+                match.striker = striker;
+                match.nonStriker = nonStriker;
+                match.bowler = bowler;
+                match.totalRuns = 0;
+                match.totalWickets = 0;
+                match.totalOvers = 0;
+                match.currentOverBalls = [];
+                match.batsmenStats = {};
+                match.bowlerStats = {};
+                match.battingTeam = match.teamBName;
+                match.status = 'live';
+                saveMatches(matches);
+                closeModal('secondInningsModal');
+                renderMatchDetail(match);
+                toast('2nd Innings started!', 'success');
+            });
+
+            // ── KEYBOARD SHORTCUTS ──
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    document.querySelectorAll('.modal-overlay.active').forEach(m => m.classList.remove('active'));
+                }
+            });
+
             // ── INIT ──
             function init() {
+                loadAuth();
                 renderTournaments();
                 updateStorageCount();
-                const select = document.getElementById('matchTournamentSelect');
-                const tournaments = getTournaments();
-                select.innerHTML = '<option value="">— Select Tournament —</option>' +
-                    tournaments.map(t => `<option value="${t.id}">${t.name}</option>`).join('');
+
+                if (selectedTournamentId) {
+                    const tournaments = getTournaments();
+                    if (tournaments.find(t => t.id === selectedTournamentId)) {
+                        selectTournament(selectedTournamentId);
+                    } else {
+                        selectedTournamentId = null;
+                    }
+                }
+
+                const params = new URLSearchParams(window.location.search);
+                const matchId = params.get('match');
+                if (matchId) {
+                    const matches = getMatches();
+                    const match = matches.find(m => m.id === matchId);
+                    if (match) {
+                        selectedTournamentId = match.tournamentId;
+                        renderTournaments();
+                        selectTournament(match.tournamentId);
+                        setTimeout(() => viewMatch(matchId), 300);
+                    }
+                }
+
+                document.getElementById('emptyCreateTournamentBtn')?.addEventListener('click', () => openModal(
+                    'createTournamentModal'));
             }
 
             window.openCreateMatch = openCreateMatch;
+            window.selectTournament = selectTournament;
 
-            document.getElementById('openCreateTournamentBtn').addEventListener('click', () => {
-                const select = document.getElementById('matchTournamentSelect');
-                const tournaments = getTournaments();
-                select.innerHTML = '<option value="">— Select Tournament —</option>' +
-                    tournaments.map(t => `<option value="${t.id}">${t.name}</option>`).join('');
+            document.addEventListener('click', (e) => {
+                if (e.target.id === 'emptyMatchCreateBtn') {
+                    if (selectedTournamentId) {
+                        openCreateMatch(selectedTournamentId);
+                    } else {
+                        toast('Select a tournament first', 'warning');
+                    }
+                }
+            });
+
+            // Explicitly wire the "New Match" button
+            document.getElementById('createMatchFromListBtn').addEventListener('click', () => {
+                if (!selectedTournamentId) {
+                    toast('Select a tournament first', 'warning');
+                    return;
+                }
+                openCreateMatch(selectedTournamentId);
             });
 
             init();
 
             if (window.location.hash === '#tournament') navigate('tournament');
-
-            setTimeout(() => {
-                const tournaments = getTournaments();
-                if (tournaments.length && document.getElementById('page-tournament').classList.contains('active')) {
-                    renderMatchList(tournaments[0].id);
-                }
-            }, 300);
 
         })();
     </script>
