@@ -173,7 +173,9 @@ textarea{min-height:130px;resize:vertical}
     <button class="btn custom" onclick="togglePartnership()">🤝 PARTNERSHIP</button>
     <button class="btn good" onclick="setMode('bowler')">BOWLER</button>
     <button class="btn freehit" onclick="setMode('summary')">SUMMARY</button>
-    <button class="btn dark" onclick="setMode('scorecard')">SCORECARD</button>
+    <button class="btn blue" id="scoreboardToggleBtn" onclick="toggleScoreboard()">🖥 SHOW SCOREBOARD</button>
+    <button class="btn gold" onclick="showInningsScoreboard(1)">1ST INN SCOREBOARD</button>
+    <button class="btn gold" onclick="showInningsScoreboard(2)">2ND INN SCOREBOARD</button>
   </div>
 
   <h3 style="color:var(--cyan);margin-top:14px">🏷️ Banners & Player Graphics</h3>
@@ -183,6 +185,8 @@ textarea{min-height:130px;resize:vertical}
     <button class="btn custom" onclick="toggleOverlayBanner('match')">⚔️ MATCH</button>
     <button class="btn good" onclick="toggleOverlayBanner('toss')">🪙 TOSS</button>
     <button class="btn custom" onclick="togglePartnership()">🤝 PARTNERSHIP</button>
+    <button class="btn blue" onclick="togglePlayerLower('b1')">🏏 B1 STATUS</button>
+    <button class="btn blue" onclick="togglePlayerLower('b2')">🏏 B2 STATUS</button>
     <button class="btn dark" onclick="toggleOverlayBanner('result')">🏆 RESULT</button>
   </div>
 
@@ -204,12 +208,6 @@ textarea{min-height:130px;resize:vertical}
     <button class="theme" data-theme="gold" onclick="setTheme('gold')">🟡 GOLD</button>
     <button class="theme" data-theme="red" onclick="setTheme('red')">🔴 RED</button>
     <button class="theme" data-theme="rainbow" onclick="setTheme('rainbow')">🌈 RAINBOW</button>
-    <button class="theme" data-theme="glass" onclick="setTheme('glass')">🪟 GLASS</button>
-    <button class="theme" data-theme="carbon" onclick="setTheme('carbon')">⬛ CARBON</button>
-    <button class="theme" data-theme="stadium" onclick="setTheme('stadium')">🏟 STADIUM</button>
-    <button class="theme" data-theme="aurora" onclick="setTheme('aurora')">🌌 AURORA</button>
-    <button class="theme" data-theme="metallic" onclick="setTheme('metallic')">⚙️ METALLIC</button>
-    <button class="theme" data-theme="redblack" onclick="setTheme('redblack')">🔥 RED BLACK</button>
     <button class="theme" data-theme="theme2" onclick="setTheme('theme2')">⭐ THEME 2</button>
   </div>
 
@@ -222,15 +220,19 @@ textarea{min-height:130px;resize:vertical}
     <label style="display:flex;align-items:center;gap:6px;font-size:13px;color:var(--text-secondary);">
       Secondary: <input type="color" id="customSecondaryColor" value="#ffd900" style="width:60px;height:40px;padding:2px;border-radius:8px;background:transparent;border:1px solid var(--line);cursor:pointer;">
     </label>
+    <label style="display:flex;align-items:center;gap:6px;font-size:13px;color:var(--text-secondary);">
+      Deep Blue: <input type="color" id="customDeepBlueColor" value="#071a58" style="width:60px;height:40px;padding:2px;border-radius:8px;background:transparent;border:1px solid var(--line);cursor:pointer;">
+    </label>
     <button class="btn custom" style="flex:0 1 auto;padding:8px 18px;" onclick="setCustomTheme()">🎨 Apply Custom</button>
     <button class="btn dark" style="flex:0 1 auto;padding:8px 18px;" onclick="setTheme('blue')">↺ Reset to Blue</button>
   </div>
 </div>
 
-<!-- ===== SCORECARD ===== -->
+<!-- ===== FULL SCREEN SCOREBOARD ===== -->
 <div class="card">
-  <h2>📋 Scorecard</h2>
-  <div id="scorecard" class="mini">No innings yet.</div>
+  <h2>🖥 Full Screen Scoreboard</h2>
+  <div class="mini" style="margin-bottom:10px;">Broadcast scoreboard is rendered in the overlay as a full 1920×1080 frame using the live match data.</div>
+  <button class="btn blue" id="scoreboardToggleBtn2" onclick="toggleScoreboard()">🖥 SHOW SCOREBOARD</button>
 </div>
 
 <!-- ===== MODALS ===== -->
@@ -544,7 +546,12 @@ textarea{min-height:130px;resize:vertical}
     if (!S.started) return;
     S.started = false;
     if (S.innings === 1) {
-      S.firstInnings = { team:S.battingTeam, runs:S.runs, wickets:S.wickets, balls:S.legalBalls, extras:S.extras };
+      S.firstInnings = {
+        team:S.battingTeam, runs:S.runs, wickets:S.wickets, balls:S.legalBalls, extras:S.extras,
+        extraDetail:{...S.extraDetail},
+        batters:JSON.parse(JSON.stringify(S.batters || {})),
+        bowlers:JSON.parse(JSON.stringify(S.bowlers || {}))
+      };
       S.target = S.runs + 1;
       S.events.push(`🏁 INNINGS 1 COMPLETE — ${S.runs}/${S.wickets}`);
       await save();
@@ -834,15 +841,28 @@ textarea{min-height:130px;resize:vertical}
     render();
   };
 
-  window.setMode = async function(mode) {
+  window.showInningsScoreboard = async function(inningsNo) {
     ensureOverlayState();
-    if (mode === "default") {
-      // DEFAULT controls only the main lower-third score visibility.
-      S.overlay.scoreVisible = !S.overlay.scoreVisible;
-      await save();
-      render();
+    if (Number(inningsNo) === 2 && S.innings < 2) {
+      alert("2nd innings has not started yet.");
       return;
     }
+    S.mode = Number(inningsNo) === 1 ? 'scorecard1' : 'scorecard2';
+    await save();
+    render();
+  };
+
+  window.toggleScoreboard = async function() {
+    ensureOverlayState();
+    S.mode = (S.mode === 'scorecard') ? 'default' : 'scorecard';
+    await save();
+    render();
+  };
+
+  window.setMode = async function(mode) {
+    ensureOverlayState();
+    if (mode === 'scorecard') { await toggleScoreboard(); return; }
+    if (mode === 'default') { S.mode='default'; await save(); render(); return; }
     S.mode = mode;
     await save();
     render();
@@ -859,12 +879,13 @@ textarea{min-height:130px;resize:vertical}
   window.setCustomTheme = async function() {
     const primary = document.getElementById('customPrimaryColor').value;
     const secondary = document.getElementById('customSecondaryColor').value;
+    const deepBlue = document.getElementById('customDeepBlueColor')?.value || '#071a58';
     if (!primary) { alert('Please select a primary color.'); return; }
     S.theme = 'custom';
-    S.customColors = { primary, secondary, accent: secondary };
+    S.customColors = { primary, secondary, deepBlue, accent: deepBlue };
     await save();
     render();
-    alert('✅ Custom theme applied to overlay!');
+    alert('✅ Custom overlay colors applied!');
   };
 
   // ---- checkMatchResult ----
@@ -972,6 +993,20 @@ textarea{min-height:130px;resize:vertical}
   // ---- initial load ----
   const bridged = loadMatchBridge();
   render();
+
+  const requestedView = new URLSearchParams(window.location.search).get("view");
+  if (requestedView) {
+    // Apply the requested view after the Firebase/local state has settled.
+    setTimeout(async () => {
+      try {
+        if (requestedView === "scorecard1") await showInningsScoreboard(1);
+        else if (requestedView === "scorecard2") await showInningsScoreboard(2);
+        else if (requestedView === "b1") await togglePlayerLower("b1");
+        else if (requestedView === "b2") await togglePlayerLower("b2");
+      } catch(e) { console.error("Requested view failed:", e); }
+    }, 700);
+  }
+
   if (bridged) {
     setTimeout(() => {
       if (typeof openStart === "function") openStart();
