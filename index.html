@@ -1654,7 +1654,7 @@
                 <a href="#" data-page="tournament">Tournament</a>
                 <a href="#" data-page="about">About</a>
                 <a href="#" data-page="contact">Contact</a>
-                <a href="./scorer.html" id="scorerNavLink" onclick="window.location.href='./scorer.html'; return false;">Scorer</a>
+                <a href="./scorer.html" id="scorerNavLink" onclick="window.location.href=currentMatchId ? ('./scorer.html?match='+encodeURIComponent(currentMatchId)) : './scorer.html'; return false;">Scorer</a>
             </nav>
             <div class="topbar-right">
                 <span class="storage-indicator">📦 Storage: <strong id="storageCount">0</strong>/10000 kb</span>
@@ -2413,9 +2413,15 @@
                     return; }
 
                 const matches = getMatches();
+                const allTournaments = getTournaments();
+                const tournament = allTournaments.find(t => t.id === tournamentId) || {};
                 const match = {
                     id: genId(),
                     tournamentId,
+                    tournamentName: tournament.name || '',
+                    tournamentVenue: tournament.venue || '',
+                    venue: tournament.venue || '',
+                    matchName: `${teamAName} vs ${teamBName}`,
                     matchNo,
                     teamAName,
                     teamBName,
@@ -2495,14 +2501,18 @@
                     const matches = getMatches();
                     const match = matches.find(m => m.id === currentMatchId);
                     if (match) {
+                        const tournaments = getTournaments();
+                        const tournament = tournaments.find(t => t.id === match.tournamentId) || {};
                         const bridge = {
-                            tournament: match.tournamentId || '',
-                            venue: match.venue || '',
+                            tournament: tournament.name || match.tournamentName || '',
+                            tournamentName: tournament.name || match.tournamentName || '',
+                            tournamentVenue: tournament.venue || match.tournamentVenue || '',
+                            venue: match.venue || tournament.venue || '',
                             matchName: match.matchName || `${match.teamAName} vs ${match.teamBName}`,
                             teamA: match.teamAName,
                             teamB: match.teamBName,
                             maxOvers: match.maxOvers,
-                            tossWinner: match.tossWinner,
+                            tossWinner: match.tossWinner === 'teamA' ? 'A' : (match.tossWinner === 'teamB' ? 'B' : (match.tossWinner || '')),
                             tossDecision: match.tossDecision,
                             xiA: match.xiTeamA || [],
                             xiB: match.xiTeamB || [],
@@ -2510,7 +2520,21 @@
                         };
                         localStorage.setItem('brklive19_score_bridge', JSON.stringify(bridge));
                     }
-                    window.location.href = `./scorer.html?match=${currentMatchId}`;
+                    const scorerData = encodeURIComponent(JSON.stringify({
+                        id: match.id,
+                        tournamentName: tournament.name || match.tournamentName || '',
+                        tournamentVenue: tournament.venue || match.tournamentVenue || '',
+                        venue: match.venue || tournament.venue || '',
+                        matchName: match.matchName || `${match.teamAName} vs ${match.teamBName}`,
+                        teamAName: match.teamAName,
+                        teamBName: match.teamBName,
+                        maxOvers: match.maxOvers,
+                        tossWinner: match.tossWinner,
+                        tossDecision: match.tossDecision,
+                        xiTeamA: match.xiTeamA || [],
+                        xiTeamB: match.xiTeamB || []
+                    }));
+                    window.location.href = `./scorer.html?match=${encodeURIComponent(currentMatchId)}&matchData=${scorerData}`;
                 } else {
                     toast('No match selected', 'error');
                 }
@@ -2519,7 +2543,8 @@
             function updateOverlayUrl(matchId) {
                 const input = document.getElementById('overlayUrlInput');
                 if (!input) return;
-                const url = window.location.href.split('?')[0] + '?stream=' + (matchId || '');
+                const base = window.location.href.split('?')[0].replace(/(?:index(?:\.html)?|BRKLIVE19_index_updated)\.html$/i, 'overlay.html');
+                const url = base + (matchId ? '?match=' + encodeURIComponent(matchId) : '');
                 input.value = url;
             }
 
