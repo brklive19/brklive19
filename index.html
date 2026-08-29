@@ -142,6 +142,37 @@
             border-color: var(--warning);
         }
 
+        /* ── OVERLAY THEME PICKER ── */
+        .theme-picker-grid {
+            display:grid;
+            grid-template-columns:repeat(3,1fr);
+            gap:14px;
+            margin-top:14px;
+        }
+        .theme-picker-btn {
+            min-height:120px;
+            border:2px solid rgba(255,255,255,.10);
+            border-radius:16px;
+            color:#fff;
+            cursor:pointer;
+            padding:16px;
+            font-weight:900;
+            font-size:15px;
+            transition:transform .18s, box-shadow .18s, border-color .18s;
+            position:relative;
+            overflow:hidden;
+        }
+        .theme-picker-btn:hover { transform:translateY(-3px); box-shadow:0 12px 30px rgba(0,0,0,.35); border-color:#fff8; }
+        .theme-picker-btn .preview { display:block; height:46px; border-radius:9px; margin-bottom:12px; box-shadow:inset 0 1px #fff7,0 5px 12px #0005; }
+        .theme-picker-btn.theme-blue { background:linear-gradient(135deg,#071a58,#00b8e8); }
+        .theme-picker-btn.theme-blue .preview { background:linear-gradient(90deg,#00b8e8,#071a58,#ffd900); }
+        .theme-picker-btn.theme-two { background:linear-gradient(135deg,#0a141e,#073c2a); }
+        .theme-picker-btn.theme-two .preview { background:linear-gradient(90deg,#00ff88,#00ccaa); }
+        .theme-picker-btn.theme-three { background:linear-gradient(135deg,#2a0000,#b40000); }
+        .theme-picker-btn.theme-three .preview { background:#b40000 url("assets/theme3-reference.png") center 43%/cover no-repeat; position:relative; }
+        .theme-picker-btn.theme-three .preview:after { content:""; position:absolute; left:16%; right:16%; bottom:7px; height:11px; border-radius:9px; background:linear-gradient(#ff8d8d,#b80000); box-shadow:0 0 0 2px #350000; }
+        @media(max-width:700px){ .theme-picker-grid{grid-template-columns:1fr;} }
+
         /* ── MODAL OVERLAY ── */
         .modal-overlay {
             position: fixed;
@@ -1180,6 +1211,7 @@
             color: var(--text-muted);
             font-weight: 500;
         }
+        .summary-score-line{display:flex;align-items:center;justify-content:flex-end;gap:18px;flex-wrap:wrap}.summary-score-line strong{font-size:20px;color:var(--accent)}
         .match-summary-container .value {
             font-weight: 600;
         }
@@ -1298,7 +1330,20 @@
                 font-size: 26px;
             }
         }
-    </style>
+    
+        .theme-picker-clean{grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:18px}
+        .theme-picker-clean .theme-picker-btn{min-height:112px;display:flex;flex-direction:column;justify-content:flex-end;padding:12px;overflow:hidden;position:relative}
+        .theme-picker-clean .theme-picker-btn .preview{height:62px;margin:0 0 10px;width:100%}
+        .theme-picker-clean .theme-four{background:linear-gradient(135deg,#07164e,#0d2c88 55%,#f0cf00);border-color:#f0cf00}
+        .theme-picker-clean .theme-four .preview{background:linear-gradient(90deg,#0b2c88,#f2d000,#12266a)}
+        .theme-picker-clean .theme-five{background:linear-gradient(135deg,#080d12,#303942 55%,#081e28);border-color:#4befff}
+        .theme-picker-clean .theme-five .preview{background:linear-gradient(90deg,#d9e0e4,#1a2027 35%,#4befff 50%,#141a20 70%,#dce2e6)}
+        .theme-picker-clean .theme-six{background:linear-gradient(135deg,#050906,#1a2c1d 55%,#071109);border-color:#58d667}
+        .theme-picker-clean .theme-six .preview{background:linear-gradient(90deg,#3a9f46,#d8e3d9,#1c3c23,#58d667)}
+        @media(max-width:700px){.theme-picker-clean{grid-template-columns:repeat(2,minmax(0,1fr))}}
+        @media(max-width:440px){.theme-picker-clean{grid-template-columns:1fr}}
+
+</style>
 </head>
 <body>
 
@@ -1311,11 +1356,11 @@
             <h2>🔐 LOGIN</h2>
             <div class="form-group">
                 <label>Username</label>
-                <input type="text" id="loginUsername" placeholder="Enter username" value="admin" />
+                <input type="text" id="loginUsername" placeholder="Enter username" autocomplete="username" />
             </div>
             <div class="form-group">
                 <label>Password</label>
-                <input type="password" id="loginPassword" placeholder="Enter password" value="admin123" />
+                <input type="password" id="loginPassword" placeholder="Enter password" autocomplete="current-password" />
             </div>
             <div class="modal-actions">
                 <button class="btn btn-primary" id="loginSubmitBtn">Login</button>
@@ -1341,6 +1386,51 @@
                 <button class="btn btn-secondary" id="registerCancelBtn">Cancel</button>
             </div>
             <div class="register-link">Already have an account? <a id="showLoginLink">Login Here</a></div>
+        </div>
+    </div>
+
+    <!-- ===== FOOTBALL SECTION ===== -->
+    <div class="modal-overlay" id="footballModal">
+      <div class="modal-content" style="max-width:760px;">
+        <h2>⚽ FOOTBALL SECTION</h2><p class="text-muted" style="margin:6px 0 12px;">Football scoring, timer, extra time, controller and overlay are completely separate from Cricket.</p>
+        <div class="form-row">
+          <div class="form-group"><label>Home Team</label><input id="fbHome" placeholder="Home Team"></div>
+          <div class="form-group"><label>Away Team</label><input id="fbAway" placeholder="Away Team"></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label>Period</label><select id="fbPeriod"><option value="1H">1st Half</option><option value="HT">Half Time</option><option value="2H">2nd Half</option><option value="ET1">Extra Time 1</option><option value="ET2">Extra Time 2</option><option value="PEN">Penalty Shootout</option><option value="FT">Full Time</option></select></div>
+          <div class="form-group"><label>Added / Extra Time (minutes)</label><input id="fbAdded" type="number" min="0" value="0"></div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;text-align:center;margin:12px 0;">
+          <div class="card" style="margin:0"><div id="fbHomeName">HOME</div><div style="font-size:54px;font-weight:900" id="fbHomeScore">0</div><div class="g2"><button class="btn btn-success" id="fbHomeGoal">⚽ + GOAL</button><button class="btn btn-warning" id="fbHomeYellow">🟨 CARD</button></div><button class="btn btn-danger" id="fbHomeRed" style="margin-top:8px">🟥 RED CARD</button></div>
+          <div class="card" style="margin:0"><div id="fbAwayName">AWAY</div><div style="font-size:54px;font-weight:900" id="fbAwayScore">0</div><div class="g2"><button class="btn btn-success" id="fbAwayGoal">⚽ + GOAL</button><button class="btn btn-warning" id="fbAwayYellow">🟨 CARD</button></div><button class="btn btn-danger" id="fbAwayRed" style="margin-top:8px">🟥 RED CARD</button></div>
+        </div>
+        <div style="text-align:center;background:#081a12;border:1px solid #1d6b48;border-radius:14px;padding:14px;margin-bottom:12px;">
+          <div style="font-size:13px;color:var(--text-muted)">MATCH TIMER</div><div id="fbTimer" style="font-size:42px;font-weight:900">00:00</div>
+          <div class="g3"><button class="btn btn-success" id="fbStart">▶ START</button><button class="btn btn-warning" id="fbPause">⏸ PAUSE</button><button class="btn btn-secondary" id="fbReset">↺ RESET</button></div>
+        </div>
+        <div id="fbStatus" class="event">Ready</div>
+        <div class="modal-actions"><button class="btn btn-primary" id="fbSave">💾 SAVE FOOTBALL SCORE</button><button class="btn btn-secondary" id="fbClose">Close</button></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px"><button class="btn btn-primary" id="openFootballControllerBtn">⚽ FOOTBALL CONTROLLER</button><button class="btn btn-secondary" id="openFootballOverlayBtn">📺 FOOTBALL OVERLAY</button></div>
+      </div>
+    </div>
+
+    <!-- ===== OVERLAY THEME PICKER ===== -->
+    <div class="modal-overlay" id="overlayThemeModal">
+        <div class="modal-content" style="max-width:720px;">
+            <h2>🏏 CRICKET OVERLAY THEME</h2>
+            <p class="text-muted" style="margin:6px 0 0;">Choose a cricket broadcast design. Football has its own separate controller and overlay.</p>
+            <div class="theme-picker-grid theme-picker-clean">
+                <button type="button" class="theme-picker-btn theme-blue" data-pick-theme="blue"><span class="preview"></span><strong>01 • BLUE</strong></button>
+                <button type="button" class="theme-picker-btn theme-two" data-pick-theme="theme2"><span class="preview"></span><strong>02 • THEME 2</strong></button>
+                <button type="button" class="theme-picker-btn theme-three" data-pick-theme="theme3"><span class="preview"></span><strong>03 • THEME 3</strong></button>
+                <button type="button" class="theme-picker-btn theme-four" data-pick-theme="theme4"><span class="preview"></span><strong>04 • THEME 4</strong></button>
+                <button type="button" class="theme-picker-btn theme-five" data-pick-theme="theme5"><span class="preview"></span><strong>05 • THEME 5</strong></button>
+                <button type="button" class="theme-picker-btn theme-six" data-pick-theme="theme6"><span class="preview"></span><strong>06 • THEME 6</strong></button>
+            </div>
+            <div class="modal-actions" style="margin-top:16px;">
+                <button class="btn btn-secondary" id="cancelThemePickerBtn">Cancel</button>
+            </div>
         </div>
     </div>
 
@@ -1655,7 +1745,7 @@
                 <a href="#" data-page="tournament">Tournament</a>
                 <a href="#" data-page="about">About</a>
                 <a href="#" data-page="contact">Contact</a>
-                <a href="./scorer.html" id="scorerNavLink" onclick="window.location.href=currentMatchId ? ('./scorer.html?match='+encodeURIComponent(currentMatchId)) : './scorer.html'; return false;">Scorer</a>
+                <a href="./themes.html" id="scorerNavLink" onclick="openScorerThemeSelection(); return false;">Scorer</a>
             </nav>
             <div class="topbar-right">
                 <span class="storage-indicator">📦 Storage: <strong id="storageCount">0</strong>/10000 kb</span>
@@ -1663,7 +1753,7 @@
                     <button class="btn-login" id="loginBtn">Log in</button>
                     <div id="userBadge" style="display:none;" class="user-badge">
                         <span class="avatar" id="userAvatar">A</span>
-                        <span id="userNameDisplay">Admin</span>
+                        <span id="userNameDisplay">User</span>
                         <button class="btn-logout" id="logoutBtn">Logout</button>
                     </div>
                 </div>
@@ -1693,7 +1783,7 @@
             <div class="flex-center mt-20">
                 <button class="btn btn-primary" data-nav="tournament">🏆 Go to Tournament</button>
                 <button class="btn btn-secondary" data-nav="about">ℹ️ About</button>
-                <a class="btn btn-primary" href="./scorer.html" id="openScorerBtn" onclick="window.location.href='./scorer.html'; return false;" style="text-decoration:none;display:inline-flex;align-items:center;justify-content:center;">🏏 Open Scorer</a>
+                <a class="btn btn-primary" href="./themes.html" id="openScorerBtn" onclick="openScorerThemeSelection(); return false;" style="text-decoration:none;display:inline-flex;align-items:center;justify-content:center;">🏏 Open Scorer</a>
             </div>
         </section>
 
@@ -1704,7 +1794,7 @@
                 <div class="links">
                     <a href="#" id="scoreboardLinksLink">📋 Scoreboard Links</a>
                     <a href="#" id="howToUseLink">❓ How To Use?</a>
-                    <a href="#" id="otherSportsLink">⚽ Other Sports</a>
+                    <a href="#" id="otherSportsLink">⚽ Football</a>
                 </div>
             </div>
             <div class="tournament-body" id="tournamentBody">
@@ -1746,7 +1836,7 @@
                 <div id="matchDetailView" class="match-detail-view hidden">
                     <div class="match-detail-toolbar">
                         <button class="btn btn-sm btn-secondary" id="backToMatchListBtn">← Back to Matches</button>
-                        <button class="btn btn-sm btn-primary" id="openFullScorerBtn">🏏 Open Scoring Control</button>
+                        <button class="btn btn-sm btn-primary" id="openFullScorerBtn">🏏 SCORE</button>
                         <button class="btn btn-sm btn-warning" id="editMatchBtn">✏️ Edit Match</button>
                         <button class="btn btn-sm btn-danger" id="deleteMatchBtn">🗑️ Delete Match</button>
                     </div>
@@ -1953,6 +2043,7 @@
 
             // ── NAVIGATION ──
             window.navigate = function(page) {
+                if (!currentUser && page !== 'home') { requireLogin(); return; }
                 document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
                 const target = document.getElementById('page-' + page);
                 if (target) target.classList.add('active');
@@ -1996,7 +2087,15 @@
                 try {
                     const data = localStorage.getItem('brklive_user');
                     if (data) {
-                        currentUser = JSON.parse(data);
+                        const parsed = JSON.parse(data);
+                        // Remove the old built-in Admin account/session.
+                        if (parsed && String(parsed.username || '').toLowerCase() === 'admin') {
+                            localStorage.removeItem('brklive_user');
+                            currentUser = null;
+                            updateAuthUI();
+                            return false;
+                        }
+                        currentUser = parsed;
                         updateAuthUI();
                         return true;
                     }
@@ -2005,6 +2104,25 @@
                 updateAuthUI();
                 return false;
             }
+
+            function requireLogin() {
+                if (currentUser) return true;
+                openModal('loginModal');
+                toast('🔐 Please log in to use BRKLIVE19.', 'error');
+                return false;
+            }
+
+            // Every application action is locked until the user is logged in.
+            document.addEventListener('click', function(e) {
+                if (currentUser) return;
+                const allowed = e.target.closest('#loginBtn,#loginModal,#registerModal,#overlayThemeModal,[data-auth-public="true"]');
+                if (allowed) return;
+                const action = e.target.closest('button,a,input,select,textarea,[data-nav],[data-page]');
+                if (!action) return;
+                e.preventDefault();
+                e.stopPropagation();
+                requireLogin();
+            }, true);
 
             function updateAuthUI() {
                 const loginBtn = document.getElementById('loginBtn');
@@ -2055,15 +2173,7 @@
                     toast('Welcome back ' + (found.fullName || username) + '!', 'success');
                     return;
                 }
-                if (username === 'admin' && password === 'admin123') {
-                    currentUser = { username: 'admin', fullName: 'Admin' };
-                    localStorage.setItem('brklive_user', JSON.stringify(currentUser));
-                    updateAuthUI();
-                    closeModal('loginModal');
-                    toast('Welcome Admin!', 'success');
-                    return;
-                }
-                toast('Invalid credentials', 'error');
+                toast('Invalid username or password', 'error');
             });
 
             document.getElementById('registerSubmitBtn').addEventListener('click', function() {
@@ -2092,6 +2202,11 @@
                 updateAuthUI();
                 toast('Logged out', 'success');
             });
+
+            loadAuth();
+            if (new URLSearchParams(window.location.search).get('login') === '1' && !currentUser) {
+                setTimeout(() => openModal('loginModal'), 120);
+            }
 
             // ── TOURNAMENT CRUD ──
             let selectedTournamentId = null;
@@ -2496,57 +2611,115 @@
                 currentMatchId = null;
             });
 
-            document.getElementById('openFullScorerBtn').addEventListener('click', () => {
-                if (currentMatchId) {
-                    // Save match bridge for scorer
-                    const matches = getMatches();
-                    const match = matches.find(m => m.id === currentMatchId);
-                    if (match) {
-                        const tournaments = getTournaments();
-                        const tournament = tournaments.find(t => t.id === match.tournamentId) || {};
-                        const bridge = {
-                            tournament: tournament.name || match.tournamentName || '',
-                            tournamentName: tournament.name || match.tournamentName || '',
-                            tournamentVenue: tournament.venue || match.tournamentVenue || '',
-                            venue: match.venue || tournament.venue || '',
-                            matchName: match.matchName || `${match.teamAName} vs ${match.teamBName}`,
-                            teamA: match.teamAName,
-                            teamB: match.teamBName,
-                            maxOvers: match.maxOvers,
-                            tossWinner: match.tossWinner === 'teamA' ? 'A' : (match.tossWinner === 'teamB' ? 'B' : (match.tossWinner || '')),
-                            tossDecision: match.tossDecision,
-                            xiA: match.xiTeamA || [],
-                            xiB: match.xiTeamB || [],
-                            matchId: match.id
-                        };
-                        localStorage.setItem('brklive19_score_bridge', JSON.stringify(bridge));
-                    }
-                    const scorerData = encodeURIComponent(JSON.stringify({
-                        id: match.id,
-                        tournamentName: tournament.name || match.tournamentName || '',
-                        tournamentVenue: tournament.venue || match.tournamentVenue || '',
-                        venue: match.venue || tournament.venue || '',
-                        matchName: match.matchName || `${match.teamAName} vs ${match.teamBName}`,
-                        teamAName: match.teamAName,
-                        teamBName: match.teamBName,
-                        maxOvers: match.maxOvers,
-                        tossWinner: match.tossWinner,
-                        tossDecision: match.tossDecision,
-                        xiTeamA: match.xiTeamA || [],
-                        xiTeamB: match.xiTeamB || []
-                    }));
-                    window.location.href = `./scorer.html?match=${encodeURIComponent(currentMatchId)}&matchData=${scorerData}`;
-                } else {
-                    toast('No match selected', 'error');
+            function openScorerThemeSelection() {
+                const params = currentMatchId ? `?match=${encodeURIComponent(currentMatchId)}` : '';
+                window.location.href = `./themes.html${params}`;
+            }
+
+            function openScorerForTheme(theme) {
+                if (!currentMatchId) {
+                    localStorage.setItem('brklive19_pending_theme', theme);
+                    window.location.href = `./scorer.html?theme=${encodeURIComponent(theme)}`;
+                    return;
                 }
+                const matches = getMatches();
+                const match = matches.find(m => m.id === currentMatchId);
+                if (!match) {
+                    localStorage.setItem('brklive19_pending_theme', theme);
+                    window.location.href = `./scorer.html?theme=${encodeURIComponent(theme)}`;
+                    return;
+                }
+                const tournaments = getTournaments();
+                const tournament = tournaments.find(t => t.id === match.tournamentId) || {};
+                const bridge = {
+                    tournament: tournament.name || match.tournamentName || '',
+                    tournamentName: tournament.name || match.tournamentName || '',
+                    tournamentVenue: tournament.venue || match.tournamentVenue || '',
+                    venue: match.venue || tournament.venue || '',
+                    matchName: match.matchName || `${match.teamAName} vs ${match.teamBName}`,
+                    teamA: match.teamAName, teamB: match.teamBName, maxOvers: match.maxOvers,
+                    tossWinner: match.tossWinner === 'teamA' ? 'A' : (match.tossWinner === 'teamB' ? 'B' : (match.tossWinner || '')),
+                    tossDecision: match.tossDecision, xiA: match.xiTeamA || [], xiB: match.xiTeamB || [], matchId: match.id
+                };
+                localStorage.setItem('brklive19_score_bridge', JSON.stringify(bridge));
+                localStorage.setItem('brklive19_pending_theme', theme);
+                const scorerData = encodeURIComponent(JSON.stringify({
+                    id: match.id, tournamentName: tournament.name || match.tournamentName || '',
+                    tournamentVenue: tournament.venue || match.tournamentVenue || '', venue: match.venue || tournament.venue || '',
+                    matchName: match.matchName || `${match.teamAName} vs ${match.teamBName}`, teamAName: match.teamAName, teamBName: match.teamBName,
+                    maxOvers: match.maxOvers, tossWinner: match.tossWinner, tossDecision: match.tossDecision,
+                    xiTeamA: match.xiTeamA || [], xiTeamB: match.xiTeamB || []
+                }));
+                window.location.href = `./scorer.html?match=${encodeURIComponent(currentMatchId)}&theme=${encodeURIComponent(theme)}&matchData=${scorerData}`;
+            }
+
+            document.getElementById('openFullScorerBtn').addEventListener('click', () => {
+                if (!currentMatchId) { toast('No match selected', 'error'); return; }
+                openScorerThemeSelection();
+            });
+
+            // ===== FOOTBALL LIVE CONTROL =====
+            const fb = {home:0, away:0, homeYellow:0, awayYellow:0, homeRed:0, awayRed:0, seconds:0, running:false, timer:null, period:'1H', added:0};
+            function fbRender(){
+                const home=document.getElementById('fbHome').value.trim()||'HOME', away=document.getElementById('fbAway').value.trim()||'AWAY';
+                document.getElementById('fbHomeName').textContent=home.toUpperCase(); document.getElementById('fbAwayName').textContent=away.toUpperCase();
+                document.getElementById('fbHomeScore').textContent=fb.home; document.getElementById('fbAwayScore').textContent=fb.away;
+                const mm=String(Math.floor(fb.seconds/60)).padStart(2,'0'), ss=String(fb.seconds%60).padStart(2,'0'); document.getElementById('fbTimer').textContent=`${mm}:${ss}`;
+                document.getElementById('fbStatus').textContent=`${fb.period} • Added time ${fb.added} min • 🟨 ${fb.homeYellow}-${fb.awayYellow} • 🟥 ${fb.homeRed}-${fb.awayRed}`;
+            }
+            function fbStartTimer(){ if(fb.running)return; fb.running=true; fb.timer=setInterval(()=>{fb.seconds++;fbRender();},1000); }
+            function fbPauseTimer(){fb.running=false;clearInterval(fb.timer);fb.timer=null;fbRender();}
+            document.getElementById('otherSportsLink').addEventListener('click',e=>{e.preventDefault();document.getElementById('footballModal').classList.add('active');fbRender();});
+            document.getElementById('openFootballControllerBtn').addEventListener('click',()=>{ if(currentUser) window.location.href='./football-control.html'; else requireLogin(); });
+            document.getElementById('openFootballOverlayBtn').addEventListener('click',()=>window.open('./football-overlay.html','_blank'));
+            document.getElementById('fbClose').addEventListener('click',()=>{fbPauseTimer();document.getElementById('footballModal').classList.remove('active');});
+            document.getElementById('fbStart').addEventListener('click',fbStartTimer); document.getElementById('fbPause').addEventListener('click',fbPauseTimer);
+            document.getElementById('fbReset').addEventListener('click',()=>{fbPauseTimer();fb.seconds=0;fbRender();});
+            document.getElementById('fbHomeGoal').addEventListener('click',()=>{fb.home++;fbRender();}); document.getElementById('fbAwayGoal').addEventListener('click',()=>{fb.away++;fbRender();});
+            document.getElementById('fbHomeYellow').addEventListener('click',()=>{fb.homeYellow++;fbRender();}); document.getElementById('fbAwayYellow').addEventListener('click',()=>{fb.awayYellow++;fbRender();});
+            document.getElementById('fbHomeRed').addEventListener('click',()=>{fb.homeRed++;fbRender();}); document.getElementById('fbAwayRed').addEventListener('click',()=>{fb.awayRed++;fbRender();});
+            document.getElementById('fbPeriod').addEventListener('change',e=>{fb.period=e.target.value;fbRender();}); document.getElementById('fbAdded').addEventListener('input',e=>{fb.added=Math.max(0,Number(e.target.value)||0);fbRender();});
+            document.getElementById('fbSave').addEventListener('click',async()=>{
+                const data={sport:'football',homeTeam:document.getElementById('fbHome').value.trim()||'HOME',awayTeam:document.getElementById('fbAway').value.trim()||'AWAY',homeScore:fb.home,awayScore:fb.away,homeYellow:fb.homeYellow,awayYellow:fb.awayYellow,homeRed:fb.homeRed,awayRed:fb.awayRed,seconds:fb.seconds,period:fb.period,addedTime:fb.added,updatedAt:Date.now()};
+                localStorage.setItem('brklive19_football',JSON.stringify(data));
+                try{localStorage.setItem('brklive19_liveSport',JSON.stringify(data));}catch(e){}
+                // Send football data to the same Internet/Firebase channel used by the browser overlay.
+                try{
+                  const fa=await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js");
+                  const fd=await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js");
+                  const cfg={apiKey:"AIzaSyBLWq1bqJ32F2cg3mqYQ0uwXcS3zvTA3A4",authDomain:"brklive19-2bab4.firebaseapp.com",databaseURL:"https://brklive19-2bab4-default-rtdb.asia-southeast1.firebasedatabase.app",projectId:"brklive19-2bab4",storageBucket:"brklive19-2bab4.firebasestorage.app",messagingSenderId:"294058533898",appId:"1:294058533898:web:4996705937e969939cabf3"};
+                  const fapp=fa.initializeApp(cfg,'brkFootball'); const fdb=fd.getDatabase(fapp);
+                  await fd.set(fd.ref(fdb,'footballLiveScore'),{sport:'football',football:data,updatedAt:Date.now()});
+                }catch(err){console.warn('Football Firebase save unavailable',err);}
+                fbRender(); toast('⚽ Football score saved and sent to the Internet overlay.','success');
+            });
+
+            document.getElementById('cancelThemePickerBtn').addEventListener('click', () => closeModal('overlayThemeModal'));
+            document.querySelectorAll('[data-pick-theme]').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const theme = btn.dataset.pickTheme;
+                    closeModal('overlayThemeModal');
+                    openScorerForTheme(theme);
+                });
             });
 
             function updateOverlayUrl(matchId) {
                 const input = document.getElementById('overlayUrlInput');
                 if (!input) return;
                 const base = window.location.href.split('?')[0].replace(/(?:index(?:\.html)?|BRKLIVE19_index_updated)\.html$/i, 'overlay.html');
-                const url = base + (matchId ? '?match=' + encodeURIComponent(matchId) : '');
-                input.value = url;
+                let tournamentName = '';
+                if (matchId) {
+                    const match = getMatches().find(m => m.id === matchId);
+                    if (match) {
+                        const t = getTournaments().find(x => x.id === match.tournamentId) || {};
+                        tournamentName = t.name || match.tournamentName || '';
+                    }
+                }
+                const params = new URLSearchParams();
+                if (matchId) params.set('match', matchId);
+                params.set('intro', String(Date.now()));
+                if (tournamentName) params.set('tournament', tournamentName);
+                input.value = base + '?' + params.toString();
             }
 
             document.getElementById('copyOverlayUrlBtn').addEventListener('click', () => {
@@ -2682,25 +2855,28 @@
 
             function renderSummary(match) {
                 const container = document.getElementById('matchSummaryContainer');
-                const rows = [
-                    ['Match', `${match.teamAName} vs ${match.teamBName}`],
-                    ['Match #', match.matchNo],
-                    ['Type', match.matchType.toUpperCase()],
-                    ['Overs', match.maxOvers],
-                    ['Status', match.status.toUpperCase()],
-                    ['Toss Winner', match.tossWinner === 'teamA' ? match.teamAName : match.tossWinner === 'teamB' ? match
-                        .teamBName : '—'
-                    ],
-                    ['Toss Decision', match.tossDecision],
-                    ['Total Runs', match.totalRuns || 0],
-                    ['Wickets', match.totalWickets || 0],
-                    ['Overs Bowled', match.totalOvers || 0],
-                    ['Target', match.target !== null ? match.target : '—'],
-                    ['Winner', match.winner || '—'],
-                ];
-                container.innerHTML = rows.map(([label, value]) =>
-                    `<div class="summary-row"><span class="label">${label}</span><span class="value">${value}</span></div>`
-                ).join('');
+                const first = match.firstInnings || {};
+                const currentInnings = Number(match.currentInnings || 1);
+                const currentRuns = Number(match.totalRuns || 0);
+                const currentWkts = Number(match.totalWickets || 0);
+                const currentBalls = Number(match.totalBalls || match.legalBalls || 0);
+                const currentOvers = currentBalls ? `${Math.floor(currentBalls/6)}.${currentBalls%6}` : `${Number(match.totalOvers||0).toFixed(1)}`;
+                const firstRuns = first.runs ?? (currentInnings===1 ? currentRuns : 0);
+                const firstWkts = first.wickets ?? (currentInnings===1 ? currentWkts : 0);
+                const firstBalls = first.balls ?? (currentInnings===1 ? currentBalls : 0);
+                const firstOvers = firstBalls ? `${Math.floor(firstBalls/6)}.${firstBalls%6}` : (currentInnings===1 ? currentOvers : '0.0');
+                const firstTeam = first.team === 'A' ? match.teamAName : first.team === 'B' ? match.teamBName : (currentInnings===1 ? (match.battingTeam || match.teamAName) : match.teamAName);
+                const secondTeam = first.team === 'A' ? match.teamBName : first.team === 'B' ? match.teamAName : (currentInnings===2 ? (match.battingTeam || match.teamBName) : match.teamBName);
+                const secondRuns = currentInnings===2 ? currentRuns : (match.secondInnings?.runs ?? 0);
+                const secondWkts = currentInnings===2 ? currentWkts : (match.secondInnings?.wickets ?? 0);
+                const secondBalls = currentInnings===2 ? currentBalls : (match.secondInnings?.balls ?? 0);
+                const secondOvers = secondBalls ? `${Math.floor(secondBalls/6)}.${secondBalls%6}` : '0.0';
+                container.innerHTML = `
+                  <div class="summary-row"><span class="label">Match</span><span class="value">${match.teamAName} vs ${match.teamBName}</span></div>
+                  <div class="summary-row"><span class="label">1st Innings</span><span class="value summary-score-line"><b>${firstTeam}</b><strong>${firstRuns}/${firstWkts}</strong><span>${firstOvers} overs</span><span>${firstBalls} balls</span></span></div>
+                  <div class="summary-row"><span class="label">2nd Innings</span><span class="value summary-score-line"><b>${secondTeam}</b><strong>${secondRuns}/${secondWkts}</strong><span>${secondOvers} overs</span><span>${secondBalls} balls</span></span></div>
+                  <div class="summary-row"><span class="label">Match</span><span class="value">${String(match.status||'LIVE').toUpperCase()} • Target ${match.target ?? '—'} • Winner ${match.winner || '—'}</span></div>
+                  <div class="summary-row"><span class="label">Toss</span><span class="value">${match.tossWinner === 'teamA' ? match.teamAName : match.tossWinner === 'teamB' ? match.teamBName : '—'} • ${match.tossDecision || '—'}</span></div>`;
             }
 
             // ── TAB SWITCHING ──
