@@ -12,11 +12,9 @@
 }
 *{box-sizing:border-box}
 html,body{margin:0;width:100%;height:100%;background:transparent!important;overflow:hidden;font-family:Arial,Helvetica,sans-serif;color:#fff}
-body{display:flex;align-items:flex-end;justify-content:center;padding:2.4vw 3vw}
+body{display:flex;align-items:flex-end;justify-content:center;padding:0 0 18px;box-sizing:border-box}
 
-.overlay{
-  width:min(1760px,96vw);position:relative;overflow:visible;
-}
+.overlay{width:min(1760px,96vw);position:relative;overflow:visible;transform-origin:bottom center;}
 .overlay.hidden{display:none}
 
 .frame{position:relative;height:142px;overflow:hidden;background:var(--navy);box-shadow:0 0 0 1px #ffffff30 inset}
@@ -294,6 +292,266 @@ body{display:flex;align-items:flex-end;justify-content:center;padding:2.4vw 3vw}
 .scorecard-overlay .fall-cell{display:flex;align-items:center;justify-content:center;gap:3px;min-width:0}
 @media(max-width:900px){.scorecard-overlay .card{padding:8px}.scorecard-overlay .pref-main{grid-template-columns:62% 38%;gap:6px}.scorecard-overlay .pref-header{grid-template-columns:1fr 72px 1fr}.scorecard-overlay .pref-team{padding:0 8px}.scorecard-overlay .pref-table th,.scorecard-overlay .pref-table td{padding:3px 4px}.scorecard-overlay .pref-title{height:24px}.scorecard-overlay .pref-footer{font-size:9px}}
 
+
+.theme-theme3 .scorePill.completed,.theme-ipl .scorePill.completed,.theme-t20world .scorePill.completed,.theme-odiworld .scorePill.completed,.theme-champions .scorePill.completed,.theme-saleague .scorePill.completed,.theme-delhi .scorePill.completed{color:#fff!important}
+
+/* ============================================================
+   THEME-WIDE BROADCAST SKINS
+   Theme selection changes the live overlay, full scorecard AND summary.
+   ============================================================ */
+.theme-neon .summary-overlay,.theme-neon .scorecard-overlay{--th-main:#ff00e6;--th-main2:#00f7ff;--th-dark:#15064f;--th-dark2:#2b0868;--th-light:#f9eaff}
+.theme-green .summary-overlay,.theme-green .scorecard-overlay{--th-main:#13d887;--th-main2:#6dffb8;--th-dark:#073c2a;--th-dark2:#0b5a3e;--th-light:#eafff5}
+.theme-gold .summary-overlay,.theme-gold .scorecard-overlay{--th-main:#ffc400;--th-main2:#fff08a;--th-dark:#4b2d00;--th-dark2:#6e4200;--th-light:#fff9df}
+.theme-red .summary-overlay,.theme-red .scorecard-overlay{--th-main:#ff3158;--th-main2:#ff7c93;--th-dark:#4c0b1a;--th-dark2:#711329;--th-light:#ffe8ed}
+.theme-rainbow .summary-overlay,.theme-rainbow .scorecard-overlay{--th-main:#00d9ff;--th-main2:#ff00e6;--th-dark:#11145e;--th-dark2:#5a0a78;--th-light:#f4ecff}
+.theme-theme2 .summary-overlay,.theme-theme2 .scorecard-overlay{--th-main:#ff7b00;--th-main2:#ffd34d;--th-dark:#17110a;--th-dark2:#5b2500;--th-light:#fff4dc}
+.theme-theme3 .summary-overlay,.theme-theme3 .scorecard-overlay{--th-main:#ff1f1f;--th-main2:#ff8b8b;--th-dark:#650000;--th-dark2:#c40000;--th-light:#ffe2e2}
+.theme-theme4 .summary-overlay,.theme-theme4 .scorecard-overlay{--th-main:#20d7ff;--th-main2:#8b43d6;--th-dark:#071338;--th-dark2:#173a8f;--th-light:#eef6ff}
+.theme-ipl .summary-overlay,.theme-ipl .scorecard-overlay{--th-main:#19a8ff;--th-main2:#ffc400;--th-dark:#092b87;--th-dark2:#1558c8;--th-light:#eaf6ff}
+.theme-t20world .summary-overlay,.theme-t20world .scorecard-overlay{--th-main:#38c8ff;--th-main2:#a6eeff;--th-dark:#061746;--th-dark2:#0e62c9;--th-light:#e8faff}
+.theme-odiworld .summary-overlay,.theme-odiworld .scorecard-overlay{--th-main:#27b7ff;--th-main2:#ffd84a;--th-dark:#084a91;--th-dark2:#147acb;--th-light:#edf8ff}
+.theme-champions .summary-overlay,.theme-champions .scorecard-overlay{--th-main:#8c6cff;--th-main2:#ffd85a;--th-dark:#15185e;--th-dark2:#6d39c8;--th-light:#f2edff}
+.theme-saleague .summary-overlay,.theme-saleague .scorecard-overlay{--th-main:#28d36b;--th-main2:#f1d12e;--th-dark:#064b27;--th-dark2:#0c8a46;--th-light:#edfff3}
+.theme-delhi .summary-overlay,.theme-delhi .scorecard-overlay{--th-main:#ff5c8a;--th-main2:#ffd34d;--th-dark:#6d0b2c;--th-dark2:#c82a55;--th-light:#fff0f5}
+
+.summary-overlay{background:var(--th-dark,#07101f);transition:background .35s ease}
+.summary-head{border-color:color-mix(in srgb,var(--th-main,#00b8e8) 70%,#fff);background:var(--th-dark2,#111b2b);box-shadow:0 8px 25px #0008,0 0 24px color-mix(in srgb,var(--th-main,#00b8e8) 28%,transparent)}
+.summary-head .side.a{background:linear-gradient(110deg,var(--th-main,#00b8e8),var(--th-dark2,#07377f))}
+.summary-head .side.b{background:linear-gradient(250deg,var(--th-main2,#ffd900),var(--th-dark,#4b0909));color:#fff}
+.summary-head .center{background:linear-gradient(180deg,var(--th-dark2,#0d1525),var(--th-dark,#07101f))}
+.summary-meta .meta{border-color:color-mix(in srgb,var(--th-main,#00b8e8) 35%,#aab2bd)}
+.summary-meta .meta b{color:var(--th-dark2,#0b2e76)}
+.summary-team{border-color:color-mix(in srgb,var(--th-main,#00b8e8) 45%,#9aa2ac);box-shadow:0 6px 18px #0005,0 0 18px color-mix(in srgb,var(--th-main,#00b8e8) 16%,transparent)}
+.summary-team-head{background:linear-gradient(100deg,var(--th-dark,#071a58),var(--th-main,#00b8e8))}
+.summary-team-head .score{background:linear-gradient(100deg,var(--th-main2,#ffd900),var(--th-main,#00b8e8));color:#111}
+.summary-box .box-head{background:linear-gradient(100deg,var(--th-dark2,#102f78),var(--th-main,#00b8e8))}
+.summary-box th{background:color-mix(in srgb,var(--th-main,#00b8e8) 15%,#e4e7ec)}
+.summary-status{border-color:var(--th-main,#7c8da9);background:linear-gradient(100deg,var(--th-dark,#142c66),var(--th-dark2,#07152e))}
+.summary-result{border-color:var(--th-main2,#77b97d);background:linear-gradient(100deg,var(--th-dark2,#075d20),var(--th-main,#0a9d39))}
+.summary-result.progress{background:linear-gradient(100deg,var(--th-dark,#172d5e),var(--th-dark2,#274f9c));border-color:var(--th-main,#6f91d3)}
+
+.scorecard-overlay{background:color-mix(in srgb,var(--th-dark,#07101f) 94%,transparent)}
+.scorecard-overlay .card{background:linear-gradient(180deg,var(--th-dark,#07101f),var(--th-dark2,#0a1324))}
+.scorecard-overlay .pref-header{border-color:var(--th-main,#8b8b8b);background:var(--th-dark2,#111b2b);box-shadow:0 0 28px color-mix(in srgb,var(--th-main,#00b8e8) 20%,transparent)}
+.scorecard-overlay .pref-team.a{background:linear-gradient(100deg,var(--th-main,#063a91),var(--th-dark2,#071d56))}
+.scorecard-overlay .pref-team.b{background:linear-gradient(260deg,var(--th-main2,#a90000),var(--th-dark,#4a0909))}
+.scorecard-overlay .pref-vs{background:linear-gradient(180deg,var(--th-dark2,#101010),var(--th-dark,#050505));border-color:var(--th-main,#aaa)}
+.scorecard-overlay .pref-innings{color:var(--th-main2,#fff)}
+.scorecard-overlay .pref-panel{border-color:color-mix(in srgb,var(--th-main,#00b8e8) 50%,#9aa2ac)}
+.scorecard-overlay .pref-title{background:linear-gradient(180deg,var(--th-main,#113b91),var(--th-dark2,#062260))}
+.scorecard-overlay .pref-title.red{background:linear-gradient(180deg,var(--th-main2,#d51a10),var(--th-dark,#8d0905))}
+.scorecard-overlay .pref-title.purple{background:linear-gradient(180deg,var(--th-main,#4c176b),var(--th-dark,#25033c))}
+.scorecard-overlay .pref-title.green{background:linear-gradient(180deg,var(--th-main,#07811a),var(--th-dark,#00590d))}
+.scorecard-overlay .pref-table th{background:linear-gradient(90deg,var(--th-dark2,#173d89),var(--th-main,#173d89))}
+.scorecard-overlay .pref-table .blue-total td{background:linear-gradient(90deg,var(--th-dark2,#123d98),var(--th-dark,#09245d))}
+.scorecard-overlay .pref-table .dark-total td{background:var(--th-dark2,#10275e)}
+.scorecard-overlay .pref-table .extra-row td{background:linear-gradient(90deg,var(--th-dark2,#15377e),var(--th-dark,#0d2555))}
+.scorecard-overlay .pref-box .box-title{background:linear-gradient(90deg,var(--th-dark2,#0b2e76),var(--th-main,#0b2e76))}
+.scorecard-overlay .pref-box .box-value{color:var(--th-dark2,#0c2a6b)}
+.scorecard-overlay .pref-footer{background:linear-gradient(90deg,var(--th-dark,#071b46),var(--th-dark2,#071b46));border-color:var(--th-main,#56709d)}
+
+/* Theme 4 – reference-inspired Asia Cup broadcast package: dark stadium, purple/blue geometry, cyan highlights */
+.theme-theme4{--cyan:#20d7ff;--cyan2:#9a6cff;--navy:#173a8f;--navy2:#071338;--yellow:#f4d24b;--red:#ff3d63}
+.theme-theme4 .frame{height:150px;background:linear-gradient(105deg,#071338 0%,#173a8f 35%,#4b238d 62%,#071338 100%);border:2px solid #20d7ff55;box-shadow:0 15px 45px #000c,0 0 0 2px #ffffff12 inset;overflow:visible}
+.theme-theme4 .frame:before{background:linear-gradient(90deg,#071338ee 0%,transparent 18%,#ffffff08 50%,transparent 82%,#071338ee 100%)}
+.theme-theme4 .teamPanel{width:20%;background:linear-gradient(135deg,#142f83,#5d2ab1);clip-path:polygon(0 0,88% 0,100% 50%,88% 100%,0 100%);padding-left:34px;padding-right:34px}
+.theme-theme4 .teamPanel.right{background:linear-gradient(225deg,#173a8f,#8b43d6);clip-path:polygon(12% 0,100% 0,100% 100%,12% 100%,0 50%);padding-left:34px;padding-right:34px}
+.theme-theme4 .teamPanel .teamName{font-size:clamp(17px,1.8vw,33px);line-height:1.02;white-space:normal;overflow:visible;text-overflow:clip;text-shadow:0 2px 4px #000b;max-width:90%;z-index:5}
+.theme-theme4 .content{left:18.5%;right:18.5%;grid-template-columns:31% 31% 38%}
+.theme-theme4 .batters{background:linear-gradient(100deg,#08133c,#173a8f 65%,#4b238d);border-top:3px solid #20d7ff55;border-bottom:3px solid #8b43d655}
+.theme-theme4 .scorePanel{background:linear-gradient(180deg,#f8fbff,#dfe9ff);color:#101c4b;border-top:3px solid #20d7ff;border-bottom:3px solid #8b43d6}
+.theme-theme4 .scorePanel:before{background:linear-gradient(#20d7ff,#8b43d6)}
+.theme-theme4 .scorePanel:after{background:linear-gradient(#8b43d6,#20d7ff)}
+.theme-theme4 .scorePill{background:linear-gradient(105deg,#173a8f,#5d2ab1,#20d7ff);background-size:220% 100%;animation:themeFlow 3.5s linear infinite;border-radius:5px;box-shadow:0 7px 18px #173a8f66,inset 0 1px #fff7}
+.theme-theme4 .bowlerPanel{background:linear-gradient(100deg,#4b238d,#173a8f,#071338);border-top:3px solid #8b43d655;border-bottom:3px solid #20d7ff55}
+.theme-theme4 .ball{background:#173a8f}.theme-theme4 .ball.four{background:#20d7ff;color:#061338}.theme-theme4 .ball.six{background:#8b43d6}.theme-theme4 .ball.wicket{background:#ff3d63}.theme-theme4 .ball.extra{background:#f4d24b;color:#111}
+.theme-theme4 .summary-overlay{background:radial-gradient(circle at 50% 0%,#274fa0,#071338 60%)}
+.theme-theme4 .summary-head{border-color:#20d7ff;background:linear-gradient(105deg,#071338,#173a8f,#4b238d);border-radius:4px;animation:themeFlow 6s linear infinite;background-size:220% 100%}
+.theme-theme4 .summary-head .side.a{background:linear-gradient(120deg,#173a8f,#20d7ff)}
+.theme-theme4 .summary-head .side.b{background:linear-gradient(240deg,#8b43d6,#173a8f)}
+.theme-theme4 .summary-head .center{background:#071338}
+.theme-theme4 .summary-team-head{background:linear-gradient(105deg,#071338,#173a8f,#8b43d6);background-size:220% 100%;animation:themeFlow 5s linear infinite}
+.theme-theme4 .summary-box .box-head{background:linear-gradient(90deg,#173a8f,#8b43d6)}
+.theme-theme4 .summary-status{background:linear-gradient(90deg,#071338,#173a8f);border-color:#20d7ff}
+.theme-theme4 .summary-result{background:linear-gradient(90deg,#173a8f,#8b43d6);border-color:#20d7ff}
+.theme-theme4 .scorecard-overlay{background:rgba(7,19,56,.94)}
+.theme-theme4 .scorecard-overlay .card{background:linear-gradient(180deg,#071338,#173a8f)}
+.theme-theme4 .scorecard-overlay .pref-header{border-color:#20d7ff;background:linear-gradient(105deg,#071338,#173a8f,#4b238d);background-size:220% 100%;animation:themeFlow 5s linear infinite}
+.theme-theme4 .scorecard-overlay .pref-team.a{background:linear-gradient(110deg,#173a8f,#20d7ff)}
+.theme-theme4 .scorecard-overlay .pref-team.b{background:linear-gradient(250deg,#8b43d6,#173a8f)}
+.theme-theme4 .scorecard-overlay .pref-title{background:linear-gradient(90deg,#173a8f,#8b43d6)}
+.theme-theme4 .scorecard-overlay .pref-table th{background:linear-gradient(90deg,#071338,#173a8f,#8b43d6)}
+.theme-theme4 .scorecard-overlay .pref-footer{background:linear-gradient(90deg,#071338,#173a8f);border-color:#20d7ff}
+.theme-theme4 .summary-overlay:after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(120deg,transparent 20%,#20d7ff0d 45%,#ffffff16 50%,transparent 55%);background-size:220% 100%;animation:themeSheen 5s linear infinite}
+
+
+
+/* ===== THEME 5: CYBER BROADCAST (uploaded Theme 5 references) ===== */
+.theme-theme5{--cyan:#56e8ff;--cyan2:#b8f7ff;--navy:#0b1018;--navy2:#020407;--yellow:#f0df24;--red:#ff375d;--green:#63ec8b;--th-main:#56e8ff;--th-main2:#f0df24;--th-dark:#06080d;--th-dark2:#1b232d;--th-light:#edf7fb}
+.theme-theme5 .frame{height:154px;background:linear-gradient(180deg,#020406,#151b22 48%,#06090d);border:2px solid #a6b3bc;border-radius:7px;box-shadow:0 16px 40px #000e,0 0 0 2px #56e8ff inset;overflow:visible}
+.theme-theme5 .frame:before{background:linear-gradient(90deg,#d9e0e4,#fff,#242b32 28%,#080b10 72%,#dce2e6);height:16px;top:0;opacity:.9}
+.theme-theme5 .teamPanel{width:20%;background:linear-gradient(145deg,#eff2f3,#5c6369 40%,#151a20 100%);color:#10151b;clip-path:polygon(0 0,88% 0,100% 50%,88% 100%,0 100%);border-right:3px solid #56e8ff;text-shadow:none}
+.theme-theme5 .teamPanel.right{background:linear-gradient(225deg,#eef2f4,#666c70 42%,#12171d 100%);clip-path:polygon(12% 0,100% 0,100% 100%,12% 100%,0 50%);border-left:3px solid #56e8ff;color:#10151b}
+.theme-theme5 .teamPanel .teamName{font-size:clamp(17px,1.9vw,34px);font-weight:1000;letter-spacing:.04em;color:#10151b;text-shadow:0 1px #fff}
+.theme-theme5 .content{left:18%;right:18%;grid-template-columns:32% 33% 35%;gap:0}
+.theme-theme5 .batters,.theme-theme5 .bowlerPanel{background:linear-gradient(180deg,#1f252c,#0b0f15);border-top:2px solid #d6dde0;border-bottom:3px solid #56e8ff;box-shadow:inset 0 1px #fff2}
+.theme-theme5 .scorePanel{background:linear-gradient(180deg,#f8fafb,#cfd6da);color:#10151b;border-top:4px solid #f0df24;border-bottom:4px solid #56e8ff;box-shadow:0 0 0 2px #161d24 inset}
+.theme-theme5 .scorePanel:before,.theme-theme5 .scorePanel:after{background:#56e8ff}
+.theme-theme5 .scorePill{background:linear-gradient(105deg,#10161c,#273039 45%,#0b1117);border:2px solid #f0df24;border-radius:3px;color:#f5fbff;box-shadow:0 0 0 2px #56e8ff33,0 8px 20px #0008}
+.theme-theme5 .scoreMeta,.theme-theme5 .crrRrr{color:#111820}.theme-theme5 .ball{background:#252d35;border-color:#7a858d}.theme-theme5 .ball.four{background:#56e8ff;color:#071018}.theme-theme5 .ball.six{background:#f0df24;color:#101010}.theme-theme5 .ball.wicket{background:#ff375d}.theme-theme5 .ball.extra{background:#b8f7ff;color:#071018}
+.theme-theme5 .summary-overlay{background:radial-gradient(circle at 50% 5%,#2b3540,#06080d 56%,#010204)}
+.theme-theme5 .summary-head{background:linear-gradient(90deg,#eff2f3,#5f676e 20%,#121820 42%,#121820 58%,#5f676e 80%,#eff2f3);border:2px solid #56e8ff;box-shadow:0 0 22px #56e8ff44}
+.theme-theme5 .summary-head .side{color:#111820}.theme-theme5 .summary-head .side.a{background:linear-gradient(90deg,#eef2f3,#7d858b)}.theme-theme5 .summary-head .side.b{background:linear-gradient(270deg,#eef2f3,#7d858b)}.theme-theme5 .summary-head .center{background:#0a0e14;color:#fff}
+.theme-theme5 .summary-team-head{background:linear-gradient(90deg,#11171e,#2d3943);border-color:#56e8ff}.theme-theme5 .summary-team-head .score{color:#f0df24}.theme-theme5 .summary-box{background:linear-gradient(180deg,#1d252d,#080b10);border-color:#56e8ff}.theme-theme5 .summary-box .box-head{background:linear-gradient(90deg,#f0df24,#fff1a0,#f0df24);color:#111820}.theme-theme5 .summary-status{background:linear-gradient(90deg,#17212a,#56e8ff);color:#061018}.theme-theme5 .summary-result{background:linear-gradient(90deg,#f0df24,#fff2a0);color:#101820}
+.theme-theme5 .scorecard-overlay{background:rgba(2,4,7,.97)}.theme-theme5 .scorecard-overlay .card{background:linear-gradient(135deg,#080b10,#1d252e 55%,#07090d);border-color:#56e8ff}.theme-theme5 .scorecard-overlay .pref-header{background:linear-gradient(90deg,#eef2f3,#6c747a 22%,#0c1118 44%,#0c1118 56%,#6c747a 78%,#eef2f3);border-color:#56e8ff}.theme-theme5 .scorecard-overlay .pref-team{color:#111820}.theme-theme5 .scorecard-overlay .pref-vs{background:#080b10;color:#f0df24;border-color:#56e8ff}.theme-theme5 .scorecard-overlay .pref-panel{background:#f3f6f7;border-color:#56e8ff}.theme-theme5 .scorecard-overlay .pref-title{background:linear-gradient(90deg,#111820,#2c3944);border-bottom:2px solid #56e8ff}.theme-theme5 .scorecard-overlay .pref-table th{background:#1b252e}.theme-theme5 .scorecard-overlay .pref-table .blue-total td,.theme-theme5 .scorecard-overlay .pref-table .extra-row td{background:#f0df24;color:#111820}.theme-theme5 .scorecard-overlay .pref-footer{background:#111820;border-color:#56e8ff}
+/* Reference assets retained for exact visual context. */
+.theme-theme5 .frame{background-image:linear-gradient(180deg,#020406ee,#151b22dd 48%,#06090dee),url('assets/theme5-reference/scoreboard.png');background-size:100% 100%,100% 100%;background-position:center}
+
+
+/* ===== THEME 6: GREEN BROADCAST (uploaded Theme 6 references) ===== */
+.theme-theme6{--cyan:#79e45d;--cyan2:#b4ff88;--navy:#09100a;--navy2:#020403;--yellow:#e8f2e9;--red:#ff3d58;--green:#58d667;--th-main:#58d667;--th-main2:#d7ffd0;--th-dark:#050706;--th-dark2:#172019;--th-light:#f3fff2}
+.theme-theme6 .frame{height:154px;background:linear-gradient(180deg,#050806,#1c2320 52%,#080b09);border:2px solid #3d9d45;border-radius:8px;box-shadow:0 15px 42px #000e,0 0 26px #4bc15a44 inset;overflow:visible}
+.theme-theme6 .frame:before{height:13px;top:2px;background:linear-gradient(90deg,#2a6e30,#75e460 18%,#c6c6c6 42%,#e5e5e5 50%,#c6c6c6 58%,#75e460 82%,#2a6e30);opacity:.9}
+.theme-theme6 .teamPanel{width:20%;background:linear-gradient(145deg,#0a160c,#203d24 55%,#07100a);clip-path:polygon(0 0,89% 0,100% 50%,89% 100%,0 100%);border-right:3px solid #58d667}.theme-theme6 .teamPanel.right{background:linear-gradient(225deg,#0a160c,#203d24 55%,#07100a);clip-path:polygon(11% 0,100% 0,100% 100%,11% 100%,0 50%);border-left:3px solid #58d667}
+.theme-theme6 .teamPanel .teamName{font-size:clamp(17px,1.9vw,34px);font-weight:1000;color:#f4fff2;text-shadow:0 2px 5px #000}
+.theme-theme6 .content{left:18%;right:18%;grid-template-columns:32% 33% 35%;gap:0}.theme-theme6 .batters,.theme-theme6 .bowlerPanel{background:linear-gradient(180deg,#2a302e,#0b0f0c);border-top:2px solid #a8a8a8;border-bottom:3px solid #58d667}.theme-theme6 .scorePanel{background:linear-gradient(180deg,#f4f7f3,#cbd1cb);color:#101510;border-top:4px solid #58d667;border-bottom:4px solid #2b7032}.theme-theme6 .scorePanel:before,.theme-theme6 .scorePanel:after{background:#58d667}.theme-theme6 .scorePill{background:linear-gradient(105deg,#0e160f,#203824,#0a100b);border:2px solid #b4ff88;border-radius:3px;color:#f3fff2;box-shadow:0 0 16px #58d66755}.theme-theme6 .scoreMeta,.theme-theme6 .crrRrr{color:#101510}.theme-theme6 .ball{background:#1d271f;border-color:#5aa65e}.theme-theme6 .ball.four{background:#b4ff88;color:#071008}.theme-theme6 .ball.six{background:#58d667;color:#061007}.theme-theme6 .ball.wicket{background:#ff3d58}.theme-theme6 .ball.extra{background:#e8f2e9;color:#0a110b}
+.theme-theme6 .summary-overlay{background:radial-gradient(circle at 50% 5%,#263529,#060906 62%,#020302)}.theme-theme6 .summary-head{background:linear-gradient(90deg,#55c95d,#132717 20%,#101512 80%,#55c95d);border:2px solid #75e460;box-shadow:0 0 22px #58d66744}.theme-theme6 .summary-head .side.a{background:linear-gradient(90deg,#2f9d38,#0d2c11)}.theme-theme6 .summary-head .side.b{background:linear-gradient(270deg,#2f9d38,#0d2c11)}.theme-theme6 .summary-head .center{background:#111713}.theme-theme6 .summary-team-head{background:linear-gradient(90deg,#1b8d27,#3ed15b);color:#071008}.theme-theme6 .summary-box{background:linear-gradient(180deg,#111813,#060906);border-color:#58d667}.theme-theme6 .summary-box .box-head{background:linear-gradient(90deg,#2c9c36,#69e66f);color:#061007}.theme-theme6 .summary-status{background:linear-gradient(90deg,#0b4112,#58d667);color:#f3fff2}.theme-theme6 .summary-result{background:linear-gradient(90deg,#58d667,#b4ff88);color:#071008}
+.theme-theme6 .scorecard-overlay{background:rgba(2,4,2,.97)}.theme-theme6 .scorecard-overlay .card{background:linear-gradient(135deg,#070a07,#182219 55%,#050705);border-color:#58d667}.theme-theme6 .scorecard-overlay .pref-header{background:linear-gradient(90deg,#3bc64d,#172217 28%,#0c120d 50%,#172217 72%,#3bc64d);border-color:#75e460}.theme-theme6 .scorecard-overlay .pref-team{color:#f3fff2}.theme-theme6 .scorecard-overlay .pref-vs{background:#080c08;color:#b4ff88;border-color:#58d667}.theme-theme6 .scorecard-overlay .pref-panel{background:#f1f6f1;border-color:#58d667}.theme-theme6 .scorecard-overlay .pref-title{background:linear-gradient(90deg,#0f5317,#48c95a)}.theme-theme6 .scorecard-overlay .pref-table th{background:#194e20}.theme-theme6 .scorecard-overlay .pref-table .blue-total td,.theme-theme6 .scorecard-overlay .pref-table .extra-row td{background:#58d667;color:#071008}.theme-theme6 .scorecard-overlay .pref-footer{background:#0d160e;border-color:#58d667}
+.theme-theme6 .frame{background-image:linear-gradient(180deg,#050806dd,#1c2320cc 52%,#080b09dd),url('assets/theme6-reference/scoreboard.png');background-size:100% 100%,100% 100%;background-position:center}
+
+/* ===== THEME 4: ASIA CUP BROADCAST PACKAGE =====
+   Built from the supplied score, summary and scorecard reference images. */
+.theme-theme4{
+  --cyan:#53d8ff;
+  --cyan2:#7a42bf;
+  --navy:#10286f;
+  --navy2:#080b24;
+  --yellow:#e9f2ff;
+  --red:#ef2445;
+  --th-main:#5bdcff;
+  --th-main2:#9a42d2;
+  --th-dark:#080a22;
+  --th-dark2:#17105a;
+  --th-light:#f3f7ff;
+}
+.theme-theme4 .frame{
+  height:154px;
+  background:
+    radial-gradient(circle at 50% 15%,#4d2b90 0%,transparent 34%),
+    linear-gradient(100deg,#080a22 0%,#17105a 30%,#2c126f 52%,#0b174d 72%,#080a22 100%);
+  border:1px solid #7b4bb9;
+  box-shadow:0 16px 45px #000d,0 0 38px #6a2bb844 inset;
+}
+.theme-theme4 .frame:after{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(118deg,transparent 8%,#fff1 42%,transparent 48%,#53d8ff10 72%,transparent 85%);
+  mix-blend-mode:screen;
+}
+.theme-theme4 .teamPanel{
+  width:19%;
+  background:linear-gradient(145deg,#0a1137,#21115f 55%,#401781);
+  clip-path:polygon(0 0,90% 0,100% 50%,90% 100%,0 100%);
+  border-right:2px solid #7446ad;
+}
+.theme-theme4 .teamPanel.right{
+  background:linear-gradient(225deg,#0a1238,#1a4d93 55%,#09224f);
+  clip-path:polygon(10% 0,100% 0,100% 100%,10% 100%,0 50%);
+  border-left:2px solid #52d9ff;
+}
+.theme-theme4 .teamPanel .teamName{
+  font-size:clamp(18px,2vw,36px);
+  font-weight:1000;letter-spacing:.05em;text-shadow:0 3px 8px #000e;
+}
+.theme-theme4 .content{left:17.5%;right:17.5%;grid-template-columns:34% 31% 35%}
+.theme-theme4 .batters,.theme-theme4 .bowlerPanel{
+  background:linear-gradient(180deg,#1b0d5d 0%,#24126d 58%,#101344 100%);
+  border-top:3px solid #2f2c92;border-bottom:3px solid #5035a8;
+}
+.theme-theme4 .scorePanel{
+  background:linear-gradient(180deg,#f7f8ff 0%,#e5e7fb 100%);
+  color:#1d1d46;
+  border-top:4px solid #57d9ff;border-bottom:4px solid #5730a4;
+}
+.theme-theme4 .scorePill{
+  color:#fff;
+  background:linear-gradient(100deg,#281071,#3e1588 50%,#10398d);
+  border:2px solid #fff8;
+  border-radius:0;
+  text-shadow:0 3px 6px #000a;
+  box-shadow:0 8px 20px #16034f99;
+}
+.theme-theme4 .scoreMeta,.theme-theme4 .crrRrr{color:#1d1d46}
+.theme-theme4 .ball{background:#1c145f;border-color:#6a4bb0}
+.theme-theme4 .ball.four{background:#4bc8ff;color:#07112c}
+.theme-theme4 .ball.six{background:#5a1ea4}
+.theme-theme4 .ball.wicket{background:#d81842}
+.theme-theme4 .ball.extra{background:#7bd0e8;color:#06112d}
+
+/* Reference-style summary: purple panel, green/cyan innings bars and large side team rail. */
+.theme-theme4 .summary-overlay{
+  background:
+    radial-gradient(circle at 15% 50%,#5d208833,transparent 32%),
+    radial-gradient(circle at 85% 50%,#175fa633,transparent 30%),
+    linear-gradient(135deg,#080a20,#17105a 55%,#10062f);
+}
+.theme-theme4 .summary-head{
+  background:linear-gradient(90deg,#1b0d58,#4c1b89 45%,#163f92);
+  border:2px solid #6841a7;
+  border-radius:5px 5px 0 0;
+}
+.theme-theme4 .summary-head .side.a{background:linear-gradient(90deg,#0b6b25,#19b54c)}
+.theme-theme4 .summary-head .side.b{background:linear-gradient(90deg,#0b4e86,#28a9df)}
+.theme-theme4 .summary-head .center{background:#24106d}
+.theme-theme4 .summary-team-head{background:linear-gradient(90deg,#0a3f1c,#10a340,#1d8ed4);color:#fff}
+.theme-theme4 .summary-box{background:linear-gradient(180deg,#1b0f57,#100b38);border-color:#5b45aa}
+.theme-theme4 .summary-box .box-head{background:linear-gradient(90deg,#26116e,#0d5fa0)}
+.theme-theme4 .summary-status{background:linear-gradient(90deg,#0c7131,#1ba84b);border-color:#8ff0ae;color:#fff}
+.theme-theme4 .summary-result{background:linear-gradient(90deg,#6ac6e5,#3ca8d1);border-color:#c9f8ff;color:#07152e}
+
+/* Reference-style full scorecard: purple header, dark table and bright total. */
+.theme-theme4 .scorecard-overlay{background:rgba(8,8,30,.94)}
+.theme-theme4 .scorecard-overlay .card{
+  background:linear-gradient(145deg,#13052e,#17105a 50%,#0a2348);
+  border-color:#6a3fa9;
+}
+.theme-theme4 .scorecard-overlay .pref-header{
+  background:linear-gradient(90deg,#251061,#4a1687,#173b8c);
+  border-color:#7449b1;
+}
+.theme-theme4 .scorecard-overlay .pref-team.a{background:linear-gradient(90deg,#0d1a41,#2d176f)}
+.theme-theme4 .scorecard-overlay .pref-team.b{background:linear-gradient(270deg,#0c1c47,#0c5f84)}
+.theme-theme4 .scorecard-overlay .pref-title,
+.theme-theme4 .scorecard-overlay .pref-table th{
+  background:linear-gradient(90deg,#1c0f59,#34127c,#173b8d);
+}
+.theme-theme4 .scorecard-overlay .pref-panel{
+  background:linear-gradient(180deg,#1a0f50,#0b1236);
+  border-color:#5d47a5;
+}
+.theme-theme4 .scorecard-overlay .pref-table tr{
+  background:linear-gradient(90deg,#140b3f,#1b0f58);
+}
+.theme-theme4 .scorecard-overlay .pref-table tr:nth-child(even){
+  background:linear-gradient(90deg,#100936,#17104b);
+}
+.theme-theme4 .scorecard-overlay .pref-table .blue-total td,
+.theme-theme4 .scorecard-overlay .pref-table .dark-total td,
+.theme-theme4 .scorecard-overlay .pref-table .extra-row td{
+  background:linear-gradient(90deg,#0a6f9c,#26b6df);
+  color:#061127;
+}
+.theme-theme4 .scorecard-overlay .pref-footer{
+  background:linear-gradient(90deg,#101a4c,#28116b);
+  border-color:#6948a5;
+}
+
+/* Theme 3 keeps its red 3D identity in all overlay modes */
+.theme-theme3 .summary-overlay{background:linear-gradient(180deg,#3a0000,#7b0000,#210000)}
+.theme-theme3 .summary-head,.theme-theme3 .pref-header{border:3px solid #ff5c5c}
+.theme-theme3 .summary-box,.theme-theme3 .pref-panel{border-color:#8d0000}
+.theme-theme3 .summary-team-head{background:linear-gradient(180deg,#ff4d4d,#8b0000,#4a0000)}
+.theme-theme3 .scorecard-overlay .pref-team.a,.theme-theme3 .scorecard-overlay .pref-team.b{background:linear-gradient(180deg,#ff5c5c,#8b0000,#4a0000)}
+
 /* ===== TARGET LOWER THIRD ===== */
 .target{position:fixed;left:50%;bottom:14px;transform:translateX(-50%) translateZ(25px);width:min(1760px,96vw);height:142px;background:linear-gradient(90deg,#4e217e,#173d89);color:#fff;padding:0 28px;border:2px solid #d7b3ff;border-radius:10px;font-size:clamp(24px,3vw,54px);font-weight:1000;letter-spacing:.02em;white-space:nowrap;display:none;align-items:center;justify-content:center;text-align:center;z-index:150;box-shadow:0 10px 30px #0008;box-sizing:border-box;text-transform:uppercase}
 .overlay.targetMode .frame{visibility:hidden}
@@ -371,9 +629,10 @@ body{display:flex;align-items:flex-end;justify-content:center;padding:2.4vw 3vw}
 .banner{z-index:120;}
 .banner.partnership{background:linear-gradient(90deg,#17316f,#2b0d63);border-color:var(--cyan2);}
 .overlay.bannerMode .frame{visibility:hidden;}
-.brkLogo{position:fixed;right:2.2vw;bottom:2.2vw;z-index:180;font-size:clamp(18px,2vw,34px);font-weight:1000;letter-spacing:-1px;color:#fff;text-shadow:0 0 10px var(--cyan2),0 0 22px #000;animation:brkPulse 2.2s ease-in-out infinite,brkFloat 4s ease-in-out infinite;pointer-events:none}.brkLogo span{color:var(--cyan2)}
-@keyframes brkPulse{0%,100%{filter:drop-shadow(0 0 0 var(--cyan2));transform:scale(1)}50%{filter:drop-shadow(0 0 12px var(--cyan2));transform:scale(1.06)}}
-@keyframes brkFloat{0%,100%{margin-bottom:0}50%{margin-bottom:7px}}
+.brkLogo{position:fixed;right:2.2vw;top:1.5vw;z-index:180;display:flex;flex-direction:column;align-items:flex-end;gap:2px;font-weight:1000;pointer-events:none;animation:brkPulse 2.2s ease-in-out infinite}.brkLogoText{font-size:clamp(18px,2vw,34px);letter-spacing:-1px;color:#fff;text-shadow:0 0 10px var(--cyan2),0 0 22px #000}.brkLogoText span{color:var(--cyan2)}
+.liveBadge{display:flex;align-items:center;gap:6px;padding-right:2px;font-size:clamp(9px,.9vw,14px);letter-spacing:.12em;color:#ff1d1d;text-shadow:0 0 8px #ff0000,0 0 14px #000}.liveBlinkDot{width:clamp(7px,.65vw,12px);height:clamp(7px,.65vw,12px);border-radius:50%;background:#ff1515;box-shadow:0 0 7px #ff0000;animation:liveBlink 1s steps(2,end) infinite}.liveBlinkText{animation:liveBlink 1s steps(2,end) infinite}
+@keyframes brkPulse{0%,100%{filter:drop-shadow(0 0 0 var(--cyan2));transform:scale(1)}50%{filter:drop-shadow(0 0 12px var(--cyan2));transform:scale(1.05)}}
+@keyframes liveBlink{0%,49%{opacity:1}50%,100%{opacity:.18}}
 /* ===== ANIMATION ===== */
 .animation{
   position:fixed;
@@ -410,6 +669,30 @@ body{display:flex;align-items:flex-end;justify-content:center;padding:2.4vw 3vw}
 .theme-gold{--cyan:#ffc400;--cyan2:#fff08a;--navy:#4b2d00;--navy2:#6e4200;--yellow:#fff3a1}
 .theme-red{--cyan:#ff3158;--cyan2:#ff7c93;--navy:#4c0b1a;--navy2:#711329;--yellow:#ffd24a}
 .theme-rainbow{--cyan:#00d9ff;--cyan2:#ff00e6;--navy:#11145e;--navy2:#5a0a78;--yellow:#ffd900}
+.theme-theme3{--cyan:#ff1f1f;--cyan2:#ff8b8b;--navy:#7b0000;--navy2:#c40000;--yellow:#fff2f2;--red:#ff1515}
+.theme-theme3 .frame{background:linear-gradient(180deg,#ff4d4d 0%,#c60000 24%,#7f0000 58%,#c40000 100%);border:3px solid #3b0000;border-radius:18px;box-shadow:0 16px 38px #000b,0 0 0 2px #ffffff30 inset,0 5px 0 #ffb2b2 inset;}
+.theme-theme3 .frame:before{background:linear-gradient(180deg,#ffb0b0aa 0%,#ffffff10 18%,transparent 34%,#30000028 100%);}
+.theme-theme3 .teamPanel.left,.theme-theme3 .teamPanel.right{background:linear-gradient(180deg,#ff6b6b 0%,#d00000 30%,#7d0000 100%);border:0;}
+.theme-theme3 .teamPanel.left{clip-path:polygon(0 0,92% 0,82% 50%,92% 100%,0 100%)}
+.theme-theme3 .teamPanel.right{clip-path:polygon(8% 0,100% 0,100% 100%,8% 100%,18% 50%);}
+.theme-theme3 .teamPanel.left:after,.theme-theme3 .teamPanel.right:after{content:"";position:absolute;width:58px;height:58px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff7,#777 28%,#111 62%,#000 100%);box-shadow:0 3px 8px #0008,inset 0 1px 2px #fff8;top:50%;transform:translateY(-50%);}
+.theme-theme3 .teamPanel.left:after{left:-14px}.theme-theme3 .teamPanel.right:after{right:-14px}
+.theme-theme3 .content{left:20%;right:20%;}
+.theme-theme3 .teamPanel{width:21%;padding-left:30px;padding-right:30px;overflow:visible;}
+.theme-theme3 .teamPanel.left{justify-content:flex-start;padding-left:32px;padding-right:38px;}
+.theme-theme3 .teamPanel.right{justify-content:flex-end;padding-left:38px;padding-right:32px;text-align:right;}
+.theme-theme3 .teamPanel .teamName{font-size:clamp(17px,1.85vw,34px);line-height:1.02;white-space:normal;overflow:visible;text-overflow:clip;max-width:100%;word-break:break-word;overflow-wrap:anywhere;position:relative;z-index:4;}
+.theme-theme3 .teamPanel.left .teamName{text-align:left;}
+.theme-theme3 .teamPanel.right .teamName{text-align:right;}
+.theme-theme3 .batters,.theme-theme3 .bowlerPanel{background:linear-gradient(180deg,#ff5454,#9c0000 65%,#650000);border-top:3px solid #ffb1b1;border-bottom:3px solid #450000;}
+.theme-theme3 .scorePanel{background:linear-gradient(180deg,#fff8f8,#ffd6d6);color:#3a0000;border-left:3px solid #5b0000;border-right:3px solid #5b0000;}
+.theme-theme3 .scorePanel:before,.theme-theme3 .scorePanel:after{background:linear-gradient(#ff4a4a,#7d0000)}
+.theme-theme3 .scorePill{background:linear-gradient(180deg,#ff5c5c,#b50000);border-radius:12px;color:#fff;box-shadow:inset 0 2px #ffd0d0,0 8px 14px #4a000055}
+.theme-theme3 .batterScore b,.theme-theme3 .scoreMeta,.theme-theme3 .live,.theme-theme3 .currentOverLabel{color:#fff2f2}
+.theme-theme3 .ball{background:#5b0000}.theme-theme3 .ball.four{background:#ff6b35}.theme-theme3 .ball.six{background:#ffbd2e;color:#111}.theme-theme3 .ball.wicket{background:#111}.theme-theme3 .ball.extra{background:#ffdf55;color:#111}
+.theme-theme3 .banner,.theme-theme3 .custom,.theme-theme3 .target{background:linear-gradient(180deg,#ff6666 0%,#c60000 32%,#820000 100%);border-color:#ffb5b5;box-shadow:0 12px 30px #0009,inset 0 3px #fff5;color:#fff}
+.theme-theme3 .banner:before,.theme-theme3 .custom:before,.theme-theme3 .target:before{content:"";position:absolute;left:2%;right:2%;top:8px;height:22px;border-radius:12px;background:linear-gradient(180deg,#ffd0d0,#ff4444 45%,#a90000);box-shadow:0 3px 4px #4d0000;pointer-events:none}
+
 .theme-theme2{
   --cyan:#00ff88;
   --cyan2:#88ffcc;
@@ -424,6 +707,20 @@ body{display:flex;align-items:flex-end;justify-content:center;padding:2.4vw 3vw}
 .theme-aurora{--cyan:#65ffdf;--cyan2:#8e7dff;--navy:#102d3acc;--navy2:#3d1e65cc;--yellow:#f2ff75}
 .theme-metallic{--cyan:#d8e2ea;--cyan2:#ffffff;--navy:#26313dcc;--navy2:#4c5b68cc;--yellow:#ffc94f}
 .theme-redblack{--cyan:#ff365f;--cyan2:#ff9bb0;--navy:#180914;--navy2:#3a0c20;--yellow:#ffd44f}
+.theme-ipl{--cyan:#19a8ff;--cyan2:#7fd8ff;--navy:#092b87;--navy2:#1558c8;--yellow:#ffc400}
+.theme-t20world{--cyan:#38c8ff;--cyan2:#a6eeff;--navy:#061746;--navy2:#0e62c9;--yellow:#eaf7ff}
+.theme-odiworld{--cyan:#27b7ff;--cyan2:#b8efff;--navy:#084a91;--navy2:#147acb;--yellow:#ffd84a}
+.theme-champions{--cyan:#8c6cff;--cyan2:#d9ccff;--navy:#15185e;--navy2:#6d39c8;--yellow:#ffd85a}
+.theme-saleague{--cyan:#28d36b;--cyan2:#b8ffcf;--navy:#064b27;--navy2:#0c8a46;--yellow:#f1d12e}
+.theme-delhi{--cyan:#ff5c8a;--cyan2:#ffc0d2;--navy:#6d0b2c;--navy2:#c82a55;--yellow:#ffd34d}
+.theme-ipl .frame,.theme-t20world .frame,.theme-odiworld .frame,.theme-champions .frame,.theme-saleague .frame,.theme-delhi .frame{background:linear-gradient(110deg,var(--navy),var(--navy2),#ffffff10,var(--navy));background-size:220% 100%;animation:themeFlow 5s linear infinite}
+.theme-ipl .scorePill,.theme-t20world .scorePill,.theme-odiworld .scorePill,.theme-champions .scorePill,.theme-saleague .scorePill,.theme-delhi .scorePill{background:linear-gradient(100deg,var(--cyan),var(--navy2),var(--yellow));background-size:220% 100%;animation:themeFlow 3.5s linear infinite}
+.theme-ipl .teamPanel.left,.theme-t20world .teamPanel.left,.theme-odiworld .teamPanel.left,.theme-champions .teamPanel.left,.theme-saleague .teamPanel.left,.theme-delhi .teamPanel.left{background:linear-gradient(110deg,var(--cyan),var(--navy2))}
+.theme-ipl .teamPanel.right,.theme-t20world .teamPanel.right,.theme-odiworld .teamPanel.right,.theme-champions .teamPanel.right,.theme-saleague .teamPanel.right,.theme-delhi .teamPanel.right{background:linear-gradient(110deg,var(--yellow),var(--cyan))}
+@keyframes themeFlow{0%{background-position:0 0}50%{background-position:100% 0}100%{background-position:0 0}}
+.theme-ipl .frame:after,.theme-t20world .frame:after,.theme-odiworld .frame:after,.theme-champions .frame:after,.theme-saleague .frame:after,.theme-delhi .frame:after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(115deg,transparent 0%,#ffffff08 38%,#ffffff2b 48%,transparent 58%);background-size:220% 100%;animation:themeSheen 4s linear infinite}@keyframes themeSheen{0%{background-position:-120% 0}100%{background-position:120% 0}}
+.theme-ipl .frame{border-color:#19a8ff;box-shadow:0 18px 55px #002a8f99,0 0 0 2px #ffc40044 inset}.theme-t20world .frame{border-color:#38c8ff;box-shadow:0 18px 55px #006cff88,0 0 0 2px #a6eeff44 inset}.theme-odiworld .frame{border-color:#27b7ff;box-shadow:0 18px 55px #004a8f88,0 0 0 2px #ffd84a44 inset}.theme-champions .frame{border-color:#8c6cff;box-shadow:0 18px 55px #24108f99,0 0 0 2px #ffd85a44 inset}.theme-saleague .frame{border-color:#28d36b;box-shadow:0 18px 55px #005c2c99,0 0 0 2px #f1d12e44 inset}.theme-delhi .frame{border-color:#ff5c8a;box-shadow:0 18px 55px #70002f99,0 0 0 2px #ffd34d44 inset}
+
 
 /* ===== V5 3D EFFECTS ===== */
 .frame{transform:perspective(1400px) rotateX(1deg);border-radius:10px;box-shadow:0 18px 45px #000b,0 0 0 1px #ffffff24 inset,0 1px 0 #fff3 inset;}
@@ -466,7 +763,267 @@ body{display:flex;align-items:flex-end;justify-content:center;padding:2.4vw 3vw}
   .custom{height:92px;width:96vw;font-size:clamp(16px,3vw,28px);padding:0 10px}
   body{padding:1vw}.frame{height:92px}.teamPanel{padding:0 10px}.teamPanel .teamName{font-size:13px}.content{left:16%;right:16%;grid-template-columns:31% 30% 39%}.batters{padding:4px 7px}.batter{gap:3px}.strike{font-size:10px}.batterName{font-size:9px}.batterScore b{font-size:14px}.batterScore span{font-size:8px}.matchTitle{font-size:9px}.scorePill{font-size:24px;padding:5px 8px}.scoreMeta{font-size:8px;gap:10px}.crrRrr{font-size:7px;gap:10px}.bowlerPanel{padding:5px 7px}.bowlerName{font-size:10px}.bowlerStats{font-size:7px}.currentOver{margin-top:4px;gap:3px}.currentOverLabel{font-size:6px}.ball{width:18px;height:18px;flex-basis:18px;font-size:7px}.live{font-size:7px}.target{top:-20px;padding:4px 8px;font-size:7px}
 }
+
+/* ================================================================
+   NEWLY UPLOADED REFERENCE THEMES 04 / 05 / 06
+   These rules are last so they replace the previous Theme 4-6 designs.
+   The same data/functions remain unchanged; only the visual package changes.
+   ================================================================ */
+
+/* ---- THEME 4: BLUE + YELLOW ANGULAR PACKAGE ---- */
+.theme-theme4{--cyan:#ffdf00;--cyan2:#2b29ff;--navy:#0a0a12;--navy2:#171058;--yellow:#ffdf00;--red:#ff3d4e;--green:#54dc6a;--th-main:#ffdf00;--th-main2:#2a28ff;--th-dark:#030307;--th-dark2:#101047;--th-light:#fff9cf}
+.theme-theme4 .frame{height:154px;background:#030306 url('assets/theme4-reference/scoreboard.png') center/100% 100% no-repeat;border:0;box-shadow:none;overflow:visible}
+.theme-theme4 .frame:before,.theme-theme4 .frame:after{background:transparent!important;box-shadow:none!important}
+.theme-theme4 .teamPanel{width:22%;background:transparent!important;border:0!important;clip-path:none!important;padding:0 34px;color:#fff;z-index:4}
+.theme-theme4 .teamPanel.right{background:transparent!important}
+.theme-theme4 .teamPanel .teamName{color:#fff;font-size:clamp(17px,1.9vw,34px);font-weight:1000;text-shadow:0 2px 5px #000}
+.theme-theme4 .content{left:20%;right:20%;grid-template-columns:33% 34% 33%;z-index:5}
+.theme-theme4 .batters,.theme-theme4 .bowlerPanel{background:transparent;border:0;box-shadow:none;padding:14px 18px}
+.theme-theme4 .batter{border-bottom:1px solid #ffffff20}.theme-theme4 .batterName,.theme-theme4 .bowlerName{color:#fff}
+.theme-theme4 .scorePanel{background:transparent;color:#fff;border:0;box-shadow:none}
+.theme-theme4 .scorePanel:before,.theme-theme4 .scorePanel:after{display:none}
+.theme-theme4 .scorePill{background:linear-gradient(90deg,#1a13ba,#3129f2);border:2px solid #ffdf00;border-radius:0;color:#fff;box-shadow:0 0 18px #ffe10055;font-size:clamp(25px,3vw,54px)}
+.theme-theme4 .scoreMeta,.theme-theme4 .crrRrr{color:#fff;text-shadow:0 2px 4px #000}.theme-theme4 .ball{background:#151262;border:1px solid #ffdf00}.theme-theme4 .ball.four{background:#ffdf00;color:#09091a}.theme-theme4 .ball.six{background:#2d28ff}.theme-theme4 .ball.wicket{background:#e62338}.theme-theme4 .ball.extra{background:#fff;color:#12122a}
+.theme-theme4 .summary-overlay{background:#030306 url('assets/theme4-reference/match summary.png') center/cover no-repeat;padding:0}.theme-theme4 .summary-shell{padding:7% 9% 8%;gap:10px}.theme-theme4 .summary-head{background:transparent;border:0;border-radius:0;box-shadow:none}.theme-theme4 .summary-head .side,.theme-theme4 .summary-head .center{background:transparent!important;color:#fff!important}.theme-theme4 .summary-meta .meta{background:rgba(18,14,140,.72);border-color:#ffdf00;color:#fff}.theme-theme4 .summary-team{background:rgba(18,14,120,.74);border-color:#ffdf00;box-shadow:none}.theme-theme4 .summary-team-head{background:linear-gradient(90deg,#1d18c9,#332bff);color:#fff}.theme-theme4 .summary-box{background:rgba(2,2,10,.82);border-color:#ffdf00}.theme-theme4 .summary-box .box-head{background:#ffdf00;color:#0b0b22}.theme-theme4 .summary-status,.theme-theme4 .summary-result{background:#ffdf00;color:#080816;border-color:#2b29ff}
+.theme-theme4 .scorecard-overlay{background:#030306 url('assets/theme4-reference/scoreboard.png') center/100% 100% no-repeat}.theme-theme4 .scorecard-overlay .card{background:rgba(15,12,95,.86);border:2px solid #ffdf00}.theme-theme4 .scorecard-overlay .pref-header,.theme-theme4 .scorecard-overlay .pref-title,.theme-theme4 .scorecard-overlay .pref-table th{background:linear-gradient(90deg,#2018cf,#322bff);border-color:#ffdf00}.theme-theme4 .scorecard-overlay .pref-team.a,.theme-theme4 .scorecard-overlay .pref-team.b{background:transparent}.theme-theme4 .scorecard-overlay .pref-vs{background:#ffdf00;color:#11103b;border-color:#2b29ff}.theme-theme4 .scorecard-overlay .pref-panel{background:rgba(7,7,20,.92);border-color:#ffdf00}.theme-theme4 .scorecard-overlay .pref-table td{color:#fff;border-color:#ffffff25}.theme-theme4 .scorecard-overlay .pref-table .blue-total td,.theme-theme4 .scorecard-overlay .pref-table .extra-row td{background:#ffdf00;color:#11103b}.theme-theme4 .scorecard-overlay .pref-footer{background:#1511a0;border-color:#ffdf00}
+
+/* ---- THEME 5: METALLIC SILVER + CYAN FUTURISTIC PACKAGE ---- */
+.theme-theme5{--cyan:#4befff;--cyan2:#d8fbff;--navy:#070b0f;--navy2:#171b20;--yellow:#ffe100;--red:#ff3156;--green:#62f2a0;--th-main:#4befff;--th-main2:#ffe100;--th-dark:#020304;--th-dark2:#11161c;--th-light:#eff9fb}
+.theme-theme5 .frame{height:154px;background:#030507 url('assets/theme5-reference/scoreboard.png') center/100% 100% no-repeat;border:0;box-shadow:none;overflow:visible}.theme-theme5 .frame:before,.theme-theme5 .frame:after{display:none!important}
+.theme-theme5 .teamPanel{width:21%;background:transparent!important;border:0!important;clip-path:none!important;color:#10141a;padding:0 34px}.theme-theme5 .teamPanel.right{background:transparent!important}.theme-theme5 .teamPanel .teamName{color:#f4f6f7;text-shadow:0 2px 5px #000;font-weight:1000}.theme-theme5 .content{left:18%;right:18%;grid-template-columns:32% 36% 32%;z-index:5}.theme-theme5 .batters,.theme-theme5 .bowlerPanel{background:transparent;border:0;box-shadow:none}.theme-theme5 .batterName,.theme-theme5 .bowlerName{color:#fff}.theme-theme5 .scorePanel{background:transparent;color:#fff;border:0;box-shadow:none}.theme-theme5 .scorePanel:before,.theme-theme5 .scorePanel:after{display:none}.theme-theme5 .scorePill{background:rgba(5,8,11,.9);border:2px solid #4befff;border-radius:4px;color:#fff;box-shadow:0 0 18px #4befff55}.theme-theme5 .scoreMeta,.theme-theme5 .crrRrr{color:#fff}.theme-theme5 .ball{background:#111820;border-color:#4befff}.theme-theme5 .ball.four{background:#4befff;color:#071015}.theme-theme5 .ball.six{background:#ffe100;color:#111}.theme-theme5 .ball.wicket{background:#ff3156}.theme-theme5 .ball.extra{background:#d8fbff;color:#071015}
+.theme-theme5 .summary-overlay{background:#020406 url('assets/theme5-reference/match summary.png') center/cover no-repeat;padding:0}.theme-theme5 .summary-shell{padding:7% 26% 7%;gap:10px}.theme-theme5 .summary-head{background:transparent;border:0;box-shadow:none}.theme-theme5 .summary-head .side,.theme-theme5 .summary-head .center{background:transparent!important;color:#fff!important}.theme-theme5 .summary-meta .meta{background:rgba(3,8,12,.88);border-color:#4befff;color:#fff}.theme-theme5 .summary-team{background:rgba(3,8,12,.88);border-color:#4befff;box-shadow:none}.theme-theme5 .summary-team-head{background:#4befff;color:#061018}.theme-theme5 .summary-box{background:rgba(1,5,8,.9);border-color:#4befff}.theme-theme5 .summary-box .box-head{background:#4befff;color:#071015}.theme-theme5 .summary-status{background:#4befff;color:#071015;border-color:#ffe100}.theme-theme5 .summary-result{background:#ffe100;color:#101820;border-color:#4befff}
+.theme-theme5 .scorecard-overlay{background:#020406 url('assets/theme5-reference/scoreboard.png') center/100% 100% no-repeat}.theme-theme5 .scorecard-overlay .card{background:rgba(2,7,10,.9);border:2px solid #4befff}.theme-theme5 .scorecard-overlay .pref-header{background:linear-gradient(90deg,#dfe4e5,#2d3439 18%,#090d11 48%,#090d11 52%,#2d3439 82%,#dfe4e5);border-color:#4befff}.theme-theme5 .scorecard-overlay .pref-title,.theme-theme5 .scorecard-overlay .pref-table th{background:#111820;border-color:#4befff}.theme-theme5 .scorecard-overlay .pref-panel{background:rgba(5,10,14,.92);border-color:#4befff}.theme-theme5 .scorecard-overlay .pref-table td{color:#fff;border-color:#ffffff22}.theme-theme5 .scorecard-overlay .pref-table .blue-total td,.theme-theme5 .scorecard-overlay .pref-table .extra-row td{background:#4befff;color:#071015}.theme-theme5 .scorecard-overlay .pref-footer{background:#111820;border-color:#4befff}
+
+/* ---- THEME 6: DARK GRAPHITE + GREEN PACKAGE ---- */
+.theme-theme6{--cyan:#63dc6d;--cyan2:#b8ff86;--navy:#060906;--navy2:#182019;--yellow:#d9e1d8;--red:#ff3b55;--green:#54d665;--th-main:#54d665;--th-main2:#b8ff86;--th-dark:#020302;--th-dark2:#121712;--th-light:#f0fff0}
+.theme-theme6 .frame{height:154px;background:#020402 url('assets/theme6-reference/scoreboard.png') center/100% 100% no-repeat;border:0;box-shadow:none;overflow:visible}.theme-theme6 .frame:before,.theme-theme6 .frame:after{display:none!important}.theme-theme6 .teamPanel{width:21%;background:transparent!important;border:0!important;clip-path:none!important;padding:0 34px}.theme-theme6 .teamPanel.right{background:transparent!important}.theme-theme6 .teamPanel .teamName{color:#f2fff1;text-shadow:0 2px 5px #000;font-weight:1000}.theme-theme6 .content{left:19%;right:19%;grid-template-columns:33% 34% 33%;z-index:5}.theme-theme6 .batters,.theme-theme6 .bowlerPanel{background:transparent;border:0;box-shadow:none}.theme-theme6 .batterName,.theme-theme6 .bowlerName{color:#fff}.theme-theme6 .scorePanel{background:transparent;color:#fff;border:0;box-shadow:none}.theme-theme6 .scorePanel:before,.theme-theme6 .scorePanel:after{display:none}.theme-theme6 .scorePill{background:rgba(7,12,8,.92);border:2px solid #63dc6d;border-radius:5px;color:#f2fff1;box-shadow:0 0 18px #54d66555}.theme-theme6 .scoreMeta,.theme-theme6 .crrRrr{color:#fff}.theme-theme6 .ball{background:#172117;border-color:#63dc6d}.theme-theme6 .ball.four{background:#b8ff86;color:#071008}.theme-theme6 .ball.six{background:#54d665;color:#071008}.theme-theme6 .ball.wicket{background:#ff3b55}.theme-theme6 .ball.extra{background:#e6ece5;color:#0a110b}
+.theme-theme6 .summary-overlay{background:#020302 url('assets/theme6-reference/Match summary.png') center/cover no-repeat;padding:0}.theme-theme6 .summary-shell{padding:7% 9% 8%;gap:10px}.theme-theme6 .summary-head{background:transparent;border:0;box-shadow:none}.theme-theme6 .summary-head .side,.theme-theme6 .summary-head .center{background:transparent!important;color:#f1fff0!important}.theme-theme6 .summary-meta .meta{background:rgba(4,8,4,.9);border-color:#54d665;color:#fff}.theme-theme6 .summary-team{background:rgba(4,8,4,.9);border-color:#54d665;box-shadow:none}.theme-theme6 .summary-team-head{background:#167a24;color:#fff}.theme-theme6 .summary-box{background:rgba(3,6,3,.92);border-color:#54d665}.theme-theme6 .summary-box .box-head{background:#54d665;color:#061007}.theme-theme6 .summary-status{background:#54d665;color:#071008;border-color:#b8ff86}.theme-theme6 .summary-result{background:#b8ff86;color:#071008;border-color:#54d665}
+.theme-theme6 .scorecard-overlay{background:#020302 url('assets/theme6-reference/scoreboard.png') center/100% 100% no-repeat}.theme-theme6 .scorecard-overlay .card{background:rgba(3,7,3,.92);border:2px solid #54d665}.theme-theme6 .scorecard-overlay .pref-header{background:linear-gradient(90deg,#4e9b55,#1b211b 22%,#0a0e0a 50%,#1b211b 78%,#4e9b55);border-color:#63dc6d}.theme-theme6 .scorecard-overlay .pref-title,.theme-theme6 .scorecard-overlay .pref-table th{background:#17471d;border-color:#54d665}.theme-theme6 .scorecard-overlay .pref-panel{background:rgba(5,9,5,.94);border-color:#54d665}.theme-theme6 .scorecard-overlay .pref-table td{color:#fff;border-color:#ffffff20}.theme-theme6 .scorecard-overlay .pref-table .blue-total td,.theme-theme6 .scorecard-overlay .pref-table .extra-row td{background:#54d665;color:#071008}.theme-theme6 .scorecard-overlay .pref-footer{background:#101710;border-color:#54d665}
+
+
+
+/* ============================================================
+   FINAL SEPARATE REBUILD: THEMES 04 / 05 / 06
+   Each theme is isolated and uses its own uploaded reference assets.
+   ============================================================ */
+body.theme-theme4 .frame{background-image:url("assets/theme4-reference/scoreboard.png")!important;background-size:100% 100%!important;background-position:center!important}
+body.theme-theme5 .frame{background-image:url("assets/theme5-reference/scoreboard.png")!important;background-size:100% 100%!important;background-position:center!important}
+body.theme-theme6 .frame{background-image:url("assets/theme6-reference/scoreboard.png")!important;background-size:100% 100%!important;background-position:center!important}
+
+/* Separate lower-third reference context */
+body.theme-theme4 .overlay:after{content:"THEME 04 • BLUE & YELLOW";position:absolute;right:10px;bottom:-18px;font-size:9px;letter-spacing:.12em;color:#ffdf00;opacity:.7}
+body.theme-theme5 .overlay:after{content:"THEME 05 • METALLIC CYAN";position:absolute;right:10px;bottom:-18px;font-size:9px;letter-spacing:.12em;color:#4befff;opacity:.7}
+body.theme-theme6 .overlay:after{content:"THEME 06 • GREEN METALLIC";position:absolute;right:10px;bottom:-18px;font-size:9px;letter-spacing:.12em;color:#63dc6d;opacity:.7}
+
+
+/* ============================================================
+   THEME 5 — DEDICATED REBUILD FROM THE FIVE USER REFERENCES
+   Separate DOM and layouts; not a recolor of the default theme.
+   ============================================================ */
+.theme5-special .overlay,.theme5-special .summary-overlay,.theme5-special .scorecard-overlay,.theme5-special .banner.player,.theme5-special .banner.tournament,.theme5-special .banner.matchFooter,.theme5-special .banner.toss,.theme5-special .custom{display:none!important}
+/* LOWER THIRD — reference: dark carbon, cyan cuts, metallic side plates */
+#theme5Lower{left:50%;bottom:18px;transform:translateX(-50%);width:min(96vw,1180px);height:205px;color:#111;filter:drop-shadow(0 12px 18px #000b)}
+#theme5Lower .t5-top{position:absolute;left:7%;right:7%;top:0;height:118px;background:linear-gradient(180deg,#2c2c2c,#151515);border:1px solid #eee;border-radius:22px 22px 12px 12px;color:#eee;text-align:center;padding-top:4px;box-sizing:border-box}
+#theme5Lower .t5-top:before{content:'';position:absolute;left:26%;right:26%;bottom:-1px;height:8px;background:#51ddd8;clip-path:polygon(5% 0,95% 0,100% 100%,0 100%)}
+#theme5Lower .t5-center{position:absolute;left:26%;right:26%;top:14px;text-align:center;color:#eee;font-weight:1000}
+#theme5Lower .t5-innings{font-size:22px;line-height:24px;letter-spacing:1px}
+#theme5Lower .t5-score{font-size:37px;line-height:46px;white-space:nowrap}
+#theme5Lower .t5-over{font-size:25px;line-height:32px}
+#theme5Lower .t5-side{position:absolute;top:25px;width:31%;height:103px;background:linear-gradient(180deg,#f5f5f5,#9e9e9e);padding:17px 24px;font-size:20px;font-weight:900;line-height:34px;box-sizing:border-box}
+#theme5Lower .t5-left{left:0;clip-path:polygon(0 0,96% 0,82% 100%,0 100%);padding-right:16%}
+#theme5Lower .t5-right{right:0;clip-path:polygon(4% 0,100% 0,100% 100%,18% 100%);padding-left:16%}
+#theme5Lower .t5-bottom{position:absolute;left:25%;right:25%;bottom:0;height:72px;background:linear-gradient(180deg,#2c2c2c,#151515);color:#eee;text-align:center;padding-top:20px;font-size:24px;font-weight:1000;clip-path:polygon(0 0,100% 0,92% 100%,8% 100%)}
+#theme5Lower .t5-bottom:before{content:'';position:absolute;left:5%;right:5%;top:0;height:4px;background:#c9b400}
+#theme5Lower .t5-glow{position:absolute;width:45px;height:45px;bottom:8px;border-radius:50%;background:radial-gradient(circle,#ffe900 0,transparent 70%);filter:blur(5px);opacity:.8}.t5-glow.a{left:28%}.t5-glow.b{right:28%}
+#theme5Lower.show{animation:t5Slide .55s cubic-bezier(.2,.8,.2,1)}
+@keyframes t5Slide{from{transform:translate(-50%,160%)}to{transform:translate(-50%,0)}}
+/* PLAYER STATUS — exact reference structure */
+#theme5PlayerCard{left:50%;bottom:18%;transform:translateX(-50%);width:min(74vw,900px);color:#7fd0e7;filter:drop-shadow(0 10px 16px #000b)}
+#theme5PlayerCard .t5-player-head{height:64px;background:linear-gradient(90deg,#9dd8e8,#78bdd0);border-radius:34px 34px 0 0;color:#05090c;display:flex;align-items:center;justify-content:space-between;padding:0 34px;font-size:38px;font-weight:1000}
+#theme5PlayerCard .t5-player-team{font-size:18px}
+#theme5PlayerCard .t5-player-body{background:#020609;border:6px solid #8fd6e9;border-top:0;padding:24px 42px 34px;display:grid;grid-template-columns:1.2fr .8fr .6fr .6fr 1fr;gap:10px;text-align:center;font-size:23px;font-weight:900}
+#theme5PlayerCard .t5-player-body span{display:flex;flex-direction:column;gap:22px}.t5-label{font-size:20px}.t5-value{font-size:29px}
+/* DISPLAY SCREEN */@keyframes t5Display{from{opacity:0;transform:translate(-50%,40px) scale(.96)}to{opacity:1;transform:translate(-50%,0) scale(1)}}
+/* MATCH SUMMARY — exact two-team stack */
+#theme5Summary{inset:0;background:#000;padding:3.5vh 5vw;color:#79c8df;overflow:hidden}
+#theme5Summary .t5-summary-shell{width:min(88vw,1150px);margin:0 auto;height:100%;display:flex;flex-direction:column;gap:16px}
+#theme5Summary .t5-summary-head{height:84px;display:grid;grid-template-columns:1fr 1.15fr 1fr;align-items:center;color:#fff;font-weight:1000;text-align:center}
+#theme5Summary .t5-summary-side{height:56px;background:linear-gradient(#f3f3f3,#d9d9d9);color:#101010;border-radius:32px;display:flex;align-items:center;justify-content:center;font-size:30px}
+#theme5Summary .t5-summary-title{height:84px;background:#05070a;clip-path:polygon(11% 0,89% 0,100% 50%,89% 100%,11% 100%,0 50%);display:flex;align-items:center;justify-content:center;font-size:34px;line-height:1.05;padding:0 50px}
+#theme5Summary .t5-summary-team{flex:1;min-height:0;display:flex;flex-direction:column;gap:12px}
+#theme5Summary .t5-teambar{height:58px;background:linear-gradient(90deg,#9bd9ea,#76bfd3);border-radius:30px 30px 0 0;color:#05090c;font-size:34px;font-weight:1000;display:flex;align-items:center;padding:0 36px}
+#theme5Summary .t5-teambox{flex:1;min-height:0;border:6px solid #8ed4e8;background:#020609;padding:22px 26px;display:grid;grid-template-columns:1fr 1fr;gap:28px;overflow:hidden}
+#theme5Summary .t5-col{display:grid;grid-template-columns:1.3fr .8fr;align-content:start;gap:13px 20px;font-size:20px;font-weight:900}
+#theme5Summary .t5-summary-status{height:58px;border-radius:30px;background:#e5e5e5;color:#111;display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:1000}
+#theme5Summary.show{animation:t5Fade .4s ease both}@keyframes t5Fade{from{opacity:0}to{opacity:1}}
+/* FULL SCORECARD — dedicated reference layout */
+#theme5Scorecard{inset:0;background:#020609;color:#222;padding:1.5vh 1vw;overflow:hidden}
+#theme5Scorecard .t5-sc-shell{height:100%;border:2px solid #51dce2;background:linear-gradient(180deg,#111820 0,#05080b 12%,#070b0e 100%);position:relative;padding:0 2.2vw 1.5vh}
+#theme5Scorecard .t5-sc-header{height:13%;min-height:78px;display:grid;grid-template-columns:1.2fr 1fr 1.2fr;align-items:center;margin:0 -1vw 1.2vh;color:#111;font-weight:1000}
+#theme5Scorecard .t5-sc-team{height:86%;background:linear-gradient(#f4f4f4,#c6c6c6);display:flex;align-items:center;padding:0 3vw;font-size:clamp(36px,5vw,80px)}
+#theme5Scorecard .t5-sc-mid{height:86%;background:#101214;color:#eee;clip-path:polygon(9% 0,91% 0,100% 100%,0 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;font-size:clamp(17px,2vw,32px);line-height:1.1;border-left:7px solid #4be5e5;border-right:7px solid #4be5e5}
+#theme5Scorecard .t5-sc-main{height:73%;display:grid;grid-template-columns:61% 39%;background:#f2f2f2;border:5px solid #7cd5e3;overflow:hidden}
+#theme5Scorecard .t5-bat{border-right:3px solid #111;padding:14px 22px}.t5-bat-head,.t5-bowl-head{display:grid;grid-template-columns:50px 1.3fr 1.1fr .35fr .35fr;color:#4d9ab2;font-weight:1000;font-size:18px;margin-bottom:6px}.t5-bat-row{display:grid;grid-template-columns:50px 1.3fr 1.1fr .35fr .35fr;font-size:18px;font-weight:900;line-height:1.75}.t5-bowl{padding:14px 16px}.t5-bowl-head,.t5-bowl-row{display:grid;grid-template-columns:45px 1.4fr .5fr .55fr .55fr .55fr;gap:5px;font-weight:900}.t5-bowl-head{color:#4d9ab2;font-size:16px}.t5-bowl-row{font-size:16px;line-height:1.75}
+#theme5Scorecard .t5-sc-total{height:10%;display:grid;grid-template-columns:1fr 190px 1fr;align-items:center;text-align:center;font-size:clamp(24px,3vw,48px);font-weight:1000;color:#111;background:#eee;border:4px solid #d8d8d8}
+#theme5Scorecard .t5-score-box{background:#111820;color:#61cbe6;border:3px solid #5bd5e0;padding:4px 12px}.t5-sc-footer{height:9%;display:grid;grid-template-columns:1fr 1fr 1.2fr;gap:18px;margin-top:1.3vh}.t5-footbox{background:#101417;border:2px solid #d6d6d6;color:#65c8e4;display:flex;align-items:center;justify-content:center;font-size:clamp(18px,2.3vw,36px);font-weight:1000;clip-path:polygon(4% 0,96% 0,100% 100%,0 100%)}
+#theme5Scorecard.show{animation:t5Fade .4s ease both}
+
+
+
+/* ============================================================
+   THEME 5 PROFESSIONAL REFINEMENT — VERSION 2
+   Dedicated broadcast geometry based on the supplied references.
+   ============================================================ */
+body.theme-theme5{background:#000}
+#theme5Lower{width:min(94vw,1280px);height:auto;aspect-ratio:900/330;bottom:2.1vh;filter:drop-shadow(0 18px 28px #000c);overflow:visible}
+#theme5Lower::before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent 0 7%,#ffffff08 7.2% 7.5%,transparent 7.7% 92.3%,#ffffff08 92.5% 92.8%,transparent 93%);pointer-events:none}
+#theme5Lower .t5-top{left:8.7%;right:8.7%;top:1.1%;height:53.5%;border:1px solid #7c858c;border-radius:28px 28px 18px 18px;background:linear-gradient(180deg,#333 0,#1c1c1c 48%,#111 100%);box-shadow:inset 0 1px #ffffff2c,0 0 0 1px #000}
+#theme5Lower .t5-top:after{content:"";position:absolute;inset:8% 2%;background-image:radial-gradient(#fff1 0.7px,transparent .8px);background-size:4px 4px;opacity:.22;pointer-events:none}
+#theme5Lower .t5-top:before{left:26%;right:26%;height:7px;background:#55d9d5;box-shadow:0 0 12px #55d9d588}
+#theme5Lower .t5-center{left:27%;right:27%;top:3%;height:51%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1.2%;z-index:2}
+#theme5Lower .t5-innings{font-size:clamp(13px,1.65vw,28px);line-height:1;color:#d9d9dc;text-transform:uppercase;letter-spacing:.08em;text-shadow:0 2px 4px #000}
+#theme5Lower .t5-score{font-size:clamp(24px,3.45vw,56px);line-height:1.05;font-weight:1000;letter-spacing:.01em}
+#theme5Lower .t5-over{font-size:clamp(17px,2.45vw,40px);line-height:1.05;color:#f0f0f0}
+#theme5Lower .t5-side{top:8.4%;height:37.5%;width:31%;padding:2.4% 2.7%;background:linear-gradient(180deg,#f7f7f7 0,#d7d7d7 42%,#a8a8a8 100%);box-shadow:inset 0 1px #fff,0 2px 7px #0008;color:#111;z-index:4;font-size:clamp(11px,1.55vw,25px);line-height:1.55}
+#theme5Lower .t5-side div{display:flex;justify-content:space-between;gap:10px;white-space:nowrap}
+#theme5Lower .t5-side .t5-side-label{font-weight:1000;letter-spacing:.02em}
+#theme5Lower .t5-side .t5-side-value{font-weight:1000}
+#theme5Lower .t5-left{left:0;clip-path:polygon(0 0,100% 0,82% 100%,0 100%);padding-right:10.5%}
+#theme5Lower .t5-right{right:0;clip-path:polygon(0 0,100% 0,100% 100%,18% 100%);padding-left:10.5%}
+#theme5Lower .t5-bottom{left:27%;right:27%;height:22.5%;bottom:0;padding:0;display:flex;align-items:center;justify-content:center;background:linear-gradient(180deg,#2c2c2c,#171717);clip-path:polygon(4% 0,96% 0,87% 100%,13% 100%);font-size:clamp(13px,1.95vw,31px);z-index:3}
+#theme5Lower .t5-bottom:before{left:8%;right:8%;height:3px;background:#c8b400;box-shadow:0 0 9px #f5df00aa}
+#theme5Lower .t5-bottom span{margin:0 .8em}
+#theme5Lower .t5-glow{width:6%;height:24%;bottom:2%;filter:blur(7px);opacity:.92;animation:t5Lamp 2.8s ease-in-out infinite}
+#theme5Lower .t5-glow.a{left:27%}#theme5Lower .t5-glow.b{right:27%;animation-delay:1.2s}
+@keyframes t5Lamp{50%{opacity:.48;transform:scale(.78)}}
+#theme5Lower.show{animation:t5LowerIn .62s cubic-bezier(.16,1,.3,1)}
+@keyframes t5LowerIn{0%{opacity:0;transform:translate(-50%,35%) scale(.96)}70%{opacity:1;transform:translate(-50%,-1.5%) scale(1.01)}100%{transform:translate(-50%,0) scale(1)}}
+
+/* Player status: exact reference proportions, premium glass/metal finish */
+#theme5PlayerCard{width:min(74vw,960px);bottom:18%;border-radius:34px 34px 0 0;filter:drop-shadow(0 18px 28px #000c)}
+#theme5PlayerCard .t5-player-head{height:78px;border-radius:40px 40px 0 0;background:linear-gradient(90deg,#9ad8e9,#76bed3 48%,#91d0e2);font-size:clamp(30px,3.7vw,58px);letter-spacing:.01em;box-shadow:inset 0 1px #fff}
+#theme5PlayerCard .t5-player-team{font-size:clamp(13px,1.5vw,23px);align-self:flex-end;margin-bottom:16px}
+#theme5PlayerCard .t5-player-body{min-height:175px;border:7px solid #8bd4e8;border-top:0;background:linear-gradient(180deg,#020507,#060b0f);padding:27px 5% 32px;gap:2%;box-shadow:inset 0 0 38px #55d8ff0b}
+#theme5PlayerCard .t5-player-body span{gap:22px}.t5-label{font-size:clamp(15px,1.65vw,26px);color:#66c8e6}.t5-value{font-size:clamp(23px,2.5vw,39px);color:#74d2eb;text-shadow:0 0 14px #55d9ff33}
+#theme5PlayerCard.show{animation:t5PlayerIn .55s cubic-bezier(.16,1,.3,1)}@keyframes t5PlayerIn{from{opacity:0;transform:translate(-50%,60px) scale(.94)}to{opacity:1;transform:translate(-50%,0) scale(1)}}
+
+/* Display screen: lower-third presentation, not full-screen text */#theme5DisplayCard::before{left:16px}#theme5DisplayCard::after{right:16px}@keyframes t5DisplayPro{from{clip-path:inset(0 50% 0 50% round 48px);opacity:0}to{clip-path:inset(0 0 0 0 round 48px);opacity:1}}
+
+/* Match summary: structured two-team broadcast board */
+#theme5Summary{background:#000;padding:2.8vh 4vw}
+#theme5Summary .t5-summary-shell{width:min(92vw,1320px);gap:3.2vh}
+#theme5Summary .t5-summary-head{height:10.5vh;min-height:72px;grid-template-columns:1fr 1.18fr 1fr;gap:0}
+#theme5Summary .t5-summary-side{height:64%;border-radius:34px;background:linear-gradient(#f7f7f7,#d6d6d6);font-size:clamp(22px,3vw,46px);box-shadow:inset 0 1px #fff}
+#theme5Summary .t5-summary-title{height:100%;background:#05070a;clip-path:polygon(10% 0,90% 0,100% 100%,0 100%);border-left:12px solid #8ed8ea;border-right:12px solid #8ed8ea;font-size:clamp(25px,3vw,48px);letter-spacing:.02em;position:relative}
+#theme5Summary .t5-summary-team{gap:1.2vh}
+#theme5Summary .t5-teambar{height:6.2vh;min-height:48px;border-radius:34px 34px 0 0;font-size:clamp(25px,3.2vw,50px);background:linear-gradient(90deg,#9ad9e9,#76bed3);box-shadow:inset 0 1px #fff}
+#theme5Summary .t5-teambox{border:7px solid #8bd4e8;background:linear-gradient(180deg,#010507,#05090c);padding:2.3vh 3.5vw;grid-template-columns:1fr 1fr;gap:8%;box-shadow:inset 0 0 38px #56d8ff08}
+#theme5Summary .t5-col{grid-template-columns:1.45fr .85fr;gap:1.2vh 2vw;font-size:clamp(15px,1.8vw,28px);color:#66c8e6}
+#theme5Summary .t5-col b{color:#66c8e6;text-align:right}
+#theme5Summary .t5-summary-status{height:6vh;min-height:46px;border-radius:32px;background:linear-gradient(#f4f4f4,#d5d5d5);font-size:clamp(16px,2.2vw,32px);box-shadow:inset 0 1px #fff}
+#theme5Summary.show{animation:t5SummaryIn .5s ease both}@keyframes t5SummaryIn{from{opacity:0;transform:scale(.985)}to{opacity:1;transform:scale(1)}}
+
+/* Full innings scorecard: 16:9 reference board with metallic frame */
+#theme5Scorecard{padding:1.3vh .8vw;background:#020507}
+#theme5Scorecard .t5-sc-shell{border:0;background:#05080b;padding:0 2.1vw 1.4vh;box-shadow:inset 0 0 0 2px #111,0 0 0 2px #3ed6e0}
+#theme5Scorecard .t5-sc-header{height:15%;margin:0 -2.1vw 1.5vh;grid-template-columns:1.12fr .95fr 1.12fr;position:relative}
+#theme5Scorecard .t5-sc-header::after{content:"";position:absolute;left:2%;right:2%;bottom:-7px;height:5px;background:linear-gradient(90deg,transparent,#4befff 10%,transparent 48%,#ffe100 52%,transparent 90%,transparent);filter:drop-shadow(0 0 6px #4befff66)}
+#theme5Scorecard .t5-sc-team{height:82%;font-size:clamp(30px,5.6vw,92px);background:linear-gradient(180deg,#f7f7f7,#bfc1c3);box-shadow:inset 0 2px #fff,inset 0 -2px #777;letter-spacing:.01em}
+#theme5Scorecard .t5-sc-mid{height:82%;font-size:clamp(14px,2vw,34px);background:linear-gradient(180deg,#15191d,#050708);border-left:10px solid #4be5e5;border-right:10px solid #4be5e5;box-shadow:inset 0 1px #ffffff22}
+#theme5Scorecard .t5-sc-main{height:67%;grid-template-columns:60% 40%;border:6px solid #8bd5e5;background:linear-gradient(#fff,#e7e7e7);box-shadow:0 0 0 3px #1b2227,0 12px 26px #0008}
+#theme5Scorecard .t5-bat{padding:1.8vh 2vw;border-right:4px solid #161616}.t5-bat-head,.t5-bowl-head{font-size:clamp(11px,1.45vw,22px);color:#4b9db8;margin-bottom:.8vh}.t5-bat-row{font-size:clamp(11px,1.55vw,23px);line-height:1.55}.t5-bowl{padding:1.8vh 1.6vw}.t5-bowl-head{font-size:clamp(10px,1.2vw,19px)}.t5-bowl-row{font-size:clamp(10px,1.25vw,20px);line-height:1.65}
+#theme5Scorecard .t5-sc-total{height:10%;grid-template-columns:1fr 180px 1fr;background:linear-gradient(#f4f4f4,#d7d7d7);font-size:clamp(18px,3vw,50px);box-shadow:inset 0 1px #fff}
+#theme5Scorecard .t5-score-box{background:linear-gradient(180deg,#0c141a,#020507);color:#61d4ee;border:3px solid #5bd5e0;padding:.25em .5em;box-shadow:0 0 16px #55d9ff44 inset}
+#theme5Scorecard .t5-sc-footer{height:7%;margin-top:1.3vh;gap:1.2vw}.t5-footbox{border:2px solid #d4d4d4;color:#65c8e4;background:linear-gradient(180deg,#12181c,#030507);font-size:clamp(13px,2vw,33px);letter-spacing:.02em}
+#theme5Scorecard.show{animation:t5ScorecardIn .45s ease both}@keyframes t5ScorecardIn{from{opacity:0;transform:scale(1.02)}to{opacity:1;transform:scale(1)}}
+@media(max-width:850px){#theme5Lower{width:99vw}#theme5Lower .t5-side{font-size:10px}#theme5Lower .t5-bottom{font-size:11px}#theme5Summary{padding:2vh 2vw}#theme5Summary .t5-summary-shell{width:96vw}#theme5Scorecard .t5-sc-main{grid-template-columns:60% 40%}.t5-bat-row,.t5-bowl-row{font-size:9px}}
+
+
+/* ==========================================================
+   UNIQUE PROFESSIONAL THEME PACK — EVERY THEME HAS ITS OWN
+   GEOMETRY, TYPOGRAPHY TREATMENT, PANELS AND ANIMATION.
+   ========================================================== */
+/* THEME 1 — ANGULAR BLUE: sharp broadcast wedges */
+.theme-blue .frame{background:linear-gradient(105deg,#06183e 0%,#0b56b5 42%,#06275f 100%);border:2px solid #36bfff;clip-path:polygon(0 0,98% 0,100% 50%,98% 100%,0 100%,2% 50%);box-shadow:0 12px 35px #001b4d99}
+.theme-blue .teamPanel{background:linear-gradient(135deg,#073a91,#0ba8ed);clip-path:polygon(0 0,88% 0,100% 50%,88% 100%,0 100%)}
+.theme-blue .teamPanel.right{background:linear-gradient(225deg,#073a91,#0ba8ed);clip-path:polygon(12% 0,100% 0,100% 100%,12% 100%,0 50%)}
+.theme-blue .scorePanel{background:#f4f8ff;border-top:4px solid #0ba8ed;border-bottom:4px solid #0b56b5}
+.theme-blue .scorePill{background:linear-gradient(90deg,#062b76,#0ba8ed);border-radius:4px;transform:skew(-6deg)}
+.theme-blue .summary-head,.theme-blue .scorecard-overlay .pref-header{background:linear-gradient(90deg,#06275f,#0b56b5,#0ba8ed)}
+.theme-blue .summary-team-head,.theme-blue .scorecard-overlay .pref-title{background:linear-gradient(90deg,#06275f,#0ba8ed)}
+.theme-blue .ball.four{background:#0ba8ed}.theme-blue .ball.six{background:#06275f}
+
+/* THEME 2 — CYBER NEON: glass, glow and scan animation */
+.theme-neon .frame{background:linear-gradient(120deg,#08051c,#21105b 48%,#071c4e);border:1px solid #b02cff;box-shadow:0 0 28px #b02cff66,inset 0 0 30px #00eaff18;overflow:hidden}
+.theme-neon .frame:after{content:"";position:absolute;inset:-50%;background:linear-gradient(115deg,transparent 46%,#00f7ff22 49%,#fff2 50%,#ff00e622 51%,transparent 54%);animation:neonSweep 4s linear infinite;pointer-events:none}
+.theme-neon .teamPanel,.theme-neon .teamPanel.right{background:linear-gradient(135deg,#17063d99,#5d13a8aa);backdrop-filter:blur(8px);border:1px solid #ff00e655;clip-path:none}
+.theme-neon .scorePanel{background:linear-gradient(180deg,#0b0b20ee,#19104bee);color:#fff;border:1px solid #00eaff77}
+.theme-neon .scorePill{background:linear-gradient(90deg,#7c12d6,#00eaff);border:1px solid #fff8;box-shadow:0 0 24px #00eaff66;animation:neonPulse 1.8s ease-in-out infinite}
+.theme-neon .batters,.theme-neon .bowlerPanel{background:linear-gradient(135deg,#12072fdd,#091e43dd);border-color:#b02cff}
+.theme-neon .summary-head,.theme-neon .scorecard-overlay .pref-header{background:linear-gradient(90deg,#18053d,#6c13b5,#071d4b);box-shadow:0 0 25px #b02cff55}
+.theme-neon .summary-team-head,.theme-neon .scorecard-overlay .pref-title{background:linear-gradient(90deg,#5d13a8,#00cfe9)}
+.theme-neon .ball{box-shadow:0 0 8px #00eaff55}
+
+/* THEME 3 — STADIUM GREEN: segmented sports broadcast */
+.theme-green .frame{background:linear-gradient(180deg,#052c20,#0a7c48 48%,#031b14);border:2px solid #54e99b;border-radius:18px;box-shadow:0 10px 35px #001b1099}
+.theme-green .teamPanel,.theme-green .teamPanel.right{background:linear-gradient(180deg,#087c48,#0acb73);clip-path:polygon(0 0,94% 0,100% 50%,94% 100%,0 100%);border-radius:0}
+.theme-green .scorePanel{background:linear-gradient(180deg,#f7fff9,#d9f5e5);color:#063d28;border-left:8px solid #0aa65c;border-right:8px solid #0aa65c}
+.theme-green .scorePill{background:linear-gradient(90deg,#064d30,#0acb73);border-radius:30px}
+.theme-green .batters,.theme-green .bowlerPanel{background:linear-gradient(180deg,#063c2b,#087348);border-color:#54e99b}
+.theme-green .summary-head,.theme-green .scorecard-overlay .pref-header{background:linear-gradient(90deg,#063c2b,#0aa65c,#063c2b);border-radius:18px}
+.theme-green .summary-team-head,.theme-green .scorecard-overlay .pref-title{background:linear-gradient(90deg,#087348,#0acb73)}
+.theme-green .ball.four{background:#0acb73}.theme-green .ball.six{background:#064d30}
+
+/* THEME 4 — GOLD LUXURY: premium black/gold championship */
+.theme-gold .frame{background:linear-gradient(105deg,#100c06,#4d2d06 42%,#120b03);border:2px solid #ffd34d;box-shadow:0 0 0 1px #fff2 inset,0 14px 45px #000d}
+.theme-gold .teamPanel,.theme-gold .teamPanel.right{background:linear-gradient(135deg,#201304,#9b610b,#3a2104);clip-path:polygon(0 0,90% 0,100% 50%,90% 100%,0 100%);border-color:#ffd34d}
+.theme-gold .scorePanel{background:linear-gradient(180deg,#fffdf3,#efe4bd);color:#261700;border-top:5px solid #ffd34d;border-bottom:5px solid #9b610b}
+.theme-gold .scorePill{background:linear-gradient(90deg,#5c3605,#d99a22,#6b3a00);color:#fff;border:1px solid #ffeaa0;box-shadow:0 0 18px #ffd34d44}
+.theme-gold .batters,.theme-gold .bowlerPanel{background:linear-gradient(180deg,#241505,#4d2d06);border-color:#9b6b18}
+.theme-gold .summary-head,.theme-gold .scorecard-overlay .pref-header{background:linear-gradient(90deg,#211304,#8d590d,#211304);border-color:#ffd34d}
+.theme-gold .summary-team-head,.theme-gold .scorecard-overlay .pref-title{background:linear-gradient(90deg,#5c3605,#d99a22,#5c3605)}
+.theme-gold .ball{background:#5c3605;border-color:#d99a22}.theme-gold .ball.four,.theme-gold .ball.six{background:#d99a22;color:#160d00}
+
+/* THEME 5 — METALLIC CYAN: futuristic reference-inspired */
+.theme-theme5 .frame{background:linear-gradient(105deg,#070b12,#12334c 38%,#0a91b4 58%,#101722 100%);border:2px solid #58efff;box-shadow:0 15px 42px #000d,inset 0 1px #fff5}
+.theme-theme5 .frame:before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(135deg,transparent 0 18px,#ffffff08 19px 20px);pointer-events:none}
+.theme-theme5 .teamPanel{background:linear-gradient(145deg,#111923,#596875 52%,#0a91b4);clip-path:polygon(0 0,91% 0,100% 50%,91% 100%,0 100%)}
+.theme-theme5 .teamPanel.right{background:linear-gradient(215deg,#0d1822,#596875 48%,#0a91b4);clip-path:polygon(9% 0,100% 0,100% 100%,9% 100%,0 50%)}
+.theme-theme5 .scorePanel{background:linear-gradient(180deg,#f9fcff,#dce7ed);color:#0b1821;border-top:5px solid #58efff;border-bottom:5px solid #2f7088}
+.theme-theme5 .scorePill{background:linear-gradient(100deg,#263642,#0a91b4,#8befff);border-radius:3px;box-shadow:0 6px 20px #0008,inset 0 1px #fff9}
+.theme-theme5 .batters,.theme-theme5 .bowlerPanel{background:linear-gradient(180deg,#111c25,#263b49);border-color:#4e8294}
+.theme-theme5 .summary-head,.theme-theme5 .scorecard-overlay .pref-header{background:linear-gradient(90deg,#111923,#0a91b4,#263b49);border-color:#58efff}
+.theme-theme5 .summary-team-head,.theme-theme5 .scorecard-overlay .pref-title{background:linear-gradient(90deg,#263642,#0a91b4,#263642)}
+.theme-theme5 .ball{background:#263642;border-color:#58efff}.theme-theme5 .ball.four{background:#58efff;color:#06202a}.theme-theme5 .ball.six{background:#0a91b4}
+
+/* THEME 6 — EMERALD TACTICAL: diagonal military/sports panels */
+.theme-theme6 .frame{background:linear-gradient(115deg,#03130c,#07522f 40%,#1a8b55 63%,#03130c);border:2px solid #55ed9b;clip-path:polygon(1% 0,99% 0,100% 88%,97% 100%,3% 100%,0 88%);box-shadow:0 16px 45px #000c}
+.theme-theme6 .teamPanel{background:linear-gradient(145deg,#032218,#087845);clip-path:polygon(0 0,86% 0,100% 50%,86% 100%,0 100%)}
+.theme-theme6 .teamPanel.right{background:linear-gradient(215deg,#032218,#0cae62);clip-path:polygon(14% 0,100% 0,100% 100%,14% 100%,0 50%)}
+.theme-theme6 .scorePanel{background:linear-gradient(180deg,#effff6,#ccebd9);color:#05271a;border-left:3px solid #55ed9b;border-right:3px solid #0cae62}
+.theme-theme6 .scorePill{background:linear-gradient(90deg,#064b35,#0cae62);border-radius:2px;transform:skew(4deg);box-shadow:0 8px 20px #001b1088}
+.theme-theme6 .batters,.theme-theme6 .bowlerPanel{background:linear-gradient(135deg,#05271a,#087845);border-color:#35d37a}
+.theme-theme6 .summary-head,.theme-theme6 .scorecard-overlay .pref-header{background:linear-gradient(90deg,#032218,#087845,#0cae62);border-color:#55ed9b}
+.theme-theme6 .summary-team-head,.theme-theme6 .scorecard-overlay .pref-title{background:linear-gradient(90deg,#064b35,#0cae62)}
+.theme-theme6 .ball{background:#064b35;border-color:#55ed9b}.theme-theme6 .ball.four{background:#55ed9b;color:#032218}.theme-theme6 .ball.six{background:#0cae62}
+
+@keyframes neonSweep{0%{transform:translateX(-35%) rotate(0deg)}100%{transform:translateX(35%) rotate(0deg)}}
+@keyframes neonPulse{0%,100%{filter:brightness(1)}50%{filter:brightness(1.25)}}
+
+
+/* Universal broadcast-safe lower-third: slight lift from bottom and scale to available viewport. */
+@media (max-width:1100px){.overlay{width:96vw}.frame{height:clamp(112px,13vw,142px)}}
+@media (max-height:650px){body{padding-bottom:10px}.overlay{transform:scale(.88)}}
 </style>
+<script>
+(function(){
+  try{
+    const t=localStorage.getItem('brklive19_pending_theme')||'theme1';
+    document.documentElement.classList.add('theme-'+t);
+    document.body.dataset.theme=t;
+  }catch(e){}
+})();
+</script>
 </head>
 <body>
 <!-- ===== MAIN OVERLAY ===== -->
@@ -483,7 +1040,10 @@ body{display:flex;align-items:flex-end;justify-content:center;padding:2.4vw 3vw}
   <div id="bannerBowler" class="banner bowler"></div>
   <div id="bannerPartnership" class="banner partnership"></div>
   <div id="custom" class="custom"></div>
-  <div id="brkLogo" class="brkLogo" aria-label="BRKLIVE19">BRK<span>LIVE</span>19</div>
+  <div id="brkLogo" class="brkLogo" aria-label="BRKLIVE19">
+    <div class="brkLogoText">BRK<span>LIVE</span>19</div>
+    <div class="liveBadge"><span class="liveBlinkDot"></span><span class="liveBlinkText">LIVE</span></div>
+  </div>
 
   <div class="frame">
     <div class="teamPanel left"><div id="batTeam" class="teamName">TEAM A</div></div>
@@ -498,7 +1058,7 @@ body{display:flex;align-items:flex-end;justify-content:center;padding:2.4vw 3vw}
       <div class="scorePanel">
         <div id="matchTitle" class="matchTitle">League Match</div>
         <div id="scorePill" class="scorePill">0-0</div>
-        <div class="scoreMeta"><span id="overs">0.0 (0)</span><span id="inningsLabel">INNINGS 1</span></div>
+        <div class="scoreMeta"><span id="overs">0.0 (0)</span><span id="inningsLabel">1ST INNINGS</span></div>
         <div class="crrRrr"><span>CRR: <b id="crr">0.00</b></span><span>RRR: <b id="rrr">0.00</b></span></div>
       </div>
 
@@ -510,6 +1070,13 @@ body{display:flex;align-items:flex-end;justify-content:center;padding:2.4vw 3vw}
     </div>
   </div>
 </div>
+
+
+<!-- ===== DEDICATED THEME 5 REBUILD ===== -->
+<div id="theme5Lower"></div>
+<div id="theme5PlayerCard"></div>
+<div id="theme5Summary"></div>
+<div id="theme5Scorecard"></div>
 
 <!-- ===== FULL-FRAME MATCH SUMMARY ===== -->
 <div id="summaryOverlay" class="summary-overlay">
@@ -526,7 +1093,6 @@ body{display:flex;align-items:flex-end;justify-content:center;padding:2.4vw 3vw}
 
 <!-- ===== ANIMATION ===== -->
 <div id="animation" class="animation"><div id="animText" class="animText">FOUR!</div></div>
-
 <script type="module">
 // ============================================================
 // FIREBASE SETUP
@@ -538,6 +1104,10 @@ import{getDatabase,ref,onValue,set}from"https://www.gstatic.com/firebasejs/10.12
 const app=initializeApp(firebaseConfig),db=getDatabase(app),liveRef=ref(db,"liveScore");
 const $=id=>document.getElementById(id),num=v=>Number(v)||0;
 const requestedMatchId = new URLSearchParams(window.location.search).get("match") || "";
+const requestedIntroKey = Number(new URLSearchParams(window.location.search).get("intro")) || 0;
+const requestedIntro = requestedIntroKey > 0;
+const requestedTournament = new URLSearchParams(window.location.search).get("tournament") || "";
+const requestedTheme = new URLSearchParams(window.location.search).get("theme") || "";
 let previousEventSignature="",previousBroadcastSignature="",animationTimer=null,animationBooted=false;
 
 function oversFromBalls(b){b=num(b);return Math.floor(b/6)+"."+(b%6)}
@@ -548,8 +1118,10 @@ function escapeText(v){return String(v??"")}
 
 // ---- Apply theme (including custom colors) ----
 function applyTheme(theme, customColors){
-  const classes=["theme-neon","theme-green","theme-gold","theme-red","theme-rainbow","theme-theme2","theme-glass","theme-carbon","theme-stadium","theme-aurora","theme-metallic","theme-redblack"];
+  theme = theme || requestedTheme || "blue";
+  const classes=["theme-neon","theme-green","theme-gold","theme-red","theme-rainbow","theme-theme2","theme-theme3","theme-theme4","theme-theme5","theme-theme6","theme-glass","theme-carbon","theme-stadium","theme-aurora","theme-metallic","theme-redblack"];
   document.body.classList.remove(...classes);
+  document.body.classList.toggle("theme5-special", theme === "theme5");
 
   if (theme === "custom") {
     const c=customColors||{};
@@ -660,7 +1232,9 @@ function detectAnimation(d){
 
 function bannerText(d){
   const t=d.overlay||{};
-  const showTournament=!!(t.showTournament??d.showTournament??false);
+  const dismissedAt = Number(d.overlay && d.overlay.introDismissedAt) || 0;
+  const introActive = requestedIntro && requestedIntroKey > dismissedAt;
+  const showTournament=!!(introActive || t.showTournament || d.showTournament);
   const showMatch=!!(t.showMatch??d.showMatch??false);
   const showToss=!!(t.showToss??d.showToss??false);
   const showResult=!!(t.showResult??d.showResult??false);
@@ -669,8 +1243,9 @@ function bannerText(d){
 
   const bTournament=$("bannerTournament"), bMatch=$("bannerMatch"), bToss=$("bannerToss");
   const bResult=$("bannerResult"), bPlayer=$("bannerPlayer"), bPartnership=$("bannerPartnership"), bBowler=$("bannerBowler");
-  bTournament.textContent=escapeText(d.tournament||"TOURNAMENT");
-  bTournament.classList.toggle("show",showTournament&&!!d.tournament);
+  const tournamentName = d.tournament || requestedTournament;
+  bTournament.textContent=escapeText(tournamentName||"TOURNAMENT");
+  bTournament.classList.toggle("show",showTournament&&!!tournamentName);
 
   bMatch.textContent=escapeText((d.matchName||((d.teamA||"TEAM A")+" VS "+(d.teamB||"TEAM B"))));
   bMatch.classList.toggle("show",showMatch);
@@ -734,8 +1309,14 @@ function customLower(d){
 // ---- Center every lower-third graphic and keep the newest visible item nearest the bottom ----
 function stackFooterBanners(){
   const items=["bannerTournament","bannerMatch","bannerVenue","bannerToss","bannerResult","bannerPlayer","bannerBowler","bannerPartnership"].map(id=>$(id)).filter(el=>el&&el.classList.contains("show"));
-  let bottomOffset=14;
-  for(const el of items.slice().reverse()){el.style.bottom=bottomOffset+"px";el.style.left="50%";el.style.transform="translateX(-50%)";bottomOffset+=el.offsetHeight+8;}
+  let bottomOffset=0;
+  for(const el of items.slice().reverse()){
+    el.style.bottom=bottomOffset+"px";
+    el.style.left="50%";
+    el.style.top="auto";
+    el.style.transform="translateX(-50%)";
+    bottomOffset+=el.getBoundingClientRect().height+6;
+  }
 }
 
 // ---- Full-frame match summary ----
@@ -772,7 +1353,7 @@ function renderSummary(d){
     const bats=summaryTopBatters(inn), bowls=summaryTopBowlers(inn);
     const batRows=bats.length?bats.map(([n,x],i)=>`<tr><td>${i+1}. ${escapeText(n)}</td><td class="num">${num(x.runs)}</td><td class="num">${num(x.balls)}</td></tr>`).join(''):`<tr><td colspan="3">NO BATTING DATA</td></tr>`;
     const bowlRows=bowls.length?bowls.map(([n,x],i)=>`<tr><td>${i+1}. ${escapeText(n)}</td><td class="num">${oversFromBalls(x.balls)}</td><td class="num">${num(x.wickets)}</td><td class="num">${num(x.runs)}</td></tr>`).join(''):`<tr><td colspan="4">NO BOWLING DATA</td></tr>`;
-    return `<section class="summary-team"><div class="summary-team-head"><div class="name">${escapeText(team)}</div><div class="score">${summaryScore(inn)}</div></div><div class="summary-columns"><div class="summary-box"><div class="box-head">TOP 3 BATTER RUN SCORERS</div><table><thead><tr><th>BATTER</th><th class="num">RUNS</th><th class="num">BALLS</th></tr></thead><tbody>${batRows}</tbody></table></div><div class="summary-box"><div class="box-head">TOP 3 BOWLING FIGURES</div><table><thead><tr><th>BOWLER</th><th class="num">OVERS</th><th class="num">W</th><th class="num">R</th></tr></thead><tbody>${bowlRows}</tbody></table></div></div></section>`;
+    return `<section class="summary-team"><div class="summary-team-head"><div class="name">${escapeText(team)}</div><div class="score">${num(inn.runs)}/${num(inn.wickets)} • ${oversFromBalls(inn.legalBalls??inn.balls)} OV • ${num(inn.legalBalls??inn.balls)} BALLS</div></div><div class="summary-columns"><div class="summary-box"><div class="box-head">TOP 3 BATTER RUN SCORERS</div><table><thead><tr><th>BATTER</th><th class="num">RUNS</th><th class="num">BALLS</th></tr></thead><tbody>${batRows}</tbody></table></div><div class="summary-box"><div class="box-head">TOP 3 BOWLING FIGURES</div><table><thead><tr><th>BOWLER</th><th class="num">OVERS</th><th class="num">W</th><th class="num">R</th></tr></thead><tbody>${bowlRows}</tbody></table></div></div></section>`;
   }
   el.innerHTML=`<div class="summary-head"><div class="side a">${escapeText(d.teamA||'TEAM A')}</div><div class="center"><div class="title">MATCH SUMMARY</div><div class="sub">${escapeText(d.matchName||'MATCH')}</div></div><div class="side b">${escapeText(d.teamB||'TEAM B')}</div></div><div class="summary-meta"><div class="meta"><b>TOURNAMENT:</b> ${escapeText(d.tournament||'—')}</div><div class="meta"><b>TOSS:</b> ${escapeText(toss)}</div></div>${teamBlock(1,i1,team1)}${teamBlock(2,i2,team2)}<div class="${completed?'summary-result':'summary-result progress'}">${escapeText(status)}</div>`;
 }
@@ -833,6 +1414,44 @@ function toggleScorecardOverlay(show){
   document.getElementById('scorecardOverlay').classList.toggle('show', show);
 }
 
+
+// ============================================================
+// DEDICATED THEME 5 RENDERERS — built from uploaded references
+// ============================================================
+function t5On(id,on){const el=$(id);if(el)el.classList.toggle('show',!!on)}
+function t5Short(n,max=16){n=String(n||'—');return n.length>max?n.slice(0,max-1)+'…':n}
+function renderTheme5Lower(d,scoreVisible){
+  const on=String(d.theme||requestedTheme||'')==='theme5' && scoreVisible!==false;
+  if(!on){t5On('theme5Lower',false);return}
+  const bat=d.battingTeam||'A', bowl=d.bowlingTeam||(bat==='A'?'B':'A');
+  const b1=d.b1||d.striker||'STRIKER', b2=d.b2||d.nonStriker||'NON-STRIKER', bo=d.bowler||'BOWLER';
+  const s1=batterStats(d,b1),s2=batterStats(d,b2),bs=bowlerStats(d,bo);
+  const balls=oversFromBalls(d.legalBalls), thisOver=currentOverEvents(d).reduce((a,x)=>a+(Number(x.v)||0),0);
+  $('theme5Lower').innerHTML=`<div class="t5-top"><div class="t5-center"><div class="t5-innings">${num(d.innings||1)}${num(d.innings||1)===1?'st':num(d.innings||1)===2?'nd':'th'} innings</div><div class="t5-score">${escapeText(teamName(d,bat))} &nbsp; ${num(d.runs)}/${num(d.wickets)}</div><div class="t5-over">Over - ${balls} (${num(d.legalBalls)})</div></div></div><div class="t5-side t5-left"><div>Striker &nbsp;&nbsp; ${escapeText(t5Short(b1,13))} &nbsp; ${num(s1.runs)}(${num(s1.balls)})</div><div>Non-striker &nbsp; ${escapeText(t5Short(b2,13))} &nbsp; ${num(s2.runs)}(${num(s2.balls)})</div></div><div class="t5-side t5-right"><div>Bowler &nbsp; ${escapeText(t5Short(bo,14))} &nbsp; ${num(bs.wickets)}-${num(bs.runs)} (${oversFromBalls(bs.balls)})</div><div>This Over - ${thisOver}</div></div><div class="t5-bottom">C.R - ${calcCRR(d)} &nbsp;&nbsp;&nbsp; Toss - ${escapeText(d.tossWinner?teamName(d,d.tossWinner):'—')}</div><i class="t5-glow a"></i><i class="t5-glow b"></i>`;
+  t5On('theme5Lower',true);
+}
+function renderTheme5Player(d){
+  const t=d.overlay||{},p=t.playerLower||{}; const on=String(d.theme||requestedTheme||'')==='theme5'&&!!p.active;
+  if(!on){t5On('theme5PlayerCard',false);return}
+  const isB1=p.slot!=='b2',name=isB1?(d.b1||d.striker||p.player):(d.b2||d.nonStriker||p.player),st=batterStats(d,name),balls=num(st.balls),runs=num(st.runs),sr=balls?((runs/balls)*100).toFixed(2):'0.00';
+  $('theme5PlayerCard').innerHTML=`<div class="t5-player-head"><span>${escapeText(name||'Striker Name')}</span><span class="t5-player-team">${escapeText(teamName(d,d.battingTeam||'A'))}</span></div><div class="t5-player-body"><span><b class="t5-label">Run</b><b class="t5-value">${runs}</b></span><span><b class="t5-label">Ball</b><b class="t5-value">${balls}</b></span><span><b class="t5-label">4s</b><b class="t5-value">${num(st.fours)}</b></span><span><b class="t5-label">6s</b><b class="t5-value">${num(st.sixes)}</b></span><span><b class="t5-label">Strike Rate</b><b class="t5-value">${sr}</b></span></div>`;t5On('theme5PlayerCard',true)
+}
+function renderTheme5Summary(d){
+  const on=String(d.theme||requestedTheme||'')==='theme5'&&d.mode==='summary'; if(!on){t5On('theme5Summary',false);return}
+  const first=d.firstInnings||{},current=d,team1=first.team?teamName(d,first.team):teamName(d,'A'),team2=teamName(d,first.team==='A'?'B':'A');
+  const block=(title,inn,team)=>{const bats=Object.entries(inn.batters||{}).sort((a,b)=>num(b[1].runs)-num(a[1].runs)).slice(0,3);const bowls=Object.entries(inn.bowlers||{}).sort((a,b)=>num(b[1].wickets)-num(a[1].wickets)).slice(0,3);return `<section class="t5-summary-team"><div class="t5-teambar">${escapeText(team||title)}</div><div class="t5-teambox"><div class="t5-col">${bats.length?bats.map(([n,x])=>`<span>${escapeText(n)}</span><b>${num(x.runs)}(${num(x.balls)})</b>`).join(''):'<span>Player A</span><b>Not Yet</b><span>Player B</span><b>Not Yet</b><span>Player C</span><b>Not Yet</b>'}</div><div class="t5-col">${bowls.length?bowls.map(([n,x])=>`<span>${escapeText(n)}</span><b>${num(x.wickets)}-${num(x.runs)} (${oversFromBalls(x.balls)})</b>`).join(''):'<span>Bower A</span><b>Not Yet</b><span>Bower B</span><b>Not Yet</b><span>Bower C</span><b>Not Yet</b>'}</div></div></section>`};
+  const status=d.status==='completed'?(d.resultText||d.matchResult||'MATCH COMPLETED'):`Match in Progress &nbsp;&nbsp;&nbsp; ${escapeText(teamName(d,d.battingTeam||'A'))} ${num(d.runs)}/${num(d.wickets)} Over ${oversFromBalls(d.legalBalls)}`;
+  $('theme5Summary').innerHTML=`<div class="t5-summary-shell"><div class="t5-summary-head"><div class="t5-summary-side">${escapeText(d.teamA||'Team A')}</div><div class="t5-summary-title">MATCH<br>SUMMARY</div><div class="t5-summary-side">${escapeText(d.teamB||'Team B')}</div></div>${block('TEAM A',first.team?first:{batters:{},bowlers:{}},team1)}${block('TEAM B',first.team?current:{batters:{},bowlers:{}},team2)}<div class="t5-summary-status">${status}</div></div>`;t5On('theme5Summary',true)
+}
+function renderTheme5Scorecard(d){
+  const on=String(d.theme||requestedTheme||'')==='theme5'&&['scorecard','scorecard1','scorecard2'].includes(String(d.mode||''));if(!on){t5On('theme5Scorecard',false);return}
+  const first=String(d.mode)==='scorecard1'||(String(d.mode)==='scorecard'&&num(d.innings)===1);const inn=first?(num(d.innings)===1?d:(d.firstInnings||{})):d;const batTeam=inn.team?teamName(d,inn.team):teamName(d,d.battingTeam||'A');const bowlTeam=batTeam===d.teamA?d.teamB:d.teamA;
+  const names=[...Object.keys(inn.batters||{})];(inn.team==='A'?d.xiA:d.xiB||[]).forEach(n=>{if(n&&!names.includes(n))names.push(n)});const bats=names.slice(0,11);const batRows=Array.from({length:11},(_,i)=>{const n=bats[i],x=(inn.batters||{})[n]||{};return `<div class="t5-bat-row"><b>${i+1}</b><span>${escapeText(n||'')}</span><span>${escapeText(x.out?'OUT':'Not out')}</span><b>${n?num(x.runs):''}</b><b>${n?num(x.balls):''}</b></div>`}).join('');const bowls=Object.entries(inn.bowlers||{}).slice(0,6);const bowlRows=Array.from({length:6},(_,i)=>{const z=bowls[i],n=z?.[0]||'',x=z?.[1]||{};return `<div class="t5-bowl-row"><b>${i+1}</b><span>${escapeText(n)}</span><b>${n?oversFromBalls(x.balls):''}</b><b>${n?num(x.maidens):''}</b><b>${n?num(x.wickets):''}</b><b>${n?num(x.runs):''}</b></div>`}).join('');
+  const ex=num(inn.extras),overs=oversFromBalls(inn.legalBalls??inn.balls),toss=d.tossWinner?teamName(d,d.tossWinner):'—';
+  $('theme5Scorecard').innerHTML=`<div class="t5-sc-shell"><div class="t5-sc-header"><div class="t5-sc-team">${escapeText(batTeam)}</div><div class="t5-sc-mid">${escapeText(d.tournament||'Cricket')}<br>${escapeText(d.venue||'Tournament')}</div><div class="t5-sc-team" style="justify-content:flex-end">${first?'1st innings':'2nd innings'}</div></div><div class="t5-sc-main"><div class="t5-bat"><div class="t5-bat-head"><span>Sl No.</span><span>Player Name</span><span>Dismissal</span><span>Run</span><span>Ball</span></div>${batRows}</div><div class="t5-bowl"><div class="t5-bowl-head"><span>Sl No.</span><span>BOWLER Name</span><span>Over</span><span>Maiden</span><span>Wicket</span><span>Run</span></div>${bowlRows}</div></div><div class="t5-sc-total"><span>Extras- ${ex}</span><span class="t5-score-box">${num(inn.runs)}/${num(inn.wickets)}</span><span>Over - ${overs} (${num(inn.legalBalls??inn.balls)})</span></div><div class="t5-sc-footer"><div class="t5-footbox">${escapeText(d.matchName||`${d.teamA||'TEAM A'} vs ${d.teamB||'TEAM B'}`)}</div><div class="t5-footbox">Toss: ${escapeText(toss)}</div><div class="t5-footbox">${d.status==='completed'?escapeText(d.resultText||d.matchResult||'MATCH RESULT'):'LIVE SCORE'}</div></div></div>`;t5On('theme5Scorecard',true)
+}
+function renderTheme5All(d,scoreVisible){renderTheme5Lower(d,scoreVisible);renderTheme5Player(d);renderTheme5Summary(d);renderTheme5Scorecard(d)}
+
 // ============================================================
 // FIREBASE LISTENER
 // ============================================================
@@ -840,19 +1459,23 @@ onValue(liveRef, snap => {
  const d=snap.val();
  if(!d) return;
  if(requestedMatchId && d.matchId && d.matchId !== requestedMatchId) return;
- const scoreVisible = d.overlay && d.overlay.scoreVisible !== undefined ? d.overlay.scoreVisible : true;
- $("overlay").classList.toggle("hidden", scoreVisible === false);
- applyTheme(d.theme, d.customColors);
+ const dismissedAt = Number(d.overlay && d.overlay.introDismissedAt) || 0;
+ const introActive = requestedIntro && requestedIntroKey > dismissedAt;
+ const scoreVisible = introActive ? false : (d.overlay && d.overlay.scoreVisible !== undefined ? d.overlay.scoreVisible : true);
+  $("overlay").classList.toggle("hidden", scoreVisible === false);
+ applyTheme(d.theme || requestedTheme || "blue", d.customColors);
+ const isTheme5=(d.theme || requestedTheme || "blue")==="theme5";
+ renderTheme5All(d,scoreVisible);
 
  // Full-frame modes
- const summaryOn = d.mode === 'summary';
+ const summaryOn = d.mode === 'summary' && !isTheme5;
  if(summaryOn){
    renderSummary(d);
    $("summaryOverlay").classList.add('show');
  }else{
    $("summaryOverlay").classList.remove('show');
  }
- if(d.mode === 'scorecard' || d.mode === 'scorecard1' || d.mode === 'scorecard2'){
+ if(!isTheme5 && (d.mode === 'scorecard' || d.mode === 'scorecard1' || d.mode === 'scorecard2')){
    renderFullScorecard(d);
    toggleScorecardOverlay(true);
  } else {
@@ -885,6 +1508,7 @@ onValue(liveRef, snap => {
    $("inningsLabel").textContent = "MATCH DECIDED";
  } else {
    $("scorePill").textContent = runs+"-"+w;
+   $("scorePill").classList.remove("completed");
    $("scorePill").style.background = "";
    $("scorePill").style.color = "";
    $("inningsLabel").textContent = "INNINGS "+num(d.innings||1);
@@ -906,3 +1530,132 @@ onValue(liveRef, snap => {
 </script>
 </body>
 </html>
+<style>
+/* ================================================================
+   FINAL THEME 5 REBUILD — based only on the user's five Theme 5
+   reference screens: lower third, innings scoreboard, summary,
+   player status and display screen.
+   ================================================================ */
+body.theme-theme5{background:#000!important}
+body.theme-theme5 .frame{
+  height:180px!important;
+  background:#000 url('assets/theme5-reference/lower third overlayer.png') center/100% 100% no-repeat!important;
+  border:0!important;box-shadow:none!important;overflow:visible!important;
+}
+body.theme-theme5 .frame:before,body.theme-theme5 .frame:after{display:none!important}
+body.theme-theme5 .teamPanel{background:transparent!important;border:0!important;box-shadow:none!important;clip-path:none!important;width:25%!important;color:#111!important}
+body.theme-theme5 .teamPanel.right{background:transparent!important}
+body.theme-theme5 .teamPanel .teamName{color:#f2f2f2!important;font-size:clamp(18px,2.1vw,34px)!important;text-shadow:0 2px 5px #000!important}
+body.theme-theme5 .content{left:8%!important;right:8%!important;bottom:8px!important;height:145px!important;grid-template-columns:30% 40% 30%!important;z-index:10!important}
+body.theme-theme5 .batters,body.theme-theme5 .bowlerPanel,body.theme-theme5 .scorePanel{background:transparent!important;border:0!important;box-shadow:none!important;color:#fff!important}
+body.theme-theme5 .batterName,body.theme-theme5 .bowlerName{color:#111!important;font-weight:1000!important}
+body.theme-theme5 .scorePanel{color:#fff!important}
+body.theme-theme5 .scorePill{background:transparent!important;border:0!important;box-shadow:none!important;border-radius:0!important;color:#fff!important;font-size:clamp(26px,3vw,54px)!important}
+body.theme-theme5 .scoreMeta,body.theme-theme5 .crrRrr{color:#d8d8d8!important}
+body.theme-theme5 .ball{background:#101418!important;border:1px solid #5ddde5!important;color:#fff!important}
+body.theme-theme5 .ball.four{background:#7dc9db!important;color:#111!important}.theme-theme5 .ball.six{background:#d6c800!important;color:#111!important}.theme-theme5 .ball.wicket{background:#d7283c!important}.theme-theme5 .ball.extra{background:#a6e3ed!important;color:#111!important}
+
+/* Theme 5 has its own angular slide + cyan pulse animation. */
+@keyframes theme5LowerIn{0%{opacity:0;transform:translateY(120px) scale(.96);filter:brightness(.35)}65%{opacity:1;transform:translateY(-8px) scale(1.01);filter:brightness(1.35)}100%{opacity:1;transform:translateY(0) scale(1);filter:brightness(1)}}
+@keyframes theme5CyanPulse{0%,100%{filter:drop-shadow(0 0 0 #55dfe8)}50%{filter:drop-shadow(0 0 14px #55dfe8)}}
+body.theme-theme5 .overlay.show .frame,body.theme-theme5 .overlay.show .frame{animation:theme5LowerIn .65s cubic-bezier(.2,.85,.2,1),theme5CyanPulse 2.6s ease-in-out infinite .7s}
+
+/* Match Summary: separate layout based on the supplied matchsummary.png */
+body.theme-theme5 .summary-overlay{background:#000!important;padding:0!important}
+body.theme-theme5 .summary-shell{width:72%!important;margin:0 auto!important;padding:2.5% 0 4%!important;gap:14px!important}
+body.theme-theme5 .summary-head{height:85px!important;min-height:85px!important;background:transparent!important;border:0!important;box-shadow:none!important}
+body.theme-theme5 .summary-head .side{background:linear-gradient(180deg,#f2f2f2,#d5d5d5)!important;color:#101010!important;border-radius:40px!important;font-size:clamp(18px,2.2vw,36px)!important}
+body.theme-theme5 .summary-head .center{background:#05070a!important;clip-path:polygon(10% 0,90% 0,100% 50%,90% 100%,10% 100%,0 50%)!important;color:#fff!important}
+body.theme-theme5 .summary-head .center .title{font-size:clamp(20px,2.7vw,48px)!important}
+body.theme-theme5 .summary-team{background:#000!important;border:0!important;box-shadow:none!important}
+body.theme-theme5 .summary-team-head{background:linear-gradient(90deg,#8ed1e3,#77c2d7)!important;color:#071015!important;border:0!important;border-radius:28px 28px 0 0!important}
+body.theme-theme5 .summary-team-head .score{color:#071015!important}
+body.theme-theme5 .summary-columns{padding:10px 0!important;background:#000!important}
+body.theme-theme5 .summary-box{background:#020508!important;border:5px solid #80cde2!important;border-radius:0!important;color:#78c6df!important}
+body.theme-theme5 .summary-box .box-head{background:transparent!important;color:#78c6df!important;font-size:clamp(13px,1.25vw,24px)!important}
+body.theme-theme5 .summary-box td,body.theme-theme5 .summary-box th{color:#78c6df!important;font-weight:900!important}
+body.theme-theme5 .summary-status,body.theme-theme5 .summary-result{background:#e4e4e4!important;color:#111!important;border:0!important;border-radius:26px!important}
+body.theme-theme5 .summary-overlay.show{animation:theme5LowerIn .5s ease both}
+
+/* Full innings-wise scoreboard: separate white panel, cyan/yellow frame from reference. */
+body.theme-theme5 .scorecard-overlay{background:#000!important;padding:0!important}
+body.theme-theme5 .scorecard-overlay .card{width:100vw!important;height:100vh!important;max-width:none!important;max-height:none!important;padding:10px 18px!important;background:#000 url('assets/theme5-reference/innings wise full scoreboard.png') center/100% 100% no-repeat!important;border:0!important;box-shadow:none!important;border-radius:0!important}
+body.theme-theme5 .scorecard-overlay #scContent{padding:1% 3%!important;gap:8px!important}
+body.theme-theme5 .scorecard-overlay .pref-header{background:transparent!important;border:0!important;height:12%!important}
+body.theme-theme5 .scorecard-overlay .pref-team{background:transparent!important;color:#101010!important;font-size:clamp(28px,4.8vw,80px)!important}
+body.theme-theme5 .scorecard-overlay .pref-vs{background:transparent!important;color:#fff!important;border:0!important}
+body.theme-theme5 .scorecard-overlay .pref-innings{color:#111!important}
+body.theme-theme5 .scorecard-overlay .pref-main{grid-template-columns:58% 42%!important;gap:12px!important;padding:3% 1% 1%!important}
+body.theme-theme5 .scorecard-overlay .pref-panel{background:rgba(248,248,248,.92)!important;border:0!important;border-radius:0!important;box-shadow:none!important}
+body.theme-theme5 .scorecard-overlay .pref-title{background:transparent!important;color:#438ba2!important;border:0!important;font-size:clamp(14px,1.25vw,24px)!important}
+body.theme-theme5 .scorecard-overlay .pref-table th{background:transparent!important;color:#438ba2!important;border:0!important}
+body.theme-theme5 .scorecard-overlay .pref-table td{color:#222!important;border-color:transparent!important;font-weight:900!important}
+body.theme-theme5 .scorecard-overlay .pref-table .blue-total td{background:#111820!important;color:#61cbe6!important}
+body.theme-theme5 .scorecard-overlay .pref-table .dark-total td{background:#e8e8e8!important;color:#111!important}
+body.theme-theme5 .scorecard-overlay .pref-table .extra-row td{background:#e8e8e8!important;color:#111!important}
+body.theme-theme5 .scorecard-overlay .pref-footer{background:transparent!important;border:0!important;color:#5dc4df!important;justify-content:center!important;font-size:clamp(18px,2vw,36px)!important}
+body.theme-theme5 .scorecard-overlay.show{animation:theme5LowerIn .55s ease both}
+
+/* Tournament / display text gets the supplied display-screen treatment. */
+body.theme-theme5 .broadcast-card,body.theme-theme5 .custom-text-overlay{background:#000!important}
+body.theme-theme5 .broadcast-card .text,body.theme-theme5 .custom-text-overlay .text{background:linear-gradient(90deg,#8fd2e4,#78c2d7)!important;color:#081015!important;border-radius:34px!important;padding:16px 42px!important;font-weight:1000!important;letter-spacing:.04em!important;box-shadow:none!important}
+</style>
+<style>
+/* FINAL DISTINCTIVE OVERRIDES */
+.theme-theme2 .frame{background:linear-gradient(135deg,#12002b,#3d0878 45%,#05082e);border:1px solid #ff44f3;box-shadow:0 0 30px #ff00ee55,inset 0 0 30px #5c00ff33}
+.theme-theme2 .teamPanel,.theme-theme2 .teamPanel.right{background:linear-gradient(135deg,#250052,#7a12d8);clip-path:polygon(0 8%,92% 0,100% 50%,92% 100%,0 92%)}
+.theme-theme2 .scorePanel{background:#09071a;color:#fff;border:2px solid #ff44f3}
+.theme-theme2 .scorePill{background:linear-gradient(90deg,#ff00c8,#6d35ff);border-radius:20px;box-shadow:0 0 24px #ff00c866}
+.theme-theme2 .batters,.theme-theme2 .bowlerPanel{background:#100726;border-color:#8d36ff}
+.theme-theme2 .summary-head,.theme-theme2 .scorecard-overlay .pref-header{background:linear-gradient(90deg,#21004b,#8b13c7,#24105d);border-color:#ff44f3}
+.theme-theme2 .summary-team-head,.theme-theme2 .scorecard-overlay .pref-title{background:linear-gradient(90deg,#5d08a6,#ff24d5)}
+
+.theme-theme3 .frame{background:linear-gradient(110deg,#240006,#a00b19 45%,#260008);border:3px solid #ff4057;border-radius:3px;box-shadow:0 12px 38px #000d}
+.theme-theme3 .teamPanel{background:linear-gradient(145deg,#4b0008,#e31e35);clip-path:polygon(0 0,94% 0,86% 50%,94% 100%,0 100%)}
+.theme-theme3 .teamPanel.right{background:linear-gradient(215deg,#4b0008,#e31e35);clip-path:polygon(6% 0,100% 0,100% 100%,6% 100%,14% 50%)}
+.theme-theme3 .scorePanel{background:linear-gradient(180deg,#fff,#f0dfe1);color:#350008;border-top:6px solid #e31e35;border-bottom:6px solid #7a0010}
+.theme-theme3 .scorePill{background:linear-gradient(90deg,#65000d,#e31e35);border-radius:0;transform:skew(-8deg);box-shadow:0 7px 18px #4b000899}
+.theme-theme3 .batters,.theme-theme3 .bowlerPanel{background:linear-gradient(180deg,#350008,#79000f);border-color:#ff4057}
+.theme-theme3 .summary-head,.theme-theme3 .scorecard-overlay .pref-header{background:linear-gradient(90deg,#4b0008,#d5162c,#4b0008);border-color:#ff4057}
+.theme-theme3 .summary-team-head,.theme-theme3 .scorecard-overlay .pref-title{background:linear-gradient(90deg,#7a0010,#e31e35)}
+
+/* distinct motion per theme */
+.theme-blue .frame{animation:blueFloat 5s ease-in-out infinite}
+.theme-green .frame{animation:greenGlow 3s ease-in-out infinite}
+.theme-gold .frame{animation:goldShine 4s linear infinite}
+.theme-theme5 .frame{animation:metalPulse 3.2s ease-in-out infinite}
+.theme-theme6 .frame{animation:emeraldPulse 3s ease-in-out infinite}
+@keyframes blueFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-1px)}}
+@keyframes greenGlow{0%,100%{box-shadow:0 10px 35px #001b1099}50%{box-shadow:0 10px 35px #00d66a44,0 0 20px #55ed9b44}}
+@keyframes goldShine{0%,100%{filter:brightness(1)}50%{filter:brightness(1.14)}}
+@keyframes metalPulse{0%,100%{filter:brightness(1)}50%{filter:brightness(1.16)}}
+@keyframes emeraldPulse{0%,100%{filter:saturate(1)}50%{filter:saturate(1.3)}}
+</style>
+
+<style id="fit-lower-third-screen-fix">
+/* UNIVERSAL BROADCAST SAFE-FIT: scale the complete lower third from a 1920x1080 design grid. */
+html,body{width:100vw!important;height:100vh!important;min-width:0!important;min-height:0!important;}
+body{display:flex!important;align-items:flex-end!important;justify-content:center!important;padding:0!important;overflow:hidden!important;}
+.overlay{position:fixed!important;left:50%!important;right:auto!important;bottom:0!important;top:auto!important;transform:translateX(-50%)!important;
+  width:min(1760px,calc(100vw - 20px))!important;max-width:none!important;margin:0!important;
+  height:calc(min(1760px,calc(100vw - 20px))*0.0806818)!important;
+  max-height:13.15vh!important;
+}
+.overlay .frame{width:100%!important;height:100%!important;min-height:0!important;max-height:none!important;}
+/* Keep all internal text proportional to the actual lower-third size. */
+.overlay .teamPanel{height:100%!important;}
+.overlay .content{height:100%!important;}
+.overlay .brkLogo{display:none!important;}
+.target,.banner,.custom,.animation{
+  left:50%!important;right:auto!important;top:auto!important;bottom:0!important;
+  width:min(1760px,calc(100vw - 20px))!important;max-width:none!important;margin:0!important;
+  height:calc(min(1760px,calc(100vw - 20px))*0.0806818)!important;
+  max-height:13.15vh!important;
+  transform:translateX(-50%)!important;
+}
+/* Stacked banners remain bottom-centred; JS can raise older banners above the active one. */
+@media(max-aspect-ratio:4/5){
+  .overlay{width:calc(100vw - 8px)!important;height:calc((100vw - 8px)*0.0806818)!important;max-height:15vh!important;}
+  .target,.banner,.custom,.animation{width:calc(100vw - 8px)!important;height:calc((100vw - 8px)*0.0806818)!important;max-height:15vh!important;}
+}
+</style>
