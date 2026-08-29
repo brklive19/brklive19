@@ -66,6 +66,8 @@ textarea{min-height:130px;resize:vertical}
 .themeGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
 .theme{padding:12px;border-radius:12px;border:2px solid #2c3755;background:#12192b;color:#fff;font-weight:800;cursor:pointer}
 .theme.active{border-color:var(--cyan);box-shadow:0 0 15px #00eaff55}
+.theme-ipl,.theme-t20world,.theme-odiworld,.theme-champions,.theme-sa,.theme-delhi{position:relative;overflow:hidden;background-size:200% 100%;animation:themeMove 3s linear infinite}.theme-ipl{background:linear-gradient(135deg,#0b2c8a,#1a8cff,#e4a900)}.theme-t20world{background:linear-gradient(135deg,#06143f,#0e70d8,#50dcff)}.theme-odiworld{background:linear-gradient(135deg,#064b95,#19a9ff,#f1c600)}.theme-champions{background:linear-gradient(135deg,#171a67,#6d38d4,#f1c63d)}.theme-sa{background:linear-gradient(135deg,#07582c,#0bb45d,#e3c400)}.theme-delhi{background:linear-gradient(135deg,#72102e,#d92e5c,#f0b600)}@keyframes themeMove{0%{background-position:0 0}50%{background-position:100% 0}100%{background-position:0 0}}
+.theme-ipl,.theme-t20world,.theme-odiworld,.theme-champions,.theme-sa,.theme-delhi{box-shadow:inset 0 1px #fff7,0 0 18px #0008}.theme-ipl:after,.theme-t20world:after,.theme-odiworld:after,.theme-champions:after,.theme-sa:after,.theme-delhi:after{content:"";position:absolute;inset:-40% -15%;background:linear-gradient(110deg,transparent 35%,#fff4 48%,transparent 60%);transform:translateX(-70%);animation:themeSweep 2.8s ease-in-out infinite;pointer-events:none}@keyframes themeSweep{0%,30%{transform:translateX(-70%)}70%,100%{transform:translateX(70%)}}
 .modal{display:none;position:fixed;inset:0;background:#000c;z-index:100;align-items:center;justify-content:center;padding:16px}
 .modal.show{display:flex}
 .modalBox{width:min(560px,100%);max-height:90vh;overflow:auto;background:#11182a;border:1px solid #3b4d75;border-radius:18px;padding:18px;box-shadow:0 25px 80px #000}
@@ -118,7 +120,30 @@ textarea{min-height:130px;resize:vertical}
   .match-selector{flex-direction:column;align-items:stretch}
   .match-selector .btn{width:100%}
 }
+
+
+
+
 </style>
+<script>
+  if (!localStorage.getItem('brklive_user')) {
+    window.location.replace('./index.html?login=1');
+  }
+</script>
+<script>
+  // Required flow: Scorer button -> Theme Selection -> Scorer Control.
+  (function(){
+    const p = new URLSearchParams(window.location.search);
+    const allowed = ['blue','neon','green','gold','theme2','theme3','theme4','theme5','theme6','glass','carbon','stadium','aurora','metallic','redblack','rainbow','custom'];
+    const theme = p.get('theme') || localStorage.getItem('brklive19_pending_theme') || '';
+    if (!allowed.includes(theme)) {
+      const q = new URLSearchParams();
+      const match = p.get('match') || localStorage.getItem('brklive19_theme_match') || '';
+      if (match) q.set('match', match);
+      window.location.replace('./themes.html' + (q.toString() ? '?' + q.toString() : ''));
+    }
+  })();
+</script>
 </head>
 <body>
 
@@ -126,19 +151,12 @@ textarea{min-height:130px;resize:vertical}
   <a href="./index.html" style="display:inline-block;padding:10px 16px;border:1px solid var(--line);border-radius:10px;color:var(--text);text-decoration:none;background:#11182a;">← Home / Tournament</a>
 </div>
 
+<div style="position:sticky;top:0;z-index:1000;display:flex;justify-content:flex-end;padding:8px 0;background:linear-gradient(180deg,#070b16 82%,transparent);">
+<button class="btn custom" style="width:auto;padding:11px 20px;font-size:14px;box-shadow:0 6px 20px #0008;" onclick="openThemePage()">🎨 OPEN THEME SECTION</button>
+</div>
 <h1>🏏 BRKLIVE19 V4</h1>
 <div class="sub">Live Cricket Scorer • Auto‑Save to Firebase</div>
   <div id="status" class="status ok">🟡 Initializing scorer…</div>
-<div class="card" style="margin-top:10px;">
-  <h2>🔗 Match Web / Streaming Overlay Link</h2>
-  <div class="mini">Copy this link and paste it into OBS, vMix, PRISM, CameraFi or another browser-source streaming app.</div>
-  <div style="display:flex;gap:8px;margin-top:8px;align-items:center;flex-wrap:wrap;">
-    <input id="streamOverlayUrl" readonly style="flex:1;min-width:220px;" value="Loading overlay link...">
-    <button class="btn blue" style="width:auto;padding:11px 18px;" onclick="copyStreamOverlayUrl()">📋 COPY LINK</button>
-    <button class="btn good" style="width:auto;padding:11px 18px;" onclick="openStreamOverlay()">↗ OPEN OVERLAY</button>
-  </div>
-</div>
-
 <!-- ===== MATCH SELECTOR ===== -->
 <div class="card">
   <div class="match-selector">
@@ -219,6 +237,9 @@ textarea{min-height:130px;resize:vertical}
 <div class="card">
   <h2>📺 Overlay Controller</h2>
   <div class="mini">All scoring and overlay controls use the same Firebase <b>liveScore</b> record.</div>
+  <div style="display:flex;gap:10px;align-items:center;justify-content:flex-end;margin-top:10px;flex-wrap:wrap;">
+    <button class="btn custom" style="width:auto;padding:10px 18px;" onclick="openThemePage()">🎨 OPEN THEME SECTION</button>
+  </div>
 
   <h3 style="color:var(--cyan);margin-top:14px">🖥 Overlay Mode</h3>
   <div class="g4">
@@ -253,34 +274,6 @@ textarea{min-height:130px;resize:vertical}
     <button class="btn wick" onclick="broadcastEvent('RUN OUT')">🏃 RUN OUT</button>
   </div>
 
-  <h3 style="color:var(--cyan);margin-top:14px">🎨 3D Overlay Theme</h3>
-  <div class="themeGrid">
-    <button class="theme" data-theme="blue" onclick="setTheme('blue')">🔵 BLUE</button>
-    <button class="theme" data-theme="neon" onclick="setTheme('neon')">🟣 NEON</button>
-    <button class="theme" data-theme="green" onclick="setTheme('green')">🟢 GREEN</button>
-    <button class="theme" data-theme="gold" onclick="setTheme('gold')">🟡 GOLD</button>
-    <button class="theme" data-theme="red" onclick="setTheme('red')">🔴 RED</button>
-    <button class="theme" data-theme="rainbow" onclick="setTheme('rainbow')">🌈 RAINBOW</button>
-    <button class="theme" data-theme="theme2" onclick="setTheme('theme2')">⭐ THEME 2</button>
-  </div>
-
-  <h3 style="color:var(--cyan);margin-top:14px;">🎨 Custom Overlay Colors</h3>
-  <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:6px;">
-    <label style="display:flex;align-items:center;gap:6px;font-size:13px;color:var(--text-secondary);">
-      Primary: <input type="color" id="customPrimaryColor" value="#00b8e8" style="width:60px;height:40px;padding:2px;border-radius:8px;background:transparent;border:1px solid var(--line);cursor:pointer;">
-    </label>
-    <label style="display:flex;align-items:center;gap:6px;font-size:13px;color:var(--text-secondary);">
-      Secondary: <input type="color" id="customSecondaryColor" value="#ffd900" style="width:60px;height:40px;padding:2px;border-radius:8px;background:transparent;border:1px solid var(--line);cursor:pointer;">
-    </label>
-    <label style="display:flex;align-items:center;gap:6px;font-size:13px;color:var(--text-secondary);">
-      Deep Blue: <input type="color" id="customDeepBlueColor" value="#071a58" style="width:60px;height:40px;padding:2px;border-radius:8px;background:transparent;border:1px solid var(--line);cursor:pointer;">
-    </label>
-    <label style="display:flex;align-items:center;gap:6px;font-size:13px;color:var(--text-secondary);">
-      Summary Background: <input type="color" id="customSummaryBgColor" value="#07101f" style="width:60px;height:40px;padding:2px;border-radius:8px;background:transparent;border:1px solid var(--line);cursor:pointer;">
-    </label>
-    <button class="btn custom" style="flex:0 1 auto;padding:8px 18px;" onclick="setCustomTheme()">🎨 Apply Custom</button>
-    <button class="btn dark" style="flex:0 1 auto;padding:8px 18px;" onclick="setTheme('blue')">↺ Reset to Blue</button>
-  </div>
 </div>
 
 <!-- ===== MODALS ===== -->
@@ -450,7 +443,7 @@ textarea{min-height:130px;resize:vertical}
       overlay:{
         showTournament:false, showVenue:false, showMatch:false, showToss:false, showResult:false, showBowler:false,
         positions:{ tournament:"upper", match:"middle", toss:"middle", custom:"upper" },
-        scoreVisible:true,
+        scoreVisible:true, intro:false, introDismissedAt:0,
         playerLower:{ active:false, slot:"", player:"" },
         partnership:{ active:false }
       },
@@ -461,6 +454,11 @@ textarea{min-height:130px;resize:vertical}
   let S = createDefaultState();
   let syncing = false;
   let currentMatchId = null;
+
+  const urlTheme = new URLSearchParams(window.location.search).get('theme') || localStorage.getItem('brklive19_pending_theme') || '';
+  if (['blue','neon','green','gold','theme2','theme3','theme4','theme5','theme6','glass','carbon','stadium','aurora','metallic','redblack','rainbow','custom'].includes(urlTheme)) S.theme = urlTheme;
+  localStorage.removeItem('brklive19_pending_theme');
+  const overlayIntroKey = Date.now();
 
   // ---- Load match bridge from localStorage ----
   function loadMatchBridge(matchId) {
@@ -486,6 +484,7 @@ textarea{min-height:130px;resize:vertical}
       S.history = []; S.events = []; S.batters = {}; S.bowlers = {};
       S.striker = ''; S.nonStriker = ''; S.bowler = ''; S.target = 0;
       S.matchWinner=''; S.matchResult=''; S.resultText=''; S.status='live';
+      S.overlay = { ...(S.overlay||{}), showTournament:true, scoreVisible:false, intro:true };
       return true;
     } catch (e) { console.error('Match bridge error:', e); return false; }
   }
@@ -563,7 +562,7 @@ textarea{min-height:130px;resize:vertical}
     S.firstInnings = { team:'', runs:0, wickets:0, balls:0, extras:0 };
     S.secondInningsStarted = false;
     S.pendingSecondInnings = false;
-    S.overlay = { showTournament:false, showVenue:false, showMatch:false, showToss:false, showResult:false, showBowler:false, positions:{}, scoreVisible:true, playerLower:{active:false,slot:'',player:''}, partnership:{active:false} };
+    S.overlay = { showTournament:true, showVenue:false, showMatch:false, showToss:false, showResult:false, showBowler:false, positions:{}, scoreVisible:false, intro:true, playerLower:{active:false,slot:'',player:''}, partnership:{active:false} };
     saveNow();
     render();
     toast('Match loaded: ' + match.teamAName + ' vs ' + match.teamBName);
@@ -599,7 +598,10 @@ textarea{min-height:130px;resize:vertical}
       m.bowler = S.bowler;
       m.totalRuns = Number(S.runs) || 0;
       m.totalWickets = Number(S.wickets) || 0;
+      m.totalBalls = Number(S.legalBalls || 0);
       m.totalOvers = Number((Number(S.legalBalls || 0) / 6).toFixed(1));
+      m.firstInnings = JSON.parse(JSON.stringify(S.firstInnings || {}));
+      if (S.innings === 2) m.secondInnings = {team:S.battingTeam,runs:Number(S.runs)||0,wickets:Number(S.wickets)||0,balls:Number(S.legalBalls)||0,extras:Number(S.extras)||0};
       m.currentInnings = S.innings;
       m.target = S.target || null;
       m.status = S.status || "live";
@@ -770,7 +772,7 @@ textarea{min-height:130px;resize:vertical}
       };
       S.target = S.runs + 1;
       S.pendingSecondInnings = true;
-      S.events.push(`🏁 INNINGS 1 COMPLETE — ${S.runs}/${S.wickets}`);
+      S.events.push(`🏁 1ST INNINGS COMPLETE — ${S.runs}/${S.wickets}`);
       await save();
       render();
       // Show second innings modal
@@ -814,7 +816,7 @@ textarea{min-height:130px;resize:vertical}
     S.batters = {}; S.bowlers = {};
     S.striker = ""; S.nonStriker = ""; S.bowler = "";
     S.started = false;
-    S.events.push(`▶ SECOND INNINGS — Target ${S.target}`);
+    S.events.push(`▶ 2ND INNINGS — Target ${S.target}`);
     await save();
     render();
     setTimeout(openStart, 300);
@@ -1016,6 +1018,8 @@ textarea{min-height:130px;resize:vertical}
       showBowler:!!S.overlay.showBowler,
       positions:S.overlay.positions||{tournament:"upper",match:"middle",toss:"middle",custom:"upper"},
       scoreVisible: S.overlay.scoreVisible !== false,
+      intro: S.overlay.intro === true,
+      introDismissedAt: Number(S.overlay.introDismissedAt)||0,
       playerLower:S.overlay.playerLower||{active:false,slot:"",player:""},
       partnership:S.overlay.partnership||{active:false}
     };
@@ -1031,6 +1035,9 @@ textarea{min-height:130px;resize:vertical}
 
   window.toggleOverlayBanner = async function(type) {
     ensureOverlayState();
+    S.overlay.intro = false;
+    S.overlay.introDismissedAt = Date.now();
+    S.overlay.scoreVisible = true;
     const key = type === "tournament" ? "showTournament" : type === "venue" ? "showVenue" : type === "match" ? "showMatch" : type === "result" ? "showResult" : "showToss";
     S.overlay[key] = !S.overlay[key];
     await save();
@@ -1096,6 +1103,9 @@ textarea{min-height:130px;resize:vertical}
 
   window.showInningsScoreboard = async function(inningsNo) {
     ensureOverlayState();
+    S.overlay.intro = false;
+    S.overlay.introDismissedAt = Date.now();
+    S.overlay.scoreVisible = true;
     if (Number(inningsNo) === 2 && S.innings < 2) {
       alert("2nd innings has not started yet.");
       return;
@@ -1109,31 +1119,38 @@ textarea{min-height:130px;resize:vertical}
     ensureOverlayState();
     if (mode === 'scorecard') { await toggleScoreboard(); return; }
     if (mode === 'bowler') {
+      S.overlay.intro = false;
+      S.overlay.introDismissedAt = Date.now();
+      S.overlay.scoreVisible = true;
       S.mode = 'default';
       S.overlay.showBowler = !S.overlay.showBowler;
       await save();
       render();
       return;
     }
-    if (mode === 'default') { S.mode='default'; await save(); render(); return; }
+    if (mode === 'default') {
+      S.mode='default';
+      S.overlay.intro = false;
+      S.overlay.introDismissedAt = Date.now();
+      S.overlay.showTournament = false;
+      S.overlay.scoreVisible = true;
+      await save(); render(); return;
+    }
     S.mode = mode;
+    S.overlay.intro = false;
+    S.overlay.introDismissedAt = Date.now();
+    S.overlay.scoreVisible = true;
     await save();
     render();
   };
 
-  function getStreamOverlayUrl(){
-    const base=window.location.href.split('?')[0].replace(/(?:scorer(?:\(\d+\))?|BRKLIVE19_scorer_updated)\.html$/i,'overlay.html');
-    return base + (S.matchId ? ('?match=' + encodeURIComponent(S.matchId)) : '');
-  }
-  function updateStreamOverlayUrl(){
-    const el=document.getElementById('streamOverlayUrl'); if(el) el.value=getStreamOverlayUrl();
-  }
-  window.copyStreamOverlayUrl=function(){
-    const el=document.getElementById('streamOverlayUrl'); if(!el)return;
-    const done=()=>toast('📋 Overlay link copied!');
-    navigator.clipboard?.writeText(el.value).then(done).catch(()=>{el.select();document.execCommand('copy');done();});
+  window.openThemePage = function(){
+    const params = new URLSearchParams();
+    if (S.matchId) params.set('match', S.matchId);
+    if (S.tournament) params.set('tournament', S.tournament);
+    if (S.theme) params.set('selected', S.theme);
+    window.location.href = './themes.html' + (params.toString() ? '?' + params.toString() : '');
   };
-  window.openStreamOverlay=function(){ window.open(getStreamOverlayUrl(),'_blank'); };
 
   window.setTheme = async function(theme) {
     S.theme = theme;
@@ -1153,6 +1170,21 @@ textarea{min-height:130px;resize:vertical}
     await save();
     render();
     alert('✅ Custom overlay colors applied!');
+  };
+
+  window.applyDesignerTheme = async function() {
+    const customColors = {
+      primary: document.getElementById('designerHighlight').value,
+      secondary: document.getElementById('designerAccent').value,
+      accent: document.getElementById('designerMain').value,
+      deepBlue: document.getElementById('designerDark').value,
+      summaryBg: document.getElementById('designerDark').value
+    };
+    S.theme = 'custom';
+    S.customColors = customColors;
+    await save();
+    render();
+    alert('✅ Custom complete cricket theme applied to overlay, summary and scorecard!');
   };
 
   // ---- checkMatchResult ----
@@ -1205,7 +1237,6 @@ textarea{min-height:130px;resize:vertical}
 
   // ---- render ----
   function render() {
-    updateStreamOverlayUrl();
     const customPreview = $("lowerPreview"); if (customPreview) customPreview.textContent = (S.customLower&&S.customLower.active) ? S.customLower.text : "Preview";
     const statusEl = $("status");
     if (statusEl) {
@@ -1222,7 +1253,7 @@ textarea{min-height:130px;resize:vertical}
       $("matchStatus").textContent =
         `🟢 LIVE — ${teamName(S.battingTeam)} (${batShort}) ${S.runs}/${S.wickets} (${oversText(S.legalBalls)}) • ${S.striker||"—"} / ${S.nonStriker||"—"} • ${S.bowler||"—"}`;
     } else {
-      $("matchStatus").textContent = S.innings === 2 ? `⏸ SECOND INNINGS READY • Target ${S.target}` : "⏸ Match not started";
+      $("matchStatus").textContent = S.innings === 2 ? `⏸ 2ND INNINGS READY • Target ${S.target}` : "⏸ Match not started";
     }
 
     $("liveScore").textContent = `${S.runs}/${S.wickets}`;
@@ -1241,7 +1272,7 @@ textarea{min-height:130px;resize:vertical}
       $("targetText").textContent = `FIRST INNINGS • ${escapeHTML(teamName(S.battingTeam))} (${escapeHTML(batShort)}) batting`;
     }
 
-    $("liveMeta").textContent = `${teamName(S.battingTeam)} (${batShort}) batting • ${teamName(S.bowlingTeam)} (${bowlShort}) bowling • Innings ${S.innings}`;
+    $("liveMeta").textContent = `${teamName(S.battingTeam)} (${batShort}) batting • ${teamName(S.bowlingTeam)} (${bowlShort}) bowling • ${S.innings===1 ? "1ST" : "2ND"} INNINGS`;
     $("crr").textContent = currentRunRate().toFixed(2);
     $("rrr").textContent = requiredRunRate().toFixed(2);
     $("extras").textContent = S.extras;
@@ -1278,7 +1309,9 @@ textarea{min-height:130px;resize:vertical}
 
       // Preserve the Index bridge if the Firebase record is missing those fields.
       const current = S;
+      const preferredTheme = urlTheme || current.theme || 'blue';
       S = { ...createDefaultState(), ...data };
+      if (preferredTheme) S.theme = preferredTheme;
       if (!S.teamA) S.teamA = current.teamA;
       if (!S.teamB) S.teamB = current.teamB;
       if (!S.tournament) S.tournament = current.tournament;
