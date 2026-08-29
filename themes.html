@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BRKLIVE19 • Theme Selection</title>
+<style>
+:root{--bg:#070b16;--card:#10182b;--line:#263653;--text:#f5f7ff;--muted:#9aa9c4;--cyan:#00d9ff;--gold:#ffd34d}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 50% -10%,#182c5a,#070b16 48%);font-family:Arial,Helvetica,sans-serif;color:var(--text);min-height:100vh;padding:18px}
+.wrap{max-width:1050px;margin:auto}.top{display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:18px}.brand{font-size:28px;font-weight:1000;letter-spacing:.04em}.sub{color:var(--muted);margin-top:4px}.btn{border:1px solid var(--line);background:#121c31;color:#fff;border-radius:10px;padding:10px 15px;font-weight:800;cursor:pointer}.btn:hover{border-color:var(--cyan);box-shadow:0 0 15px #00d9ff22}.panel{background:linear-gradient(145deg,#0e1627,#111d34);border:1px solid var(--line);border-radius:16px;padding:16px;box-shadow:0 15px 45px #0008}.theme-list{display:flex;flex-direction:column;gap:10px;margin-top:14px}.theme-row{display:grid;grid-template-columns:74px minmax(0,1fr) auto;gap:14px;align-items:center;padding:12px;border:1px solid #2b3b5a;border-radius:14px;background:#0c1425;position:relative;overflow:hidden}.theme-row:before{content:"";position:absolute;inset:0;background:linear-gradient(100deg,var(--sw1),var(--sw2));opacity:.13;pointer-events:none}.num{position:relative;width:58px;height:58px;border-radius:14px;display:grid;place-items:center;font-size:20px;font-weight:1000;background:linear-gradient(145deg,var(--sw1),var(--sw2));box-shadow:inset 0 1px #fff6,0 8px 22px #0008}.info{position:relative;min-width:0}.name{font-size:17px;font-weight:1000}.desc{color:var(--muted);font-size:12px;margin-top:4px;line-height:1.35}.actions{position:relative;display:flex;gap:8px;align-items:center;flex-wrap:wrap;justify-content:flex-end}.select{background:linear-gradient(135deg,var(--sw1),var(--sw2));border:0}.link{background:#07101e}.link.copied{border-color:#49f0a4;color:#49f0a4}.current{display:inline-block;margin-left:8px;padding:3px 7px;border-radius:999px;background:#00d9ff18;color:#73edff;border:1px solid #00d9ff44;font-size:10px}.note{margin-top:14px;color:var(--muted);font-size:12px;line-height:1.5}.custom{margin-top:16px;display:flex;gap:10px;align-items:center;flex-wrap:wrap}.color{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--muted)}.color input{width:44px;height:34px;padding:2px;background:transparent;border:1px solid var(--line);border-radius:7px}
+@media(max-width:700px){body{padding:10px}.theme-row{grid-template-columns:58px 1fr}.actions{grid-column:2;justify-content:flex-start}.brand{font-size:22px}}
+
+/* Theme preview cards */
+.theme-row{grid-template-columns:110px minmax(0,1fr) auto;min-height:92px}.preview{position:relative;width:96px;height:62px;border-radius:12px;overflow:hidden;background:linear-gradient(135deg,var(--p),var(--s));box-shadow:inset 0 1px #fff8,0 8px 20px #0008}.preview:before{content:"";position:absolute;inset:0;background:linear-gradient(110deg,transparent 35%,#fff5 48%,transparent 61%);transform:translateX(-80%);animation:previewSweep 2.8s ease-in-out infinite}.preview span{position:absolute;left:8px;top:6px;font-size:10px;font-weight:1000;color:#fff;z-index:2}.preview i,.preview b,.preview em{position:absolute;display:block;height:14px;border-radius:4px;background:#fff8;z-index:1}.preview i{left:7px;right:7px;bottom:10px}.preview b{left:9px;width:25px;bottom:13px;background:#fff}.preview em{right:9px;width:18px;bottom:13px;background:#111b}.swatches{display:flex;gap:5px;margin-top:8px}.swatches span{width:22px;height:7px;border-radius:99px;display:inline-block;border:1px solid #fff4}@keyframes previewSweep{0%,30%{transform:translateX(-80%)}70%,100%{transform:translateX(80%)}}
+@media(max-width:700px){.theme-row{grid-template-columns:76px 1fr}.preview{width:70px;height:56px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top"><div><div class="brand">🏏 BRKLIVE19</div><div class="sub">Professional Overlay Theme Selection</div></div><button class="btn" onclick="goBack()">← BACK TO SCORER</button></div>
+  <div class="panel">
+    <h2 style="margin:0">🎨 Select Overlay Theme</h2>
+    <div class="note">Choose a theme to apply to the live overlay. The <b>WEB LINK</b> on the right is the browser-source link for that exact theme.</div>
+    <div id="themeList" class="theme-list"></div>
+    <div class="custom">
+      <label class="color">Primary <input type="color" id="cp" value="#00b8e8"></label>
+      <label class="color">Secondary <input type="color" id="cs" value="#ffd900"></label>
+      <label class="color">Deep Blue <input type="color" id="cb" value="#071a58"></label>
+      <button class="btn select" onclick="applyCustom()">🎨 APPLY CUSTOM THEME</button>
+    </div>
+  </div>
+</div>
+<script>
+(function(){
+const themes=[
+['blue','01','BLUE','Classic angular broadcast','#0876d1','#081f58'],['neon','02','NEON','Cyber neon glass broadcast','#b02cff','#092cff'],['green','03','GREEN','Stadium green broadcast','#19c968','#063c2b'],['gold','04','GOLD','Luxury gold premium broadcast','#ffd34d','#6b3a00'],['theme2','05','ROYAL','Royal blue premium broadcast','#2367ff','#101a68'],['theme3','06','VIOLET','Modern violet broadcast','#a14cff','#32105e'],['theme4','07','CRIMSON','Bold red sports broadcast','#ff3158','#5b0718'],['theme5','08','METALLIC','Metallic cyan professional broadcast','#35e7ff','#1b5eaa'],['theme6','09','EMERALD','Emerald tactical broadcast','#35d37a','#064b35'],['glass','10','GLASS','Frosted glass modern broadcast','#55d8ff','#183d67'],['carbon','11','CARBON','Carbon dark premium broadcast','#8e9aaa','#171b22'],['stadium','12','STADIUM','Bright stadium energy broadcast','#32e875','#07522f'],['aurora','13','AURORA','Aurora gradient broadcast','#62f0d1','#6038ff'],['metallic','14','STEEL','Steel blue premium broadcast','#b9d4e8','#284d68'],['redblack','15','RED BLACK','High-impact red & black broadcast','#ff365f','#180914'],['rainbow','16','RAINBOW','Colorful celebration broadcast','#ff4d6d','#6d5dfc']];
+const p=new URLSearchParams(location.search); let selected=p.get('selected')||localStorage.getItem('brklive19_pending_theme')||'blue'; let match=p.get('match')||localStorage.getItem('brklive19_theme_match')||''; let tournament=p.get('tournament')||'';
+try{const b=JSON.parse(localStorage.getItem('brklive19_score_bridge')||'null');if(b){if(!match)match=b.matchId||'';if(!tournament)tournament=b.tournamentName||b.tournament||'';}}catch(e){}
+const esc=s=>String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+function overlayLink(theme){const u=new URL('./overlay.html',location.href);u.searchParams.set('theme',theme);if(match)u.searchParams.set('match',match);if(tournament)u.searchParams.set('tournament',tournament);return u.href;}
+function render(){const list=document.getElementById('themeList');if(!list)return;list.innerHTML=themes.map(t=>`<div class="theme-row" style="--sw1:${t[4]};--sw2:${t[5]}"><div class="preview" style="--p:${t[4]};--s:${t[5]}"><span>${t[1]}</span><i></i><b></b><em></em></div><div class="info"><div class="name">${esc(t[2])}${selected===t[0]?'<span class="current">SELECTED</span>':''}</div><div class="desc">${esc(t[3])}</div><div class="swatches"><span style="background:${t[4]}"></span><span style="background:${t[5]}"></span></div></div><div class="actions"><button class="btn select" onclick="chooseTheme('${t[0]}')">✓ SELECT</button><button class="btn link" onclick="copyThemeLink('${t[0]}',this)">🔗 WEB LINK</button></div></div>`).join('');}
+window.chooseTheme=function(theme){selected=theme;localStorage.setItem('brklive19_pending_theme',theme);if(match)localStorage.setItem('brklive19_theme_match',match);render();setTimeout(()=>{const u=new URL('./scorer.html',location.href);u.searchParams.set('theme',theme);if(match)u.searchParams.set('match',match);if(tournament)u.searchParams.set('tournament',tournament);location.href=u.href;},120);};
+window.copyThemeLink=async function(theme,btn){const u=overlayLink(theme);try{await navigator.clipboard.writeText(u);btn.textContent='✓ COPIED';btn.classList.add('copied');setTimeout(()=>{btn.textContent='🔗 WEB LINK';btn.classList.remove('copied');},1400);}catch(e){prompt('Copy overlay web link:',u);}};
+window.applyCustom=function(){const cp=document.getElementById('cp'),cs=document.getElementById('cs'),cb=document.getElementById('cb');localStorage.setItem('brklive19_custom_theme_colors',JSON.stringify({primary:cp.value,secondary:cs.value,deepBlue:cb.value,accent:cb.value,summaryBg:cb.value}));localStorage.setItem('brklive19_pending_theme','custom');const u=new URL('./scorer.html',location.href);u.searchParams.set('theme','custom');if(match)u.searchParams.set('match',match);if(tournament)u.searchParams.set('tournament',tournament);location.href=u.href;};
+window.goBack=function(){const u=new URL('./scorer.html',location.href);if(selected)u.searchParams.set('theme',selected);if(match)u.searchParams.set('match',match);if(tournament)u.searchParams.set('tournament',tournament);location.href=u.href;};
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',render);else render();
+})();
+</script>
+</body>
+</html>
