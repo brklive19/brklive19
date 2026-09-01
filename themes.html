@@ -30,6 +30,24 @@
     </div>
   </div>
 </div>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getDatabase, ref, update } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+const firebaseConfig={apiKey:"AIzaSyBLWq1bqJ32F2cg3mqYQ0uwXcS3zvTA3A4",authDomain:"brklive19-2bab4.firebaseapp.com",databaseURL:"https://brklive19-2bab4-default-rtdb.asia-southeast1.firebasedatabase.app",projectId:"brklive19-2bab4",storageBucket:"brklive19-2bab4.firebasestorage.app",messagingSenderId:"294058533898",appId:"1:294058533898:web:4996705937e969939cabf3",measurementId:"G-RW18E7LVEX"};
+let themeDb=null;
+try { themeDb=getDatabase(initializeApp(firebaseConfig)); } catch(e) { console.warn("Theme Firebase init failed",e); }
+window.publishThemeToLiveScore=async function(theme, matchId){
+  try {
+    localStorage.setItem("brklive19_pending_theme",theme);
+    if(matchId) localStorage.setItem("brklive19_theme_match",matchId);
+    if(themeDb){
+      const payload={theme, themeUpdatedAt:Date.now()};
+      if(matchId) payload.matchId=matchId;
+      await update(ref(themeDb,"liveScore"),payload);
+    }
+  } catch(e){ console.warn("Theme publish failed; scorer will retry on load",e); }
+};
+</script>
 <script>
 (function(){
 const themes=[
@@ -39,9 +57,9 @@ try{const b=JSON.parse(localStorage.getItem('brklive19_score_bridge')||'null');i
 const esc=s=>String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
 function overlayLink(theme){const u=new URL('./overlay.html',location.href);u.searchParams.set('theme',theme);if(match)u.searchParams.set('match',match);if(tournament)u.searchParams.set('tournament',tournament);return u.href;}
 function render(){const list=document.getElementById('themeList');if(!list)return;list.innerHTML=themes.map(t=>`<div class="theme-row" style="--sw1:${t[4]};--sw2:${t[5]}"><div class="preview" style="--p:${t[4]};--s:${t[5]}"><span>${t[1]}</span><i></i><b></b><em></em></div><div class="info"><div class="name">${esc(t[2])}${selected===t[0]?'<span class="current">SELECTED</span>':''}</div><div class="desc">${esc(t[3])}</div><div class="swatches"><span style="background:${t[4]}"></span><span style="background:${t[5]}"></span></div></div><div class="actions"><button class="btn select" onclick="chooseTheme('${t[0]}')">✓ SELECT</button><button class="btn link" onclick="copyThemeLink('${t[0]}',this)">🔗 WEB LINK</button></div></div>`).join('');}
-window.chooseTheme=function(theme){selected=theme;localStorage.setItem('brklive19_pending_theme',theme);if(match)localStorage.setItem('brklive19_theme_match',match);render();setTimeout(()=>{const u=new URL('./scorer.html',location.href);u.searchParams.set('theme',theme);if(match)u.searchParams.set('match',match);if(tournament)u.searchParams.set('tournament',tournament);location.href=u.href;},120);};
+window.chooseTheme=async function(theme){selected=theme;localStorage.setItem('brklive19_pending_theme',theme);if(match)localStorage.setItem('brklive19_theme_match',match);render();try{await window.publishThemeToLiveScore(theme,match);}catch(e){}const u=new URL('./scorer.html',location.href);u.searchParams.set('theme',theme);if(match)u.searchParams.set('match',match);if(tournament)u.searchParams.set('tournament',tournament);location.href=u.href;};
 window.copyThemeLink=async function(theme,btn){const u=overlayLink(theme);try{await navigator.clipboard.writeText(u);btn.textContent='✓ COPIED';btn.classList.add('copied');setTimeout(()=>{btn.textContent='🔗 WEB LINK';btn.classList.remove('copied');},1400);}catch(e){prompt('Copy overlay web link:',u);}};
-window.applyCustom=function(){const cp=document.getElementById('cp'),cs=document.getElementById('cs'),cb=document.getElementById('cb');localStorage.setItem('brklive19_custom_theme_colors',JSON.stringify({primary:cp.value,secondary:cs.value,deepBlue:cb.value,accent:cb.value,summaryBg:cb.value}));localStorage.setItem('brklive19_pending_theme','custom');const u=new URL('./scorer.html',location.href);u.searchParams.set('theme','custom');if(match)u.searchParams.set('match',match);if(tournament)u.searchParams.set('tournament',tournament);location.href=u.href;};
+window.applyCustom=async function(){const cp=document.getElementById('cp'),cs=document.getElementById('cs'),cb=document.getElementById('cb');const cc={primary:cp.value,secondary:cs.value,deepBlue:cb.value,accent:cb.value,summaryBg:cb.value};localStorage.setItem('brklive19_custom_theme_colors',JSON.stringify(cc));localStorage.setItem('brklive19_pending_theme','custom');try{await window.publishThemeToLiveScore('custom',match);}catch(e){}const u=new URL('./scorer.html',location.href);u.searchParams.set('theme','custom');if(match)u.searchParams.set('match',match);if(tournament)u.searchParams.set('tournament',tournament);location.href=u.href;};
 window.goBack=function(){const u=new URL('./scorer.html',location.href);if(selected)u.searchParams.set('theme',selected);if(match)u.searchParams.set('match',match);if(tournament)u.searchParams.set('tournament',tournament);location.href=u.href;};
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',render);else render();
 })();
