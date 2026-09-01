@@ -1928,3 +1928,11 @@ body.auth-required{overflow:hidden;}
 body.auth-required #loginModal{display:flex;}
 body.auth-required #loginModal .modal-content{max-width:460px;}
 .auth-welcome{display:none;}
+
+/* ===== V6 USER REQUESTS: SPORT PICKER + AUTH ===== */
+.sports-picker{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin:0 0 18px}
+.sport-choice{background:var(--card-bg);border:1px solid var(--card-border);border-radius:16px;padding:18px 14px;text-align:center;cursor:pointer;transition:.2s;display:flex;flex-direction:column;align-items:center;gap:5px}
+.sport-choice:hover,.sport-choice.active{border-color:var(--accent);transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.25)}
+.sport-choice .sport-icon{font-size:34px}.sport-choice strong{font-size:16px}.sport-choice span{font-size:11px;color:var(--text-muted)}
+#forgotPasswordLink,#backToLoginLink,#showRegisterLink,#showLoginLink{cursor:pointer}
+@media(max-width:650px){.sports-picker{grid-template-columns:1fr}.sport-choice{flex-direction:row;text-align:left;padding:12px}.sport-choice .sport-icon{font-size:28px}}
