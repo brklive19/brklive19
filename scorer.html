@@ -1015,15 +1015,24 @@ textarea{min-height:130px;resize:vertical}
     render();
   };
 
-  window.openDisplayScreen = function() {
+  function getDisplayUrl(){
     const params = new URLSearchParams();
     if (S.matchId) params.set("match", S.matchId);
     if (S.theme) params.set("theme", S.theme);
     if (S.tournament) params.set("tournament", S.tournament);
     const url = new URL("./overlay.html", location.href);
     params.forEach((v,k) => url.searchParams.set(k,v));
-    const w = window.open(url.href, "BRKLIVE19_DISPLAY", "noopener,noreferrer");
-    if (!w) alert("Please allow pop-ups for BRKLIVE19, then press OPEN DISPLAY SCREEN again.");
+    return url.href;
+  }
+  window.refreshDisplayFrame = function(){
+    const f=$("liveDisplayFrame");
+    if(f) f.src=getDisplayUrl();
+  };
+  window.openDisplayScreen = function() {
+    const url=getDisplayUrl();
+    const f=$("liveDisplayFrame"); if(f && f.src !== url) f.src=url;
+    const w = window.open(url, "BRKLIVE19_DISPLAY");
+    if (!w) alert("Display is already available in the Live Display Screen above. Allow pop-ups if you want a separate full-screen window.");
   };
 
   window.saveNow = async function() {
@@ -1047,7 +1056,9 @@ textarea{min-height:130px;resize:vertical}
   }
 
   window.broadcastEvent = async function(type) {
-    if (!S.started) { alert("Start the match first."); return; }
+    // Graphics buttons (FOUR/SIX/WICKET/FREE HIT/HAT-TRICK) are allowed even
+    // when the scorer is not currently running, so the operator can test the display.
+    if (!S.started && !["FREE HIT","HAT-TRICK BALL","FOUR","SIX","WICKET","RUN OUT"].includes(String(type).toUpperCase())) { alert("Start the match first."); return; }
     await activateBroadcast(type);
     render();
   };
@@ -1074,6 +1085,7 @@ textarea{min-height:130px;resize:vertical}
 
   window.toggleTargetOverlay = async function() {
     ensureOverlayState();
+    S.overlay.intro = false; S.overlay.introDismissedAt = Date.now(); S.overlay.scoreVisible = true;
     if (S.innings !== 2 || !S.target || S.status === "completed") { alert("Target display is available during the 2nd innings only."); return; }
     S.overlay.showTarget = !S.overlay.showTarget;
     await save();
@@ -1093,6 +1105,7 @@ textarea{min-height:130px;resize:vertical}
 
   window.togglePlayerLower = async function(which) {
     ensureOverlayState();
+    S.overlay.intro = false; S.overlay.introDismissedAt = Date.now(); S.overlay.scoreVisible = true;
     const name = which === "b1" ? (S.striker || "") : (S.nonStriker || "");
     if(!name) { alert(which==="b1" ? "B1/striker not selected." : "B2/non-striker not selected."); return; }
     if(S.overlay.playerLower.active && S.overlay.playerLower.slot === which) {
@@ -1113,6 +1126,7 @@ textarea{min-height:130px;resize:vertical}
 
   window.togglePartnership = async function() {
     ensureOverlayState();
+    S.overlay.intro = false; S.overlay.introDismissedAt = Date.now(); S.overlay.scoreVisible = true;
     if (!S.striker || !S.nonStriker) { alert("Select both current batters first."); return; }
     S.overlay.partnership.active = !S.overlay.partnership.active;
     await save();
