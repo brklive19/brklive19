@@ -585,7 +585,7 @@ body{display:flex;align-items:flex-end;justify-content:center;padding:0;box-sizi
   text-align:center;
   box-sizing:border-box;
 }
-.banner.show{display:flex}
+.banner.show{display:flex!important}
 
 /* Each banner type gets its own border colour */
 .banner.tournament{border-color:var(--yellow)}
@@ -1442,7 +1442,7 @@ body{display:block!important;position:relative!important}
 .refLogo span{width:55px!important;height:55px!important;border-radius:50%!important;display:flex!important;align-items:center!important;justify-content:center!important;background:linear-gradient(180deg,#163f94,#082765)!important;color:#fff!important;font-size:clamp(15px,1.2vw,22px)!important;font-weight:1000!important;letter-spacing:.02em!important;box-shadow:inset 0 1px 0 #ffffff55!important}
 .refLogoLeft{left:-8px!important}.refLogoRight{right:-8px!important}
 #overlay .target{position:absolute!important;left:50%!important;bottom:calc(100% + 7px)!important;transform:translateX(-50%)!important;width:min(620px,55%)!important;height:34px!important;padding:0 14px!important;border-radius:18px!important;display:none;align-items:center!important;justify-content:center!important;background:linear-gradient(180deg,#173e93,#09286e)!important;border:1px solid rgba(255,255,255,.35)!important;color:#fff!important;font-size:clamp(11px,.85vw,16px)!important;font-weight:1000!important;letter-spacing:.02em!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important;box-shadow:0 5px 14px rgba(0,0,0,.3)!important;z-index:200!important}
-#overlay .banner,#overlay .custom,#overlay .brkLogo{display:none!important}
+#overlay .banner,#overlay .custom,#overlay .brkLogo{display:flex!important}
 #overlay .broadcastBar{display:none!important}
 #overlay .compactCorners{display:none!important}
 /* Keep all secondary full-screen modes untouched. */
@@ -2090,7 +2090,7 @@ function applyLiveData(d){
  $("batter1").classList.toggle("striker", !!b1n && b1n===d.striker);
  $("batter2").classList.toggle("striker", !!b2n && b2n===d.striker);
 
- const runs=num(d.runs), w=num(d.wickets), balls=num(d.legalBalls);
+ const runs=num(d.runs ?? d.totalRuns), w=num(d.wickets ?? d.totalWickets), balls=num(d.legalBalls ?? d.totalBalls ?? d.balls);
  const directResult = deriveResult(d) || (d.matchWinner ? d.matchWinner+" WON" : "");
  const isCompleted = d.status === 'completed' || d.matchWinner || !!directResult;
  if(isCompleted && directResult){
@@ -2108,6 +2108,15 @@ function applyLiveData(d){
    $("rrr").textContent = calcRRR(d);
  }
  $("overs").textContent = oversFromBalls(balls)+" ("+balls+")";
+  const overText=oversFromBalls(balls);
+  const overEls=[$("currentOver"),$("headerOver"),$("overValue")].filter(Boolean);
+  overEls.forEach(el=>el.textContent=overText);
+  const ballEls=[$("currentBall"),$("ballValue")].filter(Boolean);
+  ballEls.forEach(el=>el.textContent=String(balls%6));
+  const recent=Array.isArray(d.recentBalls)?d.recentBalls:[];
+  const recentEl=$("recentBalls");
+  if(recentEl){recentEl.innerHTML=recent.slice(-12).map(x=>`<span class="ball-chip">${escapeText(x.label??x.runs??"")}</span>`).join("");}
+
  $("crr").textContent = calcCRR(d);
  const title=d.matchName||"League Match"; $("matchTitle").textContent=title;
  const tournament=d.tournament||requestedTournament||"TOURNAMENT"; if($("tournamentTitle")) $("tournamentTitle").textContent=tournament;
@@ -2321,7 +2330,7 @@ body{display:flex!important;align-items:flex-end!important;justify-content:cente
 .refLogoLeft{left:-8px!important}.refLogoRight{right:-8px!important}
 #overlay .target{display:none!important}
 #overlay .compactCorners{display:none!important}
-#overlay .banner,#overlay .custom,#overlay .brkLogo{display:none!important}
+#overlay .banner,#overlay .custom,#overlay .brkLogo{display:flex!important}
 @media(max-width:900px){
  body{padding-bottom:8px!important}
  #overlay.overlay{left:50%!important;bottom:8px!important;width:96vw!important;height:72px!important}
@@ -2914,7 +2923,7 @@ body{display:flex!important;align-items:flex-end!important;justify-content:cente
 
 /* Hide the extra header; the reference uses one compact graphic only. */
 #overlay .broadcastBar{display:none!important;}
-#overlay .banner,#overlay .custom,#overlay .brkLogo{display:none!important;}
+#overlay .banner,#overlay .custom,#overlay .brkLogo{display:flex!important;}
 
 #overlay .frame{
   position:absolute!important;inset:0!important;width:100%!important;height:238px!important;
