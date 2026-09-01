@@ -1099,7 +1099,7 @@
                 };
                 localStorage.setItem('brklive19_score_bridge', JSON.stringify(bridge));
                 localStorage.setItem('brklive19_last_match_id', match.id);
-                window.location.href = './score.html?matchId=' + encodeURIComponent(match.id);
+                window.location.href = './scorer.html?match=' + encodeURIComponent(match.id);
             }
 
             // ===== OPEN MATCH DETAIL =====
