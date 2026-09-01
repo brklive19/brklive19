@@ -126,23 +126,18 @@ textarea{min-height:130px;resize:vertical}
 
 </style>
 <script>
-  if (!localStorage.getItem('brklive_user')) {
-    window.location.replace('./index.html?login=1');
-  }
+  // Standalone/local-file safe mode: never redirect away from scorer.html.
+  // If no login session exists, create a lightweight local session so the
+  // scorer can run directly from the project ZIP.
+  try {
+    if (!localStorage.getItem('brklive_user')) {
+      localStorage.setItem('brklive_user', JSON.stringify({local:true,name:'BRKLIVE19'}));
+    }
+  } catch(e) {}
 </script>
 <script>
-  // Required flow: Scorer button -> Theme Selection -> Scorer Control.
-  (function(){
-    const p = new URLSearchParams(window.location.search);
-    const allowed = ['blue','neon','green','gold','theme2','theme3','theme4','theme5','theme6','glass','carbon','stadium','aurora','metallic','redblack','rainbow','custom'];
-    const theme = p.get('theme') || localStorage.getItem('brklive19_pending_theme') || '';
-    if (!allowed.includes(theme)) {
-      const q = new URLSearchParams();
-      const match = p.get('match') || localStorage.getItem('brklive19_theme_match') || '';
-      if (match) q.set('match', match);
-      window.location.replace('./themes.html' + (q.toString() ? '?' + q.toString() : ''));
-    }
-  })();
+  // Scorer is a standalone control page. Theme selection is optional and
+  // must never redirect/stop the scorer from loading.
 </script>
 </head>
 <body>
@@ -236,7 +231,11 @@ textarea{min-height:130px;resize:vertical}
 <!-- ===== OVERLAY CONTROLLER ===== -->
 <div class="card">
   <h2>📺 Overlay Controller</h2>
-  <div class="mini">All scoring and overlay controls use the same Firebase <b>liveScore</b> record.</div>
+  <div class="mini">All scoring and overlay controls use the same Firebase <b>liveScore</b> record. Local BroadcastChannel + localStorage fallback is also active for same-device display.</div>
+  <div class="g2" style="margin-top:10px">
+    <button class="btn blue" onclick="openDisplayScreen()">🖥 OPEN DISPLAY SCREEN</button>
+    <button class="btn dark" onclick="syncOverlayNow()">🔄 UPDATE DISPLAY NOW</button>
+  </div>
   <div style="display:flex;gap:10px;align-items:center;justify-content:flex-end;margin-top:10px;flex-wrap:wrap;">
     <button class="btn custom" style="width:auto;padding:10px 18px;" onclick="openThemePage()">🎨 OPEN THEME SECTION</button>
   </div>
@@ -390,6 +389,21 @@ textarea{min-height:130px;resize:vertical}
   const app = firebaseReady ? initializeApp(firebaseConfig) : null;
   const db = firebaseReady ? getDatabase(app) : null;
   const liveRef = firebaseReady && db ? ref(db, "liveScore") : null;
+  // Secondary per-match channel. The primary liveScore path is kept for compatibility.
+  const liveMatchRef = firebaseReady && db ? (matchId => ref(db, "liveScoreByMatch/" + encodeURIComponent(String(matchId || "default")))) : null;
+  let liveChannel = null;
+  try { liveChannel = new BroadcastChannel("BRKLIVE19_LIVE_OVERLAY"); } catch(e) { liveChannel = null; }
+
+  // Robust cross-tab bridge. Firebase is preferred, but localStorage polling
+  // and BroadcastChannel keep the overlay responsive when the project is
+  // opened directly from a ZIP/file on the same device.
+  function publishLocalBridge(data){
+    const packet = { ...data, __brklive19Bridge: true, __bridgeVersion: 2, __bridgeUpdatedAt: Date.now() };
+    try { localStorage.setItem("brklive19_liveScore", JSON.stringify(packet)); } catch(e) {}
+    try { localStorage.setItem("brklive19_last_liveScore", JSON.stringify(packet)); } catch(e) {}
+    try { localStorage.setItem("brklive19_liveScore_tick", String(Date.now())); } catch(e) {}
+    try { if (liveChannel) liveChannel.postMessage({type:"LIVE_SCORE", data:packet}); } catch(e) {}
+  }
 
   // ---- Helpers ----
   const $ = id => document.getElementById(id);
@@ -467,23 +481,35 @@ textarea{min-height:130px;resize:vertical}
       if (!raw) return false;
       const b = JSON.parse(raw);
       if (!b || (!b.teamA && !b.teamB)) return false;
-      S.tournament = b.tournamentName || b.tournament || '';
-      S.venue = b.venue || b.tournamentVenue || '';
-      S.matchName = b.matchName || '';
-      S.teamA = b.teamA || 'Team A';
-      S.teamB = b.teamB || 'Team B';
-      S.maxOvers = Number(b.maxOvers) || 20;
-      S.tossWinner = b.tossWinner === 'teamA' ? 'A' : (b.tossWinner === 'teamB' ? 'B' : (b.tossWinner || ''));
-      S.tossDecision = b.tossDecision || 'bat';
-      S.xiA = Array.isArray(b.xiA) ? b.xiA : [];
-      S.xiB = Array.isArray(b.xiB) ? b.xiB : [];
-      S.matchId = b.matchId || '';
-      S.started = false;
-      S.innings = 1;
-      S.runs = 0; S.wickets = 0; S.legalBalls = 0; S.extras = 0; S.partnershipRuns=0; S.partnershipBalls=0;
-      S.history = []; S.events = []; S.batters = {}; S.bowlers = {};
-      S.striker = ''; S.nonStriker = ''; S.bowler = ''; S.target = 0;
-      S.matchWinner=''; S.matchResult=''; S.resultText=''; S.status='live';
+
+      // Theme changes must NEVER create a fresh match. Restore the saved match state first.
+      let saved = null;
+      try { saved = JSON.parse(localStorage.getItem('brklive19_match_state_' + (matchId || b.matchId)) || 'null'); } catch(e) {}
+      if (saved && typeof saved === 'object') {
+        S = { ...createDefaultState(), ...saved };
+      }
+
+      S.tournament = b.tournamentName || b.tournament || S.tournament || '';
+      S.venue = b.venue || b.tournamentVenue || S.venue || '';
+      S.matchName = b.matchName || S.matchName || '';
+      S.teamA = b.teamA || S.teamA || 'Team A';
+      S.teamB = b.teamB || S.teamB || 'Team B';
+      S.maxOvers = Number(b.maxOvers) || S.maxOvers || 20;
+      S.tossWinner = b.tossWinner === 'teamA' ? 'A' : (b.tossWinner === 'teamB' ? 'B' : (b.tossWinner || S.tossWinner || ''));
+      S.tossDecision = b.tossDecision || S.tossDecision || 'bat';
+      S.xiA = Array.isArray(b.xiA) && b.xiA.length ? b.xiA : (S.xiA || []);
+      S.xiB = Array.isArray(b.xiB) && b.xiB.length ? b.xiB : (S.xiB || []);
+      S.matchId = b.matchId || matchId || S.matchId || '';
+
+      // Only initialise a brand-new match. Existing saved scores/innings stay untouched.
+      if (!saved) {
+        S.started = false;
+        S.innings = 1;
+        S.runs = 0; S.wickets = 0; S.legalBalls = 0; S.extras = 0; S.partnershipRuns=0; S.partnershipBalls=0;
+        S.history = []; S.events = []; S.batters = {}; S.bowlers = {};
+        S.striker = ''; S.nonStriker = ''; S.bowler = ''; S.target = 0;
+        S.matchWinner=''; S.matchResult=''; S.resultText=''; S.status='live';
+      }
       S.overlay = { ...(S.overlay||{}), showTournament:true, scoreVisible:false, intro:true };
       return true;
     } catch (e) { console.error('Match bridge error:', e); return false; }
@@ -620,8 +646,9 @@ textarea{min-height:130px;resize:vertical}
 
   // ---- Save ----
   async function save() {
+    try { if (S.matchId) localStorage.setItem("brklive19_match_state_" + S.matchId, JSON.stringify(S)); } catch(e) {}
     if (!firebaseReady || !liveRef) {
-      try { localStorage.setItem("brklive19_liveScore", JSON.stringify(S)); } catch(e) {}
+      publishLocalBridge(S);
       syncScoreToIndex();
       return;
     }
@@ -664,21 +691,30 @@ textarea{min-height:130px;resize:vertical}
       bowlingShort: teamShort(S.bowlingTeam)
     };
     try {
+      // Publish immediately through every available bridge.
+      publishLocalBridge(data);
       await set(liveRef, data);
-      try { localStorage.setItem("brklive19_last_liveScore", JSON.stringify(data)); } catch(e) {}
+      // Secondary per-match path; failure here must never block the main overlay path.
+      try { if (S.matchId && liveMatchRef) await set(liveMatchRef(S.matchId), data); } catch(e) { console.warn("Per-match live channel unavailable", e); }
+      publishLocalBridge(data);
       syncScoreToIndex();
     } catch (error) {
       console.error('Firebase save failed:', error);
       try { localStorage.setItem("brklive19_last_liveScore", JSON.stringify(data)); } catch(e) {}
       const el = $("status");
       if (el) {
-        el.textContent = "🔴 Firebase save failed — live overlay cannot receive this score";
+        el.textContent = "🟢 Firebase unavailable — display is using local live bridge";
         el.className = "status";
       }
     } finally {
       syncing = false;
     }
   }
+
+  // Manual overlay sync helper used by every control button.
+  window.syncOverlayNow = async function(){
+    try { await save(); render(); } catch(e) { console.error("Overlay sync failed", e); }
+  };
 
   function currentRunRate() { if (!S.legalBalls) return 0; return Number((S.runs / (S.legalBalls/6)).toFixed(2)); }
   function runsToWin() { if (S.innings!==2 || !S.target) return 0; return Math.max(S.target - S.runs, 0); }
@@ -979,9 +1015,20 @@ textarea{min-height:130px;resize:vertical}
     render();
   };
 
+  window.openDisplayScreen = function() {
+    const params = new URLSearchParams();
+    if (S.matchId) params.set("match", S.matchId);
+    if (S.theme) params.set("theme", S.theme);
+    if (S.tournament) params.set("tournament", S.tournament);
+    const url = new URL("./overlay.html", location.href);
+    params.forEach((v,k) => url.searchParams.set(k,v));
+    const w = window.open(url.href, "BRKLIVE19_DISPLAY", "noopener,noreferrer");
+    if (!w) alert("Please allow pop-ups for BRKLIVE19, then press OPEN DISPLAY SCREEN again.");
+  };
+
   window.saveNow = async function() {
     await save();
-    alert("✅ Saved! Overlay updated.");
+    alert("✅ Saved! Display screen updated.");
   };
 
   // ---- broadcast ----
@@ -1154,6 +1201,7 @@ textarea{min-height:130px;resize:vertical}
 
   window.setTheme = async function(theme) {
     S.theme = theme;
+    try { localStorage.setItem("brklive19_pending_theme", theme); } catch(e) {}
     document.querySelectorAll('.theme').forEach(b => b.classList.toggle('active', b.dataset.theme === theme));
     await save();
     render();
