@@ -2238,8 +2238,7 @@
                 localStorage.setItem('brklive_user', JSON.stringify(currentUser));
                 updateAuthUI();
                 closeModal('registerModal');
-                toast('Registered successfully! Confirmation email is ready.', 'success');
-                sendRegistrationEmail({fullName, username, email});
+                toast('Registered successfully!', 'success');
             });
 
             document.getElementById('logoutBtn').addEventListener('click', function() {
