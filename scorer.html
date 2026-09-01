@@ -672,6 +672,10 @@ textarea{min-height:130px;resize:vertical}
       bowlerWickets:S.bowler ? bowlerStatsNow.wickets : 0,
       overs:oversText(S.legalBalls),
       currentOver:oversText(S.legalBalls),
+      currentBall:Number(S.legalBalls||0)%6,
+      totalRuns:Number(S.runs)||0,
+      totalWickets:Number(S.wickets)||0,
+      totalBalls:Number(S.legalBalls)||0,
       currentRunRate:currentRunRate(),
       requiredRunRate:requiredRunRate(),
       ballsRemaining:legalBallsRemaining(),
@@ -1043,7 +1047,8 @@ textarea{min-height:130px;resize:vertical}
   // ---- broadcast ----
   async function activateBroadcast(type) {
     const eventId = String(Date.now()) + "-" + Math.random().toString(36).slice(2,8);
-    S.broadcast = { type, text:type, active:true, id:eventId, eventId:eventId };
+    S.broadcast = { type, text:type, active:true, id:eventId, eventId:eventId, createdAt:Date.now() };
+    S.overlay = {...(S.overlay||{}), scoreVisible:true, intro:false, introDismissedAt:Date.now()};
     await save();
     setTimeout(async () => {
       if (S.broadcast && S.broadcast.id === eventId) {
