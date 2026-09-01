@@ -1362,6 +1362,10 @@
                 <label>Password</label>
                 <input type="password" id="loginPassword" placeholder="Enter password" autocomplete="current-password" />
             </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;margin:4px 0 12px;font-size:13px;">
+                <label style="display:flex;align-items:center;gap:7px;cursor:pointer;margin:0;"><input type="checkbox" id="rememberLogin" style="width:auto;"> Save ID &amp; Password</label>
+                <a href="#" id="forgotPasswordLink">Forgot Password?</a>
+            </div>
             <div class="modal-actions">
                 <button class="btn btn-primary" id="loginSubmitBtn">Login</button>
                 <button class="btn btn-secondary" id="loginCancelBtn">Cancel</button>
@@ -1369,6 +1373,19 @@
             <div class="register-link">
                 Don't have an account? <a id="showRegisterLink">Register Here</a>
             </div>
+        </div>
+    </div>
+
+    <!-- ===== FORGOT PASSWORD MODAL ===== -->
+    <div class="modal-overlay" id="forgotPasswordModal">
+        <div class="modal-content">
+            <h2>🔑 FORGOT PASSWORD</h2>
+            <p class="text-muted" style="margin-bottom:14px;">Enter your registered username or email address.</p>
+            <div class="form-group"><label>Username / Email</label><input type="text" id="forgotIdentity" placeholder="Enter username or email" /></div>
+            <div class="form-group"><label>New Password</label><input type="password" id="forgotNewPassword" placeholder="Create a new password" /></div>
+            <div class="form-group"><label>Confirm New Password</label><input type="password" id="forgotConfirmPassword" placeholder="Confirm new password" /></div>
+            <div class="modal-actions"><button class="btn btn-primary" id="resetPasswordBtn">Reset Password</button><button class="btn btn-secondary" id="forgotCancelBtn">Cancel</button></div>
+            <div class="register-link"><a href="#" id="backToLoginLink">← Back to Login</a></div>
         </div>
     </div>
 
@@ -1439,9 +1456,12 @@
         <div class="modal-content workflow-modal-content">
             <button class="workflow-close" id="closeCreateTournamentBtn" type="button">×</button>
             <div class="create-tournament-section">
-                <h4>📋 CREATE TOURNAMENT</h4>
+                <h4 id="createTournamentTitle">🏏 CREATE CRICKET TOURNAMENT</h4>
                 <div class="form-row">
+                    <div class="form-group"><label>Sport</label><select id="tournamentSport"><option value="cricket">🏏 Cricket</option><option value="football">⚽ Football</option><option value="other">🏅 Other Sports</option></select></div>
                     <div class="form-group"><label>Tournament Name</label><input type="text" id="tournamentName" placeholder="e.g. World Cup 2026" /></div>
+                </div>
+                <div class="form-row">
                     <div class="form-group"><label>Venue</label><input type="text" id="tournamentVenue" placeholder="e.g. Melbourne Cricket Ground" /></div>
                 </div>
                 <div class="form-row">
@@ -1470,7 +1490,8 @@
         <div class="modal-content workflow-modal-content workflow-match-content">
             <button class="workflow-close" id="closeCreateMatchBtn" type="button">×</button>
             <div class="match-setup-form" id="matchSetupForm">
-                <h4>⚙️ CREATE MATCH</h4>
+                <h4 id="createMatchHeading">⚙️ CREATE MATCH</h4>
+                <div id="footballMatchNotice" style="display:none;margin:10px 0 14px;padding:12px 14px;border-radius:10px;background:linear-gradient(90deg,#082b20,#123c31);border:1px solid #36d58b;color:#dfffee;font-weight:700;">⚽ FOOTBALL MATCH SETUP — This match uses football scoring, match clock, goals, yellow/red cards and the Football Overlay.</div>
                 <div class="form-row">
                     <div class="form-group"><label>Tournament</label><select id="matchTournamentSelect"><option value="">— Select Tournament —</option></select></div>
                     <div class="form-group"><label>Match No.</label><input type="number" id="matchNo" value="1" min="1" /></div>
@@ -1479,36 +1500,28 @@
                     <div class="form-group"><label>Team A Name</label><input type="text" id="teamAName" value="India" placeholder="e.g. India" /></div>
                     <div class="form-group"><label>Team B Name</label><input type="text" id="teamBName" value="Australia" placeholder="e.g. Australia" /></div>
                 </div>
-                <div class="form-row">
+                <div class="form-row" id="cricketMatchFields">
                     <div class="form-group"><label>Match Type</label>
                         <select id="matchType">
-                            <option value="t20">T20</option>
-                            <option value="odi">ODI</option>
-                            <option value="test">Test</option>
-                            <option value="thehundred">The Hundred</option>
-                            <option value="local">Local</option>
-                            <option value="domestic">Domestic</option>
-                            <option value="international">International</option>
-                            <option value="friendly">Friendly</option>
-                            <option value="tournament">Tournament</option>
+                            <option value="t20">T20</option><option value="odi">ODI</option><option value="test">Test</option><option value="thehundred">The Hundred</option><option value="local">Local</option><option value="domestic">Domestic</option><option value="international">International</option><option value="friendly">Friendly</option><option value="tournament">Tournament</option>
                         </select>
                     </div>
                     <div class="form-group"><label>Overs per Innings</label><input type="number" id="maxOvers" value="20" min="1" max="50" /></div>
                 </div>
-                <div class="form-row">
-                    <div class="form-group"><label>Toss Winner</label>
-                        <select id="tossWinner">
-                            <option value="teamA">Team A</option>
-                            <option value="teamB">Team B</option>
-                            <option value="none">—</option>
-                        </select>
+                <div class="form-row" id="cricketTossFields">
+                    <div class="form-group"><label>Toss Winner</label><select id="tossWinner"><option value="teamA">Team A</option><option value="teamB">Team B</option><option value="none">—</option></select></div>
+                    <div class="form-group"><label>Toss Decision</label><select id="tossDecision"><option value="bat">Bat</option><option value="bowl">Bowl</option></select></div>
+                </div>
+                <div id="footballMatchFields" style="display:none">
+                    <div class="form-row">
+                        <div class="form-group"><label>Football Match Type</label><select id="footballMatchType"><option value="friendly">Friendly</option><option value="league">League</option><option value="cup">Cup</option><option value="knockout">Knockout</option><option value="final">Final</option><option value="semi-final">Semi-Final</option></select></div>
+                        <div class="form-group"><label>Match Duration</label><select id="footballDuration"><option value="90">90 Minutes</option><option value="80">80 Minutes</option><option value="60">60 Minutes</option><option value="50">50 Minutes</option><option value="40">40 Minutes</option></select></div>
                     </div>
-                    <div class="form-group"><label>Toss Decision</label>
-                        <select id="tossDecision">
-                            <option value="bat">Bat</option>
-                            <option value="bowl">Bowl</option>
-                        </select>
+                    <div class="form-row">
+                        <div class="form-group"><label>First Half</label><input type="number" id="footballHalfMinutes" value="45" min="1" max="60" /></div>
+                        <div class="form-group"><label>Extra Time</label><select id="footballExtraTime"><option value="yes">Available</option><option value="no">Not Available</option></select></div>
                     </div>
+                    <div style="padding:10px 12px;border-radius:9px;background:rgba(255,255,255,.04);color:var(--text-muted);font-size:12px;">Football has no overs, innings, striker, non-striker, bowler or toss fields. Use the Football Controller for the match clock, goals and cards.</div>
                 </div>
                 <div class="xi-section">
                     <h3 style="font-size:16px;font-weight:700;margin-bottom:12px;color:var(--text-secondary);">👥 Player XI</h3>
@@ -1540,7 +1553,7 @@
                     </div>
                 </div>
                 <div class="form-actions" style="margin-top:16px;">
-                    <button class="btn btn-primary" id="createTournamentMatchBtn">🏏 Create Match</button>
+                    <button class="btn btn-primary" id="createTournamentMatchBtn">⚽ Create Match</button>
                     <button class="btn btn-secondary" id="resetMatchSetupBtn">🔄 Reset</button>
                 </div>
                 <div style="margin-top:12px;font-size:12px;color:var(--text-muted);">Note: Your data will be available on this device only</div>
@@ -1799,9 +1812,14 @@
             </div>
             <div class="tournament-body" id="tournamentBody">
 
-                <div class="workflow-actions">
-                    <button class="btn btn-primary" id="openCreateTournamentBtn">🏏 Create Tournament</button>
-                    <span class="workflow-hint" id="tournamentHint">Create a tournament, then click its card to manage matches.</span>
+                <div class="sports-picker" id="sportsPicker">
+                <div class="sport-choice active" data-sport="cricket"><div class="sport-icon">🏏</div><strong>Cricket</strong><span>Create Cricket Tournament</span></div>
+                <div class="sport-choice" data-sport="football"><div class="sport-icon">⚽</div><strong>Football</strong><span>Create Football Tournament</span></div>
+                <div class="sport-choice" data-sport="other"><div class="sport-icon">🏅</div><strong>Other Sports</strong><span>Create Other Tournament</span></div>
+            </div>
+            <div class="workflow-actions">
+                    <button class="btn btn-primary" id="openCreateTournamentBtn">🏏 Create Cricket Tournament</button>
+                    <span class="workflow-hint" id="tournamentHint">Choose a sport, then create a tournament. The match workflow stays the same.</span>
                     <span id="selectedTournamentBadge" class="selected-tournament-badge" style="display:none;"></span>
                 </div>
 
@@ -2146,6 +2164,25 @@
             });
 
             document.getElementById('loginCancelBtn').addEventListener('click', () => closeModal('loginModal'));
+            document.getElementById('forgotPasswordLink').addEventListener('click', e => {
+                e.preventDefault(); closeModal('loginModal');
+                document.getElementById('forgotIdentity').value = document.getElementById('loginUsername').value.trim();
+                openModal('forgotPasswordModal');
+            });
+            document.getElementById('forgotCancelBtn').addEventListener('click', () => closeModal('forgotPasswordModal'));
+            document.getElementById('backToLoginLink').addEventListener('click', e => { e.preventDefault(); closeModal('forgotPasswordModal'); openModal('loginModal'); });
+            document.getElementById('resetPasswordBtn').addEventListener('click', () => {
+                const identity = document.getElementById('forgotIdentity').value.trim().toLowerCase();
+                const np = document.getElementById('forgotNewPassword').value, cp = document.getElementById('forgotConfirmPassword').value;
+                if (!identity || !np || !cp) { toast('Please fill all fields', 'error'); return; }
+                if (np !== cp) { toast('Passwords do not match', 'error'); return; }
+                let users=[]; try { users=JSON.parse(localStorage.getItem('brklive_users')||'[]'); } catch {}
+                const found=users.find(u=>String(u.username).toLowerCase()===identity || String(u.email).toLowerCase()===identity);
+                if (!found) { toast('No registered user found', 'error'); return; }
+                found.password=np; localStorage.setItem('brklive_users',JSON.stringify(users));
+                closeModal('forgotPasswordModal'); openModal('loginModal'); toast('Password reset successfully. Please login.','success');
+            });
+
             document.getElementById('showRegisterLink').addEventListener('click', e => {
                 e.preventDefault();
                 closeModal('loginModal');
@@ -2166,8 +2203,10 @@
                 try { users = JSON.parse(localStorage.getItem('brklive_users') || '[]'); } catch {}
                 const found = users.find(u => u.username === username && u.password === password);
                 if (found) {
-                    currentUser = { username: found.username, fullName: found.fullName };
+                    currentUser = { username: found.username, fullName: found.fullName, email: found.email };
                     localStorage.setItem('brklive_user', JSON.stringify(currentUser));
+                    if (document.getElementById('rememberLogin')?.checked) localStorage.setItem('brklive_saved_login', JSON.stringify({username:found.username,password:found.password}));
+                    else localStorage.removeItem('brklive_saved_login');
                     updateAuthUI();
                     closeModal('loginModal');
                     toast('Welcome back ' + (found.fullName || username) + '!', 'success');
@@ -2175,6 +2214,12 @@
                 }
                 toast('Invalid username or password', 'error');
             });
+
+            async function sendRegistrationEmail(user) {
+                // A silent email sender requires a configured backend/email provider.
+                // This browser-only build opens a pre-filled confirmation email to the registered address.
+                try { const subject=encodeURIComponent('BRKLIVE19 - Registration Successful'); const body=encodeURIComponent(`Hello ${user.fullName},\\n\\nYour BRKLIVE19 registration was successful.\\n\\nUsername: ${user.username}\\n\\nThank you for registering with BRKLIVE19.`); window.open(`mailto:${user.email}?subject=${subject}&body=${body}`,'_blank'); } catch(e) {}
+            }
 
             document.getElementById('registerSubmitBtn').addEventListener('click', function() {
                 const fullName = document.getElementById('registerFullName').value.trim();
@@ -2189,11 +2234,12 @@
                 if (users.find(u => u.username === username)) { toast('Username already taken', 'error'); return; }
                 users.push({ fullName, username, email, password });
                 localStorage.setItem('brklive_users', JSON.stringify(users));
-                currentUser = { username, fullName };
+                currentUser = { username, fullName, email };
                 localStorage.setItem('brklive_user', JSON.stringify(currentUser));
                 updateAuthUI();
                 closeModal('registerModal');
-                toast('Registered successfully!', 'success');
+                toast('Registered successfully! Confirmation email is ready.', 'success');
+                sendRegistrationEmail({fullName, username, email});
             });
 
             document.getElementById('logoutBtn').addEventListener('click', function() {
@@ -2203,6 +2249,7 @@
                 toast('Logged out', 'success');
             });
 
+            try { const saved=JSON.parse(localStorage.getItem('brklive_saved_login')||'null'); if(saved){document.getElementById('loginUsername').value=saved.username||'';document.getElementById('loginPassword').value=saved.password||'';document.getElementById('rememberLogin').checked=true;} } catch(e) {}
             loadAuth();
             if (new URLSearchParams(window.location.search).get('login') === '1' && !currentUser) {
                 setTimeout(() => openModal('loginModal'), 120);
@@ -2210,6 +2257,21 @@
 
             // ── TOURNAMENT CRUD ──
             let selectedTournamentId = null;
+            let selectedTournamentSport = 'cricket';
+            function applyTournamentSport(sport) {
+                selectedTournamentSport=sport||'cricket';
+                const labels={cricket:['🏏','Cricket'],football:['⚽','Football'],other:['🏅','Other Sports']}; const x=labels[selectedTournamentSport]||labels.cricket;
+                document.getElementById('createTournamentTitle').textContent=`${x[0]} CREATE ${x[1].toUpperCase()} TOURNAMENT`;
+                document.getElementById('openCreateTournamentBtn').textContent=`${x[0]} Create ${x[1]} Tournament`;
+                document.getElementById('createTournamentBtn').textContent=`${x[0]} Create Tournament`;
+                const sel=document.getElementById('tournamentSport'); if(sel) sel.value=selectedTournamentSport;
+                document.querySelectorAll('.sport-choice').forEach(c=>c.classList.toggle('active',c.dataset.sport===selectedTournamentSport));
+                const type=document.getElementById('tournamentType'); if(type) type.innerHTML=selectedTournamentSport==='cricket' ? '<option value="t20">T20</option><option value="odi">ODI</option><option value="test">Test</option><option value="thehundred">The Hundred</option><option value="league">League</option><option value="knockout">Knockout</option>' : '<option value="league">League</option><option value="knockout">Knockout</option><option value="friendly">Friendly</option><option value="cup">Cup</option>';
+            }
+            document.querySelectorAll('.sport-choice').forEach(c=>c.addEventListener('click',()=>{applyTournamentSport(c.dataset.sport);openModal('createTournamentModal');}));
+            document.getElementById('tournamentSport')?.addEventListener('change',e=>applyTournamentSport(e.target.value));
+
+            
 
             function renderTournaments() {
                 const grid = document.getElementById('tournamentGrid');
@@ -2229,7 +2291,7 @@
                 grid.innerHTML = tournaments.map(t => `
                     <div class="tournament-card ${selectedTournamentId === t.id ? 'selected' : ''}" data-id="${t.id}">
                         <div class="name">${t.name}</div>
-                        <div class="meta">${t.venue || '—'} • ${t.type || 'T20'}</div>
+                        <div class="meta">${t.sport === 'football' ? '⚽ Football' : (t.sport === 'other' ? '🏅 Other Sports' : '🏏 Cricket')} • ${t.venue || '—'} • ${t.type || 'T20'}</div>
                         <div class="badge">${t.startDate || ''} — ${t.endDate || ''}</div>
                         <div style="font-size:12px;color:var(--text-muted);margin-top:6px;">${t.matchCount || 0} matches</div>
                         <div class="card-actions">
@@ -2304,6 +2366,7 @@
             }
 
             document.getElementById('openCreateTournamentBtn').addEventListener('click', () => {
+                applyTournamentSport(selectedTournamentSport);
                 document.getElementById('tournamentName').value = '';
                 document.getElementById('tournamentVenue').value = '';
                 document.getElementById('tournamentStartDate').value = '';
@@ -2321,13 +2384,18 @@
                 const end = document.getElementById('tournamentEndDate').value;
                 if (!name) { toast('Please enter a tournament name', 'error'); return; }
                 const tournaments = getTournaments();
-                const t = { id: genId(), name, venue, type, startDate: start, endDate: end, matchCount: 0 };
+                const sport = document.getElementById('tournamentSport')?.value || selectedTournamentSport || 'cricket';
+                const t = { id: genId(), sport, name, venue, type, startDate: start, endDate: end, matchCount: 0 };
                 tournaments.push(t);
                 saveTournaments(tournaments);
                 closeModal('createTournamentModal');
                 toast('Tournament created!', 'success');
                 renderTournaments();
                 selectTournament(t.id);
+                // Football workflow: after creating the tournament, immediately open Match Create.
+                if (sport === 'football') {
+                    setTimeout(() => openCreateMatch(t.id), 180);
+                }
             });
 
             // ── MATCH LIST ──
@@ -2383,6 +2451,10 @@
 
                 matches = matches.filter(m => m.id !== matchId);
                 saveMatches(matches);
+                if (isFootball) {
+                    localStorage.setItem('brklive19_activeFootballMatch', JSON.stringify({matchId: match.id, tournamentId, homeTeam: teamAName, awayTeam: teamBName, duration: footballDuration, halfMinutes: footballHalfMinutes, extraTime: footballExtraTime}));
+                    localStorage.setItem('brklive19_liveSport', JSON.stringify({sport:'football', matchId:match.id, homeTeam:teamAName, awayTeam:teamBName, homeScore:0, awayScore:0, homeYellow:0, awayYellow:0, homeRed:0, awayRed:0, seconds:0, period:'1H', addedTime:0, updatedAt:Date.now()}));
+                }
 
                 const tournaments = getTournaments();
                 const t = tournaments.find(t => t.id === tournamentId);
@@ -2411,6 +2483,27 @@
                 renderTournaments();
             }
 
+            // ── SPORT-SPECIFIC MATCH SETUP ──
+            function updateMatchSportFields() {
+                const tid = document.getElementById('matchTournamentSelect')?.value;
+                const t = getTournaments().find(x => x.id === tid);
+                const football = t?.sport === 'football';
+                document.getElementById('footballMatchFields').style.display = football ? 'block' : 'none';
+                document.getElementById('footballMatchNotice').style.display = football ? 'block' : 'none';
+                document.getElementById('cricketMatchFields').style.display = football ? 'none' : 'grid';
+                document.getElementById('cricketTossFields').style.display = football ? 'none' : 'grid';
+                document.getElementById('xiTeamALabel').textContent = football ? 'Home Team Players (optional)' : 'Team A XI';
+                document.getElementById('xiTeamBLabel').textContent = football ? 'Away Team Players (optional)' : 'Team B XI';
+                document.getElementById('xiTeamAInput').placeholder = football ? 'Home player name' : 'Player name';
+                document.getElementById('xiTeamBInput').placeholder = football ? 'Away player name' : 'Player name';
+                document.getElementById('createMatchHeading').textContent = football ? '⚽ CREATE FOOTBALL MATCH' : '⚙️ CREATE CRICKET MATCH';
+                document.getElementById('createTournamentMatchBtn').textContent = football ? '⚽ Create Football Match' : '🏏 Create Cricket Match';
+                if (football) {
+                    document.getElementById('teamAName').value = 'HOME';
+                    document.getElementById('teamBName').value = 'AWAY';
+                }
+            }
+
             // ── CREATE MATCH ──
             function openCreateMatch(tournamentId) {
                 const select = document.getElementById('matchTournamentSelect');
@@ -2432,6 +2525,7 @@
                 const existing = getMatches().filter(m => m.tournamentId === tournamentId);
                 document.getElementById('matchNo').value = existing.length + 1;
                 openModal('createMatchModal');
+                updateMatchSportFields();
             }
 
             function renderXiList(listId) {
@@ -2494,6 +2588,8 @@
                 bulk.value = '';
             });
 
+            document.getElementById('matchTournamentSelect').addEventListener('change', updateMatchSportFields);
+
             document.getElementById('resetMatchSetupBtn').addEventListener('click', () => {
                 document.getElementById('xiTeamAList').dataset.items = JSON.stringify([]);
                 document.getElementById('xiTeamBList').dataset.items = JSON.stringify([]);
@@ -2516,21 +2612,24 @@
                 const matchNo = parseInt(document.getElementById('matchNo').value) || 1;
                 const teamAName = document.getElementById('teamAName').value.trim();
                 const teamBName = document.getElementById('teamBName').value.trim();
-                const matchType = document.getElementById('matchType').value;
-                const maxOvers = parseInt(document.getElementById('maxOvers').value) || 20;
-                const tossWinner = document.getElementById('tossWinner').value;
-                const tossDecision = document.getElementById('tossDecision').value;
+                const tournament = getTournaments().find(t => t.id === tournamentId) || {};
+                const isFootball = tournament.sport === 'football';
+                const matchType = isFootball ? document.getElementById('footballMatchType').value : document.getElementById('matchType').value;
+                const maxOvers = isFootball ? 0 : (parseInt(document.getElementById('maxOvers').value) || 20);
+                const tossWinner = isFootball ? null : document.getElementById('tossWinner').value;
+                const tossDecision = isFootball ? null : document.getElementById('tossDecision').value;
+                const footballDuration = isFootball ? Number(document.getElementById('footballDuration').value) || 90 : null;
+                const footballHalfMinutes = isFootball ? Number(document.getElementById('footballHalfMinutes').value) || Math.floor(footballDuration/2) : null;
+                const footballExtraTime = isFootball ? document.getElementById('footballExtraTime').value === 'yes' : false;
                 const xiTeamA = JSON.parse(document.getElementById('xiTeamAList').dataset.items || '[]');
                 const xiTeamB = JSON.parse(document.getElementById('xiTeamBList').dataset.items || '[]');
 
                 if (!tournamentId) { toast('Please select a tournament', 'error'); return; }
                 if (!teamAName || !teamBName) { toast('Enter both team names', 'error'); return; }
-                if (xiTeamA.length < 2 || xiTeamB.length < 2) { toast('Each team needs at least 2 players', 'error');
-                    return; }
+                if (!isFootball && (xiTeamA.length < 2 || xiTeamB.length < 2)) { toast('Each cricket team needs at least 2 players', 'error'); return; }
 
                 const matches = getMatches();
                 const allTournaments = getTournaments();
-                const tournament = allTournaments.find(t => t.id === tournamentId) || {};
                 const match = {
                     id: genId(),
                     tournamentId,
@@ -2541,7 +2640,11 @@
                     matchNo,
                     teamAName,
                     teamBName,
+                    sport: isFootball ? 'football' : 'cricket',
                     matchType,
+                    footballDuration,
+                    footballHalfMinutes,
+                    footballExtraTime,
                     maxOvers,
                     tossWinner,
                     tossDecision,
@@ -2555,6 +2658,7 @@
                     striker: null,
                     nonStriker: null,
                     bowler: null,
+                    football: isFootball ? {homeTeam: teamAName, awayTeam: teamBName, homeScore: 0, awayScore: 0, homeYellow: 0, awayYellow: 0, homeRed: 0, awayRed: 0, seconds: 0, period: '1H', addedTime: 0} : null,
                     totalRuns: 0,
                     totalWickets: 0,
                     totalOvers: 0,
@@ -2582,6 +2686,7 @@
                     document.getElementById('matchListContainer').style.display = 'block';
                 }
                 viewMatch(match.id);
+                if (isFootball) setTimeout(() => window.location.href = './football-control.html?matchId=' + encodeURIComponent(match.id), 250);
             });
 
             // ── VIEW MATCH ──
@@ -2669,7 +2774,7 @@
             }
             function fbStartTimer(){ if(fb.running)return; fb.running=true; fb.timer=setInterval(()=>{fb.seconds++;fbRender();},1000); }
             function fbPauseTimer(){fb.running=false;clearInterval(fb.timer);fb.timer=null;fbRender();}
-            document.getElementById('otherSportsLink').addEventListener('click',e=>{e.preventDefault();document.getElementById('footballModal').classList.add('active');fbRender();});
+            document.getElementById('otherSportsLink').addEventListener('click',e=>{e.preventDefault(); navigate('tournament'); applyTournamentSport('football'); document.getElementById('sportsPicker')?.scrollIntoView({behavior:'smooth',block:'start'});});
             document.getElementById('openFootballControllerBtn').addEventListener('click',()=>{ if(currentUser) window.location.href='./football-control.html'; else requireLogin(); });
             document.getElementById('openFootballOverlayBtn').addEventListener('click',()=>window.open('./football-overlay.html','_blank'));
             document.getElementById('fbClose').addEventListener('click',()=>{fbPauseTimer();document.getElementById('footballModal').classList.remove('active');});
@@ -3005,8 +3110,7 @@
                 const xiTeamB = JSON.parse(document.getElementById('editXiTeamBList').dataset.items || '[]');
 
                 if (!teamAName || !teamBName) { toast('Both team names are required', 'error'); return; }
-                if (xiTeamA.length < 2 || xiTeamB.length < 2) { toast('Each team needs at least 2 players', 'error');
-                    return; }
+                if (!isFootball && (xiTeamA.length < 2 || xiTeamB.length < 2)) { toast('Each cricket team needs at least 2 players', 'error'); return; }
 
                 const oldTeamA = match.teamAName;
                 const oldTeamB = match.teamBName;
