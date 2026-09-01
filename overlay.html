@@ -1621,10 +1621,16 @@ body{padding:0 0 .5vh !important}
 // FIREBASE SETUP
 // ============================================================
 const firebaseConfig={apiKey:"AIzaSyBLWq1bqJ32F2cg3mqYQ0uwXcS3zvTA3A4",authDomain:"brklive19-2bab4.firebaseapp.com",databaseURL:"https://brklive19-2bab4-default-rtdb.asia-southeast1.firebasedatabase.app",projectId:"brklive19-2bab4",storageBucket:"brklive19-2bab4.firebasestorage.app",messagingSenderId:"294058533898",appId:"1:294058533898:web:4996705937e969939cabf3",measurementId:"G-RW18E7LVEX"};
-import{initializeApp}from"https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import{getDatabase,ref,onValue,set}from"https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
-
-const app=initializeApp(firebaseConfig),db=getDatabase(app),liveRef=ref(db,"liveScore");
+let firebaseReady=false, initializeApp=null, getDatabase=null, ref=null, onValue=null, set=null;
+let db=null, liveRef=null;
+try {
+  const [fa, fd] = await Promise.all([
+    import("https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js"),
+    import("https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js")
+  ]);
+  initializeApp=fa.initializeApp; getDatabase=fd.getDatabase; ref=fd.ref; onValue=fd.onValue; set=fd.set;
+  const app=initializeApp(firebaseConfig); db=getDatabase(app); liveRef=ref(db,"liveScore"); firebaseReady=true;
+} catch(err) { console.warn("Firebase unavailable; using local overlay bridge.", err); }
 const $=id=>document.getElementById(id),num=v=>Number(v)||0;
 const requestedMatchId = new URLSearchParams(window.location.search).get("match") || "";
 const requestedIntroKey = Number(new URLSearchParams(window.location.search).get("intro")) || 0;
@@ -1745,7 +1751,19 @@ function detectAnimation(d){
   const bcast=d.broadcast||{};
   const broadcastId=String(bcast.id||bcast.eventId||"");
   const bsig=broadcastId || (bcast.active?String(bcast.type||""):"");
-  if(!animationBooted){previousBroadcastSignature=bsig;previousEventSignature=Array.isArray(d.events)?String(d.events.length)+"|"+String(d.events[d.events.length-1]||""):"";animationBooted=true;return;}
+  if(!animationBooted){
+  previousBroadcastSignature="";
+  previousEventSignature="";
+  animationBooted=true;
+  // If the overlay opens after a scorer action, still show the current active event.
+  if(bcast.active&&bsig){
+    const t0=String(bcast.type||"").toLowerCase();
+    if(t0.includes("free hit"))showAnimation("freehit");else if(t0.includes("hat"))showAnimation("hattrick");else if(t0.includes("run out"))showAnimation("runout");else if(t0.includes("six"))showAnimation("six");else if(t0.includes("four"))showAnimation("four");else if(t0.includes("wicket"))showAnimation("wicket");
+  }
+  previousBroadcastSignature=bsig;
+  previousEventSignature=Array.isArray(d.events)?String(d.events.length)+"|"+String(d.events[d.events.length-1]||""):"";
+  return;
+}
   if(bcast.active&&bsig&&bsig!==previousBroadcastSignature){
     const t=String(bcast.type||"").toLowerCase();
     if(t.includes("free hit"))showAnimation("freehit");else if(t.includes("hat"))showAnimation("hattrick");else if(t.includes("run out"))showAnimation("runout");else if(t.includes("six"))showAnimation("six");else if(t.includes("four"))showAnimation("four");else if(t.includes("wicket"))showAnimation("wicket");
@@ -2021,10 +2039,12 @@ function renderTheme5All(d,scoreVisible){renderTheme5Lower(d,scoreVisible);rende
 // ============================================================
 function applyLiveData(d){
  if(!d) return;
+ // A scorer control action is authoritative: once it sends a packet, the overlay must respond.
+ if(d.overlay && (d.overlay.scoreVisible === true || d.overlay.intro === false)) { d.overlay.scoreVisible = true; d.overlay.intro = false; }
  if(requestedMatchId && d.matchId && d.matchId !== requestedMatchId) return;
  const dismissedAt = Number(d.overlay && d.overlay.introDismissedAt) || 0;
  const introActive = requestedIntro && requestedIntroKey > dismissedAt;
- const scoreVisible = introActive ? false : (d.overlay && d.overlay.scoreVisible !== undefined ? d.overlay.scoreVisible : true);
+ const scoreVisible = (d.overlay && d.overlay.scoreVisible === false && d.overlay.intro === true) ? false : true;
   $("overlay").classList.toggle("hidden", scoreVisible === false);
  applyTheme(d.theme || requestedTheme || "blue", d.customColors);
  const isTheme5=(d.theme || requestedTheme || "blue")==="theme5";
