@@ -1904,7 +1904,10 @@ function renderSummary(d){
     const bowlRows=bowls.length?bowls.map(([n,x],i)=>`<tr><td>${i+1}. ${escapeText(n)}</td><td class="num">${oversFromBalls(x.balls)}</td><td class="num">${num(x.wickets)}</td><td class="num">${num(x.runs)}</td></tr>`).join(''):`<tr><td colspan="4">NO BOWLING DATA</td></tr>`;
     return `<section class="summary-team"><div class="summary-team-head"><div class="name">${escapeText(team)}</div><div class="score">${num(inn.runs)}/${num(inn.wickets)} • ${oversFromBalls(inn.legalBalls??inn.balls)} OV • ${num(inn.legalBalls??inn.balls)} BALLS</div></div><div class="summary-columns"><div class="summary-box"><div class="box-head">TOP 3 BATTER RUN SCORERS</div><table><thead><tr><th>BATTER</th><th class="num">RUNS</th><th class="num">BALLS</th></tr></thead><tbody>${batRows}</tbody></table></div><div class="summary-box"><div class="box-head">TOP 3 BOWLING FIGURES</div><table><thead><tr><th>BOWLER</th><th class="num">OVERS</th><th class="num">W</th><th class="num">R</th></tr></thead><tbody>${bowlRows}</tbody></table></div></div></section>`;
   }
-  el.innerHTML=`<div class="summary-head"><div class="side a">${escapeText(d.teamA||'TEAM A')}</div><div class="center"><div class="title">MATCH SUMMARY</div><div class="sub">${escapeText(d.matchName||'MATCH')}</div></div><div class="side b">${escapeText(d.teamB||'TEAM B')}</div></div><div class="summary-meta"><div class="meta"><b>TOURNAMENT:</b> ${escapeText(d.tournament||'—')}</div><div class="meta"><b>TOSS:</b> ${escapeText(toss)}</div></div>${teamBlock(1,i1,team1)}${teamBlock(2,i2,team2)}<div class="${completed?'summary-result':'summary-result progress'}">${escapeText(status)}</div>`;
+  const tournament = d.tournament || d.tournamentName || requestedTournament || '—';
+  const matchName = d.matchName || `${d.teamA||'TEAM A'} vs ${d.teamB||'TEAM B'}`;
+  const liveLabel = completed ? 'MATCH COMPLETED' : 'LIVE MATCH';
+  el.innerHTML=`<div class="summary-head"><div class="side a">${escapeText(d.teamA||'TEAM A')}</div><div class="center"><div class="title">MATCH SUMMARY</div><div class="sub">${escapeText(matchName)}</div><div class="summary-center-meta"><span><b>TOURNAMENT</b> ${escapeText(tournament)}</span><span><b>TOSS</b> ${escapeText(toss)}</span></div><div class="summary-live-pill">● ${liveLabel}</div></div><div class="side b">${escapeText(d.teamB||'TEAM B')}</div></div>${teamBlock(1,i1,team1)}${teamBlock(2,i2,team2)}<div class="${completed?'summary-result':'summary-result progress'}">${escapeText(status)}</div>`;
 }
 
 // ---- Full scorecard render ----
@@ -2023,7 +2026,10 @@ function renderTheme5Summary(d){
   const first=d.firstInnings||{},current=d,team1=first.team?teamName(d,first.team):teamName(d,'A'),team2=teamName(d,first.team==='A'?'B':'A');
   const block=(title,inn,team)=>{const bats=Object.entries(inn.batters||{}).sort((a,b)=>num(b[1].runs)-num(a[1].runs)).slice(0,3);const bowls=Object.entries(inn.bowlers||{}).sort((a,b)=>num(b[1].wickets)-num(a[1].wickets)).slice(0,3);return `<section class="t5-summary-team"><div class="t5-teambar">${escapeText(team||title)}</div><div class="t5-teambox"><div class="t5-col">${bats.length?bats.map(([n,x])=>`<span>${escapeText(n)}</span><b>${num(x.runs)}(${num(x.balls)})</b>`).join(''):'<span>Player A</span><b>Not Yet</b><span>Player B</span><b>Not Yet</b><span>Player C</span><b>Not Yet</b>'}</div><div class="t5-col">${bowls.length?bowls.map(([n,x])=>`<span>${escapeText(n)}</span><b>${num(x.wickets)}-${num(x.runs)} (${oversFromBalls(x.balls)})</b>`).join(''):'<span>Bower A</span><b>Not Yet</b><span>Bower B</span><b>Not Yet</b><span>Bower C</span><b>Not Yet</b>'}</div></div></section>`};
   const status=d.status==='completed'?(d.resultText||d.matchResult||'MATCH COMPLETED'):`Match in Progress &nbsp;&nbsp;&nbsp; ${escapeText(teamName(d,d.battingTeam||'A'))} ${num(d.runs)}/${num(d.wickets)} Over ${oversFromBalls(d.legalBalls)}`;
-  $('theme5Summary').innerHTML=`<div class="t5-summary-shell"><div class="t5-summary-head"><div class="t5-summary-side">${escapeText(d.teamA||'Team A')}</div><div class="t5-summary-title">MATCH<br>SUMMARY</div><div class="t5-summary-side">${escapeText(d.teamB||'Team B')}</div></div>${block('TEAM A',first.team?first:{batters:{},bowlers:{}},team1)}${block('TEAM B',first.team?current:{batters:{},bowlers:{}},team2)}<div class="t5-summary-status">${status}</div></div>`;t5On('theme5Summary',true)
+  const tournament = d.tournament || d.tournamentName || requestedTournament || '—';
+  const toss = d.tossWinner ? `${teamName(d,d.tossWinner)} • ${d.tossDecision==='bat'?'BAT FIRST':'BOWL FIRST'}` : '—';
+  const matchName = d.matchName || `${d.teamA||'Team A'} vs ${d.teamB||'Team B'}`;
+  $('theme5Summary').innerHTML=`<div class="t5-summary-shell"><div class="t5-summary-head"><div class="t5-summary-side">${escapeText(d.teamA||'Team A')}</div><div class="t5-summary-title"><span>MATCH<br>SUMMARY</span><small>${escapeText(matchName)}</small><em>TOURNAMENT: ${escapeText(tournament)} &nbsp; • &nbsp; TOSS: ${escapeText(toss)}</em></div><div class="t5-summary-side">${escapeText(d.teamB||'Team B')}</div></div>${block('TEAM A',first.team?first:{batters:{},bowlers:{}},team1)}${block('TEAM B',first.team?current:{batters:{},bowlers:{}},team2)}<div class="t5-summary-status">${status}</div></div>`;t5On('theme5Summary',true)
 }
 function renderTheme5Scorecard(d){
   const on=String(d.theme||requestedTheme||'')==='theme5'&&['scorecard','scorecard1','scorecard2'].includes(String(d.mode||''));if(!on){t5On('theme5Scorecard',false);return}
@@ -2459,6 +2465,29 @@ body{display:flex!important;align-items:flex-end!important;justify-content:cente
 </style>
 
 </body>
+
+<style id="brklive19-live-summary-fix-v1">
+/* LIVE MATCH SUMMARY FIX: keep live data visible and put tournament/toss in the center header. */
+.summary-overlay{z-index:900!important;}
+.summary-head .center{position:relative;overflow:hidden;padding:5px 10px;box-sizing:border-box;}
+.summary-head .center .title{line-height:1.05;}
+.summary-head .center .sub{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.summary-center-meta{display:flex;justify-content:center;align-items:center;gap:14px;flex-wrap:wrap;margin-top:3px;font-size:clamp(9px,.8vw,15px);line-height:1.1;max-width:100%;}
+.summary-center-meta span{max-width:46%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.summary-center-meta b{margin-right:4px;opacity:.75;}
+.summary-live-pill{font-size:clamp(8px,.65vw,12px);font-weight:1000;letter-spacing:.04em;opacity:.9;margin-top:2px;}
+#theme5Summary .t5-summary-title{flex-direction:column;gap:2px;text-align:center;line-height:1.0;overflow:hidden;}
+#theme5Summary .t5-summary-title small{font-size:clamp(8px,.7vw,13px);font-weight:800;max-width:80%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+#theme5Summary .t5-summary-title em{font-style:normal;font-size:clamp(7px,.58vw,11px);font-weight:800;color:#78c6df;max-width:90%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+@media(max-width:900px){
+  .summary-head .center{padding:2px 4px;}
+  .summary-center-meta{gap:5px;font-size:6px;}
+  .summary-center-meta span{max-width:48%;}
+  .summary-live-pill{font-size:6px;}
+  #theme5Summary .t5-summary-title small{font-size:6px;}
+  #theme5Summary .t5-summary-title em{font-size:5px;}
+}
+</style>
 </html>
 <style>
 /* ================================================================
