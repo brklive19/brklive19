@@ -2134,16 +2134,16 @@ function applyLiveData(d){
  $("batTeam").textContent=teamName(d,bat);
  $("scoreBattingTeam").textContent=teamName(d,bat);
  $("bowlTeam").textContent=teamName(d,bowl);
- $("batLogo").textContent=teamInitials(teamName(d,bat));
- $("bowlLogo").textContent=teamInitials(teamName(d,bowl));
- $("headerBatTeam").textContent=teamName(d,bat);
- $("headerBowlTeam").textContent=teamName(d,bowl);
- $("cornerBatTeam").textContent=teamName(d,bat);
- $("cornerBowlTeam").textContent=teamName(d,bowl);
- $("headerInnings").textContent=(num(d.innings||1)===1?"1st":"2nd")+" INNINGS";
+ if($("batLogo")) $("batLogo").textContent=teamInitials(teamName(d,bat));
+ if($("bowlLogo")) $("bowlLogo").textContent=teamInitials(teamName(d,bowl));
+ if($("headerBatTeam")) $("headerBatTeam").textContent=teamName(d,bat);
+ if($("headerBowlTeam")) $("headerBowlTeam").textContent=teamName(d,bowl);
+ if($("cornerBatTeam")) $("cornerBatTeam").textContent=teamName(d,bat);
+ if($("cornerBowlTeam")) $("cornerBowlTeam").textContent=teamName(d,bowl);
+ if($("headerInnings")) $("headerInnings").textContent=(num(d.innings||1)===1?"1st":"2nd")+" INNINGS";
  const tossText=d.tossWinner ? ("TOSS: "+teamName(d,d.tossWinner)+" • "+(d.tossDecision==="bat"?"BAT FIRST":"BOWL FIRST")) : "TOSS —";
- $("headerToss").textContent=tossText;
- $("headerMatch").textContent=d.matchName||"LIVE CRICKET";
+ if($("headerToss")) $("headerToss").textContent=tossText;
+ if($("headerMatch")) $("headerMatch").textContent=d.matchName||"LIVE CRICKET";
 
  const b1n=d.b1||d.striker||d.batsman1||"STRIKER";
  const b2n=d.b2||d.nonStriker||d.batsman2||"NON-STRIKER";
@@ -3619,6 +3619,62 @@ html,body{background:transparent!important;background-color:transparent!importan
  #overlay .scorePill{font-size:clamp(18px,4vw,30px)!important}
  #bannerTournament.show,#bannerMatch.show,#bannerVenue.show,#bannerToss.show,#bannerResult.show,#bannerPlayer.show,#bannerBowler.show,#bannerPartnership.show,#custom.show{width:96vw!important;height:88px!important;font-size:clamp(16px,3.1vw,26px)!important;padding:8px 15px!important;border-radius:16px!important}
  #animation.show{width:96vw!important;height:110px!important;border-radius:18px!important}
+}
+</style>
+<style id="BRKLIVE19-OPERATOR-FINAL-FIX">
+/* Equal team-name sizing on BOTH corner panels. */
+#overlay .teamPanel.left .teamName,#overlay .teamPanel.right .teamName{
+  font-size:clamp(18px,1.85vw,34px)!important;
+  font-weight:1000!important; line-height:1!important;
+  max-width:96%!important; white-space:nowrap!important;
+  overflow:hidden!important; text-overflow:ellipsis!important;
+}
+/* Keep the current batting team clearly visible beside the score. */
+#overlay .scorePanel{padding:5px 10px 7px!important;gap:2px!important;overflow:hidden!important}
+#overlay .scoreBattingTeam{
+  display:block!important;width:100%!important;min-height:14px!important;
+  margin:0 0 2px!important;padding:0 5px!important;
+  font-size:clamp(10px,1.0vw,18px)!important;
+  line-height:1.05!important;font-weight:1000!important;
+  text-align:center!important;text-transform:uppercase!important;
+  white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important;
+  color:inherit!important;
+}
+#overlay .scorePill{height:auto!important;min-height:48px!important;padding:6px 14px!important}
+#overlay .scoreOverDetail{display:block!important;margin-top:2px!important;font-size:clamp(8px,.70vw,13px)!important;line-height:1!important;font-weight:1000!important}
+#overlay .scoreCRR{display:block!important;margin-top:3px!important;font-size:clamp(8px,.68vw,13px)!important;line-height:1!important;font-weight:1000!important;letter-spacing:.035em!important;text-transform:uppercase!important;color:inherit!important}
+/* Smaller batter/bowler names for a cleaner broadcast layout. */
+#overlay .batterName>span,#overlay .bowlerName{font-size:clamp(11px,.95vw,18px)!important;line-height:1.02!important}
+#overlay .batterName small{font-size:clamp(6px,.45vw,8px)!important}
+#overlay .bowlerStats{font-size:clamp(9px,.72vw,14px)!important}
+/* Every operator information button uses the selected theme colours and fully replaces the scoring bar. */
+#bannerTournament.show,#bannerMatch.show,#bannerVenue.show,#bannerToss.show,#bannerResult.show,#bannerPlayer.show,#bannerBowler.show,#bannerPartnership.show,#custom.show{
+  display:flex!important;visibility:visible!important;opacity:1!important;
+  position:fixed!important;left:0!important;right:0!important;top:auto!important;bottom:0!important;
+  transform:none!important;width:100vw!important;height:142px!important;max-width:none!important;
+  margin:0!important;padding:12px 6vw!important;box-sizing:border-box!important;
+  align-items:center!important;justify-content:center!important;text-align:center!important;
+  border-radius:0!important;border:3px solid var(--cyan2,#08d7ff)!important;
+  border-top-color:var(--yellow,#ffd900)!important;
+  border-bottom-color:var(--cyan2,#08d7ff)!important;
+  background:linear-gradient(120deg,var(--navy,#071a58),var(--accent,#153f98),var(--cyan,#00b8e8))!important;
+  color:#fff!important;z-index:5000!important;
+  font-size:clamp(22px,2.5vw,48px)!important;font-weight:1000!important;line-height:1.1!important;
+  text-transform:uppercase!important;white-space:normal!important;overflow:hidden!important;
+  box-shadow:0 -8px 30px rgba(0,0,0,.32),inset 0 1px rgba(255,255,255,.35)!important;
+}
+#bannerTournament.show{border-color:var(--yellow,#ffd900)!important}
+#bannerMatch.show{border-color:var(--cyan2,#08d7ff)!important}
+#bannerVenue.show{border-color:var(--cyan,#00b8e8)!important}
+#bannerToss.show{border-color:var(--green,#16b86a)!important}
+#bannerResult.show{border-color:var(--pink,#d600ff)!important}
+#bannerPlayer.show,#bannerPartnership.show{border-color:var(--cyan2,#08d7ff)!important}
+#bannerBowler.show{border-color:var(--green,#16b86a)!important}
+#overlay.bannerMode .frame,#overlay.customMode .frame{visibility:hidden!important;opacity:0!important}
+@media(max-width:900px){
+ #overlay .teamPanel.left .teamName,#overlay .teamPanel.right .teamName{font-size:clamp(13px,2.5vw,22px)!important}
+ #overlay .batterName>span,#overlay .bowlerName{font-size:clamp(9px,1.5vw,15px)!important}
+ #bannerTournament.show,#bannerMatch.show,#bannerVenue.show,#bannerToss.show,#bannerResult.show,#bannerPlayer.show,#bannerBowler.show,#bannerPartnership.show,#custom.show{height:88px!important;font-size:clamp(16px,3vw,27px)!important;padding:8px 4vw!important}
 }
 </style>
 <style id="BRKLIVE19-USER-TEAM-SIZE-FINAL">
