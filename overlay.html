@@ -1512,6 +1512,39 @@ body{padding:0 0 .5vh !important}
 }
 </style>
 
+<style id="BRKLIVE19-USER-FINAL-REQUEST">
+/* User final layout: large corner teams, clean score block, no bowler-status line, single top-right live brand. */
+#overlay .teamPanel{width:20%!important;padding:0 1.1vw!important;z-index:8!important}
+#overlay .teamPanel.left{left:0!important;justify-content:center!important}
+#overlay .teamPanel.right{right:0!important;justify-content:center!important}
+#overlay .teamPanel .teamName{font-size:clamp(20px,2.05vw,40px)!important;line-height:.95!important;font-weight:1000!important;max-width:96%!important;text-align:center!important;letter-spacing:.02em!important}
+#overlay .content{left:20%!important;right:20%!important;grid-template-columns:38% 24% 38%!important}
+#overlay .batterName>span{font-size:clamp(13px,1.12vw,21px)!important}
+#overlay .batterName small{font-size:clamp(7px,.50vw,10px)!important}
+#overlay .bowlerName{font-size:clamp(14px,1.18vw,22px)!important}
+#overlay .bowlerStatus{display:none!important}
+#overlay .scorePanel{position:relative!important;display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;gap:3px!important;padding:6px 8px!important}
+#overlay .scoreBattingTeam{display:block!important;width:100%!important;text-align:left!important;padding-left:8px!important;font-size:clamp(11px,.95vw,18px)!important;font-weight:1000!important;line-height:1!important;text-transform:uppercase!important;color:#10245b!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}
+#overlay .scorePill{width:82%!important;min-width:0!important;height:auto!important;min-height:48%!important;padding:8px 10px!important;font-size:clamp(28px,3.0vw,58px)!important}
+#overlay .scoreOverDetail{display:block!important;font-size:clamp(9px,.72vw,14px)!important;font-weight:1000!important;line-height:1!important;text-transform:uppercase!important;color:#26385b!important;letter-spacing:.05em!important}
+#overlay .scoreExtraDetail{display:block!important;font-size:clamp(7px,.52vw,10px)!important;font-weight:900!important;color:#66748a!important;line-height:1!important;text-transform:uppercase!important}
+#overlay .hiddenCompat{display:none!important}
+#overlay .refBrandLive{top:6px!important;right:10px!important;bottom:auto!important;z-index:1000!important;width:115px!important}
+#overlay .refBrandText{font-size:clamp(13px,1.05vw,21px)!important}
+#overlay .refBrandLiveLine{font-size:clamp(7px,.52vw,11px)!important}
+#overlay .compactCorners{display:none!important}
+@media(max-width:900px){
+ #overlay .teamPanel{width:20%!important;padding:0 7px!important}
+ #overlay .content{left:20%!important;right:20%!important;grid-template-columns:39% 22% 39%!important}
+ #overlay .teamPanel .teamName{font-size:clamp(14px,2.5vw,23px)!important}
+ #overlay .batterName>span{font-size:clamp(10px,1.8vw,16px)!important}
+ #overlay .bowlerName{font-size:clamp(10px,1.8vw,16px)!important}
+ #overlay .scoreBattingTeam{font-size:clamp(7px,1.4vw,12px)!important}
+ #overlay .scorePill{font-size:clamp(20px,4.5vw,34px)!important}
+ #overlay .scoreOverDetail{font-size:clamp(6px,1.2vw,10px)!important}
+ #overlay .scoreExtraDetail{font-size:clamp(5px,1vw,8px)!important}
+}
+</style>
 </head>
 <body>
 <!-- ===== MAIN OVERLAY ===== -->
@@ -1576,18 +1609,19 @@ body{padding:0 0 .5vh !important}
       </div>
 
       <div class="scorePanel">
-        <div id="tournamentTitle" class="tournamentTitle">TOURNAMENT</div>
-        <div id="matchTitle" class="matchTitle">League Match</div>
-        <div id="matchTeams" class="matchTeams">TEAM A <b>VS</b> TEAM B</div>
-        <div class="scoreCaption">TOTAL SCORE</div>
+        <div id="scoreBattingTeam" class="scoreBattingTeam">TEAM A</div>
         <div id="scorePill" class="scorePill">0-0</div>
-        <div class="scoreMeta"><span>RUNS <b id="runsValue">0</b></span><span>WKTS <b id="wicketsValue">0</b></span><span>OV <b id="overs">0.0</b></span><span>BALL <b id="ballsValue">0</b></span></div>
-        <div class="crrRrr"><span id="inningsLabel">1st innings</span><span>CRR: <b id="crr">0.00</b></span><span>RRR: <b id="rrr">0.00</b></span><span id="extraMeta">EXTRAS: 0</span></div>
+        <div id="scoreOverDetail" class="scoreOverDetail">OVER 0.0 • BALL 0</div>
+        <div id="scoreCRR" class="scoreCRR">CURRENT RUN RATE: 0.00</div>
+        <div id="scoreExtraDetail" class="scoreExtraDetail">1ST INNINGS</div>
+        <!-- Compatibility fields kept for scorer/data updates but not displayed in the compact scoring graphic. -->
+        <span id="tournamentTitle" class="hiddenCompat">TOURNAMENT</span><span id="matchTitle" class="hiddenCompat">League Match</span><span id="matchTeams" class="hiddenCompat">TEAM A VS TEAM B</span>
+        <span id="runsValue" class="hiddenCompat">0</span><span id="wicketsValue" class="hiddenCompat">0</span><span id="overs" class="hiddenCompat">0.0</span><span id="ballsValue" class="hiddenCompat">0</span><span id="inningsLabel" class="hiddenCompat">1st innings</span><span id="crr" class="hiddenCompat">0.00</span><span id="rrr" class="hiddenCompat">0.00</span><span id="extraMeta" class="hiddenCompat">EXTRAS: 0</span>
       </div>
 
       <div class="bowlerPanel">
         <div class="bowlerTop"><div id="bowler" class="bowlerName">BOWLER</div><div class="live">LIVE</div></div>
-        <div id="bowlerStats" class="bowlerStats">0.0 O • 0 R • 0 W</div><div id="bowlerStatus" class="bowlerStatus">BOWLER STATUS • LIVE</div>
+        <div id="bowlerStats" class="bowlerStats">0.0 O • 0 R • 0 W</div>
         <div class="currentOver"><div class="currentOverLabel">THIS OVER</div><div id="balls" class="ballList"></div></div>
       </div>
     </div>
@@ -1744,7 +1778,7 @@ function showAnimation(type){
   t.textContent=map[type][0];
   void t.offsetWidth;
   a.classList.add("show",map[type][1]);
-  animationTimer=setTimeout(()=>a.className="animation",2400);
+  animationTimer=setTimeout(()=>a.className="animation",3200);
 }
 
 function detectAnimation(d){
@@ -1871,9 +1905,12 @@ function stackFooterBanners(){
 // ---- Full-frame match summary ----
 function inningsData(d, no){
   if(no===1){
+    // During the live first innings the current scorer packet is the truth.
+    // Use the saved snapshot only after the second innings has started.
+    if(Number(d.innings||1)===1) return d;
     const f=d.firstInnings||{};
     if(f && (f.runs!==undefined || f.batters || f.bowlers)) return f;
-    return Number(d.innings||1)===1 ? d : {};
+    return {};
   }
   if(Number(d.innings||1)===2) return d;
   const firstSide=(d.firstInnings&&d.firstInnings.team)||d.battingTeam||'A';
@@ -2069,7 +2106,7 @@ function applyLiveData(d){
  if(!d) return;
  // A scorer control action is authoritative: once it sends a packet, the overlay must respond.
  if(d.overlay && (d.overlay.scoreVisible === true || d.overlay.intro === false)) { d.overlay.scoreVisible = true; d.overlay.intro = false; }
- if(requestedMatchId && d.matchId && d.matchId !== requestedMatchId) return;
+ // Latest scorer packet is authoritative; do not reject it because of a stale display URL match id.
  const dismissedAt = Number(d.overlay && d.overlay.introDismissedAt) || 0;
  const introActive = requestedIntro && requestedIntroKey > dismissedAt;
  const scoreVisible = (d.overlay && d.overlay.scoreVisible === false && d.overlay.intro === true) ? false : true;
@@ -2095,6 +2132,7 @@ function applyLiveData(d){
 
  const bat=d.battingTeam||"A", bowl=d.bowlingTeam||(bat==="A"?"B":"A");
  $("batTeam").textContent=teamName(d,bat);
+ $("scoreBattingTeam").textContent=teamName(d,bat);
  $("bowlTeam").textContent=teamName(d,bowl);
  $("batLogo").textContent=teamInitials(teamName(d,bat));
  $("bowlLogo").textContent=teamInitials(teamName(d,bowl));
@@ -2151,6 +2189,7 @@ function applyLiveData(d){
   if(recentEl){recentEl.innerHTML=recent.slice(-12).map(x=>`<span class="ball-chip">${escapeText(x.label??x.runs??"")}</span>`).join("");}
 
  $("crr").textContent = calcCRR(d);
+ if($("scoreCRR")) $("scoreCRR").textContent = "CURRENT RUN RATE: " + calcCRR(d);
  const title=d.matchName||"League Match"; $("matchTitle").textContent=title;
  const tournament=d.tournament||requestedTournament||"TOURNAMENT"; if($("tournamentTitle")) $("tournamentTitle").textContent=tournament;
  if($("matchTeams")) $("matchTeams").innerHTML=escapeText(teamName(d,bat))+" <b>VS</b> "+escapeText(teamName(d,bowl));
@@ -2158,7 +2197,7 @@ function applyLiveData(d){
  const bow=d.bowler||"BOWLER", bo=bowlerStats(d,bow);
  $("bowler").textContent=bow;
  $("bowlerStats").textContent=oversFromBalls(bo.balls)+" O • "+num(bo.runs)+" R • "+num(bo.wickets)+" W";
- $("bowlerStatus").textContent = (d.status==="completed" ? "MATCH COMPLETED" : "BOWLER STATUS • LIVE");
+ if($("bowlerStatus")) $("bowlerStatus").textContent = (d.status==="completed" ? "MATCH COMPLETED" : "BOWLER STATUS • LIVE");
 
  updateTarget(d);
  renderBalls(d);
@@ -2182,7 +2221,7 @@ function readLocalLiveScore(){
 function applyLocalLiveScore(){
   const d=readLocalLiveScore();
   if (!d) return;
-  if (requestedMatchId && d.matchId && d.matchId !== requestedMatchId) return;
+  // Accept the newest scorer packet even when the overlay URL still has an older match id.
   lastBridgeUpdate = Math.max(lastBridgeUpdate, Number(d.__bridgeUpdatedAt)||0);
   applyLiveData(d);
 }
@@ -2491,6 +2530,23 @@ body{display:flex!important;align-items:flex-end!important;justify-content:cente
 }
 </style>
 
+<style id="BRKLIVE19-REQUESTED-FIX-2">
+#overlay .teamPanel.left .teamName,#overlay .teamPanel.right .teamName{
+  font-size:clamp(20px,2.25vw,42px)!important;
+  line-height:.95!important;
+  font-weight:1000!important;
+  max-width:96%!important;
+}
+#overlay .batterName>span,#overlay .bowlerName{font-size:clamp(11px,.92vw,18px)!important;line-height:1!important}
+#overlay .batterName small{font-size:clamp(7px,.52vw,10px)!important}
+#overlay .scoreCRR{display:block!important;margin-top:5px!important;font-size:clamp(9px,.72vw,14px)!important;line-height:1!important;font-weight:1000!important;color:#26385b!important;letter-spacing:.04em!important;text-transform:uppercase!important}
+@media(max-width:900px){
+ #overlay .teamPanel.left .teamName,#overlay .teamPanel.right .teamName{font-size:clamp(13px,2.5vw,22px)!important}
+ #overlay .batterName>span,#overlay .bowlerName{font-size:clamp(9px,1.55vw,15px)!important}
+ #overlay .batterName small{font-size:clamp(6px,1vw,9px)!important}
+ #overlay .scoreCRR{font-size:clamp(6px,1.15vw,10px)!important;margin-top:3px!important}
+}
+</style>
 </body>
 
 <style id="brklive19-live-summary-fix-v1">
@@ -3514,4 +3570,98 @@ body:not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6)
 #overlay .scorePanel:before,#overlay .scorePanel:after{background:linear-gradient(var(--cyan),var(--pink),var(--cyan2))!important}
 .summary-center-meta{justify-content:center!important;text-align:center!important}
 @media(max-width:700px){#overlay .scoreMeta{gap:2px!important}#overlay .scoreMeta span{font-size:5px!important}#overlay .scoreMeta span b{font-size:10px!important}#overlay .crrRrr{gap:3px!important}.summary-center-meta span{max-width:32%!important}}
+</style>
+
+<style id="BRKLIVE19-PERFECT-FINAL-OVERRIDES">
+/* FINAL operator build: transparent canvas, simple scoring bar, reliable info cards and event graphics. */
+html,body{background:transparent!important;background-color:transparent!important;overflow:hidden!important}
+/* Normal scoring graphic: remove tournament/match/vs labels and duplicate RUN/WKT/BALL counters. */
+#overlay #tournamentTitle,#overlay #matchTitle,#overlay #matchTeams,#overlay .scoreCaption,#overlay .scoreMeta,#overlay .crrRrr{display:none!important}
+#overlay .scorePanel{display:flex!important;align-items:center!important;justify-content:center!important;padding:4px 10px!important}
+#overlay .scorePill{display:flex!important;align-items:center!important;justify-content:center!important;font-size:clamp(30px,3.3vw,64px)!important;line-height:1!important;min-width:78%!important;height:72%!important;border-radius:18px!important;font-weight:1000!important}
+/* Team names live at the two corners and are large enough for broadcast. */
+#overlay .teamPanel{display:flex!important;align-items:center!important;justify-content:center!important;overflow:hidden!important}
+#overlay .teamPanel.left{left:0!important;width:18%!important}
+#overlay .teamPanel.right{right:0!important;width:18%!important}
+#overlay .teamName{font-size:clamp(17px,1.65vw,32px)!important;font-weight:1000!important;line-height:1!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important;max-width:94%!important;text-align:center!important}
+#overlay .content{left:18%!important;right:18%!important;grid-template-columns:37% 26% 37%!important}
+/* Keep current batter/bowler names + THIS OVER information crisp. */
+#overlay .batterName>span,#overlay .bowlerName{font-size:clamp(15px,1.25vw,24px)!important;font-weight:1000!important}
+#overlay .batterName small,#overlay .bowlerStatus{font-size:clamp(8px,.62vw,12px)!important}
+#overlay .batterScore b{font-size:clamp(21px,1.75vw,34px)!important}
+#overlay .bowlerStats{font-size:clamp(11px,.9vw,17px)!important;font-weight:900!important}
+#overlay .currentOverLabel{font-size:clamp(8px,.58vw,11px)!important;font-weight:1000!important}
+#overlay .ball{width:clamp(24px,1.7vw,33px)!important;height:clamp(24px,1.7vw,33px)!important;flex-basis:clamp(24px,1.7vw,33px)!important;font-size:clamp(10px,.8vw,15px)!important}
+/* A pressed operator button must always create a visible center lower-third information card. */
+#bannerTournament.show,#bannerMatch.show,#bannerVenue.show,#bannerToss.show,#bannerResult.show,#bannerPlayer.show,#bannerBowler.show,#bannerPartnership.show,#custom.show{
+ display:flex!important;visibility:visible!important;opacity:1!important;position:fixed!important;left:50%!important;right:auto!important;top:auto!important;bottom:26px!important;transform:translateX(-50%)!important;width:min(92vw,1650px)!important;height:clamp(92px,9.2vw,150px)!important;max-height:none!important;align-items:center!important;justify-content:center!important;box-sizing:border-box!important;padding:12px 42px!important;border-radius:24px!important;z-index:5000!important;font-size:clamp(22px,2.25vw,44px)!important;font-weight:1000!important;line-height:1.12!important;text-align:center!important;letter-spacing:.025em!important;color:#fff!important;background:linear-gradient(120deg,var(--navy,#09286e),var(--cyan,#00b8e8),var(--accent,#153f98))!important;border:3px solid var(--yellow,#ffd900)!important;box-shadow:0 16px 42px rgba(0,0,0,.46),inset 0 1px rgba(255,255,255,.5)!important;overflow:hidden!important
+}
+#bannerVenue.show{background:linear-gradient(120deg,var(--navy,#09286e),var(--cyan2,#08d7ff))!important}
+#bannerToss.show{background:linear-gradient(120deg,#074f46,var(--cyan,#00b8e8))!important}
+#bannerPlayer.show{background:linear-gradient(120deg,var(--accent,#153f98),var(--cyan,#00b8e8))!important}
+#bannerBowler.show{background:linear-gradient(120deg,#07254d,#0a896e)!important}
+#custom.show{background:linear-gradient(120deg,var(--accent,#153f98),var(--cyan,#00b8e8),var(--yellow,#ffd900))!important;color:#fff!important}
+/* Information cards replace the score bar while active, preventing overlap. */
+#overlay.bannerMode .frame,#overlay.customMode .frame{visibility:hidden!important}
+/* Event animation covers the overlay area, with strong event-specific colour backgrounds. */
+#animation.show{display:flex!important;visibility:visible!important;opacity:1!important;position:fixed!important;left:50%!important;right:auto!important;top:auto!important;bottom:24px!important;transform:translateX(-50%)!important;width:min(94vw,1740px)!important;height:clamp(118px,12vw,210px)!important;max-height:none!important;align-items:center!important;justify-content:center!important;border-radius:30px!important;z-index:9000!important;border:4px solid rgba(255,255,255,.92)!important;box-shadow:0 18px 60px rgba(0,0,0,.55)!important;overflow:hidden!important}
+#animation.show .animText{font-size:clamp(48px,7vw,132px)!important;font-weight:1000!important;letter-spacing:.055em!important;text-shadow:0 5px 14px rgba(0,0,0,.46)!important}
+#animation.animFour{background:linear-gradient(120deg,#0054a8,#00cfff,#003f8c)!important}
+#animation.animSix{background:linear-gradient(120deg,#4d008e,#d900ff,#52008f)!important}
+#animation.animWicket{background:linear-gradient(120deg,#7e0018,#ff1744,#8c001f)!important}
+#animation.animRunOut{background:linear-gradient(120deg,#8c001f,#ff5b2d,#8c001f)!important}
+#animation.animFreeHit{background:linear-gradient(120deg,#c38300,#ffe100,#d39200)!important;color:#101010!important}
+#animation.animHat{background:linear-gradient(120deg,#006638,#00d978,#075b36)!important}
+@media(max-width:900px){
+ #overlay .teamPanel.left,#overlay .teamPanel.right{width:20%!important}
+ #overlay .content{left:20%!important;right:20%!important;grid-template-columns:39% 22% 39%!important}
+ #overlay .teamName{font-size:clamp(10px,2.1vw,18px)!important}
+ #overlay .scorePill{font-size:clamp(18px,4vw,30px)!important}
+ #bannerTournament.show,#bannerMatch.show,#bannerVenue.show,#bannerToss.show,#bannerResult.show,#bannerPlayer.show,#bannerBowler.show,#bannerPartnership.show,#custom.show{width:96vw!important;height:88px!important;font-size:clamp(16px,3.1vw,26px)!important;padding:8px 15px!important;border-radius:16px!important}
+ #animation.show{width:96vw!important;height:110px!important;border-radius:18px!important}
+}
+</style>
+<style id="BRKLIVE19-USER-TEAM-SIZE-FINAL">
+/* Exact final refinement: larger corner team names, batting team beside score, clean bowler spacing, one top-right live brand. */
+#overlay .teamPanel .teamName{
+  font-size:clamp(22px,2.45vw,46px)!important;
+  font-weight:1000!important;
+  line-height:.95!important;
+  max-width:96%!important;
+  letter-spacing:.015em!important;
+  text-overflow:ellipsis!important;
+}
+#overlay .teamPanel.left .teamName{text-align:left!important}
+#overlay .teamPanel.right .teamName{text-align:right!important}
+#overlay .scorePanel{position:relative!important;padding-top:12px!important}
+#overlay .scoreBattingTeam{
+  display:block!important;
+  width:100%!important;
+  text-align:left!important;
+  padding-left:8px!important;
+  margin-bottom:4px!important;
+  font-size:clamp(12px,1.15vw,22px)!important;
+  line-height:1!important;
+  font-weight:1000!important;
+  text-transform:uppercase!important;
+  white-space:nowrap!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+  color:inherit!important;
+}
+#overlay .bowlerTop{grid-template-columns:minmax(0,1fr) auto!important;gap:20px!important;margin-bottom:8px!important}
+#overlay .bowlerName{padding-right:6px!important}
+#overlay .bowlerStats{margin-top:7px!important;padding-top:2px!important}
+#overlay .bowlerStatus{display:none!important}
+/* Remove duplicate/old branding and keep only the requested top-right BRKLIVE19 LIVE mark. */
+#overlay .broadcastBar,#overlay .refBrandLive,#overlay .compactCorners{display:none!important}
+#overlay #brkLogo{display:flex!important;position:absolute!important;right:14px!important;top:10px!important;left:auto!important;z-index:10000!important;align-items:center!important;gap:7px!important;pointer-events:none!important}
+#overlay #brkLogo .brkLogoText{font-size:clamp(11px,1vw,19px)!important;font-weight:1000!important;letter-spacing:.08em!important}
+#overlay #brkLogo .liveBadge{display:flex!important;align-items:center!important;font-size:clamp(8px,.72vw,13px)!important;font-weight:1000!important;letter-spacing:.08em!important}
+#overlay #brkLogo .liveBlinkDot{width:clamp(7px,.55vw,11px)!important;height:clamp(7px,.55vw,11px)!important}
+@media(max-width:900px){
+ #overlay .teamPanel .teamName{font-size:clamp(14px,2.9vw,25px)!important;max-width:94%!important}
+ #overlay .scoreBattingTeam{font-size:clamp(8px,1.5vw,14px)!important}
+ #overlay .bowlerTop{gap:12px!important;margin-bottom:5px!important}
+}
 </style>
