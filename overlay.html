@@ -2176,13 +2176,17 @@ setInterval(applyLocalLiveScore, 1000);
 
 // Firebase is the main cross-device transport. Listen to both the legacy global
 // path and the newer per-match path so the overlay keeps updating reliably.
-onValue(liveRef, snap => applyLiveData(snap.val()), error => {
-  console.warn("Firebase global overlay listener unavailable; local/channel bridge remains active.", error);
+if (firebaseReady && typeof onValue === "function" && liveRef) {
+  onValue(liveRef, snap => applyLiveData(snap.val()), error => {
+    console.warn("Firebase global overlay listener unavailable; local/channel bridge remains active.", error);
+    applyLocalLiveScore();
+  });
+} else {
   applyLocalLiveScore();
-});
+}
 try {
   const matchRef = requestedMatchId ? ref(db, "liveScoreByMatch/" + encodeURIComponent(String(requestedMatchId))) : null;
-  if (matchRef) onValue(matchRef, snap => applyLiveData(snap.val()), error => console.warn("Per-match overlay listener unavailable", error));
+  if (matchRef && firebaseReady && typeof onValue === "function") onValue(matchRef, snap => applyLiveData(snap.val()), error => console.warn("Per-match overlay listener unavailable", error));
 } catch(e) { console.warn("Could not attach per-match overlay listener",e); }
 </script>
 
@@ -3382,4 +3386,51 @@ body{padding:0!important;display:flex!important;align-items:flex-end!important;j
 <style id="BRKLIVE19-OVERLAY-DOWN-FIX">
 /* Requested: move the normal cricket lower-third slightly downward. */
 body:not(.theme-theme5) #overlay{bottom:0!important;}
+</style>
+
+
+<style id="BRKLIVE19-TRANSPARENT-CANVAS-FINAL-FIX">
+/* FINAL FIX: transparent browser/OBS canvas outside the actual lower-third.
+   The unwanted navy rectangle must never sit behind or cover the graphic. */
+html,body{
+  background:transparent!important;
+  background-color:transparent!important;
+  overflow:hidden!important;
+}
+/* Default/reference lower-third: only its actual panels draw pixels. */
+body:not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-theme2):not(.theme-theme7) #overlay .frame{
+  background:transparent!important;
+  box-shadow:none!important;
+}
+body:not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-theme2):not(.theme-theme7) #overlay .frame:before{
+  display:none!important;
+}
+/* Never allow an inactive full-screen layer to paint a background. */
+#summaryOverlay:not(.show),
+#scorecardOverlay:not(.show),
+#theme5Lower:not(.show),
+#theme5PlayerCard:not(.show),
+#theme5Summary:not(.show),
+#theme5Scorecard:not(.show),
+#animation:not(.show),
+#bannerTournament:not(.show),
+#bannerMatch:not(.show),
+#bannerVenue:not(.show),
+#bannerToss:not(.show),
+#bannerResult:not(.show),
+#bannerPlayer:not(.show),
+#bannerBowler:not(.show),
+#bannerPartnership:not(.show),
+#custom:not(.show){
+  display:none!important;
+  visibility:hidden!important;
+  pointer-events:none!important;
+}
+/* Active graphic layers receive clicks nowhere and cannot block the broadcast. */
+#overlay,#summaryOverlay,#scorecardOverlay,#theme5Lower,#theme5PlayerCard,#theme5Summary,#theme5Scorecard,#animation,.banner,.custom{
+  pointer-events:none!important;
+}
+/* Keep the real lower-third above transparent canvas pixels. */
+#overlay{z-index:100!important;}
+#overlay .content,#overlay .teamPanel{z-index:4!important;}
 </style>
