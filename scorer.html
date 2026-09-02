@@ -647,11 +647,6 @@ textarea{min-height:130px;resize:vertical}
   // ---- Save ----
   async function save() {
     try { if (S.matchId) localStorage.setItem("brklive19_match_state_" + S.matchId, JSON.stringify(S)); } catch(e) {}
-    if (!firebaseReady || !liveRef) {
-      publishLocalBridge(S);
-      syncScoreToIndex();
-      return;
-    }
     syncing = true;
     const strikerStats = battingStats(S.striker);
     const nonStats = battingStats(S.nonStriker);
@@ -667,56 +662,39 @@ textarea{min-height:130px;resize:vertical}
       batsman1Fours:strikerStats.fours, batsman2Fours:nonStats.fours,
       batsman1Sixes:strikerStats.sixes, batsman2Sixes:nonStats.sixes,
       bowler:S.bowler,
+      currentBowler:S.bowler,
       bowlerOvers:S.bowler ? oversText(bowlerStatsNow.balls) : "0.0",
       bowlerRuns:S.bowler ? bowlerStatsNow.runs : 0,
       bowlerWickets:S.bowler ? bowlerStatsNow.wickets : 0,
-      overs:oversText(S.legalBalls),
-      currentOver:oversText(S.legalBalls),
+      overs:oversText(S.legalBalls), currentOver:oversText(S.legalBalls),
       currentBall:Number(S.legalBalls||0)%6,
-      totalRuns:Number(S.runs)||0,
-      totalWickets:Number(S.wickets)||0,
-      totalBalls:Number(S.legalBalls)||0,
-      currentRunRate:currentRunRate(),
-      requiredRunRate:requiredRunRate(),
-      ballsRemaining:legalBallsRemaining(),
-      runsToWin:runsToWin(),
-      target:S.target,
-      fallWickets:[...(S.fallWickets||[])],
-      recentBalls:[...(S.recentBalls||[])],
-      customLower:{...(S.customLower||{})},
-      overlay:{...(S.overlay||{})},
-      // Top-level aliases keep older overlay/theme builds compatible with every control button.
+      totalRuns:Number(S.runs)||0, totalWickets:Number(S.wickets)||0, totalBalls:Number(S.legalBalls)||0,
+      currentRunRate:currentRunRate(), requiredRunRate:requiredRunRate(),
+      ballsRemaining:legalBallsRemaining(), runsToWin:runsToWin(), target:S.target,
+      fallWickets:[...(S.fallWickets||[])], recentBalls:[...(S.recentBalls||[])], currentOverBalls:[...(S.recentBalls||[])],
+      customLower:{...(S.customLower||{})}, overlay:{...(S.overlay||{})},
       showTournament:!!S.overlay?.showTournament, showVenue:!!S.overlay?.showVenue, showMatch:!!S.overlay?.showMatch,
       showToss:!!S.overlay?.showToss, showResult:!!S.overlay?.showResult, showTarget:!!S.overlay?.showTarget,
       showBowler:!!S.overlay?.showBowler,
-      battingTeam:S.battingTeam,
-      bowlingTeam:S.bowlingTeam,
-      teamAScore: S.battingTeam === "A" ? S.runs : S.firstInnings.runs,
-      teamBScore: S.battingTeam === "B" ? S.runs : S.firstInnings.runs,
-      teamAShort: teamShort('A'),
-      teamBShort: teamShort('B'),
-      battingShort: teamShort(S.battingTeam),
-      bowlingShort: teamShort(S.bowlingTeam)
+      battingTeam:S.battingTeam, bowlingTeam:S.bowlingTeam,
+      teamAScore:S.battingTeam === "A" ? S.runs : S.firstInnings.runs,
+      teamBScore:S.battingTeam === "B" ? S.runs : S.firstInnings.runs,
+      teamAShort:teamShort('A'), teamBShort:teamShort('B'), battingShort:teamShort(S.battingTeam), bowlingShort:teamShort(S.bowlingTeam)
     };
+    // ALWAYS publish locally first. This is the primary same-device scorer -> overlay bridge.
+    publishLocalBridge(data);
+    syncScoreToIndex();
     try {
-      // Publish immediately through every available bridge.
+      if (firebaseReady && liveRef) {
+        await set(liveRef, data);
+        try { if (S.matchId && liveMatchRef) await set(liveMatchRef(S.matchId), data); } catch(e) { console.warn("Per-match live channel unavailable", e); }
+      }
+      // Publish again after cloud sync so the display gets a fresh packet immediately.
       publishLocalBridge(data);
-      await set(liveRef, data);
-      // Secondary per-match path; failure here must never block the main overlay path.
-      try { if (S.matchId && liveMatchRef) await set(liveMatchRef(S.matchId), data); } catch(e) { console.warn("Per-match live channel unavailable", e); }
-      publishLocalBridge(data);
-      syncScoreToIndex();
     } catch (error) {
       console.error('Firebase save failed:', error);
-      try { localStorage.setItem("brklive19_last_liveScore", JSON.stringify(data)); } catch(e) {}
-      const el = $("status");
-      if (el) {
-        el.textContent = "🟢 Firebase unavailable — display is using local live bridge";
-        el.className = "status";
-      }
-    } finally {
-      syncing = false;
-    }
+      const el=$("status"); if(el){el.textContent="🟢 LOCAL LIVE BRIDGE ACTIVE";el.className="status";}
+    } finally { syncing=false; }
   }
 
   // Manual overlay sync helper used by every control button.
@@ -1060,7 +1038,7 @@ textarea{min-height:130px;resize:vertical}
         try { await save(); } catch(e) {}
         render();
       }
-    }, 1200);
+    }, 3200);
     return eventId;
   }
 
@@ -1096,7 +1074,10 @@ textarea{min-height:130px;resize:vertical}
     ensureOverlayState();
     S.overlay.intro = false; S.overlay.introDismissedAt = Date.now(); S.overlay.scoreVisible = true;
     if (S.innings !== 2 || !S.target || S.status === "completed") { alert("Target display is available during the 2nd innings only."); return; }
-    S.overlay.showTarget = !S.overlay.showTarget;
+    const wasOn=!!S.overlay.showTarget;
+    ["showTournament","showVenue","showMatch","showToss","showResult","showBowler","showTarget"].forEach(k=>S.overlay[k]=false);
+    S.overlay.playerLower={active:false,slot:"",player:""}; S.overlay.partnership={active:false}; S.customLower={...(S.customLower||{}),active:false};
+    S.overlay.showTarget = !wasOn;
     await save();
     render();
   };
@@ -1107,7 +1088,12 @@ textarea{min-height:130px;resize:vertical}
     S.overlay.introDismissedAt = Date.now();
     S.overlay.scoreVisible = true;
     const key = type === "tournament" ? "showTournament" : type === "venue" ? "showVenue" : type === "match" ? "showMatch" : type === "result" ? "showResult" : "showToss";
-    S.overlay[key] = !S.overlay[key];
+    const wasOn=!!S.overlay[key];
+    ["showTournament","showVenue","showMatch","showToss","showResult","showBowler","showTarget"].forEach(k=>S.overlay[k]=false);
+    S.overlay.playerLower={active:false,slot:"",player:""};
+    S.overlay.partnership={active:false};
+    S.customLower={...(S.customLower||{}),active:false};
+    S.overlay[key]=!wasOn;
     await save();
     render();
   };
@@ -1117,6 +1103,9 @@ textarea{min-height:130px;resize:vertical}
     S.overlay.intro = false; S.overlay.introDismissedAt = Date.now(); S.overlay.scoreVisible = true;
     const name = which === "b1" ? (S.striker || "") : (S.nonStriker || "");
     if(!name) { alert(which==="b1" ? "B1/striker not selected." : "B2/non-striker not selected."); return; }
+    ["showTournament","showVenue","showMatch","showToss","showResult","showBowler","showTarget"].forEach(k=>S.overlay[k]=false);
+    S.overlay.partnership={active:false};
+    S.customLower={...(S.customLower||{}),active:false};
     if(S.overlay.playerLower.active && S.overlay.playerLower.slot === which) {
       S.overlay.playerLower = { active:false, slot:"", player:"" };
     } else {
@@ -1158,6 +1147,10 @@ textarea{min-height:130px;resize:vertical}
   window.showCustomLower = async function() {
     const text = $("customLowerText").value.trim();
     if (!text) { alert("Enter a lower-third message first."); return; }
+    ensureOverlayState();
+    ["showTournament","showVenue","showMatch","showToss","showResult","showBowler","showTarget"].forEach(k=>S.overlay[k]=false);
+    S.overlay.playerLower={active:false,slot:"",player:""};
+    S.overlay.partnership={active:false};
     S.customLower = { text, active:true };
     $("lowerPreview").textContent = text;
     await save();
@@ -1193,7 +1186,10 @@ textarea{min-height:130px;resize:vertical}
       S.overlay.introDismissedAt = Date.now();
       S.overlay.scoreVisible = true;
       S.mode = 'default';
-      S.overlay.showBowler = !S.overlay.showBowler;
+      const wasOn=!!S.overlay.showBowler;
+      ["showTournament","showVenue","showMatch","showToss","showResult","showBowler","showTarget"].forEach(k=>S.overlay[k]=false);
+      S.overlay.playerLower={active:false,slot:"",player:""}; S.overlay.partnership={active:false}; S.customLower={...(S.customLower||{}),active:false};
+      S.overlay.showBowler = !wasOn;
       await save();
       render();
       return;
