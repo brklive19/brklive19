@@ -1571,8 +1571,8 @@ body{padding:0 0 .5vh !important}
 
     <div class="content">
       <div class="batters">
-        <div id="batter1" class="batter striker"><div class="strike">⚡</div><div id="b1name" class="batterName">STRIKER</div><div class="batterScore"><b id="b1runs">0</b><span>(<span id="b1balls">0</span>)</span></div></div>
-        <div id="batter2" class="batter"><div class="strike">⚡</div><div id="b2name" class="batterName">NON-STRIKER</div><div class="batterScore"><b id="b2runs">0</b><span>(<span id="b2balls">0</span>)</span></div></div>
+        <div id="batter1" class="batter striker"><div class="strike">⚡</div><div class="batterName"><span id="b1name">STRIKER</span><small id="b1status">NOT OUT</small></div><div class="batterScore"><b id="b1runs">0</b><span>(<span id="b1balls">0</span>)</span></div></div>
+        <div id="batter2" class="batter"><div class="strike">⚡</div><div class="batterName"><span id="b2name">NON-STRIKER</span><small id="b2status">NOT OUT</small></div><div class="batterScore"><b id="b2runs">0</b><span>(<span id="b2balls">0</span>)</span></div></div>
       </div>
 
       <div class="scorePanel">
@@ -1581,8 +1581,8 @@ body{padding:0 0 .5vh !important}
         <div id="matchTeams" class="matchTeams">TEAM A <b>VS</b> TEAM B</div>
         <div class="scoreCaption">TOTAL SCORE</div>
         <div id="scorePill" class="scorePill">0-0</div>
-        <div class="scoreMeta"><span id="overs">0.0 (0)</span><span id="inningsLabel">1st innings</span></div>
-        <div class="crrRrr"><span>CRR: <b id="crr">0.00</b></span><span>RRR: <b id="rrr">0.00</b></span><span id="extraMeta">EXTRAS: 0</span></div>
+        <div class="scoreMeta"><span>RUNS <b id="runsValue">0</b></span><span>WKTS <b id="wicketsValue">0</b></span><span>OV <b id="overs">0.0</b></span><span>BALL <b id="ballsValue">0</b></span></div>
+        <div class="crrRrr"><span id="inningsLabel">1st innings</span><span>CRR: <b id="crr">0.00</b></span><span>RRR: <b id="rrr">0.00</b></span><span id="extraMeta">EXTRAS: 0</span></div>
       </div>
 
       <div class="bowlerPanel">
@@ -1894,6 +1894,8 @@ function renderSummary(d){
   const el=$("summaryContent"); if(!el)return;
   const team1=summaryTeamSide(d,1), team2=summaryTeamSide(d,2);
   const i1=inningsData(d,1), i2=inningsData(d,2);
+  if(!i1.team) i1.team = (d.firstInnings&&d.firstInnings.team) || (Number(d.innings||1)===1 ? d.battingTeam : (d.battingTeam==='A'?'B':'A'));
+  if(!i2.team && Number(d.innings||1)===2) i2.team = d.battingTeam;
   const toss=d.tossWinner ? `${teamName(d,d.tossWinner)} WON THE TOSS AND ELECTED TO ${d.tossDecision==='bat'?'BAT FIRST':'BOWL FIRST'}` : 'TOSS —';
   const completed=d.status==='completed'||!!d.matchWinner||!!deriveResult(d);
   const result=deriveResult(d)||d.resultText||d.matchResult||'';
@@ -1907,7 +1909,7 @@ function renderSummary(d){
   const tournament = d.tournament || d.tournamentName || requestedTournament || '—';
   const matchName = d.matchName || `${d.teamA||'TEAM A'} vs ${d.teamB||'TEAM B'}`;
   const liveLabel = completed ? 'MATCH COMPLETED' : 'LIVE MATCH';
-  el.innerHTML=`<div class="summary-head"><div class="side a">${escapeText(d.teamA||'TEAM A')}</div><div class="center"><div class="title">MATCH SUMMARY</div><div class="sub">${escapeText(matchName)}</div><div class="summary-center-meta"><span><b>TOURNAMENT</b> ${escapeText(tournament)}</span><span><b>TOSS</b> ${escapeText(toss)}</span></div><div class="summary-live-pill">● ${liveLabel}</div></div><div class="side b">${escapeText(d.teamB||'TEAM B')}</div></div>${teamBlock(1,i1,team1)}${teamBlock(2,i2,team2)}<div class="${completed?'summary-result':'summary-result progress'}">${escapeText(status)}</div>`;
+  el.innerHTML=`<div class="summary-head"><div class="side a">${escapeText(d.teamA||'TEAM A')}</div><div class="center"><div class="title">MATCH SUMMARY</div><div class="sub">${escapeText(matchName)}</div><div class="summary-center-meta"><span><b>TOURNAMENT</b> ${escapeText(tournament)}</span><span><b>VENUE</b> ${escapeText(d.venue||'—')}</span><span><b>TOSS</b> ${escapeText(toss)}</span></div><div class="summary-live-pill">● ${liveLabel}</div></div><div class="side b">${escapeText(d.teamB||'TEAM B')}</div></div>${teamBlock(1,i1,team1)}${teamBlock(2,i2,team2)}<div class="${completed?'summary-result':'summary-result progress'}">${escapeText(status)}</div>`;
 }
 
 // ---- Full scorecard render ----
@@ -2043,7 +2045,27 @@ function renderTheme5All(d,scoreVisible){renderTheme5Lower(d,scoreVisible);rende
 // ============================================================
 // FIREBASE LISTENER
 // ============================================================
+function normalizeLiveData(raw){
+  const d = (raw && typeof raw === "object") ? {...raw} : {};
+  d.runs = num(d.runs ?? d.totalRuns ?? d.scoreRuns);
+  d.wickets = num(d.wickets ?? d.totalWickets ?? d.scoreWickets);
+  d.legalBalls = num(d.legalBalls ?? d.totalBalls ?? d.balls ?? d.totalLegalBalls);
+  d.maxOvers = num(d.maxOvers ?? d.oversLimit ?? d.totalOversLimit) || 20;
+  d.innings = num(d.innings ?? d.currentInnings) || 1;
+  d.b1 = d.b1 || d.striker || d.batsman1 || ""; d.b2 = d.b2 || d.nonStriker || d.batsman2 || "";
+  d.bowler = d.bowler || d.currentBowler || "";
+  d.tournament = d.tournament || d.tournamentName || "";
+  d.venue = d.venue || d.tournamentVenue || "";
+  d.matchName = d.matchName || d.match || "";
+  d.batters = d.batters || {}; d.bowlers = d.bowlers || {};
+  d.recentBalls = Array.isArray(d.recentBalls) ? d.recentBalls : (Array.isArray(d.currentOverBalls) ? d.currentOverBalls : []);
+  d.currentOverBalls = Array.isArray(d.currentOverBalls) ? d.currentOverBalls : [];
+  d.overlay = {...(d.overlay||{})};
+  return d;
+}
+
 function applyLiveData(d){
+ d=normalizeLiveData(d);
  if(!d) return;
  // A scorer control action is authoritative: once it sends a packet, the overlay must respond.
  if(d.overlay && (d.overlay.scoreVisible === true || d.overlay.intro === false)) { d.overlay.scoreVisible = true; d.overlay.intro = false; }
@@ -2093,10 +2115,15 @@ function applyLiveData(d){
  $("b1balls").textContent=num(b1.balls??d.batsman1Balls);
  $("b2runs").textContent=num(b2.runs??d.batsman2Runs);
  $("b2balls").textContent=num(b2.balls??d.batsman2Balls);
+ const b1out=!!b1.out, b2out=!!b2.out;
+ $("b1status").textContent=b1out?"OUT":(b1n===d.striker?"STRIKER • NOT OUT":"NOT OUT");
+ $("b2status").textContent=b2out?"OUT":(b2n===d.striker?"STRIKER • NOT OUT":"NON-STRIKER • NOT OUT");
+ $("batter1").classList.toggle("out",b1out); $("batter2").classList.toggle("out",b2out);
  $("batter1").classList.toggle("striker", !!b1n && b1n===d.striker);
  $("batter2").classList.toggle("striker", !!b2n && b2n===d.striker);
 
  const runs=num(d.runs ?? d.totalRuns), w=num(d.wickets ?? d.totalWickets), balls=num(d.legalBalls ?? d.totalBalls ?? d.balls);
+ $("runsValue").textContent=runs; $("wicketsValue").textContent=w; $("ballsValue").textContent=balls;
  const directResult = deriveResult(d) || (d.matchWinner ? d.matchWinner+" WON" : "");
  const isCompleted = d.status === 'completed' || d.matchWinner || !!directResult;
  if(isCompleted && directResult){
@@ -2113,7 +2140,7 @@ function applyLiveData(d){
    $("inningsLabel").textContent = num(d.innings||1)===1?"1st innings":num(d.innings||1)===2?"2nd innings":num(d.innings||1)+"th innings";
    $("rrr").textContent = calcRRR(d);
  }
- $("overs").textContent = oversFromBalls(balls)+" ("+balls+")";
+ $("overs").textContent = oversFromBalls(balls);
   const overText=oversFromBalls(balls);
   const overEls=[$("currentOver"),$("headerOver"),$("overValue")].filter(Boolean);
   overEls.forEach(el=>el.textContent=overText);
@@ -3462,4 +3489,29 @@ body:not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6)
 /* Keep the real lower-third above transparent canvas pixels. */
 #overlay{z-index:100!important;}
 #overlay .content,#overlay .teamPanel{z-index:4!important;}
+</style>
+<style id="brklive19-hq-live-data-fix">
+/* BRKLIVE19 HQ live-data presentation: explicit counters, player status and theme-aware finish. */
+#overlay .scoreMeta{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px!important;width:100%;text-align:center;align-items:center}
+#overlay .scoreMeta span{font-size:clamp(7px,.62vw,12px)!important;font-weight:1000!important;white-space:nowrap!important;overflow:hidden;text-overflow:ellipsis;color:var(--theme-text,#26324a)!important}
+#overlay .scoreMeta span b{display:block;font-size:clamp(12px,1.08vw,21px)!important;line-height:1!important;color:var(--cyan,#00b8e8)!important}
+#overlay .crrRrr{width:100%;justify-content:center;gap:clamp(5px,.7vw,13px)!important;flex-wrap:nowrap!important}
+#overlay .batterName{display:flex!important;flex-direction:column!important;justify-content:center!important;min-width:0!important;line-height:1.05!important}
+#overlay .batterName small{display:block!important;margin-top:2px!important;font-size:clamp(6px,.46vw,9px)!important;line-height:1!important;font-weight:1000!important;letter-spacing:.03em!important;color:var(--cyan2,#08d7ff)!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}
+#overlay .batter.out .batterName small{color:var(--red,#f3274f)!important}
+#overlay .bowlerStatus{display:block!important;font-size:clamp(6px,.48vw,9px)!important;line-height:1!important;font-weight:1000!important;letter-spacing:.04em!important;color:var(--cyan2,#08d7ff)!important;margin-top:2px!important}
+#overlay .bowlerStats{line-height:1.1!important}
+#overlay .ball{background:var(--navy2,#18367f)!important;border:1px solid color-mix(in srgb,var(--cyan,#00b8e8) 55%, transparent)!important}
+#overlay .ball.four{background:var(--cyan)!important;color:#06101c!important}
+#overlay .ball.six{background:var(--cyan2)!important;color:#06101c!important}
+#overlay .ball.wicket{background:var(--red)!important;color:#fff!important}
+#overlay .ball.extra{background:var(--yellow)!important;color:#111!important}
+#overlay .teamPanel.left{background:linear-gradient(105deg,var(--cyan),var(--navy2))!important}
+#overlay .teamPanel.right{background:linear-gradient(255deg,var(--yellow),var(--cyan))!important}
+#overlay .batters,#overlay .bowlerPanel{background:linear-gradient(105deg,var(--navy2),var(--navy))!important}
+#overlay .scorePanel{box-shadow:inset 0 0 0 1px #ffffffaa,0 0 24px color-mix(in srgb,var(--cyan) 20%, transparent)!important}
+#overlay .scorePill{background:linear-gradient(105deg,var(--cyan),var(--pink),var(--cyan2))!important;background-size:200% 100%!important}
+#overlay .scorePanel:before,#overlay .scorePanel:after{background:linear-gradient(var(--cyan),var(--pink),var(--cyan2))!important}
+.summary-center-meta{justify-content:center!important;text-align:center!important}
+@media(max-width:700px){#overlay .scoreMeta{gap:2px!important}#overlay .scoreMeta span{font-size:5px!important}#overlay .scoreMeta span b{font-size:10px!important}#overlay .crrRrr{gap:3px!important}.summary-center-meta span{max-width:32%!important}}
 </style>
