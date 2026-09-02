@@ -685,6 +685,10 @@ textarea{min-height:130px;resize:vertical}
       recentBalls:[...(S.recentBalls||[])],
       customLower:{...(S.customLower||{})},
       overlay:{...(S.overlay||{})},
+      // Top-level aliases keep older overlay/theme builds compatible with every control button.
+      showTournament:!!S.overlay?.showTournament, showVenue:!!S.overlay?.showVenue, showMatch:!!S.overlay?.showMatch,
+      showToss:!!S.overlay?.showToss, showResult:!!S.overlay?.showResult, showTarget:!!S.overlay?.showTarget,
+      showBowler:!!S.overlay?.showBowler,
       battingTeam:S.battingTeam,
       bowlingTeam:S.bowlingTeam,
       teamAScore: S.battingTeam === "A" ? S.runs : S.firstInnings.runs,
