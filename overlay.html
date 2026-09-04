@@ -1545,6 +1545,91 @@ body{padding:0 0 .5vh !important}
  #overlay .scoreExtraDetail{font-size:clamp(5px,1vw,8px)!important}
 }
 </style>
+
+<style id="BRKLIVE19-USER-FINAL-FIX">
+/* ===== BRKLIVE19 FINAL BROADCAST DATA/PLACEMENT FIX ===== */
+#overlay .teamPanel{width:20%!important;padding:0 18px!important;overflow:hidden!important}
+#overlay .content{left:20%!important;right:20%!important;grid-template-columns:38% 25% 37%!important}
+#overlay .teamName{max-width:100%!important;white-space:normal!important;line-height:.95!important;text-align:center!important;overflow:visible!important;text-overflow:clip!important;overflow-wrap:anywhere!important}
+#overlay .batterScore{gap:5px!important;flex-wrap:nowrap!important;min-width:0!important}
+#overlay .batterScore>span{font-weight:900!important;white-space:nowrap!important}
+#overlay .batterScore .miniStat{font-size:clamp(7px,.48vw,11px)!important;opacity:.9!important}
+#overlay .batterScore .miniStat b{font-size:clamp(9px,.62vw,14px)!important;color:var(--yellow)!important}
+#overlay .bowlerPanel{padding:10px 20px!important}
+#overlay .bowlerTop{gap:18px!important}
+#overlay .bowlerStats{letter-spacing:.035em!important;word-spacing:.12em!important;overflow:visible!important;text-overflow:clip!important}
+#overlay .bowlerTeamFrom{font-size:clamp(7px,.52vw,11px)!important;font-weight:1000!important;color:var(--cyan2)!important;margin-top:3px!important;text-transform:uppercase!important;white-space:nowrap!important}
+#overlay .currentOver{margin-top:8px!important;gap:8px!important}
+#overlay .ballList{gap:7px!important}
+#overlay .ball{flex:0 0 clamp(25px,1.75vw,34px)!important;width:clamp(25px,1.75vw,34px)!important;height:clamp(25px,1.75vw,34px)!important}
+/* Target automatically appears in 2nd innings directly above the lower third. */
+#overlay.targetMode #targetTop{display:flex!important}
+#targetTop{position:absolute!important;left:50%!important;bottom:calc(100% + 6px)!important;transform:translateX(-50%)!important;width:min(72vw,1050px)!important;height:34px!important;min-height:34px!important;align-items:center!important;justify-content:center!important;padding:0 18px!important;border-radius:18px!important;background:linear-gradient(90deg,var(--navy),var(--cyan),var(--navy))!important;border:2px solid var(--yellow)!important;color:#fff!important;font-size:clamp(11px,1vw,19px)!important;font-weight:1000!important;z-index:7000!important;box-shadow:0 5px 18px #0008!important;box-sizing:border-box!important}
+/* BRKLIVE19 + blinking red LIVE stays at top-right of the screen. */
+#brkLogo{position:fixed!important;right:22px!important;top:14px!important;bottom:auto!important;z-index:12000!important;display:flex!important;align-items:center!important;gap:8px!important;padding:7px 11px!important;border-radius:8px!important;background:rgba(0,0,0,.58)!important;backdrop-filter:blur(5px)!important;box-shadow:0 3px 14px #0007!important}
+#brkLogo .brkLogoText{font-size:clamp(15px,1.35vw,25px)!important;font-weight:1000!important;letter-spacing:.04em!important;color:#fff!important}
+#brkLogo .brkLogoText span{color:var(--cyan2,#08d7ff)!important}
+#brkLogo .liveBadge{display:flex!important;align-items:center!important;gap:4px!important;color:#fff!important;font-size:clamp(9px,.7vw,13px)!important;font-weight:1000!important}
+#brkLogo .liveBlinkDot{width:8px!important;height:8px!important;border-radius:50%!important;background:#ff173f!important;box-shadow:0 0 10px #ff173f!important;animation:brkLiveBlink 1s infinite!important}
+@keyframes brkLiveBlink{0%,45%{opacity:1;transform:scale(1)}55%,100%{opacity:.25;transform:scale(.72)}}
+/* Event animation covers the complete lower-third section, not just its text. */
+#animation.show{left:50%!important;top:auto!important;bottom:22px!important;width:min(88vw,1500px)!important;height:104px!important;max-height:none!important;transform:translateX(-50%)!important;border-radius:52px!important;z-index:15000!important}
+#animation.show .animText{font-size:clamp(42px,5.8vw,100px)!important}
+/* Theme-aware player/data backgrounds. */
+#overlay .batter.striker{background:linear-gradient(90deg,color-mix(in srgb,var(--cyan) 28%,transparent),transparent)!important}
+#overlay .batter.out{background:linear-gradient(90deg,color-mix(in srgb,var(--red) 28%,transparent),transparent)!important}
+#overlay .batterName small,#overlay .bowlerTeamFrom{color:var(--cyan2)!important}
+/* Scorecard top information */
+.scorecard-overlay .pref-header{position:relative!important;padding-top:24px!important}
+.scorecard-overlay .scorecardTopMeta{position:absolute!important;left:0!important;right:0!important;top:3px!important;height:20px!important;display:flex!important;align-items:center!important;justify-content:center!important;gap:clamp(12px,2vw,32px)!important;color:#fff!important;font-size:clamp(8px,.72vw,13px)!important;font-weight:1000!important;text-transform:uppercase!important;white-space:nowrap!important;overflow:hidden!important}
+.scorecard-overlay .scorecardTopMeta span{max-width:45%!important;overflow:hidden!important;text-overflow:ellipsis!important}
+.scorecard-overlay .scorecardToss{height:24px!important;display:flex!important;align-items:center!important;justify-content:center!important;text-align:center!important;font-size:clamp(9px,.85vw,16px)!important;font-weight:1000!important;color:#fff!important;background:rgba(0,0,0,.25)!important;border-radius:7px!important;padding:0 10px!important}
+</style>
+
+<style id="BRKLIVE19-USER-FINAL-FIX-2">
+/* ===== FINAL SCORE / CONTROL SIZE + DATA COLUMN FIX ===== */
+#overlay .scorePanel{padding:5px 7px!important;gap:2px!important;overflow:hidden!important}
+#overlay .scoreBattingTeam{
+  width:100%!important;max-width:100%!important;height:auto!important;min-height:24px!important;
+  display:flex!important;align-items:center!important;justify-content:center!important;text-align:center!important;
+  padding:0 5px!important;margin:0!important;font-size:clamp(12px,1.15vw,21px)!important;
+  line-height:.95!important;font-weight:1000!important;letter-spacing:.02em!important;
+  white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important;
+}
+#overlay .scorePill{width:86%!important;min-height:44px!important;padding:6px 8px!important}
+#overlay .scoreOverDetail{margin-top:1px!important}
+
+/* Tournament is prominent at the top of the scoreboard. */
+.scorecard-overlay .scorecardTournament{
+  width:100%;text-align:center;text-transform:uppercase;font-weight:1000;letter-spacing:.04em;
+  font-size:clamp(24px,3vw,46px);line-height:1.05;color:#fff;
+  padding:4px 60px 8px;margin:-2px 0 4px;
+  text-shadow:0 2px 8px #0008;
+}
+.scorecard-overlay .scorecardToss{
+  width:100%;min-height:30px;margin:0 0 6px;
+  font-size:clamp(11px,1vw,18px)!important;
+  background:linear-gradient(90deg,var(--th-dark2,#173a8f),var(--th-main,#00b8e8),var(--th-dark2,#173a8f))!important;
+  color:#fff!important;border:1px solid color-mix(in srgb,var(--th-main,#00b8e8) 55%,#fff)!important;
+}
+.scorecard-overlay .scorecardInnings{
+  width:100%;text-align:center;text-transform:uppercase;font-weight:1000;
+  font-size:clamp(18px,1.7vw,30px);padding:5px 0 8px;color:#fff;
+}
+
+/* Keep scorer controller keys compact without changing modal controls. */
+body .card .g4 > button, body .card .g2 > button, body .card .btns > button{
+  font-size:10px!important;padding:4px 6px!important;min-height:27px!important;line-height:1.05!important;
+}
+</style>
+<style id="BRKLIVE19-USER-FINAL-FIX-3">
+/* Final scoreboard corrections */
+#overlay .scorePanel{overflow:hidden!important}
+#overlay .scoreBattingTeam{display:flex!important;align-items:center!important;justify-content:center!important;width:100%!important;max-width:100%!important;min-height:25px!important;height:25px!important;margin:0!important;padding:0 6px!important;text-align:center!important;font-size:clamp(12px,1.15vw,21px)!important;line-height:1!important;font-weight:1000!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important;text-transform:uppercase!important}
+.scorecard-overlay .scorecardTournamentTitle{width:100%;text-align:center;text-transform:uppercase;font-weight:1000;letter-spacing:.045em;font-size:clamp(28px,3.4vw,52px);line-height:1.05;color:#fff;padding:2px 55px 9px;text-shadow:0 2px 10px #0009;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.scorecard-overlay .scorecardTopMeta{top:4px!important;height:18px!important;font-size:clamp(8px,.7vw,12px)!important}
+.scorecard-overlay .pref-header{padding-top:18px!important}
+</style>
 </head>
 <body>
 <!-- ===== MAIN OVERLAY ===== -->
@@ -1604,8 +1689,8 @@ body{padding:0 0 .5vh !important}
 
     <div class="content">
       <div class="batters">
-        <div id="batter1" class="batter striker"><div class="strike">⚡</div><div class="batterName"><span id="b1name">STRIKER</span><small id="b1status">NOT OUT</small></div><div class="batterScore"><b id="b1runs">0</b><span>(<span id="b1balls">0</span>)</span></div></div>
-        <div id="batter2" class="batter"><div class="strike">⚡</div><div class="batterName"><span id="b2name">NON-STRIKER</span><small id="b2status">NOT OUT</small></div><div class="batterScore"><b id="b2runs">0</b><span>(<span id="b2balls">0</span>)</span></div></div>
+        <div id="batter1" class="batter striker"><div class="strike">⚡</div><div class="batterName"><span id="b1name">STRIKER</span><small id="b1status">NOT OUT</small></div><div class="batterScore"><b id="b1runs">0</b><span id="b1balls">0</span><span class="miniStat">4s <b id="b1fours">0</b></span><span class="miniStat">6s <b id="b1sixes">0</b></span><span class="miniStat">SR <b id="b1sr">0.0</b></span></div></div>
+        <div id="batter2" class="batter"><div class="strike">⚡</div><div class="batterName"><span id="b2name">NON-STRIKER</span><small id="b2status">NOT OUT</small></div><div class="batterScore"><b id="b2runs">0</b><span id="b2balls">0</span><span class="miniStat">4s <b id="b2fours">0</b></span><span class="miniStat">6s <b id="b2sixes">0</b></span><span class="miniStat">SR <b id="b2sr">0.0</b></span></div></div>
       </div>
 
       <div class="scorePanel">
@@ -1621,7 +1706,7 @@ body{padding:0 0 .5vh !important}
 
       <div class="bowlerPanel">
         <div class="bowlerTop"><div id="bowler" class="bowlerName">BOWLER</div><div class="live">LIVE</div></div>
-        <div id="bowlerStats" class="bowlerStats">0.0 O • 0 R • 0 W</div>
+        <div id="bowlerStats" class="bowlerStats">0.0 O    0 M    0 W    0 R    0.00 ECON</div><div id="bowlerTeamFrom" class="bowlerTeamFrom">TEAM B</div>
         <div class="currentOver"><div class="currentOverLabel">THIS OVER</div><div id="balls" class="ballList"></div></div>
       </div>
     </div>
@@ -1725,9 +1810,14 @@ function parseBallEvent(text){
 }
 
 function currentOverEvents(data){
-  if(Array.isArray(data.currentOverBalls)&&data.currentOverBalls.length)return data.currentOverBalls;
-  const events=Array.isArray(data.events)?data.events:[];
-  let start=0;
+  const rb=Array.isArray(data.recentBalls)&&data.recentBalls.length?data.recentBalls:(Array.isArray(data.currentOverBalls)?data.currentOverBalls:[]);
+  if(rb.length){
+    const lb=num(data.legalBalls);
+    const current=Math.max(0,Math.floor(Math.max(lb-1,0)/6));
+    const same=rb.filter(x=>Math.floor(Number(String(x.over??'').match(/\d+/)?.[0]??-1))===current);
+    if(same.length)return same.map(x=>({v:x.label??x.runs??'',c:x.wicket?'wicket':(Number(x.runs)===4?'four':Number(x.runs)===6?'six':String(x.label||'').match(/wide|noball|bye|legbye/i)?'extra':Number(x.runs)===0?'zero':'')}));
+  }
+  const events=Array.isArray(data.events)?data.events:[]; let start=0;
   for(let i=events.length-1;i>=0;i--){if(/OVER\s+\d+\.\d+\s+COMPLETE/i.test(String(events[i]))){start=i+1;break}}
   return events.slice(start).map(parseBallEvent).filter(Boolean);
 }
@@ -1757,7 +1847,7 @@ function deriveResult(d){
 
 function updateTarget(d){
   const target=num(d.target), second=num(d.innings)===2;
-  const show=!!(d.overlay&&d.overlay.showTarget);
+  const show=true;
   const isCompleted = d.status === 'completed' || d.matchWinner || !!deriveResult(d);
   if(target && second && show && !isCompleted){
     $("targetTop").style.display="flex";
@@ -1964,7 +2054,7 @@ function renderFullScorecard(d){
   const xi=Array.isArray(inn.xi)?inn.xi:(side==='A'?(d.xiA||[]):(d.xiB||[]));
   const names=[...Object.keys(batters)]; xi.forEach(n=>{if(n&&!names.includes(n))names.push(n)});
   const dismissalMap={}; (inn.fallWickets||[]).forEach(f=>dismissalMap[f.player]=`${f.type||'OUT'}`);
-  const batterRows=names.length?names.map(name=>{const st=batters[name]||{};const r=num(st.runs),b=num(st.balls),f=num(st.fours),s=num(st.sixes);const out=st.out===true;const sr=b?((r/b)*100).toFixed(1):'-';const dis=st.dismissal||dismissalMap[name]||(out?'OUT':'not out');return `<tr><td>${escapeText(name)}${!out&&b>0?' *':''}</td><td style="text-align:center">${b>0||r>0?r:'-'}</td><td style="text-align:center">${b||'-'}</td><td style="text-align:center">${b>0||f>0?f:'-'}</td><td style="text-align:center">${b>0||s>0?s:'-'}</td><td style="text-align:center">${sr}</td><td>${escapeText(dis)}</td></tr>`}).join(''):`<tr><td colspan="7" style="text-align:center">NO BATTING DATA</td></tr>`;
+  const batterRows=names.length?names.map(name=>{const st=batters[name]||{};const r=num(st.runs),b=num(st.balls),f=num(st.fours),sx=num(st.sixes);const hasData=Object.keys(st).length>0&&(b>0||r>0||st.out===true||st.dismissal);const out=st.out===true;const sr=b?((r/b)*100).toFixed(1):'';const dis=st.dismissal||dismissalMap[name]||(out?'OUT':(hasData?'NOT OUT':''));return `<tr><td>${escapeText(name)}${!out&&hasData&&b>0?' *':''}</td><td>${escapeText(dis)}</td><td style="text-align:center">${hasData?r:''}</td><td style="text-align:center">${hasData?b:''}</td><td style="text-align:center">${hasData?f:''}</td><td style="text-align:center">${hasData?sx:''}</td><td style="text-align:center">${hasData?sr:''}</td></tr>`}).join(''):`<tr><td colspan="7" style="text-align:center">NO BATTING DATA</td></tr>`;
   const bowlers=inn.bowlers||{};
   const bowlRows=Object.keys(bowlers).map(name=>{const st=bowlers[name]||{};const ob=Math.floor(num(st.balls)/6)+'.'+(num(st.balls)%6);const r=num(st.runs),w=num(st.wickets),eco=st.balls?(r/(st.balls/6)).toFixed(2):'0.00';return `<tr><td>${escapeText(name)}</td><td style="text-align:center">${ob}</td><td style="text-align:center">${num(st.maidens||0)}</td><td style="text-align:center">${r}</td><td style="text-align:center">${w}</td><td style="text-align:center">${eco}</td></tr>`}).join('')||`<tr><td colspan="6" style="text-align:center">NO BOWLING DATA</td></tr>`;
   const ex=inn.extraDetail||{}; const extras=num(inn.extras), rr=balls?(runs/(balls/6)).toFixed(2):'0.00';
@@ -1977,7 +2067,9 @@ function renderFullScorecard(d){
   const inningsNo=isFirst?1:2;
   const shortA=teamA.split(/\s+/).map(x=>x[0]).join('').slice(0,4).toUpperCase(), shortB=teamB.split(/\s+/).map(x=>x[0]).join('').slice(0,4).toUpperCase();
   container.innerHTML=`
-    <div class="pref-header"><div class="pref-team a">${escapeText(teamA)}</div><div class="pref-vs">VS</div><div class="pref-team b">${escapeText(teamB)}</div></div>
+    <div class="scorecardTournamentTitle">${escapeText(d.tournament||d.tournamentName||requestedTournament||"TOURNAMENT")}</div>
+    <div class="pref-header"><div class="scorecardTopMeta"><span>VENUE: ${escapeText(d.venue||"—")}</span></div><div class="pref-team a">${escapeText(teamA)}</div><div class="pref-vs">VS</div><div class="pref-team b">${escapeText(teamB)}</div></div>
+    <div class="scorecardToss">${escapeText(d.tossWinner ? (teamName(d,d.tossWinner)+" WON THE TOSS • "+(d.tossDecision==="bat"?"ELECTED TO BAT":"ELECTED TO BOWL")) : "TOSS —")}</div>
     <div class="pref-innings">${inningsNo===1?"1ST":"2ND"} INNINGS</div>
     <div class="pref-main">
       <div class="pref-left">
@@ -2153,6 +2245,9 @@ function applyLiveData(d){
  $("b1balls").textContent=num(b1.balls??d.batsman1Balls);
  $("b2runs").textContent=num(b2.runs??d.batsman2Runs);
  $("b2balls").textContent=num(b2.balls??d.batsman2Balls);
+ const setStat=(id,v)=>{if($(id)) $(id).textContent=v};
+ setStat("b1fours",num(b1.fours)); setStat("b1sixes",num(b1.sixes)); setStat("b1sr",num(b1.balls)?((num(b1.runs)/num(b1.balls))*100).toFixed(1):"0.0");
+ setStat("b2fours",num(b2.fours)); setStat("b2sixes",num(b2.sixes)); setStat("b2sr",num(b2.balls)?((num(b2.runs)/num(b2.balls))*100).toFixed(1):"0.0");
  const b1out=!!b1.out, b2out=!!b2.out;
  $("b1status").textContent=b1out?"OUT":(b1n===d.striker?"STRIKER • NOT OUT":"NOT OUT");
  $("b2status").textContent=b2out?"OUT":(b2n===d.striker?"STRIKER • NOT OUT":"NON-STRIKER • NOT OUT");
@@ -2196,7 +2291,9 @@ function applyLiveData(d){
  if($("extraMeta")) $("extraMeta").textContent="EXTRAS: "+num(d.extras);
  const bow=d.bowler||"BOWLER", bo=bowlerStats(d,bow);
  $("bowler").textContent=bow;
- $("bowlerStats").textContent=oversFromBalls(bo.balls)+" O • "+num(bo.runs)+" R • "+num(bo.wickets)+" W";
+ const eco=num(bo.balls)?(num(bo.runs)/(num(bo.balls)/6)).toFixed(2):"0.00";
+ $("bowlerStats").innerHTML=oversFromBalls(bo.balls)+" O &nbsp;&nbsp; "+num(bo.maidens)+" M &nbsp;&nbsp; "+num(bo.wickets)+" W &nbsp;&nbsp; "+num(bo.runs)+" R &nbsp;&nbsp; "+eco+" ECON";
+ if($("bowlerTeamFrom")) $("bowlerTeamFrom").textContent="FROM: "+teamName(d,bowl);
  if($("bowlerStatus")) $("bowlerStatus").textContent = (d.status==="completed" ? "MATCH COMPLETED" : "BOWLER STATUS • LIVE");
 
  updateTarget(d);
