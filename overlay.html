@@ -1500,7 +1500,7 @@ body{padding:0 0 .5vh !important}
 #overlay .brkLogoText{font-size:clamp(8px,.8vw,14px) !important}
 #overlay .liveBadge{font-size:clamp(5px,.42vw,8px) !important;gap:2px !important}
 #overlay .liveBlinkDot{width:clamp(4px,.35vw,7px) !important;height:clamp(4px,.35vw,7px) !important}
-#targetTop.target,#overlay .target{height:9vh !important;max-height:96px !important;font-size:clamp(14px,1.6vw,30px) !important}
+#targetTop.target,#overlay .target{height:auto !important;min-height:9vh !important;max-height:96px !important;font-size:clamp(14px,1.6vw,30px) !important}
 .banner{height:9vh !important;max-height:96px !important;font-size:clamp(14px,1.6vw,30px) !important;padding:0 1vw !important}
 .custom{height:9vh !important;max-height:96px !important;font-size:clamp(14px,1.7vw,32px) !important;padding:0 1vw !important}
 .animation{height:9vh !important;max-height:96px !important}
@@ -1618,13 +1618,29 @@ body{padding:0 0 .5vh !important}
   #overlay .bowlerStats{font-size:clamp(12px,1.8vw,18px)!important}
   #overlay .scoreCRR{font-size:clamp(7px,1vw,10px)!important}
 }
+
+/* BRKLIVE19 target hotfix: transparent, large and always visible above lower third */
+#overlay #targetTop.target{
+  position:fixed!important; left:50%!important; bottom:150px!important; top:auto!important;
+  transform:translateX(-50%)!important; width:min(1100px,92vw)!important; min-height:64px!important;
+  padding:8px 18px!important; background:transparent!important; border:0!important; box-shadow:none!important;
+  display:none; flex-direction:column!important; gap:2px!important; overflow:visible!important; white-space:normal!important;
+  text-align:center!important; z-index:25000!important; text-shadow:0 3px 10px #000,0 0 14px #000!important;
+}
+#overlay #targetTop .targetMatchData{font-size:clamp(13px,1.2vw,22px)!important;font-weight:900!important;color:#ffe66d!important;line-height:1.1!important}
+#overlay #targetTop #targetValue{font-size:clamp(30px,4vw,70px)!important;font-weight:1000!important;line-height:1.05!important;background:linear-gradient(90deg,#00f5ff,#fff,#ffd400,#ff4f8b);-webkit-background-clip:text;background-clip:text;color:transparent!important}
+#overlay.targetMode .frame{visibility:visible!important}
+
 </style>
 
 </head>
 <body>
 <!-- ===== MAIN OVERLAY ===== -->
 <div id="overlay" class="overlay">
-  <div id="targetTop" class="target"><span id="targetValue">—</span></div>
+  <div id="targetTop" class="target">
+  <span id="targetMatchData" class="targetMatchData">MATCH • TARGET</span>
+  <span id="targetValue">—</span>
+</div>
 
   <!-- Banners are fixed position, not inside .overlay -->
   <div id="bannerTournament" class="banner tournament"></div>
@@ -1721,6 +1737,27 @@ body{padding:0 0 .5vh !important}
   <div class="card">
     <button class="close-btn" id="closeScorecardBtn">✕ CLOSE</button>
     <div id="scContent"></div>
+  </div>
+</div>
+
+<!-- ===== PLAYING XI OVERLAY ===== -->
+<div id="playingXIOverlay" class="playing-xi-overlay">
+  <div class="playing-xi-shell">
+    <div class="playing-xi-header">
+      <div id="playingXITournament" class="playing-xi-tournament">TOURNAMENT</div>
+      <div class="playing-xi-title">PLAYING XI</div>
+      <div id="playingXIMatch" class="playing-xi-match">TEAM A VS TEAM B</div>
+    </div>
+    <div class="playing-xi-teams">
+      <section class="playing-xi-team team-a">
+        <div id="playingXITeamA" class="playing-xi-team-name">TEAM A</div>
+        <div id="playingXIListA" class="playing-xi-list"></div>
+      </section>
+      <section class="playing-xi-team team-b">
+        <div id="playingXITeamB" class="playing-xi-team-name">TEAM B</div>
+        <div id="playingXIListB" class="playing-xi-list"></div>
+      </section>
+    </div>
   </div>
 </div>
 
@@ -1832,8 +1869,9 @@ function deriveResult(d){
 }
 
 function updateTarget(d){
-  const target=num(d.target), second=num(d.innings)===2;
-  const show=!!(d.overlay&&d.overlay.showTarget);
+  const firstRuns=num(d.firstInnings&&d.firstInnings.runs);
+  const target=num(d.target) || (num(d.innings)===2 ? firstRuns+1 : 0), second=num(d.innings)===2;
+  const show=!!((d.overlay&&d.overlay.showTarget) || d.showTarget);
   const isCompleted = d.status === 'completed' || d.matchWinner || !!deriveResult(d);
   if(target && second && show && !isCompleted){
     $("targetTop").style.display="flex";
@@ -1841,8 +1879,31 @@ function updateTarget(d){
     const need=Math.max(target-num(d.runs),0);
     const ballsLeft=Math.max(num(d.maxOvers)*6-num(d.legalBalls),0);
     const chasing=teamName(d,d.battingTeam||"A");
-    $("targetValue").textContent = `${chasing} Need ${need} run${need===1?'':'s'} from ${ballsLeft} ball${ballsLeft===1?'':'s'}`;
-  }else{ $("targetTop").style.display="none"; $("overlay").classList.remove("targetMode"); }
+    const matchText=d.matchName || `${d.teamA||"TEAM A"} VS ${d.teamB||"TEAM B"}`;
+    $("targetMatchData").textContent=`${matchText}  •  TARGET ${target}`;
+    $("targetValue").textContent = `TO WIN NEED ${need} RUN${need===1?'':'S'} FROM ${ballsLeft} BALL${ballsLeft===1?'':'S'}`;
+  }else{
+    $("targetTop").style.display="none";
+    $("overlay").classList.remove("targetMode");
+  }
+}
+
+function renderPlayingXI(d){
+  const ov=$("playingXIOverlay");
+  if(!ov)return;
+  const on=String(d.mode||"")==="playingxi";
+  ov.classList.toggle("show",on);
+  if(!on)return;
+  const a=Array.isArray(d.xiA)?d.xiA:[];
+  const b=Array.isArray(d.xiB)?d.xiB:[];
+  const teamA=d.teamA||"TEAM A", teamB=d.teamB||"TEAM B";
+  const tournament=d.tournament||d.tournamentName||requestedTournament||"TOURNAMENT";
+  const matchName=d.matchName||`${teamA} VS ${teamB}`;
+  $("playingXITournament").textContent=tournament;
+  $("playingXITeamA").textContent=teamA; $("playingXITeamB").textContent=teamB;
+  $("playingXIMatch").textContent=matchName;
+  const make=(arr)=>arr.length?arr.map((name,i)=>`<div class="playing-xi-row"><span class="xi-no">${i+1}</span><span class="xi-name">${escapeText(name)}</span></div>`).join(""):`<div class="playing-xi-empty">PLAYERS NOT ADDED</div>`;
+  $("playingXIListA").innerHTML=make(a); $("playingXIListB").innerHTML=make(b);
 }
 
 function showAnimation(type){
@@ -1895,7 +1956,7 @@ function bannerText(d){
   const introActive = requestedIntro && requestedIntroKey > dismissedAt;
   const showTournament=!!(introActive || t.showTournament || d.showTournament);
   const showMatch=!!(t.showMatch??d.showMatch??false);
-  const showToss=!!(t.showToss??d.showToss??false);
+  const showToss=!!(t.showToss??d.showToss??false) && d.started === true;
   const showResult=!!(t.showResult??d.showResult??false);
   const playerLower=t.playerLower||{};
   const partnership=t.partnership||{};
@@ -2190,6 +2251,7 @@ function applyLiveData(d){
  applyTheme(d.theme || requestedTheme || "blue", d.customColors);
  const isTheme5=(d.theme || requestedTheme || "blue")==="theme5";
  renderTheme5All(d,scoreVisible);
+ renderPlayingXI(d);
 
  // Full-frame modes
  const summaryOn = d.mode === 'summary' && !isTheme5;
@@ -2218,8 +2280,15 @@ function applyLiveData(d){
  if($("cornerBowlTeam")) $("cornerBowlTeam").textContent=teamName(d,bowl);
  if($("headerInnings")) $("headerInnings").textContent=(num(d.innings||1)===1?"1st":"2nd")+" INNINGS";
  const tossText=d.tossWinner ? ("TOSS: "+teamName(d,d.tossWinner)+" • "+(d.tossDecision==="bat"?"BAT FIRST":"BOWL FIRST")) : "TOSS —";
- if($("headerToss")) $("headerToss").textContent=tossText;
- if($("topToss")) $("topToss").textContent=tossText;
+ const tossVisible=!!d.started;
+ if($("headerToss")){
+   $("headerToss").textContent=tossText;
+   $("headerToss").style.display=tossVisible ? "block" : "none";
+ }
+ if($("topToss")){
+   $("topToss").textContent=tossText;
+   $("topToss").style.display=tossVisible ? "block" : "none";
+ }
  if($("headerMatch")) $("headerMatch").textContent=d.matchName||"LIVE CRICKET";
 
  const b1n=d.b1||d.striker||d.batsman1||"STRIKER";
@@ -4148,5 +4217,196 @@ html,body{background:transparent!important;background-color:transparent!importan
  #overlay .ballList{height:22px!important}
  #overlay .ball{width:19px!important;height:19px!important;flex-basis:19px!important}
  #overlay .scorePill{font-size:clamp(25px,6vw,42px)!important;padding:4px 10px!important}
+}
+</style>
+
+<style id="BRKLIVE19-FINAL-CONTROL-OVERLAY-FIX">
+/* Small, clean scorer overlay controls */
+#scorer button, #controls button, .controls button, .score-controls button, .scoring-controls button{font-size:11px!important;padding:5px 7px!important;min-height:29px!important}
+
+/* PLAYING XI full-screen broadcast graphic */
+.playing-xi-overlay{
+ position:fixed!important;inset:0!important;display:none;align-items:center;justify-content:center;
+ z-index:15000!important;background:rgba(2,8,20,.94)!important;padding:3vh 3vw!important;box-sizing:border-box;
+}
+.playing-xi-overlay.show{display:flex!important}
+.playing-xi-shell{width:min(94vw,1500px);height:min(88vh,900px);border:2px solid rgba(255,255,255,.25);border-radius:18px;overflow:hidden;background:linear-gradient(180deg,#071a3d,#07101f);box-shadow:0 20px 70px #000b}
+/* ===== PLAYING XI / TARGET FINAL REFINEMENT ===== */
+.playing-xi-header{
+ position:relative!important;
+ background:linear-gradient(100deg,var(--cyan),var(--navy),var(--yellow))!important;
+}
+.playing-xi-tournament{
+ font-size:clamp(15px,1.45vw,26px)!important;
+ font-weight:1000!important;
+ letter-spacing:.08em!important;
+ text-transform:uppercase!important;
+ line-height:1!important;
+ margin-bottom:6px!important;
+ color:#fff!important;
+ text-shadow:0 2px 8px #0008!important;
+}
+.playing-xi-title{font-size:clamp(30px,3.7vw,58px)!important}
+.playing-xi-match{
+ font-size:clamp(14px,1.35vw,24px)!important;
+ margin-top:5px!important;
+ font-weight:1000!important;
+ color:#fff!important;
+}
+.playing-xi-team-name{
+ background:linear-gradient(180deg,var(--cyan),var(--navy))!important;
+}
+.team-b .playing-xi-team-name{
+ background:linear-gradient(180deg,var(--yellow),var(--navy))!important;
+ color:#07101f!important;
+}
+.playing-xi-row{
+ border-color:color-mix(in srgb,var(--cyan) 35%,#b8c0cc)!important;
+}
+#overlay .target{
+ flex-direction:column!important;
+ gap:2px!important;
+ height:auto!important;
+ min-height:46px!important;
+ padding:6px 18px!important;
+ background:linear-gradient(100deg,var(--cyan),var(--navy),var(--yellow))!important;
+ border-color:rgba(255,255,255,.45)!important;
+ border-radius:10px!important;
+}
+#overlay .targetMatchData{
+ font-size:clamp(9px,.7vw,14px)!important;
+ font-weight:900!important;
+ letter-spacing:.06em!important;
+ line-height:1!important;
+ opacity:.92!important;
+ text-transform:uppercase!important;
+}
+#overlay #targetValue{
+ font-size:clamp(17px,1.55vw,30px)!important;
+ font-weight:1000!important;
+ line-height:1.05!important;
+ letter-spacing:.03em!important;
+}
+.playing-xi-header{height:18%;min-height:80px;display:flex;flex-direction:column;align-items:center;justify-content:center;background:linear-gradient(100deg,#0b3f99,#10275e,#8d0c22);color:#fff;text-align:center}
+.playing-xi-title{font-size:clamp(28px,4vw,62px);font-weight:1000;letter-spacing:.06em}
+.playing-xi-match{margin-top:5px;font-size:clamp(13px,1.4vw,24px);font-weight:900;opacity:.9}
+.playing-xi-teams{height:82%;display:grid;grid-template-columns:1fr 1fr;gap:2px;background:#71809a}
+.playing-xi-team{min-width:0;padding:18px 22px;background:#f5f7fb;color:#0a1630;overflow:hidden}
+.playing-xi-team.team-b{background:#fff4f4}
+.playing-xi-team-name{text-align:center;color:#fff;padding:12px 10px;border-radius:9px;font-size:clamp(20px,2vw,34px);font-weight:1000;text-transform:uppercase;background:linear-gradient(180deg,#123f98,#071f58);margin-bottom:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.team-b .playing-xi-team-name{background:linear-gradient(180deg,#c51d35,#700918)}
+.playing-xi-list{display:grid;grid-template-columns:1fr 1fr;gap:7px 10px;align-content:start}
+.playing-xi-row{display:flex;align-items:center;min-width:0;background:#fff;border:1px solid #b8c0cc;border-radius:7px;padding:8px 10px;font-size:clamp(13px,1.15vw,21px);font-weight:800;box-shadow:0 2px 5px #0002}
+.xi-no{flex:0 0 30px;font-weight:1000;text-align:center}.xi-name{min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.playing-xi-empty{text-align:center;font-weight:900;padding:20px}
+@media(max-width:700px){.playing-xi-shell{height:94vh;width:96vw}.playing-xi-header{height:13%;min-height:65px}.playing-xi-teams{height:87%;grid-template-columns:1fr 1fr}.playing-xi-team{padding:8px}.playing-xi-list{grid-template-columns:1fr;gap:5px}.playing-xi-row{padding:6px 7px;font-size:12px}.playing-xi-team-name{font-size:16px;padding:8px}.playing-xi-title{font-size:24px}.playing-xi-tournament{font-size:13px}.playing-xi-match{font-size:11px}}
+
+/* Animation always occupies the entire lower-third broadcast area, never the full video. */
+#animation.animation{position:fixed!important;left:0!important;right:0!important;bottom:0!important;top:auto!important;transform:none!important;width:100vw!important;height:96px!important;max-width:none!important;margin:0!important;border-radius:0!important;z-index:14000!important;box-sizing:border-box!important;display:none;align-items:center!important;justify-content:center!important}
+#animation.animation.show{display:flex!important}
+#animation .animText{font-size:clamp(28px,4.2vw,72px)!important;line-height:1!important;font-weight:1000!important;text-align:center!important}
+
+/* BRKLIVE19 blinking brand: top-right corner of the video screen, not the lower third. */
+#overlay #brkLogo{position:fixed!important;right:16px!important;top:10px!important;left:auto!important;bottom:auto!important;z-index:20000!important}
+#overlay #brkLogo .brkLogoText{font-size:clamp(18px,1.8vw,32px)!important}
+#overlay #brkLogo .liveBadge{font-size:clamp(8px,.75vw,13px)!important}
+#overlay .refBrandLive{display:none!important}
+</style>
+
+<style id="BRKLIVE19-PLAYINGXI-FINAL-FIX">
+/* Show every Playing XI entry in one team-wise column and prevent header clipping */
+.playing-xi-shell{
+  width:min(96vw,1500px)!important;
+  height:min(94vh,950px)!important;
+}
+.playing-xi-header{
+  height:auto!important;
+  min-height:110px!important;
+  padding:14px 3vw!important;
+  overflow:visible!important;
+}
+.playing-xi-tournament,
+.playing-xi-match,
+.playing-xi-title{
+  max-width:94%!important;
+  white-space:normal!important;
+  overflow:visible!important;
+  text-overflow:clip!important;
+  overflow-wrap:anywhere!important;
+  word-break:break-word!important;
+}
+.playing-xi-tournament{
+  font-size:clamp(13px,1.25vw,22px)!important;
+  line-height:1.15!important;
+  margin-bottom:4px!important;
+}
+.playing-xi-title{
+  font-size:clamp(24px,3vw,46px)!important;
+  line-height:1.05!important;
+}
+.playing-xi-match{
+  font-size:clamp(12px,1.1vw,19px)!important;
+  line-height:1.15!important;
+}
+.playing-xi-teams{
+  height:auto!important;
+  min-height:0!important;
+  grid-template-columns:1fr 1fr!important;
+  align-items:stretch!important;
+}
+.playing-xi-team{
+  padding:10px 14px!important;
+  overflow:visible!important;
+}
+.playing-xi-list{
+  display:grid!important;
+  grid-template-columns:1fr!important;
+  gap:4px!important;
+}
+.playing-xi-row{
+  min-height:0!important;
+  padding:5px 8px!important;
+  font-size:clamp(11px,0.95vw,17px)!important;
+  line-height:1.1!important;
+  border-radius:5px!important;
+}
+.xi-no{
+  flex:0 0 22px!important;
+  font-size:.9em!important;
+}
+.xi-name{
+  min-width:0!important;
+  overflow:visible!important;
+  white-space:normal!important;
+  overflow-wrap:anywhere!important;
+}
+.playing-xi-empty{font-size:12px!important}
+@media(max-width:800px){
+ .playing-xi-header{min-height:95px!important;padding:10px 2vw!important}
+ .playing-xi-teams{grid-template-columns:1fr 1fr!important}
+ .playing-xi-team{padding:7px 7px!important}
+ .playing-xi-row{padding:4px 5px!important;font-size:11px!important}
+ .xi-no{flex-basis:18px!important}
+}
+</style>
+
+<style id="BRKLIVE19-TARGET-OVERLAY-FINAL">
+#overlay .target{
+ background:transparent!important;
+ border:0!important;
+ box-shadow:none!important;
+ padding:5px 18px!important;
+}
+#overlay .targetMatchData{
+ color:#fff!important;
+ text-shadow:0 2px 8px #000!important;
+}
+#overlay #targetValue{
+ background:linear-gradient(90deg,#00e5ff,#fff,#ffd21f,#ff4f81,#00e5ff)!important;
+ -webkit-background-clip:text!important;
+ background-clip:text!important;
+ color:transparent!important;
+ -webkit-text-fill-color:transparent!important;
+ text-shadow:0 0 18px rgba(0,220,255,.35)!important;
+ font-size:clamp(22px,2.2vw,40px)!important;
 }
 </style>
