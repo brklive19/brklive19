@@ -1621,7 +1621,7 @@ body{padding:0 0 .5vh !important}
 
 /* BRKLIVE19 target hotfix: transparent, large and always visible above lower third */
 #overlay #targetTop.target{
-  position:fixed!important; left:50%!important; bottom:150px!important; top:auto!important;
+  position:absolute!important; left:50%!important; top:-82px!important; bottom:auto!important;
   transform:translateX(-50%)!important; width:min(1100px,92vw)!important; min-height:64px!important;
   padding:8px 18px!important; background:transparent!important; border:0!important; box-shadow:none!important;
   display:none; flex-direction:column!important; gap:2px!important; overflow:visible!important; white-space:normal!important;
@@ -1950,6 +1950,39 @@ function detectAnimation(d){
   }
 }
 
+let topInfoItems=[];
+let topInfoIndex=0;
+let topInfoSignature="";
+function buildTopInfoItems(d){
+  const items=[];
+  const tournament=String(d.tournament||requestedTournament||"TOURNAMENT").trim();
+  const match=String(d.matchName||((d.teamA||"TEAM A")+" VS "+(d.teamB||"TEAM B"))).trim();
+  const toss=d.tossWinner ? ("TOSS: "+teamName(d,d.tossWinner)+" • "+(d.tossDecision==="bat"?"BAT FIRST":"BOWL FIRST")) : "TOSS: —";
+  const runs=num(d.runs ?? d.totalRuns), balls=num(d.legalBalls ?? d.totalBalls ?? d.balls);
+  const crr=calcCRR(d);
+  const maxOvers=num(d.maxOvers);
+  const projected=maxOvers ? Math.round((Number(crr)||0)*maxOvers) : (balls ? Math.round(runs/(balls/6)) : 0);
+  if(tournament) items.push("TOURNAMENT • "+tournament);
+  if(match) items.push("MATCH • "+match);
+  if(d.started===true) items.push(toss);
+  items.push("CURRENT RUN RATE • "+crr);
+  items.push("PROJECTED SCORE • "+projected);
+  return items;
+}
+function setTopInfoItems(items, active){
+  const sig=items.join("¦");
+  if(sig!==topInfoSignature){ topInfoSignature=sig; topInfoItems=items; topInfoIndex=0; }
+  const text=active && topInfoItems.length ? topInfoItems[topInfoIndex % topInfoItems.length] : "";
+  [$("headerToss"),$("topToss")].filter(Boolean).forEach(el=>{ el.textContent=text; el.style.display=active && text ? "block" : "none"; });
+}
+setInterval(()=>{
+  if(topInfoItems.length){
+    topInfoIndex=(topInfoIndex+1)%topInfoItems.length;
+    const text=topInfoItems[topInfoIndex];
+    [$("headerToss"),$("topToss")].filter(Boolean).forEach(el=>{ if(el.style.display!=="none") el.textContent=text; });
+  }
+},3000);
+
 function bannerText(d){
   const t=d.overlay||{};
   const dismissedAt = Number(d.overlay && d.overlay.introDismissedAt) || 0;
@@ -2101,7 +2134,7 @@ function renderFullScorecard(d){
   const xi=Array.isArray(inn.xi)?inn.xi:(side==='A'?(d.xiA||[]):(d.xiB||[]));
   const names=[...Object.keys(batters)]; xi.forEach(n=>{if(n&&!names.includes(n))names.push(n)});
   const dismissalMap={}; (inn.fallWickets||[]).forEach(f=>dismissalMap[f.player]=`${f.type||'OUT'}`);
-  const batterRows=names.length?names.map(name=>{const st=batters[name]||{};const r=num(st.runs),b=num(st.balls),f=num(st.fours),s=num(st.sixes);const out=st.out===true;const sr=b?((r/b)*100).toFixed(1):'-';const dis=st.dismissal||dismissalMap[name]||(out?'OUT':'not out');return `<tr><td>${escapeText(name)}${!out&&b>0?' *':''}</td><td style="text-align:center">${b>0||r>0?r:'-'}</td><td style="text-align:center">${b||'-'}</td><td style="text-align:center">${b>0||f>0?f:'-'}</td><td style="text-align:center">${b>0||s>0?s:'-'}</td><td style="text-align:center">${sr}</td><td>${escapeText(dis)}</td></tr>`}).join(''):`<tr><td colspan="7" style="text-align:center">NO BATTING DATA</td></tr>`;
+  const batterRows=names.length?names.map(name=>{const st=batters[name]||{};const r=num(st.runs),b=num(st.balls),f=num(st.fours),s=num(st.sixes);const out=st.out===true;const sr=b?((r/b)*100).toFixed(1):'-';const dis=st.dismissal||dismissalMap[name]||(out?'OUT':'not out');return `<tr><td>${escapeText(name)}${!out&&b>0?' *':''}</td><td>${escapeText(dis)}</td><td style="text-align:center">${b>0||r>0?r:'-'}</td><td style="text-align:center">${b||'-'}</td><td style="text-align:center">${b>0||f>0?f:'-'}</td><td style="text-align:center">${b>0||s>0?s:'-'}</td><td style="text-align:center">${sr}</td></tr>`}).join(''):`<tr><td colspan="7" style="text-align:center">NO BATTING DATA</td></tr>`;
   const bowlers=inn.bowlers||{};
   const bowlRows=Object.keys(bowlers).map(name=>{const st=bowlers[name]||{};const ob=Math.floor(num(st.balls)/6)+'.'+(num(st.balls)%6);const r=num(st.runs),w=num(st.wickets),eco=st.balls?(r/(st.balls/6)).toFixed(2):'0.00';return `<tr><td>${escapeText(name)}</td><td style="text-align:center">${ob}</td><td style="text-align:center">${num(st.maidens||0)}</td><td style="text-align:center">${r}</td><td style="text-align:center">${w}</td><td style="text-align:center">${eco}</td></tr>`}).join('')||`<tr><td colspan="6" style="text-align:center">NO BOWLING DATA</td></tr>`;
   const ex=inn.extraDetail||{}; const extras=num(inn.extras), rr=balls?(runs/(balls/6)).toFixed(2):'0.00';
@@ -2279,16 +2312,10 @@ function applyLiveData(d){
  if($("cornerBatTeam")) $("cornerBatTeam").textContent=teamName(d,bat);
  if($("cornerBowlTeam")) $("cornerBowlTeam").textContent=teamName(d,bowl);
  if($("headerInnings")) $("headerInnings").textContent=(num(d.innings||1)===1?"1st":"2nd")+" INNINGS";
- const tossText=d.tossWinner ? ("TOSS: "+teamName(d,d.tossWinner)+" • "+(d.tossDecision==="bat"?"BAT FIRST":"BOWL FIRST")) : "TOSS —";
- const tossVisible=!!d.started;
- if($("headerToss")){
-   $("headerToss").textContent=tossText;
-   $("headerToss").style.display=tossVisible ? "block" : "none";
- }
- if($("topToss")){
-   $("topToss").textContent=tossText;
-   $("topToss").style.display=tossVisible ? "block" : "none";
- }
+ // Automated top-row broadcast information.  The old top-row slot was reserved
+ // for Toss; it now rotates tournament, match, toss, CRR and projected score.
+ const topInfo=buildTopInfoItems(d);
+ setTopInfoItems(topInfo, d.started === true);
  if($("headerMatch")) $("headerMatch").textContent=d.matchName||"LIVE CRICKET";
 
  const b1n=d.b1||d.striker||d.batsman1||"STRIKER";
@@ -2326,6 +2353,10 @@ function applyLiveData(d){
  }
  $("overs").textContent = oversFromBalls(balls);
   const overText=oversFromBalls(balls);
+  const maxOvers=num(d.maxOvers);
+  const overDisplay=maxOvers>0 ? `${overText} / ${maxOvers}` : overText;
+  const scoreOverDetail=$("scoreOverDetail");
+  if(scoreOverDetail) scoreOverDetail.textContent=`OVER ${overDisplay} • BALL ${Number(balls||0)%6}`;
   const overEls=[$("currentOver"),$("headerOver"),$("overValue")].filter(Boolean);
   overEls.forEach(el=>el.textContent=overText);
   const ballEls=[$("currentBall"),$("ballValue")].filter(Boolean);
