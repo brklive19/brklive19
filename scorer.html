@@ -648,7 +648,9 @@ button { max-width: 100%; }
       m.totalBalls = Number(S.legalBalls || 0);
       m.totalOvers = oversText(S.legalBalls);
       m.firstInnings = JSON.parse(JSON.stringify(S.firstInnings || {}));
-      if (S.innings === 2) m.secondInnings = {team:S.battingTeam,runs:Number(S.runs)||0,wickets:Number(S.wickets)||0,balls:Number(S.legalBalls)||0,extras:Number(S.extras)||0};
+      m.firstInnings.batters = JSON.parse(JSON.stringify(S.innings === 1 ? (S.batters || {}) : (S.firstInnings?.batters || {})));
+      if (S.innings === 1) m.firstInnings.xi = Array.from(players(S.battingTeam) || []);
+      if (S.innings === 2) m.secondInnings = {team:S.battingTeam,runs:Number(S.runs)||0,wickets:Number(S.wickets)||0,balls:Number(S.legalBalls)||0,extras:Number(S.extras)||0,extraDetail:{...(S.extraDetail||{})},batters:JSON.parse(JSON.stringify(S.batters||{})),bowlers:JSON.parse(JSON.stringify(S.bowlers||{})),fallWickets:JSON.parse(JSON.stringify(S.fallWickets||[])),xi:Array.from(players(S.battingTeam)||[])};
       m.currentInnings = S.innings;
       m.target = S.target || null;
       m.status = S.status || "live";
@@ -703,6 +705,7 @@ button { max-width: 100%; }
       bowlerRuns:S.bowler ? bowlerStatsNow.runs : 0,
       bowlerWickets:S.bowler ? bowlerStatsNow.wickets : 0,
       overs:oversText(S.legalBalls), currentOver:oversText(S.legalBalls),
+      overDisplay:oversText(S.legalBalls),
       currentBall:Number(S.legalBalls||0)%6,
       totalRuns:Number(S.runs)||0, totalWickets:Number(S.wickets)||0, totalBalls:Number(S.legalBalls)||0,
       currentRunRate:currentRunRate(), requiredRunRate:requiredRunRate(),
@@ -1115,8 +1118,10 @@ button { max-width: 100%; }
     ["showTournament","showVenue","showMatch","showToss","showResult","showBowler","showTarget"].forEach(k=>S.overlay[k]=false);
     S.overlay.playerLower={active:false,slot:"",player:""}; S.overlay.partnership={active:false}; S.customLower={...(S.customLower||{}),active:false};
     S.overlay.showTarget = !wasOn;
+    // Publish immediately so the display reacts even when Firebase is slow.
     await save();
     render();
+    try { publishLocalBridge({ ...S, overlay:{...S.overlay}, target:S.target, runs:S.runs, wickets:S.wickets, legalBalls:S.legalBalls, maxOvers:S.maxOvers, innings:S.innings, updatedAt:Date.now(), __bridgeUpdatedAt:Date.now() }); } catch(e) {}
   };
 
   window.toggleOverlayBanner = async function(type) {
@@ -1373,6 +1378,8 @@ button { max-width: 100%; }
 
     $("liveScore").textContent = `${S.runs}/${S.wickets}`;
     $("liveOvers").textContent = `${oversText(S.legalBalls)} OV`;
+    const scoreOverDetail = $("scoreOverDetail");
+    if (scoreOverDetail) scoreOverDetail.textContent = `OVER ${oversText(S.legalBalls)} • BALL ${Number(S.legalBalls||0)%6}`;
 
     // Target display with "To Win Need ___ runs From ___ balls"
     if (S.status === "completed" && S.resultText) {
