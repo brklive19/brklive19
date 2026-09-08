@@ -742,6 +742,19 @@
                         showToast('⚠️ Please fill all fields.', 'error');
                         return;
                     }
+                    // Freeze the complete first-innings data before resetting live stats for innings 2.
+                    // This keeps the full scoreboard accurate for BOTH innings.
+                    const firstBattingTeam = match.battingFirst || match.team1;
+                    const firstXI = firstBattingTeam === match.team1 ? (match.team1Players || []) : (match.team2Players || []);
+                    const firstBowlingTeam = firstBattingTeam === match.team1 ? match.team2 : match.team1;
+                    const firstBowlersXI = firstBowlingTeam === match.team1 ? (match.team1Players || []) : (match.team2Players || []);
+                    match.firstInnings = {
+                        team: firstBattingTeam === match.team1 ? 'A' : 'B',
+                        xi: Array.from(firstXI),
+                        batters: JSON.parse(JSON.stringify(match.batsmenStats || {})),
+                        bowlers: JSON.parse(JSON.stringify(match.bowlingStats || {}))
+                    };
+
                     match.striker = striker;
                     match.nonStriker = nonStriker;
                     match.bowler = bowler;
@@ -1262,300 +1275,56 @@
                 if (!match) return;
                 const container = document.getElementById('matchSummaryContainer');
                 if (!container) return;
-
-                const team1 = match.team1;
-                const team2 = match.team2;
-                const score1 = match.score1 || { runs: 0, wickets: 0, overs: 0, balls: 0 };
-                const score2 = match.score2 || { runs: 0, wickets: 0, overs: 0, balls: 0 };
-                const batsmen = match.batsmenStats || {};
-                const bowlers = match.bowlingStats || {};
-
-                // Determine innings order
-                const isTeam1First = match.battingFirst === team1;
-                const firstInnTeam = isTeam1First ? team1 : team2;
-                const secondInnTeam = isTeam1First ? team2 : team1;
-                const firstInnScore = isTeam1First ? score1 : score2;
-                const secondInnScore = isTeam1First ? score2 : score1;
-
-                // Determine bowling teams (opposition)
-                const firstInnBowlingTeam = isTeam1First ? team2 : team1;
-                const secondInnBowlingTeam = isTeam1First ? team1 : team2;
-
-                // Build result banner
-                let resultText = '';
-                let resultClass = 'pending';
-                if (match.status === 'completed' && match.matchWinner) {
-                    resultText = `🏆 ${match.matchWinner} won by ${match.winMargin} ${match.winMarginType}`;
-                    resultClass = 'completed';
-                } else if (match.status === 'live') {
-                    resultText = '🔴 Match in Progress';
-                    resultClass = 'live';
-                } else {
-                    resultText = '⏳ Match Pending';
-                    resultClass = 'pending';
-                }
-
-                // Build innings blocks
-                let html = `
-                    <div class="summary-title">
-                        MATCH SUMMARY
-                        <button class="undo-btn" id="summaryUndoBtn">UNDO</button>
-                    </div>
-                    <div class="summary-result-banner ${resultClass}">${resultText}</div>
-                `;
-
-                // --- 1st Innings ---
-                html += `
-                    <div class="innings-block">
-                        <div class="innings-header">
-                            <span class="team-name">${firstInnTeam}</span>
-                            <span class="score-summary">${firstInnScore.runs || 0} - ${firstInnScore.wickets || 0}</span>
-                            <span class="overs-info">Overs: ${firstInnScore.overs || 0}.${firstInnScore.balls || 0}</span>
-                        </div>
-                        <div class="scorecard-grid">
-                            <div class="batting-card">
-                                <h5>Batting</h5>
-                                <table>
-                                    <thead><tr><th>Batsman</th><th>R</th><th>B</th><th>4s</th><th>6s</th><th>SR</th></tr></thead>
-                                    <tbody>
-                `;
-
-                // Add batsmen from first innings (all batsmen, show all)
-                const allBatsmen = Object.entries(batsmen);
-                if (allBatsmen.length === 0) {
-                    html += `<tr><td colspan="6" style="text-align:center;color:var(--text-muted);">No batting data</td></tr>`;
-                } else {
-                    // Sort by runs descending
-                    allBatsmen.sort((a, b) => b[1].runs - a[1].runs);
-                    allBatsmen.forEach(([name, stats]) => {
-                        const isOut = stats.isOut !== false;
-                        const suffix = isOut ? '' : '<span class="not-out">*</span>';
-                        const sr = stats.balls > 0 ? ((stats.runs / stats.balls) * 100).toFixed(1) : '0.0';
-                        html += `
-                            <tr>
-                                <td>${name}${suffix}</td>
-                                <td>${stats.runs || 0}</td>
-                                <td>${stats.balls || 0}</td>
-                                <td>${stats.fours || 0}</td>
-                                <td>${stats.sixes || 0}</td>
-                                <td>${sr}</td>
-                            </tr>
-                        `;
-                    });
-                }
-
-                // Add extras row
-                const firstInnExtras = firstInnScore.extras || 0;
-                html += `
-                                    <tr class="extras-row"><td colspan="6">Extras: ${firstInnExtras} (b ${firstInnScore.byeCount || 0}, lb ${firstInnScore.legByeCount || 0}, w ${firstInnScore.wideCount || 0}, nb ${firstInnScore.noBallCount || 0})</td></tr>
-                                    <tr class="total-row"><td colspan="2">Total: ${firstInnScore.runs || 0} / ${firstInnScore.wickets || 0}</td><td colspan="4">Overs: ${firstInnScore.overs || 0}.${firstInnScore.balls || 0}</td></tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="bowling-card">
-                            <h5>Bowling (${firstInnBowlingTeam})</h5>
-                            <table>
-                                <thead><tr><th>Bowler</th><th>O</th><th>M</th><th>R</th><th>W</th><th>Econ</th></tr></thead>
-                                <tbody>
-                `;
-
-                // Bowling stats for first innings
-                const bowlingEntries = Object.entries(bowlers);
-                if (bowlingEntries.length === 0) {
-                    html += `<tr><td colspan="6" style="text-align:center;color:var(--text-muted);">No bowling data</td></tr>`;
-                } else {
-                    // Sort by wickets descending
-                    bowlingEntries.sort((a, b) => b[1].wickets - a[1].wickets);
-                    bowlingEntries.forEach(([name, stats]) => {
-                        const econ = stats.overs > 0 ? (stats.runs / stats.overs).toFixed(2) : '0.00';
-                        html += `
-                            <tr>
-                                <td>${name}</td>
-                                <td>${stats.overs || 0}</td>
-                                <td>${stats.maidens || 0}</td>
-                                <td>${stats.runs || 0}</td>
-                                <td>${stats.wickets || 0}</td>
-                                <td>${econ}</td>
-                            </tr>
-                        `;
-                    });
-                }
-
-                html += `
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-                `;
-
-                // --- 2nd Innings ---
-                html += `
-                    <div class="innings-block">
-                        <div class="innings-header">
-                            <span class="team-name">${secondInnTeam}</span>
-                            <span class="score-summary">${secondInnScore.runs || 0} - ${secondInnScore.wickets || 0}</span>
-                            <span class="overs-info">Overs: ${secondInnScore.overs || 0}.${secondInnScore.balls || 0}</span>
-                        </div>
-                        <div class="scorecard-grid">
-                            <div class="batting-card">
-                                <h5>Batting</h5>
-                                <table>
-                                    <thead><tr><th>Batsman</th><th>R</th><th>B</th><th>4s</th><th>6s</th><th>SR</th></tr></thead>
-                                    <tbody>
-                `;
-
-                // Same batsmen list for second innings (show all again, but they are the same players)
-                const allBatsmen2 = Object.entries(batsmen);
-                if (allBatsmen2.length === 0) {
-                    html += `<tr><td colspan="6" style="text-align:center;color:var(--text-muted);">No batting data</td></tr>`;
-                } else {
-                    allBatsmen2.sort((a, b) => b[1].runs - a[1].runs);
-                    allBatsmen2.forEach(([name, stats]) => {
-                        const isOut = stats.isOut !== false;
-                        const suffix = isOut ? '' : '<span class="not-out">*</span>';
-                        const sr = stats.balls > 0 ? ((stats.runs / stats.balls) * 100).toFixed(1) : '0.0';
-                        html += `
-                            <tr>
-                                <td>${name}${suffix}</td>
-                                <td>${stats.runs || 0}</td>
-                                <td>${stats.balls || 0}</td>
-                                <td>${stats.fours || 0}</td>
-                                <td>${stats.sixes || 0}</td>
-                                <td>${sr}</td>
-                            </tr>
-                        `;
-                    });
-                }
-
-                const secondInnExtras = secondInnScore.extras || 0;
-                html += `
-                                    <tr class="extras-row"><td colspan="6">Extras: ${secondInnExtras} (b ${secondInnScore.byeCount || 0}, lb ${secondInnScore.legByeCount || 0}, w ${secondInnScore.wideCount || 0}, nb ${secondInnScore.noBallCount || 0})</td></tr>
-                                    <tr class="total-row"><td colspan="2">Total: ${secondInnScore.runs || 0} / ${secondInnScore.wickets || 0}</td><td colspan="4">Overs: ${secondInnScore.overs || 0}.${secondInnScore.balls || 0}</td></tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="bowling-card">
-                            <h5>Bowling (${secondInnBowlingTeam})</h5>
-                            <table>
-                                <thead><tr><th>Bowler</th><th>O</th><th>M</th><th>R</th><th>W</th><th>Econ</th></tr></thead>
-                                <tbody>
-                `;
-
-                // Same bowling stats for second innings
-                const bowlingEntries2 = Object.entries(bowlers);
-                if (bowlingEntries2.length === 0) {
-                    html += `<tr><td colspan="6" style="text-align:center;color:var(--text-muted);">No bowling data</td></tr>`;
-                } else {
-                    bowlingEntries2.sort((a, b) => b[1].wickets - a[1].wickets);
-                    bowlingEntries2.forEach(([name, stats]) => {
-                        const econ = stats.overs > 0 ? (stats.runs / stats.overs).toFixed(2) : '0.00';
-                        html += `
-                            <tr>
-                                <td>${name}</td>
-                                <td>${stats.overs || 0}</td>
-                                <td>${stats.maidens || 0}</td>
-                                <td>${stats.runs || 0}</td>
-                                <td>${stats.wickets || 0}</td>
-                                <td>${econ}</td>
-                            </tr>
-                        `;
-                    });
-                }
-
-                html += `
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-                `;
-
-                // --- Footer ---
-                html += `
-                    <div class="summary-footer">
-                        <span>Match: ${team1} vs ${team2}</span>
-                        <span class="mvp">${match.mvp ? 'MVP: ' + match.mvp : ''}</span>
-                    </div>
-                    <div class="edit-short-name">Edit Team Short Name ✨</div>
-                `;
-
-                container.innerHTML = html;
-
-                // Attach undo button event
-                const undoBtn = document.getElementById('summaryUndoBtn');
-                if (undoBtn) {
-                    undoBtn.addEventListener('click', function() {
-                        window.undoLastBall();
-                    });
-                }
+                const team1 = match.team1 || match.teamAName || 'Team A';
+                const team2 = match.team2 || match.teamBName || 'Team B';
+                const score1 = match.score1 || {runs:0,wickets:0,overs:0,balls:0};
+                const score2 = match.score2 || {runs:0,wickets:0,overs:0,balls:0};
+                const currentInnings = Number(match.innings || match.currentInnings || 1);
+                const tournament = getTournament(match.tournamentId);
+                const tournamentName = tournament?.name || match.tournamentName || match.tournament || 'No Tournament';
+                const firstTeam = match.firstInnings?.team === 'A' ? (match.teamAName || team1) : match.firstInnings?.team === 'B' ? (match.teamBName || team2) : (match.battingFirst || team1);
+                const secondTeam = firstTeam === team1 ? team2 : team1;
+                const firstScore = firstTeam === team1 ? score1 : score2;
+                const secondScore = secondTeam === team1 ? score1 : score2;
+                const firstStats = match.firstInnings?.batters || (currentInnings === 1 ? (match.batsmenStats || {}) : {});
+                const secondStats = match.secondInnings?.batters || (currentInnings === 2 ? (match.batsmenStats || {}) : {});
+                const firstXI = Array.from(match.firstInnings?.xi || (firstTeam === team1 ? (match.team1Players || []) : (match.team2Players || [])));
+                const secondXI = Array.from(match.secondInnings?.xi || (secondTeam === team1 ? (match.team1Players || []) : (match.team2Players || [])));
+                const esc = v => String(v ?? '').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+                const namesFor = (xi, stats) => { const a=[]; xi.forEach(n=>{if(n&&!a.includes(n))a.push(n)}); Object.keys(stats||{}).forEach(n=>{if(n&&!a.includes(n))a.push(n)}); return a; };
+                // Keep every batting value under its correct heading:
+                // Batsman | R | B | 4s | 6s | Dismissal | SR
+                // A player who has no stats object has not batted yet -> blank dismissal/stats.
+                // A player with stats and not dismissed -> NOT OUT. A dismissed player -> exact dismissal type.
+                const batRows = (xi, stats) => namesFor(xi,stats).map(name=>{
+                    const st=stats?.[name];
+                    const has=!!st;
+                    const out=has && (st.out===true || st.isOut===true || !!st.dismissal);
+                    const dismissal=out ? esc(st.dismissal || 'OUT') : (has ? 'NOT OUT' : '');
+                    const r=has?Number(st.runs||0):'', b=has?Number(st.balls||0):'', f=has?Number(st.fours||0):'', s=has?Number(st.sixes||0):'';
+                    const sr=has?(Number(st.balls)>0?((Number(st.runs||0)/Number(st.balls))*100).toFixed(1):'0.0'):'';
+                    return `<tr><td>${esc(name)}${out?'':(has?'<span class="not-out">*</span>':'')}</td><td>${r}</td><td>${b}</td><td>${f}</td><td>${s}</td><td>${dismissal}</td><td>${sr}</td></tr>`;
+                }).join('') || '<tr><td colspan="7" style="text-align:center;color:var(--text-muted);">No batting data</td></tr>';
+                const bowlRows = bowlers => Object.entries(bowlers||{}).map(([name,st])=>{
+                    const balls=Number(st.balls||0); const overs=balls?Math.floor(balls/6)+'.'+(balls%6):Number(st.overs||0).toFixed(1); const econ=balls?(Number(st.runs||0)/(balls/6)).toFixed(2):'0.00';
+                    return `<tr><td>${esc(name)}</td><td>${overs}</td><td>${st.maidens||0}</td><td>${st.runs||0}</td><td>${st.wickets||0}</td><td>${econ}</td></tr>`;
+                }).join('') || '<tr><td colspan="6" style="text-align:center;color:var(--text-muted);">No bowling data</td></tr>';
+                const result=match.status==='completed'&&match.matchWinner?`🏆 ${esc(match.matchWinner)} won by ${esc(match.winMargin)} ${esc(match.winMarginType||'')}`:match.status==='live'?'🔴 Match in Progress':'⏳ Match Pending';
+                const cls=match.status==='completed'?'completed':match.status==='live'?'live':'pending';
+                const firstBowlers=match.firstInnings?.bowlers || (firstTeam===team1?match.bowlingStats:{});
+                const secondBowlers=match.secondInnings?.bowlers || (currentInnings===2?match.bowlingStats:{});
+                container.innerHTML=`
+                  <div class="full-scoreboard-header" style="width:100%;text-align:center;margin-bottom:14px;padding:14px 18px;border-radius:12px;background:linear-gradient(135deg,rgba(108,92,231,.18),rgba(255,255,255,.04));border:1px solid var(--card-border)"><div style="font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.12em;font-weight:800">TOURNAMENT</div><div style="font-size:24px;font-weight:900;line-height:1.2;margin-top:4px">${esc(tournamentName)}</div></div><div class="summary-title"><span>MATCH SCOREBOARD</span></div>
+                  <div class="summary-result-banner ${cls}">${result}</div>
+                  <div class="innings-block"><div class="innings-header"><span class="team-name">${esc(firstTeam)}</span><span class="score-summary">${firstScore.runs||0} - ${firstScore.wickets||0}</span><span class="overs-info">Overs: ${firstScore.overs||0}.${firstScore.balls||0}</span></div><div class="scorecard-grid">
+                    <div class="batting-card"><h5>Batting</h5><table><thead><tr><th>Batsman</th><th>R</th><th>B</th><th>4s</th><th>6s</th><th>Dismissal</th><th>SR</th></tr></thead><tbody>${batRows(firstXI,firstStats)}<tr class="extras-row"><td colspan="7">Extras: ${firstScore.extras||0}</td></tr><tr class="total-row"><td colspan="2">Total: ${firstScore.runs||0} / ${firstScore.wickets||0}</td><td colspan="5">Overs: ${firstScore.overs||0}.${firstScore.balls||0}</td></tr></tbody></table></div>
+                    <div class="bowling-card"><h5>Bowling (${esc(secondTeam)})</h5><table><thead><tr><th>Bowler</th><th>O</th><th>M</th><th>R</th><th>W</th><th>Econ</th></tr></thead><tbody>${bowlRows(firstBowlers)}</tbody></table></div>
+                  </div></div>
+                  <div class="innings-block"><div class="innings-header"><span class="team-name">${esc(secondTeam)}</span><span class="score-summary">${secondScore.runs||0} - ${secondScore.wickets||0}</span><span class="overs-info">Overs: ${secondScore.overs||0}.${secondScore.balls||0}</span></div><div class="scorecard-grid">
+                    <div class="batting-card"><h5>Batting</h5><table><thead><tr><th>Batsman</th><th>R</th><th>B</th><th>4s</th><th>6s</th><th>Dismissal</th><th>SR</th></tr></thead><tbody>${batRows(secondXI,secondStats)}<tr class="extras-row"><td colspan="7">Extras: ${secondScore.extras||0}</td></tr><tr class="total-row"><td colspan="2">Total: ${secondScore.runs||0} / ${secondScore.wickets||0}</td><td colspan="5">Overs: ${secondScore.overs||0}.${secondScore.balls||0}</td></tr></tbody></table></div>
+                    <div class="bowling-card"><h5>Bowling (${esc(firstTeam)})</h5><table><thead><tr><th>Bowler</th><th>O</th><th>M</th><th>R</th><th>W</th><th>Econ</th></tr></thead><tbody>${bowlRows(secondBowlers)}</tbody></table></div>
+                  </div></div>`;
             }
-
-            // ===== UNDO FUNCTION =====
-            window.undoLastBall = function() {
-                const match = getMatch(state.currentMatchId);
-                if (!match) {
-                    showToast('No match found.', 'error');
-                    return;
-                }
-                if (match.status === 'completed') {
-                    showToast('Match is already completed. Cannot undo.', 'error');
-                    return;
-                }
-
-                const history = match.history || [];
-                if (history.length === 0) {
-                    showToast('Nothing to undo.', 'info');
-                    return;
-                }
-
-                const snap = history.pop();
-                match.history = history;
-
-                const inn = match.innings === 1 ? match.score1 : match.score2;
-                if (!inn) return;
-
-                inn.runs = snap.runs || 0;
-                inn.wickets = snap.wickets || 0;
-                inn.overs = snap.overs || 0;
-                inn.balls = snap.balls || 0;
-                inn.overBallData = snap.overBallData || [];
-                inn.ballHistory = snap.ballHistory || [];
-                inn.extras = snap.extras || 0;
-                inn.wideCount = snap.wideCount || 0;
-                inn.noBallCount = snap.noBallCount || 0;
-                inn.byeCount = snap.byeCount || 0;
-                inn.legByeCount = snap.legByeCount || 0;
-                inn.fours = snap.fours || 0;
-                inn.sixes = snap.sixes || 0;
-                inn.strikerRuns = snap.strikerRuns || 0;
-                inn.bowlerWickets = snap.bowlerWickets || 0;
-                inn.strikerBallsFaced = snap.strikerBallsFaced || 0;
-
-                match.striker = snap.striker || match.striker;
-                match.nonStriker = snap.nonStriker || match.nonStriker;
-                match.bowler = snap.bowler || match.bowler;
-                match.bowlerOvers = snap.bowlerOvers || 0;
-                match.bowlerRuns = snap.bowlerRuns || 0;
-                match.bowlerWickets = snap.bowlerWickets || 0;
-                match.ballsInCurrentOver = snap.ballsInCurrentOver || 0;
-                match.batsmenStats = snap.batsmenStats || {};
-                match.bowlingStats = snap.bowlingStats || {};
-                match.targetRuns = snap.targetRuns || match.targetRuns;
-                match.targetBalls = snap.targetBalls || match.targetBalls;
-
-                // If match was completed, revert status
-                if (snap.status === 'live' || snap.status === 'pending') {
-                    match.status = snap.status || 'live';
-                    match.matchWinner = null;
-                    match.winMargin = 0;
-                    match.winMarginType = '';
-                }
-
-                saveState();
-                updateAllViews();
-                showToast('↩ Undo successful!', 'success');
-            };
 
             // ===== UPDATE SCORECARD =====
             function updateScorecard(match) {
@@ -1567,7 +1336,7 @@
                 let summaryHtml = '';
                 if (match.status === 'completed' && match.matchWinner) {
                     summaryHtml =
-                        `<tr style="background:rgba(46,204,113,0.1);"><td colspan="6" style="font-weight:700;color:var(--success);text-align:center;">🏆 ${match.matchWinner} won by ${match.winMargin} ${match.winMarginType}</td></tr>`;
+                        `<tr style="background:rgba(46,204,113,0.1);"><td colspan="7" style="font-weight:700;color:var(--success);text-align:center;">🏆 ${match.matchWinner} won by ${match.winMargin} ${match.winMarginType}</td></tr>`;
                 }
                 battingBody.innerHTML = summaryHtml;
 
@@ -1575,16 +1344,17 @@
                 const sortedBatsmen = Object.entries(batsmen).sort((a, b) => b[1].runs - a[1].runs);
                 if (sortedBatsmen.length === 0) {
                     battingBody.innerHTML +=
-                        '<tr><td colspan="6" style="text-align:center;color:var(--text-muted);">No batting data yet</td></tr>';
+                        '<tr><td colspan="7" style="text-align:center;color:var(--text-muted);">No batting data yet</td></tr>';
                 } else {
                     sortedBatsmen.forEach(([name, stats]) => {
                         const sr = stats.balls > 0 ? ((stats.runs / stats.balls) * 100).toFixed(1) : '0.0';
                         const fours = stats.fours || 0;
                         const sixes = stats.sixes || 0;
-                        const isOut = stats.isOut !== false;
+                        const isOut = stats.out === true || stats.isOut === true || !!stats.dismissal;
                         const suffix = isOut ? '' : '*';
+                        const dismissal = isOut ? (stats.dismissal || 'OUT') : 'NOT OUT';
                         battingBody.innerHTML +=
-                            `<tr><td>${name}${suffix}</td><td>${stats.runs}</td><td>${stats.balls}</td><td>${fours}</td><td>${sixes}</td><td>${sr}</td></tr>`;
+                            `<tr><td>${name}${suffix}</td><td>${stats.runs}</td><td>${stats.balls}</td><td>${fours}</td><td>${sixes}</td><td>${dismissal}</td><td>${sr}</td></tr>`;
                     });
                 }
 
@@ -2296,8 +2066,19 @@
                         inn.ballHistory.push({ type: 'wicket', label: 'W' });
                         inn.overBallData.push({ label: 'W', type: 'wicket' });
 
-                        if (match.striker && match.batsmenStats[match.striker]) {
+                        // Record the exact dismissal so the full scoreboard can show it.
+                        let dismissalType = prompt(
+                            'Dismissal type (Caught, Bowled, LBW, Run Out, Stumped, Hit Wicket, etc.):',
+                            'OUT'
+                        );
+                        dismissalType = (dismissalType || 'OUT').trim();
+                        if (match.striker) {
+                            if (!match.batsmenStats[match.striker]) {
+                                match.batsmenStats[match.striker] = { runs: 0, balls: 0, fours: 0, sixes: 0 };
+                            }
                             match.batsmenStats[match.striker].isOut = true;
+                            match.batsmenStats[match.striker].out = true;
+                            match.batsmenStats[match.striker].dismissal = dismissalType;
                         }
 
                         if (inn.wickets >= 10) {
