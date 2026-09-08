@@ -1313,6 +1313,22 @@
             flex-wrap: wrap;
             gap: 10px;
         }
+        .match-summary-container .summary-title > div:first-child {
+            min-width: 220px;
+        }
+        .match-summary-container .summary-title > div:first-child strong {
+            font-size: 16px;
+            color: var(--accent);
+        }
+        .match-summary-container .batting-card table th:nth-child(6),
+        .match-summary-container .batting-card table td:nth-child(6) {
+            min-width: 105px;
+        }
+        .match-summary-container .batting-card table th:nth-child(7),
+        .match-summary-container .batting-card table td:nth-child(7) {
+            min-width: 55px;
+            text-align: right;
+        }
         .match-summary-container .summary-title .undo-btn {
             padding: 6px 20px;
             border-radius: 30px;
