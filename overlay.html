@@ -1015,6 +1015,20 @@ body.theme-theme5{background:#000}
 /* Universal broadcast-safe lower-third: slight lift from bottom and scale to available viewport. */
 @media (max-width:1100px){.overlay{width:96vw}.frame{height:clamp(112px,13vw,142px)}}
 @media (max-height:650px){body{padding-bottom:10px}.overlay{transform:scale(.88)}}
+
+/* BRKLIVE19 broadcast scorecard refinements */
+#theme5Scorecard .t5-sc-mid strong{font-size:clamp(18px,2.2vw,38px);font-weight:1000;letter-spacing:.03em}
+#theme5Scorecard .t5-sc-mid small{font-size:clamp(11px,1.2vw,20px);margin-top:4px;color:#b9c3c9;font-weight:800}
+#theme5Scorecard .t5-sc-mid em{font-size:clamp(9px,.9vw,15px);margin-top:5px;color:#67dff0;font-style:normal}
+#theme5Scorecard .t5-score-team{flex-direction:column!important;align-items:flex-end!important;justify-content:center!important;line-height:.9}
+#theme5Scorecard .t5-score-team span{font-size:clamp(36px,5.4vw,88px);font-weight:1000;color:#101820}
+#theme5Scorecard .t5-score-team small{font-size:clamp(11px,1.2vw,20px);margin-top:7px;color:#17202a;font-weight:1000}
+#theme5Scorecard .t5-bat-row.t5-out span:nth-child(3){color:#a51f1f}
+#theme5Scorecard .t5-bat-row.t5-crease span:nth-child(3){color:#14804a}
+#theme5Scorecard .t5-bat-row.t5-notyet span:nth-child(3){color:transparent}
+#theme5Scorecard .t5-right-metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:12px}
+#theme5Scorecard .t5-right-metrics span{background:#111820;color:#8deaf5;border:1px solid #34515a;padding:6px 8px;text-align:center;font-size:clamp(9px,1vw,15px);font-weight:900}
+#theme5Scorecard .t5-right-metrics b{display:block;font-size:clamp(14px,1.5vw,24px);color:#fff}
 </style>
 <script>
 (function(){
@@ -1585,6 +1599,8 @@ body{padding:0 0 .5vh !important}
   overflow:hidden!important;
   text-overflow:ellipsis!important;
 }
+/* TARGET uses the exact same blinking/rotating top-row position. */
+#overlay #topRowTarget{display:none!important}
 #overlay .scoreSubRow{justify-content:center!important}
 #overlay .scoreToss{display:none!important}
 /* Remove the extra line below the score; C.R. remains directly under the score. */
@@ -1633,14 +1649,91 @@ body{padding:0 0 .5vh !important}
 
 </style>
 
+
+<style id="BRKLIVE19-VIEWPORT-LIVE-BADGE">
+/* EXACT REQUEST: BRKLIVE19 + blinking red dot + LIVE at the top-right of the VIEWPORT.
+   It is intentionally outside #overlay so transformed overlay containers cannot move it. */
+#brkLogo{
+  position:fixed!important;
+  top:24px!important;
+  right:28px!important;
+  left:auto!important;
+  bottom:auto!important;
+  z-index:2147483647!important;
+  display:flex!important;
+  flex-direction:row!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:12px!important;
+  padding:10px 18px!important;
+  min-height:30px!important;
+  box-sizing:border-box!important;
+  border-radius:999px!important;
+  background:rgba(115,115,115,.72)!important;
+  box-shadow:0 2px 10px rgba(0,0,0,.18)!important;
+  pointer-events:none!important;
+  animation:none!important;
+  transform:none!important;
+  filter:none!important;
+}
+#brkLogo .brkLogoText{
+  margin:0!important;
+  font-size:clamp(16px,1.55vw,30px)!important;
+  line-height:1!important;
+  font-weight:1000!important;
+  letter-spacing:.01em!important;
+  color:#00eaff!important;
+  text-shadow:0 1px 4px rgba(0,0,0,.35)!important;
+  white-space:nowrap!important;
+}
+#brkLogo .liveBadge{
+  display:flex!important;
+  flex-direction:row!important;
+  align-items:center!important;
+  gap:7px!important;
+  margin:0!important;
+  padding:0!important;
+  color:#fff!important;
+  font-size:clamp(14px,1.25vw,25px)!important;
+  line-height:1!important;
+  font-weight:1000!important;
+  letter-spacing:.02em!important;
+  text-shadow:0 1px 4px rgba(0,0,0,.4)!important;
+}
+#brkLogo .liveBlinkDot{
+  width:clamp(10px,.8vw,16px)!important;
+  height:clamp(10px,.8vw,16px)!important;
+  flex:0 0 auto!important;
+  margin:0!important;
+  border-radius:50%!important;
+  background:#ff3158!important;
+  box-shadow:0 0 8px #ff3158,0 0 16px rgba(255,49,88,.55)!important;
+  animation:brkliveViewportBlink 1s steps(2,end) infinite!important;
+}
+#brkLogo .liveBlinkText{
+  color:#fff!important;
+  animation:brkliveViewportBlink 1s steps(2,end) infinite!important;
+}
+@keyframes brkliveViewportBlink{0%,49%{opacity:1}50%,100%{opacity:.18}}
+@media(max-width:700px){
+  #brkLogo{top:12px!important;right:12px!important;gap:7px!important;padding:7px 11px!important}
+}
+</style>
+
 </head>
 <body>
+<!-- BRKLIVE19 LIVE badge: viewport-level, independent of the scoreboard overlay -->
+<div id="brkLogo" class="brkLogo" aria-label="BRKLIVE19 LIVE">
+  <span class="brkLogoText">BRKLIVE19</span>
+  <span class="liveBadge"><span class="liveBlinkDot"></span><span class="liveBlinkText">LIVE</span></span>
+</div>
+<!-- Automatic 2nd-innings target corner: replaces BRKLIVE19 at top-right -->
 <!-- ===== MAIN OVERLAY ===== -->
 <div id="overlay" class="overlay">
-  <div id="targetTop" class="target">
-  <span id="targetMatchData" class="targetMatchData">MATCH • TARGET</span>
-  <span id="targetValue">—</span>
-</div>
+  <div id="targetTop" class="target targetFullScreen" aria-live="polite">
+    <div id="chasingTeamName" class="chasingTeamName">CHASING TEAM</div>
+    <div id="targetNeedText" class="targetNeedText">NEED 0 RUN FROM 0 BALLS</div>
+  </div>
 
   <!-- Banners are fixed position, not inside .overlay -->
   <div id="bannerTournament" class="banner tournament"></div>
@@ -1650,13 +1743,9 @@ body{padding:0 0 .5vh !important}
   <div id="bannerResult" class="banner result"></div>
   <div id="bannerPlayer" class="banner player"></div>
   <div id="bannerBowler" class="banner bowler"></div>
+  <div id="bannerFOW" class="banner fow"></div>
   <div id="bannerPartnership" class="banner partnership"></div>
   <div id="custom" class="custom"></div>
-  <div id="brkLogo" class="brkLogo" aria-label="BRKLIVE19">
-    <div class="brkLogoText">BRK<span>LIVE</span>19</div>
-    <div id="topToss" class="topToss">TOSS —</div>
-    <div class="liveBadge"><span class="liveBlinkDot"></span><span class="liveBlinkText">LIVE</span></div>
-  </div>
 
   <div class="broadcastBar">
     <div class="broadcastBrand">BRKLIVE19 <span>LIVE</span></div>
@@ -1669,6 +1758,7 @@ body{padding:0 0 .5vh !important}
       <span id="headerInnings">1ST INNINGS</span>
       <span id="headerToss">TOSS —</span>
       <span id="headerMatch">LIVE CRICKET</span>
+      <span id="topRowTarget" class="topRowTarget" aria-live="polite"><span class="targetLabel">TARGET -</span><strong id="topRowTargetValue">0</strong></span>
     </div>
   </div>
 
@@ -1691,7 +1781,10 @@ body{padding:0 0 .5vh !important}
 </style>
 
     <div class="teamPanel left"><div id="batTeam" class="teamName">TEAM A</div></div>
-    <div class="teamPanel right"><div id="bowlTeam" class="teamName">TEAM B</div></div>
+    <div class="teamPanel right">
+      <div id="secondInningsTarget" class="secondInningsTarget" aria-live="polite" hidden><span class="targetLabel">TARGET</span><strong id="targetScoreValue">0</strong></div>
+      <div id="bowlTeam" class="teamName">TEAM B</div>
+    </div>
 
 
     <div class="content">
@@ -1714,7 +1807,7 @@ body{padding:0 0 .5vh !important}
       <div class="bowlerPanel">
         <div class="bowlerTop"><div id="bowler" class="bowlerName">BOWLER</div><div class="live">LIVE</div></div>
         <div id="bowlerStats" class="bowlerStats">0.0 O • 0 R • 0 W</div>
-        <div class="currentOver"><div class="currentOverLabel">THIS OVER</div><div id="balls" class="ballList"></div></div>
+        <div class="currentOver"><div class="currentOverLabel">THIS OVER</div><div id="balls" class="ballList"></div><div id="currentOverTotal" class="currentOverTotal">0 RUNS</div></div>
       </div>
     </div>
   </div>
@@ -1838,17 +1931,32 @@ function parseBallEvent(text){
 }
 
 function currentOverEvents(data){
-  if(Array.isArray(data.currentOverBalls)&&data.currentOverBalls.length)return data.currentOverBalls;
-  const events=Array.isArray(data.events)?data.events:[];
-  let start=0;
-  for(let i=events.length-1;i>=0;i--){if(/OVER\s+\d+\.\d+\s+COMPLETE/i.test(String(events[i]))){start=i+1;break}}
-  return events.slice(start).map(parseBallEvent).filter(Boolean);
+  // ONLY the live current-over buffer is rendered. An explicit empty buffer
+  // means a new bowler/over has just started, so previous-over data is never
+  // shown.
+  if(Array.isArray(data.currentOverBalls)){
+    return data.currentOverBalls.map(b=>{
+      const parsed=parseBallEvent(b?.label??b?.value??b?.text??"") || ({v:String(b?.label??b?.value??""),c:""});
+      return parsed && parsed.v ? {...parsed,_runs:num(b?.runs)} : null;
+    }).filter(Boolean);
+  }
+  return [];
 }
+
 function renderBalls(data){
-  const box=$("balls");box.innerHTML="";
-  const list=currentOverEvents(data).slice(-6);
-  if(!list.length){const x=document.createElement("span");x.className="ball";x.textContent="—";box.appendChild(x);return}
-  list.forEach((b,i)=>{const x=document.createElement("span");x.className="ball "+(b.c||"")+(i===list.length-1?" latest":"");x.textContent=b.v;box.appendChild(x)})
+  const box=$("balls"); if(!box) return; box.innerHTML="";
+  const totalEl=$("currentOverTotal");
+  const list=currentOverEvents(data);
+  const total=list.reduce((sum,b)=>sum+num(b._runs),0);
+  if(totalEl) totalEl.textContent=`${total} RUN${total===1?"":"S"}`;
+  if(!list.length) return;
+  list.forEach((b,i)=>{
+    const x=document.createElement("span");
+    x.className="ball "+(b.c||"")+(i===list.length-1?" latest":"");
+    x.textContent=b.v;
+    x.title = `Delivery ${i+1}: ${b.v}`;
+    box.appendChild(x);
+  });
 }
 
 function calcCRR(d){const balls=num(d.legalBalls);return balls?(num(d.runs)/(balls/6)).toFixed(2):"0.00"}
@@ -1868,25 +1976,43 @@ function deriveResult(d){
   return "";
 }
 
-function updateTarget(d){
-  const firstRuns=num(d.firstInnings&&d.firstInnings.runs);
-  const target=num(d.target) || (num(d.innings)===2 ? firstRuns+1 : 0), second=num(d.innings)===2;
-  const show=!!((d.overlay&&d.overlay.showTarget) || d.showTarget);
-  const isCompleted = d.status === 'completed' || d.matchWinner || !!deriveResult(d);
-  if(target && second && show && !isCompleted){
-    $("targetTop").style.display="flex";
-    $("overlay").classList.add("targetMode");
-    const need=Math.max(target-num(d.runs),0);
-    const ballsLeft=Math.max(num(d.maxOvers)*6-num(d.legalBalls),0);
-    const chasing=teamName(d,d.battingTeam||"A");
-    const matchText=d.matchName || `${d.teamA||"TEAM A"} VS ${d.teamB||"TEAM B"}`;
-    $("targetMatchData").textContent=`${matchText}  •  TARGET ${target}`;
-    $("targetValue").textContent = `TO WIN NEED ${need} RUN${need===1?'':'S'} FROM ${ballsLeft} BALL${ballsLeft===1?'':'S'}`;
-  }else{
-    $("targetTop").style.display="none";
-    $("overlay").classList.remove("targetMode");
-  }
+let targetPreviousInnings = null;
+let targetStartFlashTimer = null;
+function triggerTargetStartFlash(d){
+  if(Number(d.innings)!==2 || targetPreviousInnings===2) return;
+  targetPreviousInnings=2;
+  const root=document.getElementById("overlay"); if(!root) return;
+  root.classList.add("targetRRRFlash");
+  clearTimeout(targetStartFlashTimer);
+  targetStartFlashTimer=setTimeout(()=>root.classList.remove("targetRRRFlash"),3000);
 }
+
+function updateTarget(d){
+  // Normal overlay target: show ONLY on the right side of the bowling panel
+  // during the live 2nd innings. Never switch the overlay into fullscreen
+  // target mode here.
+  const firstRuns=num(d.firstInnings&&d.firstInnings.runs);
+  const target=num(d.target) || (num(d.innings)===2 ? firstRuns+1 : 0);
+  const second=num(d.innings)===2;
+  const isCompleted = d.status === 'completed' || d.matchWinner || !!deriveResult(d);
+
+  const rightTarget=document.getElementById("secondInningsTarget");
+  const rightTargetValue=document.getElementById("targetScoreValue");
+  const topTarget=document.getElementById("topRowTarget");
+  const topTargetValue=document.getElementById("topRowTargetValue");
+  const showRight = second && !!target && !isCompleted;
+  if(rightTarget){ rightTarget.style.display="none"; rightTarget.hidden=true; }
+  if(rightTargetValue && target) rightTargetValue.textContent=String(Math.round(target));
+  if(topTarget){ topTarget.style.display = showRight ? "inline-flex" : "none"; topTarget.hidden = !showRight; topTarget.classList.toggle("target-visible", showRight); }
+  if(topTargetValue && target) topTargetValue.textContent=String(Math.round(target));
+
+  // Keep the separate Target-button/fullscreen graphic hidden during normal scoring.
+  const targetTop=document.getElementById("targetTop");
+  if(targetTop){ targetTop.style.display="none"; targetTop.hidden=true; }
+  const overlayEl=document.getElementById("overlay");
+  if(overlayEl) overlayEl.classList.remove("targetMode");
+}
+
 
 function renderPlayingXI(d){
   const ov=$("playingXIOverlay");
@@ -1966,7 +2092,13 @@ function buildTopInfoItems(d){
   if(match) items.push("MATCH • "+match);
   if(d.started===true) items.push(toss);
   items.push("CURRENT RUN RATE • "+crr);
-  items.push("PROJECTED SCORE • "+projected);
+  // 2nd-innings target belongs in the same 3-second rotating TOP ROW as
+  // tournament/toss/current-run-rate details. It is NOT a separate overlay box.
+  if(num(d.innings)===2 && num(d.target)){
+    items.push("TARGET • "+Math.round(num(d.target)));
+  }
+  // Projected score is a first-innings statistic only. Never show it after the 2nd innings starts.
+  if(num(d.innings)!==2) items.push("PROJECTED SCORE • "+projected);
   return items;
 }
 function setTopInfoItems(items, active){
@@ -1995,7 +2127,7 @@ function bannerText(d){
   const partnership=t.partnership||{};
 
   const bTournament=$("bannerTournament"), bMatch=$("bannerMatch"), bToss=$("bannerToss");
-  const bResult=$("bannerResult"), bPlayer=$("bannerPlayer"), bPartnership=$("bannerPartnership"), bBowler=$("bannerBowler");
+  const bResult=$("bannerResult"), bPlayer=$("bannerPlayer"), bPartnership=$("bannerPartnership"), bBowler=$("bannerBowler"), bFOW=$("bannerFOW");
   const tournamentName = d.tournament || requestedTournament;
   bTournament.textContent=escapeText(tournamentName||"TOURNAMENT");
   bTournament.classList.toggle("show",showTournament&&!!tournamentName);
@@ -2017,10 +2149,22 @@ function bannerText(d){
 
   let playerText="";
   if(playerLower.active){
-    const isB1=playerLower.slot!=="b2"; const playerName=isB1?(d.b1||d.striker||playerLower.player):(d.b2||d.nonStriker||playerLower.player);
-    if(playerName){const st=batterStats(d,playerName), balls=num(st.balls), runs=num(st.runs); const fours=num(st.fours), sixes=num(st.sixes); const sr=balls?((runs/balls)*100).toFixed(2):"0.00"; playerText=(isB1?"B1":"B2")+" • "+playerName+"  |  "+runs+" ("+balls+")  •  4s "+fours+"  •  6s "+sixes+"  •  SR "+sr;}
+    const isB1=playerLower.slot!=="b2";
+    const playerName=isB1?(d.b1||d.striker||playerLower.player):(d.b2||d.nonStriker||playerLower.player);
+    if(playerName){
+      const st=batterStats(d,playerName), balls=num(st.balls), runs=num(st.runs);
+      const fours=num(st.fours), sixes=num(st.sixes);
+      const sr=balls?((runs/balls)*100).toFixed(2):"0.00";
+      const team=teamName(d,d.battingTeam||"A");
+      const role=isB1?"B1 • STRIKER":"B2 • NON-STRIKER";
+      playerText=`<div class="statGraphic">
+        <div class="sg-head"><strong>${escapeText(playerName)}</strong><span>${escapeText(role)}<small>${escapeText(team)}</small></span></div>
+        <div class="sg-labels"><span>RUNS</span><span>BALLS</span><span>4s</span><span>6s</span><span>SR</span></div>
+        <div class="sg-values"><strong>${runs}</strong><strong>${balls}</strong><strong>${fours}</strong><strong>${sixes}</strong><strong>${sr}</strong></div>
+      </div>`;
+    }
   }
-  bPlayer.textContent=playerText; bPlayer.classList.toggle("show",!!playerText);
+  bPlayer.innerHTML=playerText; bPlayer.classList.toggle("show",!!playerText);
 
   const pRuns=num(d.partnershipRuns ?? (num((d.batters||{})[d.striker]?.runs)+num((d.batters||{})[d.nonStriker]?.runs)));
   const pBalls=num(d.partnershipBalls ?? d.legalBalls);
@@ -2035,11 +2179,37 @@ function bannerText(d){
   if(bBowler){
     const bs=bowlerStats(d,bowlerName);
     const econ=bs.balls?((num(bs.runs)/(num(bs.balls)/6)).toFixed(2)):"0.00";
-    bBowler.textContent=bowlerName ? `BOWLER • ${bowlerName}  |  ${oversFromBalls(bs.balls)} O • ${num(bs.runs)} R • ${num(bs.wickets)} W • ECON ${econ}` : "BOWLER";
-    bBowler.classList.toggle("show",!!(t.showBowler??d.showBowler??false)&&!!bowlerName);
+    const showBowler=!!(t.showBowler??d.showBowler??false)&&!!bowlerName;
+    bBowler.innerHTML=showBowler ? `<div class="statGraphic statGraphicBowler">
+      <div class="sg-head"><strong>${escapeText(bowlerName)}</strong><span>BOWLER<small>${escapeText(teamName(d,d.bowlingTeam||(d.battingTeam==="A"?"B":"A")))}</small></span></div>
+      <div class="sg-labels"><span>OVERS</span><span>RUNS</span><span>WICKETS</span><span>ECONOMY</span></div>
+      <div class="sg-values"><strong>${oversFromBalls(bs.balls)}</strong><strong>${num(bs.runs)}</strong><strong>${num(bs.wickets)}</strong><strong>${econ}</strong></div>
+    </div>` : "";
+    bBowler.classList.toggle("show",showBowler);
   }
 
-  const anyBanner=[bTournament,bMatch,venueEl,bToss,bResult,bPlayer,bBowler,bPartnership].filter(Boolean).some(el=>el.classList.contains("show"));
+  const showFOW=!!(t.showFOW??d.showFOW??false);
+  const fows=Array.isArray(d.fallWickets)?d.fallWickets:[];
+  const fow=d.fow||fows[fows.length-1]||null;
+  if(bFOW){
+    if(showFOW && fow){
+      const player=escapeText(fow.player||"BATTER");
+      const team=escapeText(fow.team||teamName(d,d.battingTeam)||"TEAM");
+      const type=escapeText(fow.type||"WICKET");
+      const bowler=escapeText(fow.bowler||d.bowler||"—");
+      const runs=num(fow.runs), balls=num(fow.balls), fours=num(fow.fours), sixes=num(fow.sixes);
+      const sr=fow.sr!==undefined ? fow.sr : (balls?((runs/balls)*100).toFixed(2):"0.00");
+      bFOW.innerHTML=`<div class="statGraphic statGraphicFow">
+        <div class="sg-head"><strong>${player}</strong><span>FALL OF WICKET #${num(fow.wicket)||1}<small>${team} • ${type}</small></span></div>
+        <div class="sg-labels"><span>RUNS</span><span>BALLS</span><span>4s</span><span>6s</span><span>SR</span></div>
+        <div class="sg-values"><strong>${runs}</strong><strong>${balls}</strong><strong>${fours}</strong><strong>${sixes}</strong><strong>${sr}</strong></div>
+        <div class="sg-note">SCORE ${num(fow.score)} / ${num(fow.wicket)} • ${escapeText(fow.overs||"")} OV • BOWLER ${bowler}</div>
+      </div>`;
+    }else bFOW.innerHTML="";
+    bFOW.classList.toggle("show",showFOW&&!!fow);
+  }
+
+  const anyBanner=[bTournament,bMatch,venueEl,bToss,bResult,bPlayer,bBowler,bFOW,bPartnership].filter(Boolean).some(el=>el.classList.contains("show"));
   $("overlay").classList.toggle("bannerMode",anyBanner);
   stackFooterBanners();
 }
@@ -2061,7 +2231,7 @@ function customLower(d){
 
 // ---- Center every lower-third graphic and keep the newest visible item nearest the bottom ----
 function stackFooterBanners(){
-  const items=["bannerTournament","bannerMatch","bannerVenue","bannerToss","bannerResult","bannerPlayer","bannerBowler","bannerPartnership"].map(id=>$(id)).filter(el=>el&&el.classList.contains("show"));
+  const items=["bannerTournament","bannerMatch","bannerVenue","bannerToss","bannerResult","bannerPlayer","bannerBowler","bannerFOW","bannerPartnership"].map(id=>$(id)).filter(el=>el&&el.classList.contains("show"));
   let bottomOffset=0;
   for(const el of items.slice().reverse()){
     el.style.bottom=bottomOffset+"px";
@@ -2133,34 +2303,53 @@ function renderFullScorecard(d){
   const batters=inn.batters||{};
   const xi=Array.isArray(inn.xi)?inn.xi:(side==='A'?(d.xiA||[]):(d.xiB||[]));
   const names=[...Object.keys(batters)]; xi.forEach(n=>{if(n&&!names.includes(n))names.push(n)});
-  const dismissalMap={}; (inn.fallWickets||[]).forEach(f=>dismissalMap[f.player]=`${f.type||'OUT'}`);
-  const batterRows=names.length?names.map(name=>{const st=batters[name]||{};const r=num(st.runs),b=num(st.balls),f=num(st.fours),s=num(st.sixes);const out=st.out===true;const sr=b?((r/b)*100).toFixed(1):'-';const dis=st.dismissal||dismissalMap[name]||(out?'OUT':'not out');return `<tr><td>${escapeText(name)}${!out&&b>0?' *':''}</td><td>${escapeText(dis)}</td><td style="text-align:center">${b>0||r>0?r:'-'}</td><td style="text-align:center">${b||'-'}</td><td style="text-align:center">${b>0||f>0?f:'-'}</td><td style="text-align:center">${b>0||s>0?s:'-'}</td><td style="text-align:center">${sr}</td></tr>`}).join(''):`<tr><td colspan="7" style="text-align:center">NO BATTING DATA</td></tr>`;
+  const dismissalMap={}; (inn.fallWickets||[]).forEach(f=>{if(f&&f.player)dismissalMap[f.player]=`${f.type||'OUT'}`});
+  const classified=names.map((name,index)=>{
+    const st=batters[name]||{}; const r=num(st.runs),b=num(st.balls),f=num(st.fours),sx=num(st.sixes);
+    const out=st.out===true || !!st.dismissal || !!dismissalMap[name];
+    const onCrease=!out && ((inn.striker===name)||(inn.nonStriker===name));
+    const hasBatted=out || onCrease || r>0 || b>0 || f>0 || sx>0;
+    return {name,st,r,b,f,sx,out,onCrease,hasBatted,index};
+  });
+  // Broadcast scorecard order: dismissed batters first, current crease batters next, yet-to-bat last.
+  const order={out:0,crease:1,notyet:2};
+  classified.sort((a,b)=>{
+    const ga=a.out?order.out:(a.onCrease?order.crease:order.notyet), gb=b.out?order.out:(b.onCrease?order.crease:order.notyet);
+    return ga-gb || a.index-b.index;
+  });
+  const batterRows=classified.slice(0,11).map((q,i)=>{
+    const sr=q.b?((q.r/q.b)*100).toFixed(1):'0.0';
+    const dis=q.out?(q.st.dismissal||dismissalMap[q.name]||'OUT'):(q.hasBatted?'NOT OUT':'');
+    return `<tr class="${q.out?'is-out':(q.onCrease?'is-notout':'not-batted')}"><td>${escapeText(q.name)}${q.onCrease&&!q.out?' *':''}</td><td>${escapeText(dis)}</td><td style="text-align:center">${q.hasBatted?q.r:''}</td><td style="text-align:center">${q.hasBatted?q.b:''}</td><td style="text-align:center">${q.hasBatted?q.f:''}</td><td style="text-align:center">${q.hasBatted?q.sx:''}</td><td style="text-align:center">${q.hasBatted?sr:''}</td></tr>`;
+  }).join('') || `<tr><td colspan="7" style="text-align:center">NO BATTING DATA</td></tr>`;
   const bowlers=inn.bowlers||{};
-  const bowlRows=Object.keys(bowlers).map(name=>{const st=bowlers[name]||{};const ob=Math.floor(num(st.balls)/6)+'.'+(num(st.balls)%6);const r=num(st.runs),w=num(st.wickets),eco=st.balls?(r/(st.balls/6)).toFixed(2):'0.00';return `<tr><td>${escapeText(name)}</td><td style="text-align:center">${ob}</td><td style="text-align:center">${num(st.maidens||0)}</td><td style="text-align:center">${r}</td><td style="text-align:center">${w}</td><td style="text-align:center">${eco}</td></tr>`}).join('')||`<tr><td colspan="6" style="text-align:center">NO BOWLING DATA</td></tr>`;
+  const bowlRows=Object.keys(bowlers).map(name=>{const st=bowlers[name]||{};const ob=Math.floor(num(st.balls)/6)+'.'+(num(st.balls)%6),r=num(st.runs),w=num(st.wickets),eco=st.balls?(r/(st.balls/6)).toFixed(2):'0.00';return `<tr><td>${escapeText(name)}</td><td style="text-align:center">${ob}</td><td style="text-align:center">${num(st.maidens||0)}</td><td style="text-align:center">${r}</td><td style="text-align:center">${w}</td><td style="text-align:center">${eco}</td></tr>`}).join('')||`<tr><td colspan="6" style="text-align:center">NO BOWLING DATA</td></tr>`;
   const ex=inn.extraDetail||{}; const extras=num(inn.extras), rr=balls?(runs/(balls/6)).toFixed(2):'0.00';
-  const target=num(d.target), need=Math.max(target-runs,0), ballsLeft=Math.max(num(d.maxOvers)*6-num(d.legalBalls),0), rrr=target&&Number(d.innings)===2&&ballsLeft?((need/ballsLeft)*6).toFixed(2):'-';
+  const target=num(d.target), need=Math.max(target-runs,0), ballsLeft=Math.max(num(d.maxOvers)*6-balls,0), rrr=target&&Number(d.innings)===2&&ballsLeft?((need/ballsLeft)*6).toFixed(2):'-';
   const fall=Array.isArray(inn.fallWickets)?inn.fallWickets:[];
   const recent=Array.isArray(inn.recentBalls)?inn.recentBalls.slice(-12):[];
-  const dots=recent.map(x=>{let cls='dot';let label=x.label||'-';if(x.wicket)cls+='';else if(String(label)==='4')label='4';else if(String(label)==='6')label='6';return `<span class="${cls}">${escapeText(label)}</span>`}).join('')||Array.from({length:12},()=>'<span class="dot">-</span>').join('');
+  const dots=recent.map(x=>`<span class="dot">${escapeText(x.label??x.runs??'-')}</span>`).join('')||Array.from({length:12},()=>'<span class="dot">-</span>').join('');
   const partnershipRuns=num(inn.partnershipRuns), partnershipBalls=num(inn.partnershipBalls);
-  const result=deriveResult(d);
-  const inningsNo=isFirst?1:2;
-  const shortA=teamA.split(/\s+/).map(x=>x[0]).join('').slice(0,4).toUpperCase(), shortB=teamB.split(/\s+/).map(x=>x[0]).join('').slice(0,4).toUpperCase();
+  const result=deriveResult(d), inningsNo=isFirst?1:2;
+  const needFooter=inningsNo===2 && target ? `Need ${need} run from ${ballsLeft} ball` : '';
   container.innerHTML=`
-    <div class="pref-header"><div class="pref-team a">${escapeText(teamA)}</div><div class="pref-vs">VS</div><div class="pref-team b">${escapeText(teamB)}</div></div>
-    <div class="pref-innings">${inningsNo===1?"1ST":"2ND"} INNINGS</div>
+    <div class="pref-broadcast-header">
+      <div class="pref-tournament">${escapeText(d.tournament || d.tournamentName || requestedTournament || 'TOURNAMENT')}</div>
+      <div class="pref-match-line"><span>${escapeText(teamA)}</span><b>VS</b><span>${escapeText(teamB)}</span></div>
+      <div class="pref-batting-score"><span class="pref-batting-team">${escapeText(battingTeam)}</span><strong>${runs}/${wickets}</strong><small>${overs} OV • ${inningsNo===1?'1ST':'2ND'} INNINGS</small></div>
+    </div>
     <div class="pref-main">
       <div class="pref-left">
-        <div class="pref-panel pref-batting"><div class="pref-title">BATTER</div><div class="pref-scroll"><table class="pref-table"><thead><tr><th style="width:27%">BATTER</th><th style="width:18%">DISMISSAL</th><th>R</th><th>B</th><th>4s</th><th>6s</th><th>SR</th></tr></thead><tbody>${batterRows}<tr class="extra-row"><td colspan="2">EXTRAS</td><td>${extras}</td><td colspan="4">nb ${num(ex.noball)} • w ${num(ex.wide)} • b ${num(ex.bye)} • lb ${num(ex.legbye)}</td></tr><tr class="blue-total"><td colspan="2">TOTAL</td><td colspan="2">${runs}/${wickets}</td><td colspan="3">${overs} OV • RR ${rr}</td></tr></tbody></table></div></div>
-        <div class="pref-panel pref-bowling"><div class="pref-title red">BOWLER</div><div class="pref-scroll"><table class="pref-table"><thead><tr><th>BOWLER</th><th>O</th><th>M</th><th>R</th><th>W</th><th>ECON</th></tr></thead><tbody>${bowlRows}</tbody></table></div></div>
+        <div class="pref-panel pref-batting"><div class="pref-title">BATTING SCORECARD <span class="panel-sub">${escapeText(battingTeam)}</span></div><div class="pref-scroll"><table class="pref-table"><thead><tr><th style="width:30%">BATTER</th><th style="width:25%">DISMISSAL</th><th>R</th><th>B</th><th>4s</th><th>6s</th><th>SR</th></tr></thead><tbody>${batterRows}<tr class="extra-row"><td colspan="2">EXTRAS</td><td>${extras}</td><td colspan="4">nb ${num(ex.noball)} • w ${num(ex.wide)} • b ${num(ex.bye)} • lb ${num(ex.legbye)}</td></tr><tr class="blue-total"><td colspan="2">TOTAL</td><td colspan="2">${runs}/${wickets}</td><td colspan="3">${overs} OV • RR ${rr}</td></tr></tbody></table></div></div>
       </div>
       <div class="pref-right">
-        <div class="pref-panel"><div class="pref-title">SCORE</div><div class="pref-summary"><div class="pref-box wide"><div class="box-value">${runs}/${wickets}</div><div class="box-sub">(${overs} OVERS) • ${escapeText(battingTeam)}</div></div><div class="pref-box"><div class="box-title">RUN RATE</div><div class="box-value">${rr}</div></div><div class="pref-box"><div class="box-title">REQ RUN RATE</div><div class="box-value">${rrr}</div></div><div class="pref-box"><div class="box-title">OVERS</div><div class="box-value">${overs}</div></div><div class="pref-box"><div class="box-title">EXTRAS</div><div class="box-value">${extras}</div></div><div class="pref-box wide"><div class="box-title">PARTNERSHIP</div><div class="box-value">${partnershipRuns} <span style="font-size:.55em">(${partnershipBalls})</span></div></div></div></div>
+        <div class="pref-panel pref-bowling"><div class="pref-title red">BOWLING FIGURES <span class="panel-sub">${escapeText(bowlingTeam)}</span></div><div class="pref-scroll"><table class="pref-table"><thead><tr><th>BOWLER</th><th>O</th><th>M</th><th>R</th><th>W</th><th>ECON</th></tr></thead><tbody>${bowlRows}</tbody></table></div></div>
+        <div class="pref-panel pref-score"><div class="pref-title">SCORE</div><div class="score-hero"><span class="score-main">${runs}/${wickets}</span><span class="score-overs">${overs} OV</span></div><div class="score-meta"><div><b>CRR</b><strong>${rr}</strong></div><div><b>REQ RR</b><strong>${inningsNo===2?rrr:'-'}</strong></div><div><b>EXTRAS</b><strong>${extras}</strong></div><div><b>PARTNERSHIP</b><strong>${partnershipRuns} <small>(${partnershipBalls})</small></strong></div></div></div>
         <div class="pref-panel pref-fall"><div class="pref-title purple">FALL OF WICKETS</div><div class="pref-scroll"><table class="pref-table"><thead><tr>${Array.from({length:10},(_,i)=>`<th style="text-align:center">${i+1}</th>`).join('')}</tr></thead><tbody><tr>${Array.from({length:10},(_,i)=>{const f=fall[i];return `<td><div class="fall-cell">${f?`${escapeText(f.score)} • ${escapeText(f.player)}`:'-'}</div></td>`}).join('')}</tr></tbody></table></div></div>
-        <div class="pref-panel pref-recent"><div class="pref-title green">RECENT OVERS</div><div style="height:calc(100% - 32px);display:flex;align-items:center;justify-content:center;gap:2px;overflow:hidden">${dots}</div></div>
+        <div class="pref-panel pref-recent"><div class="pref-title green">RECENT BALLS</div><div style="height:calc(100% - 32px);display:flex;align-items:center;justify-content:center;gap:3px;overflow:hidden">${dots}</div></div>
       </div>
     </div>
-    <div class="pref-footer"><span>DATE: ${escapeText(d.date||'--/--/----')}</span><span>VENUE: ${escapeText(d.venue||'----------------')}</span><span>${result?escapeText(result):`INNINGS ${inningsNo} • ${escapeText(battingTeam)} ${runs}/${wickets}`}</span><span>LIVE</span></div>`;
+    <div class="pref-footer"><span>DATE: ${escapeText(d.date||'--/--/----')}</span><span>VENUE: ${escapeText(d.venue||'----------------')}</span><span>${result?escapeText(result):`INNINGS ${inningsNo} • ${escapeText(battingTeam)} ${runs}/${wickets}`}</span><span>${escapeText(needFooter||'LIVE')}</span></div>`;
 }
 
 // ---- Close scorecard ----
@@ -2242,11 +2431,22 @@ function renderTheme5Summary(d){
 }
 function renderTheme5Scorecard(d){
   const on=String(d.theme||requestedTheme||'')==='theme5'&&['scorecard','scorecard1','scorecard2'].includes(String(d.mode||''));if(!on){t5On('theme5Scorecard',false);return}
-  const first=String(d.mode)==='scorecard1'||(String(d.mode)==='scorecard'&&num(d.innings)===1);const inn=first?(num(d.innings)===1?d:(d.firstInnings||{})):d;const batTeam=inn.team?teamName(d,inn.team):teamName(d,d.battingTeam||'A');const bowlTeam=batTeam===d.teamA?d.teamB:d.teamA;
-  const names=[...Object.keys(inn.batters||{})];(inn.team==='A'?d.xiA:d.xiB||[]).forEach(n=>{if(n&&!names.includes(n))names.push(n)});const bats=names.slice(0,11);const batRows=Array.from({length:11},(_,i)=>{const n=bats[i],x=(inn.batters||{})[n]||{};return `<div class="t5-bat-row"><b>${i+1}</b><span>${escapeText(n||'')}</span><span>${escapeText(x.out?'OUT':'Not out')}</span><b>${n?num(x.runs):''}</b><b>${n?num(x.balls):''}</b></div>`}).join('');const bowls=Object.entries(inn.bowlers||{}).slice(0,6);const bowlRows=Array.from({length:6},(_,i)=>{const z=bowls[i],n=z?.[0]||'',x=z?.[1]||{};return `<div class="t5-bowl-row"><b>${i+1}</b><span>${escapeText(n)}</span><b>${n?oversFromBalls(x.balls):''}</b><b>${n?num(x.maidens):''}</b><b>${n?num(x.wickets):''}</b><b>${n?num(x.runs):''}</b></div>`}).join('');
-  const ex=num(inn.extras),overs=oversFromBalls(inn.legalBalls??inn.balls),toss=d.tossWinner?teamName(d,d.tossWinner):'—';
-  $('theme5Scorecard').innerHTML=`<div class="t5-sc-shell"><div class="t5-sc-header"><div class="t5-sc-team">${escapeText(batTeam)}</div><div class="t5-sc-mid">${escapeText(d.tournament||'Cricket')}<br>${escapeText(d.venue||'Tournament')}</div><div class="t5-sc-team" style="justify-content:flex-end">${first?'1st innings':'2nd innings'}</div></div><div class="t5-sc-main"><div class="t5-bat"><div class="t5-bat-head"><span>Sl No.</span><span>Player Name</span><span>Dismissal</span><span>Run</span><span>Ball</span></div>${batRows}</div><div class="t5-bowl"><div class="t5-bowl-head"><span>Sl No.</span><span>BOWLER Name</span><span>Over</span><span>Maiden</span><span>Wicket</span><span>Run</span></div>${bowlRows}</div></div><div class="t5-sc-total"><span>Extras- ${ex}</span><span class="t5-score-box">${num(inn.runs)}/${num(inn.wickets)}</span><span>Over - ${overs} (${num(inn.legalBalls??inn.balls)})</span></div><div class="t5-sc-footer"><div class="t5-footbox">${escapeText(d.matchName||`${d.teamA||'TEAM A'} vs ${d.teamB||'TEAM B'}`)}</div><div class="t5-footbox">Toss: ${escapeText(toss)}</div><div class="t5-footbox">${d.status==='completed'?escapeText(d.resultText||d.matchResult||'MATCH RESULT'):'LIVE SCORE'}</div></div></div>`;t5On('theme5Scorecard',true)
+  const first=String(d.mode)==='scorecard1'||(String(d.mode)==='scorecard'&&num(d.innings)===1);const inn=first?(num(d.innings)===1?d:(d.firstInnings||{})):d;
+  const batTeam=inn.team?teamName(d,inn.team):teamName(d,d.battingTeam||'A');
+  const bowlTeam=batTeam===d.teamA?d.teamB:d.teamA;
+  const xi=Array.isArray(inn.xi)?inn.xi:(inn.team==='A'?(d.xiA||[]):(d.xiB||[]));
+  const rawNames=[...Object.keys(inn.batters||{})];xi.forEach(n=>{if(n&&!rawNames.includes(n))rawNames.push(n)});
+  const dismissalMap={};(inn.fallWickets||[]).forEach(f=>{if(f&&f.player)dismissalMap[f.player]=`${f.type||'OUT'}`});
+  const classified=rawNames.map((name,index)=>{const x=(inn.batters||{})[name]||{},r=num(x.runs),b=num(x.balls),f=num(x.fours),s=num(x.sixes),out=x.out===true||!!x.dismissal||!!dismissalMap[name],crease=!out&&((inn.striker===name)||(inn.nonStriker===name)),has=out||crease||r>0||b>0||f>0||s>0;return{name,x,r,b,f,s,out,crease,has,index}});
+  classified.sort((a,b)=>{const g=q=>q.out?0:(q.crease?1:2);return g(a)-g(b)||a.index-b.index});
+  const bats=classified.slice(0,11);
+  const batRows=Array.from({length:11},(_,i)=>{const q=bats[i];if(!q)return `<div class="t5-bat-row"><b>${i+1}</b><span></span><span></span><b></b><b></b></div>`;const status=q.out?(q.x.dismissal||dismissalMap[q.name]||'OUT'):(q.has?'NOT OUT':'');return `<div class="t5-bat-row ${q.out?'t5-out':(q.crease?'t5-crease':'t5-notyet')}"><b>${i+1}</b><span>${escapeText(q.name)}${q.crease?' *':''}</span><span>${escapeText(status)}</span><b>${q.has?q.r:''}</b><b>${q.has?q.b:''}</b></div>`}).join('');
+  const bowls=Object.entries(inn.bowlers||{}).slice(0,6);const bowlRows=Array.from({length:6},(_,i)=>{const z=bowls[i],n=z?.[0]||'',x=z?.[1]||{};return `<div class="t5-bowl-row"><b>${i+1}</b><span>${escapeText(n)}</span><b>${n?oversFromBalls(x.balls):''}</b><b>${n?num(x.maidens):''}</b><b>${n?num(x.wickets):''}</b><b>${n?num(x.runs):''}</b></div>`}).join('');
+  const ex=num(inn.extras),balls=num(inn.legalBalls??inn.balls),runs=num(inn.runs),rr=balls?(runs/(balls/6)).toFixed(2):'0.00',target=num(d.target),need=Math.max(target-runs,0),ballsLeft=Math.max(num(d.maxOvers)*6-balls,0),rrr=target&&Number(d.innings)===2&&ballsLeft?((need/ballsLeft)*6).toFixed(2):'-',overs=oversFromBalls(balls),toss=d.tossWinner?teamName(d,d.tossWinner):'—';
+  const needFooter=(!first&&target)?`Need ${need} run from ${ballsLeft} ball`:'';
+  $('theme5Scorecard').innerHTML=`<div class="t5-sc-shell"><div class="t5-sc-header"><div class="t5-sc-team">${escapeText(batTeam)}</div><div class="t5-sc-mid"><strong>${escapeText(d.tournament||d.tournamentName||'Cricket')}</strong><small>${escapeText(d.matchName||`${d.teamA||'TEAM A'} vs ${d.teamB||'TEAM B'}`)}</small><em>${escapeText(d.venue||'')} • ${first?'1ST':'2ND'} INNINGS</em></div><div class="t5-sc-team t5-score-team"><span>${runs}/${wickets}</span><small>${overs} OV</small></div></div><div class="t5-sc-main"><div class="t5-bat"><div class="t5-bat-head"><span>Sl No.</span><span>Player Name</span><span>Dismissal</span><span>Run</span><span>Ball</span></div>${batRows}</div><div class="t5-bowl"><div class="t5-bowl-head"><span>Sl No.</span><span>BOWLER Name</span><span>Over</span><span>Maiden</span><span>Wicket</span><span>Run</span></div>${bowlRows}<div class="t5-right-metrics"><span>CRR <b>${rr}</b></span><span>REQ RR <b>${!first?rrr:'-'}</b></span><span>EXTRAS <b>${ex}</b></span></div></div></div><div class="t5-sc-total"><span>Extras- ${ex}</span><span class="t5-score-box">${runs}/${num(inn.wickets)}</span><span>${!first&&target?`NEED ${need} FROM ${ballsLeft} BALLS`:`Over - ${overs}`}</span></div><div class="t5-sc-footer"><div class="t5-footbox">${escapeText(d.matchName||`${d.teamA||'TEAM A'} vs ${d.teamB||'TEAM B'}`)}</div><div class="t5-footbox">Toss: ${escapeText(toss)}</div><div class="t5-footbox">${escapeText(needFooter||'LIVE SCORE')}</div></div></div>`;t5On('theme5Scorecard',true)
 }
+
 function renderTheme5All(d,scoreVisible){renderTheme5Lower(d,scoreVisible);renderTheme5Player(d);renderTheme5Summary(d);renderTheme5Scorecard(d)}
 
 // ============================================================
@@ -2267,11 +2467,25 @@ function normalizeLiveData(raw){
   d.batters = d.batters || {}; d.bowlers = d.bowlers || {};
   d.recentBalls = Array.isArray(d.recentBalls) ? d.recentBalls : (Array.isArray(d.currentOverBalls) ? d.currentOverBalls : []);
   d.currentOverBalls = Array.isArray(d.currentOverBalls) ? d.currentOverBalls : [];
+  // Backward-compatible fallback: older scorer packets may only contain the
+  // innings/recent-ball data. Reconstruct the current over without dropping
+  // wides/no-balls.
+  if(!d.currentOverBalls.length){
+    const source = d.innings===2 && d.secondInnings ? d.secondInnings : (d.innings===1 && d.firstInnings ? d.firstInnings : d);
+    const nested = source && Array.isArray(source.recentBalls) ? source.recentBalls : d.recentBalls;
+    const legal = num(d.legalBalls);
+    const overNo = Math.floor(legal/6);
+    if(Array.isArray(nested)) d.currentOverBalls = nested.filter(b => {
+      const m=String(b&&b.over!=null?b.over:'').match(/^(\d+)\.(\d+)$/);
+      return m ? Number(m[1])===overNo : false;
+    });
+  }
   d.overlay = {...(d.overlay||{})};
   return d;
 }
 
 function applyLiveData(d){
+  try{ window.__BRKLIVE19_LIVE_DATA__=d; }catch(e){}
  d=normalizeLiveData(d);
  if(!d) return;
  // A scorer control action is authoritative: once it sends a packet, the overlay must respond.
@@ -2475,7 +2689,7 @@ body{display:flex!important;align-items:flex-end!important;justify-content:cente
 @keyframes t5CompleteFitIn{from{opacity:0;transform:translate(-50%,18%) scale(.97)}to{opacity:1;transform:translate(-50%,0) scale(1)}}
 
 /* All bottom banners generated by the scorer are kept fully inside the viewport. */
-#bannerTournament,#bannerMatch,#bannerVenue,#bannerToss,#bannerResult,#bannerPlayer,#bannerBowler,#bannerPartnership,#custom{
+#bannerTournament,#bannerMatch,#bannerVenue,#bannerToss,#bannerResult,#bannerPlayer,#bannerBowler,#bannerFOW,#bannerPartnership,#custom{
   left:50%!important;right:auto!important;top:auto!important;
   width:min(96vw,1760px)!important;max-width:96vw!important;
   box-sizing:border-box!important;transform:translateX(-50%)!important;
@@ -2728,6 +2942,85 @@ body{display:flex!important;align-items:flex-end!important;justify-content:cente
 }
 </style>
 
+
+
+
+<style id="BRKLIVE19-TARGET-FULLSCREEN-FINAL">
+/* TARGET DISPLAY — same centered modal size and position as PLAYING XI. */
+#overlay #targetTop.targetFullScreen{
+  position:fixed!important; left:50%!important; top:50%!important; right:auto!important; bottom:auto!important;
+  transform:translate(-50%,-50%)!important; width:min(94vw,1500px)!important; height:min(88vh,900px)!important;
+  margin:0!important; padding:4vh 4vw!important; box-sizing:border-box!important;
+  display:none; align-items:center!important; justify-content:center!important;
+  background:linear-gradient(180deg,#071a3d,#07101f)!important;
+  border:2px solid rgba(255,255,255,.25)!important; border-radius:18px!important;
+  box-shadow:0 20px 70px #000b!important; overflow:hidden!important; z-index:2147483647!important;
+  text-align:center!important; text-transform:uppercase!important; flex-direction:column!important;
+}
+#overlay.targetMode #targetTop.targetFullScreen{display:flex!important}
+#overlay.targetMode .frame{visibility:hidden!important}
+#overlay .targetTournament{font-size:clamp(22px,3vw,56px)!important;font-weight:1000!important;color:#ffd84a!important;letter-spacing:.05em!important;line-height:1.1!important;text-shadow:0 3px 12px #000!important;margin-top:0!important}
+#overlay .targetMatch{font-size:clamp(18px,2.1vw,38px)!important;font-weight:900!important;color:#fff!important;letter-spacing:.04em!important;text-shadow:0 2px 9px #000!important;margin-top:1vh!important}
+#overlay .targetStatsRow{width:min(1100px,82vw)!important;display:grid!important;grid-template-columns:1fr 1fr!important;gap:2vw!important;margin-top:4vh!important}
+#overlay .targetStat{display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;padding:2vh 2vw!important;border:1px solid rgba(255,255,255,.25)!important;border-radius:18px!important;background:rgba(0,0,0,.25)!important;box-shadow:0 8px 28px rgba(0,0,0,.25)!important}
+#overlay .targetStat span{font-size:clamp(12px,1.2vw,22px)!important;font-weight:900!important;color:#dbe9ff!important;letter-spacing:.06em!important}
+#overlay .targetStat strong{font-size:clamp(38px,5vw,90px)!important;font-weight:1000!important;color:#00e5ff!important;line-height:1.05!important;text-shadow:0 0 20px rgba(0,229,255,.25)!important}
+#overlay .targetNeed strong{color:#ffd21f!important}
+#overlay .targetStat em{font-size:clamp(12px,1.1vw,20px)!important;font-style:normal!important;font-weight:900!important;color:#fff!important;margin-top:.5vh!important}
+#overlay #targetValue.targetValueLarge{font-size:clamp(28px,4vw,72px)!important;font-weight:1000!important;line-height:1.1!important;margin-top:4vh!important;color:#fff!important;background:linear-gradient(90deg,#00e5ff,#fff,#ffd21f,#ff4f81,#00e5ff)!important;-webkit-background-clip:text!important;background-clip:text!important;-webkit-text-fill-color:transparent!important;text-shadow:0 0 22px rgba(0,220,255,.22)!important}
+/* When TARGET is active, replace the BRKLIVE19 corner badge with the chase info. */
+#overlay .targetCorner{position:fixed!important;top:24px!important;right:28px!important;min-width:190px;padding:10px 16px!important;border-radius:999px;background:rgba(20,20,20,.82);border:1px solid rgba(255,216,74,.55);color:#ffd84a;font-size:clamp(12px,1.15vw,21px);font-weight:1000;letter-spacing:.03em;white-space:nowrap;text-shadow:0 1px 5px #000;box-shadow:0 3px 14px rgba(0,0,0,.3);z-index:2147483648!important}
+/* When TARGET is active, replace the BRKLIVE19 corner badge with the chase info. */
+#overlay.targetMode ~ #brkLogo{display:none!important}
+@keyframes brkTargetRRRBlink{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.18;transform:scale(1.035)}}
+#overlay.targetRRRFlash .targetRRRBox{animation:brkTargetRRRBlink .45s steps(2,end) infinite!important}
+@media(max-width:700px){
+ #overlay #targetTop.targetFullScreen{width:96vw!important;height:94vh!important;border-radius:14px!important}
+ #overlay .targetTournament{font-size:clamp(18px,6vw,32px)!important;margin-top:-30vh!important}
+ #overlay .targetMatch{font-size:clamp(13px,4.5vw,24px)!important}
+ #overlay .targetStatsRow{grid-template-columns:1fr!important;gap:1vh!important;width:86vw!important;margin-top:3vh!important}
+ #overlay .targetStat{padding:1.2vh 2vw!important}
+ #overlay .targetStat strong{font-size:clamp(34px,12vw,62px)!important}
+ #overlay #targetValue.targetValueLarge{font-size:clamp(24px,7vw,42px)!important;margin-top:3vh!important}
+ #overlay .targetCorner{top:12px!important;right:12px!important;min-width:0!important;padding:7px 10px!important;font-size:11px!important}
+}
+</style>
+
+<style id="BRKLIVE19-TARGET-EXACT-REQUEST">
+/* EXACT TARGET REQUEST: target button = Playing XI-sized centered screen; normal 2nd innings = corner target only. */
+#autoTargetCorner{
+  position:fixed!important; right:16px!important; top:10px!important; left:auto!important; bottom:auto!important;
+  z-index:2147483648!important; display:none; align-items:center!important;
+  padding:7px 12px!important; border-radius:6px!important;
+  background:rgba(4,10,25,.97)!important; border:1px solid rgba(255,216,74,.55)!important;
+  color:#ffd84a!important; font-size:clamp(11px,1vw,18px)!important; font-weight:1000!important;
+  letter-spacing:.06em!important; text-shadow:0 2px 7px #000!important;
+}
+#autoTargetCorner strong{font-size:1.15em!important;color:#fff!important}
+/* In target-button mode, hide the entire normal overlay and keep only the target screen. */
+#overlay.targetMode{position:fixed!important;inset:0!important;width:100vw!important;height:100vh!important;
+  background:transparent!important;z-index:2147483646!important;pointer-events:none!important}
+#overlay.targetMode > *:not(#targetTop){visibility:hidden!important;display:none!important}
+#overlay.targetMode #targetTop.targetFullScreen{
+  visibility:visible!important; display:flex!important; pointer-events:auto!important;
+  position:fixed!important; left:50%!important; top:50%!important; right:auto!important; bottom:auto!important;
+  transform:translate(-50%,-50%)!important; margin:0!important;
+  width:min(94vw,1500px)!important; height:min(88vh,900px)!important;
+  box-sizing:border-box!important; padding:4vh 4vw!important;
+  background:linear-gradient(180deg,#071a3d,#07101f)!important;
+  border:2px solid rgba(255,255,255,.25)!important; border-radius:18px!important;
+  box-shadow:0 20px 70px #000b!important; overflow:hidden!important;
+  align-items:center!important; justify-content:center!important; flex-direction:column!important;
+}
+#overlay.targetMode #targetTop .targetCorner{display:none!important}
+#overlay.targetMode ~ #brkLogo{display:none!important}
+#overlay.targetMode ~ #autoTargetCorner{display:none!important}
+/* First innings: no chase RRR/need rotation and normal BRKLIVE19 branding remains. */
+@media(max-width:700px){
+ #autoTargetCorner{right:10px!important;top:7px!important;font-size:10px!important;padding:6px 9px!important}
+ #overlay.targetMode #targetTop.targetFullScreen{width:94vw!important;height:88vh!important}
+}
+</style>
 </body>
 
 <style id="brklive19-live-summary-fix-v1">
@@ -3774,7 +4067,7 @@ html,body{background:transparent!important;background-color:transparent!importan
 #overlay .currentOverLabel{font-size:clamp(8px,.58vw,11px)!important;font-weight:1000!important}
 #overlay .ball{width:clamp(24px,1.7vw,33px)!important;height:clamp(24px,1.7vw,33px)!important;flex-basis:clamp(24px,1.7vw,33px)!important;font-size:clamp(10px,.8vw,15px)!important}
 /* A pressed operator button must always create a visible center lower-third information card. */
-#bannerTournament.show,#bannerMatch.show,#bannerVenue.show,#bannerToss.show,#bannerResult.show,#bannerPlayer.show,#bannerBowler.show,#bannerPartnership.show,#custom.show{
+#bannerTournament.show,#bannerMatch.show,#bannerVenue.show,#bannerToss.show,#bannerResult.show,#bannerPlayer.show,#bannerBowler.show,#bannerFOW.show,#bannerPartnership.show,#custom.show{
  display:flex!important;visibility:visible!important;opacity:1!important;position:fixed!important;left:50%!important;right:auto!important;top:auto!important;bottom:26px!important;transform:translateX(-50%)!important;width:min(92vw,1650px)!important;height:clamp(92px,9.2vw,150px)!important;max-height:none!important;align-items:center!important;justify-content:center!important;box-sizing:border-box!important;padding:12px 42px!important;border-radius:24px!important;z-index:5000!important;font-size:clamp(22px,2.25vw,44px)!important;font-weight:1000!important;line-height:1.12!important;text-align:center!important;letter-spacing:.025em!important;color:#fff!important;background:linear-gradient(120deg,var(--navy,#09286e),var(--cyan,#00b8e8),var(--accent,#153f98))!important;border:3px solid var(--yellow,#ffd900)!important;box-shadow:0 16px 42px rgba(0,0,0,.46),inset 0 1px rgba(255,255,255,.5)!important;overflow:hidden!important
 }
 #bannerVenue.show{background:linear-gradient(120deg,var(--navy,#09286e),var(--cyan2,#08d7ff))!important}
@@ -3798,7 +4091,7 @@ html,body{background:transparent!important;background-color:transparent!importan
  #overlay .content{left:20%!important;right:20%!important;grid-template-columns:39% 22% 39%!important}
  #overlay .teamName{font-size:clamp(10px,2.1vw,18px)!important}
  #overlay .scorePill{font-size:clamp(18px,4vw,30px)!important}
- #bannerTournament.show,#bannerMatch.show,#bannerVenue.show,#bannerToss.show,#bannerResult.show,#bannerPlayer.show,#bannerBowler.show,#bannerPartnership.show,#custom.show{width:96vw!important;height:88px!important;font-size:clamp(16px,3.1vw,26px)!important;padding:8px 15px!important;border-radius:16px!important}
+ #bannerTournament.show,#bannerMatch.show,#bannerVenue.show,#bannerToss.show,#bannerResult.show,#bannerPlayer.show,#bannerBowler.show,#bannerFOW.show,#bannerPartnership.show,#custom.show{width:96vw!important;height:88px!important;font-size:clamp(16px,3.1vw,26px)!important;padding:8px 15px!important;border-radius:16px!important}
  #animation.show{width:96vw!important;height:110px!important;border-radius:18px!important}
 }
 </style>
@@ -3829,7 +4122,7 @@ html,body{background:transparent!important;background-color:transparent!importan
 #overlay .batterName small{font-size:clamp(6px,.45vw,8px)!important}
 #overlay .bowlerStats{font-size:clamp(9px,.72vw,14px)!important}
 /* Every operator information button uses the selected theme colours and fully replaces the scoring bar. */
-#bannerTournament.show,#bannerMatch.show,#bannerVenue.show,#bannerToss.show,#bannerResult.show,#bannerPlayer.show,#bannerBowler.show,#bannerPartnership.show,#custom.show{
+#bannerTournament.show,#bannerMatch.show,#bannerVenue.show,#bannerToss.show,#bannerResult.show,#bannerPlayer.show,#bannerBowler.show,#bannerFOW.show,#bannerPartnership.show,#custom.show{
   display:flex!important;visibility:visible!important;opacity:1!important;
   position:fixed!important;left:0!important;right:0!important;top:auto!important;bottom:0!important;
   transform:none!important;width:100vw!important;height:142px!important;max-width:none!important;
@@ -3855,7 +4148,7 @@ html,body{background:transparent!important;background-color:transparent!importan
 @media(max-width:900px){
  #overlay .teamPanel.left .teamName,#overlay .teamPanel.right .teamName{font-size:clamp(13px,2.5vw,22px)!important}
  #overlay .batterName>span,#overlay .bowlerName{font-size:clamp(9px,1.5vw,15px)!important}
- #bannerTournament.show,#bannerMatch.show,#bannerVenue.show,#bannerToss.show,#bannerResult.show,#bannerPlayer.show,#bannerBowler.show,#bannerPartnership.show,#custom.show{height:88px!important;font-size:clamp(16px,3vw,27px)!important;padding:8px 4vw!important}
+ #bannerTournament.show,#bannerMatch.show,#bannerVenue.show,#bannerToss.show,#bannerResult.show,#bannerPlayer.show,#bannerBowler.show,#bannerFOW.show,#bannerPartnership.show,#custom.show{height:88px!important;font-size:clamp(16px,3vw,27px)!important;padding:8px 4vw!important}
 }
 </style>
 <style id="BRKLIVE19-USER-TEAM-SIZE-FINAL">
@@ -4440,4 +4733,1333 @@ html,body{background:transparent!important;background-color:transparent!importan
  text-shadow:0 0 18px rgba(0,220,255,.35)!important;
  font-size:clamp(22px,2.2vw,40px)!important;
 }
+</style>
+
+<style id="BRKLIVE19-FOW-GRAPHIC-FINAL">
+#bannerFOW.show{width:min(96vw,1180px)!important;height:auto!important;min-height:82px!important;max-height:none!important;padding:10px 18px!important;border-radius:14px!important;background:linear-gradient(110deg,#170b0b,#6d1010,#b51c1c)!important;border:2px solid rgba(255,90,90,.75)!important;box-shadow:0 8px 24px rgba(0,0,0,.38)!important;font-size:clamp(12px,1.25vw,18px)!important;line-height:1.12!important;text-align:left!important;white-space:normal!important;overflow:visible!important;box-sizing:border-box!important}
+#bannerFOW .fowTitle{display:flex;justify-content:space-between;align-items:center;font-weight:1000;font-size:clamp(13px,1.1vw,18px);letter-spacing:.08em;color:#ffd34d;margin-bottom:5px}
+#bannerFOW .fowMain{display:flex;align-items:baseline;gap:clamp(7px,1vw,15px);flex-wrap:wrap;color:#fff}
+#bannerFOW .fowMain strong{font-size:clamp(18px,1.8vw,28px);font-weight:1000}
+#bannerFOW .fowMain small{font-size:clamp(10px,.8vw,13px);opacity:.8;font-weight:800;margin-right:4px}
+#bannerFOW .fowMain b{font-size:clamp(12px,1vw,16px);color:#ffcf55}
+#bannerFOW .fowMain span{font-size:clamp(11px,.9vw,15px);font-weight:800}
+</style>
+<style id="BRKLIVE19-REMOVE-UNWANTED-BLANK-LAYER">
+/* Remove any empty/unused overlay layer so it can never cover the live scoreboard. */
+.banner:empty,
+.custom:empty,
+#targetTop:empty,
+#animation:empty,
+#theme5Lower:empty,
+#theme5PlayerCard:empty,
+#theme5Summary:empty,
+#theme5Scorecard:empty{
+  display:none!important;
+  visibility:hidden!important;
+  opacity:0!important;
+  background:transparent!important;
+  box-shadow:none!important;
+  pointer-events:none!important;
+}
+/* Inactive full-screen graphics must never paint a blank rectangle. */
+#playingXIOverlay:not(.show),
+#summaryOverlay:not(.show),
+#scorecardOverlay:not(.show),
+#theme5Lower:not(.show),
+#theme5PlayerCard:not(.show),
+#theme5Summary:not(.show),
+#theme5Scorecard:not(.show),
+#animation:not(.show){
+  display:none!important;
+  visibility:hidden!important;
+  opacity:0!important;
+  background:transparent!important;
+  pointer-events:none!important;
+}
+/* If a banner has no actual text/data, it must not enter banner mode or block the scoreboard. */
+.banner.show:empty,
+.custom.show:empty{
+  display:none!important;
+  visibility:hidden!important;
+  opacity:0!important;
+  pointer-events:none!important;
+}
+/* Only the actual broadcast graphic is allowed to occupy the normal overlay canvas. */
+#overlay{background:transparent!important;}
+</style>
+
+<style>
+/* ============================================================
+   BRKLIVE19 PROFESSIONAL TV BROADCAST SCORECARD
+   ============================================================ */
+.scorecard-overlay .card{
+  padding:14px 18px 12px!important;
+  background:linear-gradient(145deg,#07101d 0%,#0b1628 55%,#06101d 100%)!important;
+}
+.scorecard-overlay #scContent{gap:7px!important}
+.scorecard-overlay .pref-header{
+  height:12%!important;min-height:58px!important;grid-template-columns:1fr 92px 1fr!important;
+  border:1px solid rgba(255,255,255,.28)!important;border-radius:6px!important;
+  box-shadow:0 4px 20px rgba(0,0,0,.35)!important;
+}
+.scorecard-overlay .pref-team{padding:0 22px!important;font-size:clamp(21px,2.2vw,42px)!important;letter-spacing:.02em}
+.scorecard-overlay .pref-vs{font-size:clamp(22px,2.3vw,42px)!important}
+.scorecard-overlay .pref-innings{
+  height:4%!important;min-height:23px!important;font-size:clamp(13px,1.1vw,22px)!important;
+  letter-spacing:.13em!important;color:#dce8ff!important;text-shadow:0 1px 5px #000;
+}
+.scorecard-overlay .pref-main{
+  grid-template-columns:minmax(0,72%) minmax(260px,28%)!important;gap:9px!important;
+}
+.scorecard-overlay .pref-left,.scorecard-overlay .pref-right{gap:7px!important}
+.scorecard-overlay .pref-panel{
+  border:1px solid rgba(255,255,255,.18)!important;border-radius:5px!important;
+  box-shadow:0 3px 12px rgba(0,0,0,.38)!important;
+}
+.scorecard-overlay .pref-title{
+  height:28px!important;min-height:28px!important;justify-content:flex-start!important;padding:0 10px!important;
+  font-size:clamp(11px,1vw,18px)!important;letter-spacing:.08em!important;
+  border-bottom:1px solid rgba(255,255,255,.25);position:relative;
+}
+.scorecard-overlay .panel-sub{margin-left:auto;font-size:.75em;opacity:.82;letter-spacing:.03em}
+.scorecard-overlay .pref-table{font-size:clamp(10px,.82vw,15px)!important}
+.scorecard-overlay .pref-table th{padding:4px 6px!important;height:22px!important;font-size:clamp(9px,.72vw,13px)!important;letter-spacing:.06em}
+.scorecard-overlay .pref-table td{padding:3px 6px!important;height:21px!important;line-height:1.05!important}
+.scorecard-overlay .pref-table tr:hover td{background:rgba(20,120,220,.10)}
+.scorecard-overlay .pref-batting{flex:1!important;min-height:0!important}
+.scorecard-overlay .pref-batting .pref-scroll{height:calc(100% - 28px)!important;overflow:hidden!important}
+.scorecard-overlay .pref-batting .pref-table tbody tr{height:26px}
+.scorecard-overlay .pref-batting .pref-table td:first-child{font-weight:900;letter-spacing:.01em}
+.scorecard-overlay .pref-batting .pref-table td:nth-child(n+3){text-align:center;font-variant-numeric:tabular-nums}
+.scorecard-overlay .pref-table .extra-row td{padding:4px 6px!important;font-size:clamp(9px,.75vw,13px)!important}
+.scorecard-overlay .pref-table .blue-total td{padding:6px!important;font-size:clamp(13px,1.05vw,19px)!important}
+.scorecard-overlay .pref-right .pref-bowling{height:34%!important;min-height:150px!important}
+.scorecard-overlay .pref-bowling .pref-scroll{height:calc(100% - 28px)!important;overflow:hidden!important}
+.scorecard-overlay .pref-bowling .pref-table td{height:23px!important}
+.scorecard-overlay .pref-bowling .pref-table td:first-child{font-weight:900}
+.scorecard-overlay .pref-score{height:26%!important;min-height:116px!important}
+.scorecard-overlay .pref-score .pref-title{justify-content:center!important}
+.scorecard-overlay .score-hero{height:52%;display:flex;align-items:center;justify-content:center;gap:10px;background:linear-gradient(100deg,#081c3d,#103c82,#081c3d);border-bottom:1px solid rgba(255,255,255,.12)}
+.scorecard-overlay .score-main{font-size:clamp(30px,3.3vw,58px);font-weight:1000;line-height:1;color:#fff;letter-spacing:-.03em}
+.scorecard-overlay .score-overs{font-size:clamp(12px,1vw,18px);font-weight:900;color:#cfe2ff;border-left:1px solid #ffffff55;padding-left:10px}
+.scorecard-overlay .score-meta{height:48%;display:grid;grid-template-columns:repeat(4,1fr);gap:0;background:#eef2f7;color:#101820}
+.scorecard-overlay .score-meta>div{display:flex;flex-direction:column;align-items:center;justify-content:center;border-right:1px solid #c8d0da;min-width:0}
+.scorecard-overlay .score-meta>div:last-child{border-right:0}
+.scorecard-overlay .score-meta b{font-size:clamp(7px,.55vw,10px);color:#4b5b6d;letter-spacing:.05em}
+.scorecard-overlay .score-meta strong{font-size:clamp(11px,.85vw,16px);color:#0a2c66;margin-top:2px;white-space:nowrap}
+.scorecard-overlay .score-meta small{font-size:.65em}
+.scorecard-overlay .pref-fall{height:18%!important;min-height:70px!important;flex:none!important}
+.scorecard-overlay .pref-fall .pref-scroll{height:calc(100% - 28px)!important}
+.scorecard-overlay .pref-fall .pref-table{table-layout:fixed}
+.scorecard-overlay .pref-fall .pref-table th{padding:2px!important;font-size:8px!important}
+.scorecard-overlay .pref-fall .pref-table td{padding:2px!important;font-size:8px!important;overflow:hidden;text-overflow:ellipsis}
+.scorecard-overlay .fall-cell{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.scorecard-overlay .pref-recent{height:18%!important;min-height:70px!important;flex:none!important}
+.scorecard-overlay .pref-recent .dot{width:clamp(20px,2vw,32px)!important;height:clamp(20px,2vw,32px)!important;margin:0 2px!important;font-weight:1000}
+.scorecard-overlay .pref-footer{height:5%!important;min-height:28px!important;font-size:clamp(8px,.72vw,13px)!important;padding:0 9px!important;border-radius:4px!important}
+@media(max-width:1000px){
+ .scorecard-overlay .pref-main{grid-template-columns:68% 32%!important;gap:6px!important}
+ .scorecard-overlay .pref-team{padding:0 10px!important}
+ .scorecard-overlay .pref-table th,.scorecard-overlay .pref-table td{padding:2px 4px!important}
+ .scorecard-overlay .pref-title{padding:0 7px!important}
+}
+</style>
+<style>
+/* ===== PROFESSIONAL TV SCOREBOARD HEADER + DISMISSAL STATES ===== */
+.scorecard-overlay .pref-broadcast-header{height:17%;min-height:112px;display:grid;grid-template-rows:28% 25% 47%;background:linear-gradient(180deg,#08182f,#0d2749 62%,#071326);border:2px solid #4c678e;border-radius:10px;overflow:hidden;box-shadow:0 5px 18px #0008;text-align:center}
+.scorecard-overlay .pref-tournament{display:flex;align-items:center;justify-content:center;padding:3px 18px;background:linear-gradient(90deg,#0b3977,#1687c7,#0b3977);color:#fff;font-size:clamp(13px,1.15vw,22px);font-weight:1000;text-transform:uppercase;letter-spacing:.14em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.scorecard-overlay .pref-match-line{display:flex;align-items:center;justify-content:center;gap:clamp(12px,2vw,36px);color:#dbeaff;font-size:clamp(12px,1.15vw,22px);font-weight:900;text-transform:uppercase;letter-spacing:.05em}
+.scorecard-overlay .pref-match-line b{color:#72d7ff;font-size:.8em}
+.scorecard-overlay .pref-batting-score{display:flex;align-items:center;justify-content:center;gap:clamp(10px,1.5vw,26px);background:#020914;color:#fff;border-top:1px solid #ffffff22}
+.scorecard-overlay .pref-batting-team{font-size:clamp(18px,1.8vw,34px);font-weight:1000;text-transform:uppercase;color:#d9eaff;max-width:34%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.scorecard-overlay .pref-batting-score strong{font-size:clamp(38px,4.8vw,82px);line-height:.9;font-weight:1000;letter-spacing:-.04em;color:#fff;text-shadow:0 2px 10px #000}
+.scorecard-overlay .pref-batting-score small{font-size:clamp(10px,.85vw,16px);font-weight:900;color:#8fcfff;white-space:nowrap}
+.scorecard-overlay .pref-table tr.is-out td:nth-child(2){color:#b00000;font-weight:1000;text-transform:uppercase}
+.scorecard-overlay .pref-table tr.is-notout td:nth-child(2){color:#08752a;font-weight:1000;text-transform:uppercase}
+.scorecard-overlay .pref-table tr.not-batted td:nth-child(2){color:transparent}
+.scorecard-overlay .pref-table tr.not-batted td{color:#111}
+.scorecard-overlay .pref-batting .pref-scroll{height:calc(100% - 32px)!important}
+@media(max-width:900px){
+ .scorecard-overlay .pref-broadcast-header{min-height:88px;height:15%}
+ .scorecard-overlay .pref-tournament{font-size:9px;letter-spacing:.08em}
+ .scorecard-overlay .pref-match-line{font-size:9px;gap:8px}
+ .scorecard-overlay .pref-batting-team{font-size:13px}
+ .scorecard-overlay .pref-batting-score strong{font-size:30px}
+ .scorecard-overlay .pref-batting-score small{font-size:8px}
+}
+</style>
+
+
+<style id="BRKLIVE19-STAT-GRAPHIC-REDESIGN-2026-09-08">
+/* B1 / B2 / BOWLER / FOW: clean three-row broadcast graphic */
+#bannerPlayer.show,
+#bannerBowler.show,
+#bannerFOW.show{
+  width:min(92vw,980px)!important;
+  min-height:0!important;
+  height:auto!important;
+  padding:0!important;
+  border:0!important;
+  border-radius:12px!important;
+  background:transparent!important;
+  box-shadow:0 10px 30px rgba(0,0,0,.42)!important;
+  overflow:hidden!important;
+  color:#fff!important;
+  text-align:left!important;
+  line-height:1!important;
+}
+
+#bannerPlayer.show .statGraphic,
+#bannerBowler.show .statGraphic,
+#bannerFOW.show .statGraphic{
+  display:grid!important;
+  grid-template-rows:auto auto auto auto!important;
+  width:100%!important;
+  overflow:hidden!important;
+  border:1px solid rgba(255,255,255,.18)!important;
+  border-radius:12px!important;
+  background:linear-gradient(135deg,#071a36 0%,#0b2f68 55%,#071a36 100%)!important;
+}
+
+#bannerPlayer.show .sg-head,
+#bannerBowler.show .sg-head,
+#bannerFOW.show .sg-head{
+  min-height:48px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+  gap:16px!important;
+  padding:9px 16px 8px!important;
+  background:linear-gradient(90deg,#07162d,#123c7b)!important;
+  border-bottom:1px solid rgba(255,255,255,.16)!important;
+}
+
+#bannerPlayer.show .sg-head>strong,
+#bannerBowler.show .sg-head>strong,
+#bannerFOW.show .sg-head>strong{
+  min-width:0!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+  white-space:nowrap!important;
+  font-size:clamp(22px,2.2vw,40px)!important;
+  font-weight:1000!important;
+  letter-spacing:-.02em!important;
+  color:#fff!important;
+}
+
+#bannerPlayer.show .sg-head>span,
+#bannerBowler.show .sg-head>span,
+#bannerFOW.show .sg-head>span{
+  flex:0 0 auto!important;
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:flex-end!important;
+  gap:4px!important;
+  font-size:clamp(10px,.85vw,14px)!important;
+  font-weight:900!important;
+  letter-spacing:.07em!important;
+  text-transform:uppercase!important;
+  color:#9fd0ff!important;
+}
+
+#bannerPlayer.show .sg-head small,
+#bannerBowler.show .sg-head small,
+#bannerFOW.show .sg-head small{
+  font-size:clamp(8px,.65vw,11px)!important;
+  font-weight:700!important;
+  letter-spacing:.03em!important;
+  opacity:.8!important;
+  text-transform:uppercase!important;
+}
+
+#bannerPlayer.show .sg-labels,
+#bannerBowler.show .sg-labels,
+#bannerFOW.show .sg-labels,
+#bannerPlayer.show .sg-values,
+#bannerBowler.show .sg-values,
+#bannerFOW.show .sg-values{
+  display:grid!important;
+  align-items:center!important;
+  text-align:center!important;
+  min-width:0!important;
+}
+
+#bannerPlayer.show .sg-labels,
+#bannerFOW.show .sg-labels{
+  grid-template-columns:repeat(5,1fr)!important;
+  min-height:28px!important;
+  background:#eef3f8!important;
+  color:#536276!important;
+  border-bottom:1px solid #c7d1dc!important;
+}
+
+#bannerPlayer.show .sg-values,
+#bannerFOW.show .sg-values{
+  grid-template-columns:repeat(5,1fr)!important;
+  min-height:43px!important;
+  background:#fff!important;
+  color:#09285d!important;
+}
+
+#bannerBowler.show .sg-labels,
+#bannerBowler.show .sg-values{
+  grid-template-columns:repeat(4,1fr)!important;
+}
+
+#bannerBowler.show .sg-labels{
+  min-height:28px!important;
+  background:#eef3f8!important;
+  color:#536276!important;
+  border-bottom:1px solid #c7d1dc!important;
+}
+
+#bannerBowler.show .sg-values{
+  min-height:43px!important;
+  background:#fff!important;
+  color:#09285d!important;
+}
+
+#bannerPlayer.show .sg-labels span,
+#bannerBowler.show .sg-labels span,
+#bannerFOW.show .sg-labels span{
+  font-size:clamp(8px,.62vw,11px)!important;
+  font-weight:1000!important;
+  letter-spacing:.08em!important;
+  padding:0 4px!important;
+}
+
+#bannerPlayer.show .sg-values strong,
+#bannerBowler.show .sg-values strong,
+#bannerFOW.show .sg-values strong{
+  font-size:clamp(18px,1.55vw,29px)!important;
+  font-weight:1000!important;
+  font-variant-numeric:tabular-nums!important;
+  padding:0 4px!important;
+}
+
+#bannerPlayer.show .sg-values>strong:not(:last-child),
+#bannerBowler.show .sg-values>strong:not(:last-child),
+#bannerFOW.show .sg-values>strong:not(:last-child),
+#bannerPlayer.show .sg-labels>span:not(:last-child),
+#bannerBowler.show .sg-labels>span:not(:last-child),
+#bannerFOW.show .sg-labels>span:not(:last-child){
+  border-right:1px solid #d1d8e0!important;
+}
+
+#bannerFOW.show .sg-note{
+  padding:6px 12px!important;
+  background:#07162c!important;
+  color:#a8c7ec!important;
+  text-align:center!important;
+  font-size:clamp(8px,.65vw,11px)!important;
+  font-weight:800!important;
+  letter-spacing:.04em!important;
+  white-space:nowrap!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+}
+
+@media(max-width:700px){
+  #bannerPlayer.show,
+  #bannerBowler.show,
+  #bannerFOW.show{
+    width:94vw!important;
+  }
+  #bannerPlayer.show .sg-head,
+  #bannerBowler.show .sg-head,
+  #bannerFOW.show .sg-head{
+    min-height:42px!important;
+    padding:7px 10px!important;
+    gap:8px!important;
+  }
+  #bannerPlayer.show .sg-head>strong,
+  #bannerBowler.show .sg-head>strong,
+  #bannerFOW.show .sg-head>strong{
+    font-size:clamp(17px,5vw,24px)!important;
+  }
+  #bannerPlayer.show .sg-head>span,
+  #bannerBowler.show .sg-head>span,
+  #bannerFOW.show .sg-head>span{
+    font-size:clamp(8px,2.3vw,11px)!important;
+    gap:2px!important;
+  }
+  #bannerPlayer.show .sg-head small,
+  #bannerBowler.show .sg-head small,
+  #bannerFOW.show .sg-head small{
+    font-size:7px!important;
+  }
+  #bannerPlayer.show .sg-labels,
+  #bannerBowler.show .sg-labels,
+  #bannerFOW.show .sg-labels{
+    min-height:23px!important;
+  }
+  #bannerPlayer.show .sg-values,
+  #bannerBowler.show .sg-values,
+  #bannerFOW.show .sg-values{
+    min-height:34px!important;
+  }
+  #bannerPlayer.show .sg-labels span,
+  #bannerBowler.show .sg-labels span,
+  #bannerFOW.show .sg-labels span{
+    font-size:7px!important;
+    letter-spacing:.04em!important;
+  }
+  #bannerPlayer.show .sg-values strong,
+  #bannerBowler.show .sg-values strong,
+  #bannerFOW.show .sg-values strong{
+    font-size:clamp(14px,4vw,21px)!important;
+  }
+  #bannerFOW.show .sg-note{
+    font-size:7px!important;
+    padding:5px 8px!important;
+  }
+}
+</style>
+
+
+<style id="BRKLIVE19-CENTERED-STAT-BANNER-2026-09-08">
+/* Selected B1/B2/BOWLER/FOW banner mode: hide the normal overlay and center
+   only the selected statistic graphic on screen. */
+body.stat-banner-focus #overlay,
+body.stat-banner-focus .overlay,
+body.stat-banner-focus .scoreOverlay,
+body.stat-banner-focus .mainOverlay,
+body.stat-banner-focus .overlay-content{
+  visibility:hidden!important;
+}
+
+body.stat-banner-focus #bannerPlayer.show,
+body.stat-banner-focus #bannerBowler.show,
+body.stat-banner-focus #bannerFOW.show{
+  visibility:visible!important;
+  position:fixed!important;
+  left:50%!important;
+  top:50%!important;
+  right:auto!important;
+  bottom:auto!important;
+  transform:translate(-50%,-50%)!important;
+  z-index:2147483647!important;
+  margin:0!important;
+  width:min(88vw,980px)!important;
+  max-width:980px!important;
+}
+
+/* If the overlay uses a different wrapper, suppress everything except the
+   active statistic banner while focus mode is on. */
+body.stat-banner-focus > *:not(#bannerPlayer):not(#bannerBowler):not(#bannerFOW){
+  visibility:hidden;
+}
+body.stat-banner-focus #bannerPlayer.show,
+body.stat-banner-focus #bannerBowler.show,
+body.stat-banner-focus #bannerFOW.show,
+body.stat-banner-focus #bannerPlayer.show *,
+body.stat-banner-focus #bannerBowler.show *,
+body.stat-banner-focus #bannerFOW.show *{
+  visibility:visible!important;
+}
+
+/* Theme-color accents: use existing --primary where available, with the
+   current theme's CSS variable as the source rather than a fixed color. */
+#bannerPlayer.show .statGraphic,
+#bannerBowler.show .statGraphic,
+#bannerFOW.show .statGraphic{
+  --stat-theme:var(--primary,#1769aa);
+  border-color:color-mix(in srgb,var(--stat-theme) 70%,white 30%)!important;
+  background:linear-gradient(135deg,
+    color-mix(in srgb,var(--stat-theme) 25%,#07162d 75%),
+    color-mix(in srgb,var(--stat-theme) 72%,#07162d 28%),
+    color-mix(in srgb,var(--stat-theme) 35%,#07162d 65%))!important;
+}
+
+#bannerPlayer.show .sg-head,
+#bannerBowler.show .sg-head,
+#bannerFOW.show .sg-head{
+  background:linear-gradient(90deg,
+    color-mix(in srgb,var(--primary,#1769aa) 28%,#07162d 72%),
+    color-mix(in srgb,var(--primary,#1769aa) 88%,#07162d 12%))!important;
+}
+
+#bannerPlayer.show .sg-head>span,
+#bannerBowler.show .sg-head>span,
+#bannerFOW.show .sg-head>span{
+  color:color-mix(in srgb,var(--primary,#1769aa) 45%,white 55%)!important;
+}
+
+@media(max-width:700px){
+  body.stat-banner-focus #bannerPlayer.show,
+  body.stat-banner-focus #bannerBowler.show,
+  body.stat-banner-focus #bannerFOW.show{
+    width:94vw!important;
+  }
+}
+</style>
+
+
+<script id="BRKLIVE19-STAT-BANNER-FOCUS-2026-09-08">
+(function(){
+  function bannerFocus(){
+    const p=document.getElementById("bannerPlayer");
+    const b=document.getElementById("bannerBowler");
+    const f=document.getElementById("bannerFOW");
+    const active=!!(p&&p.classList.contains("show") ||
+                    b&&b.classList.contains("show") ||
+                    f&&f.classList.contains("show"));
+    document.body.classList.toggle("stat-banner-focus",active);
+  }
+
+  const ids=["bannerPlayer","bannerBowler","bannerFOW"];
+  function watch(){
+    ids.forEach(function(id){
+      const el=document.getElementById(id);
+      if(el && !el.__statFocusObserver){
+        new MutationObserver(bannerFocus).observe(el,{
+          attributes:true,attributeFilter:["class"]
+        });
+        el.__statFocusObserver=true;
+      }
+    });
+    bannerFocus();
+  }
+
+  // Catch the existing B1/B2/BOWLER/FOW controls regardless of their exact
+  // implementation: whenever a control is clicked, focus mode is refreshed.
+  document.addEventListener("click",function(e){
+    const el=e.target.closest("button,[role='button'],[data-action]");
+    if(!el)return;
+    const label=(el.textContent||el.getAttribute("aria-label")||"").trim().toUpperCase();
+    if(/\b(B1|B2|BOWLER|BOWER|FOW)\b/.test(label)){
+      setTimeout(function(){watch();bannerFocus();},0);
+    }
+  },true);
+
+  new MutationObserver(watch).observe(document.documentElement,{childList:true,subtree:true});
+  if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",watch);
+  else watch();
+})();
+</script>
+
+
+<style id="BRKLIVE19-FINAL-THEME-BANNER-2026-09-08">
+/* Final stat-banner presentation.
+   B1, B2, BOWLER and FOW all share one visual language and use the selected
+   theme color as the banner background/accent. */
+body.stat-banner-focus #bannerPlayer.show,
+body.stat-banner-focus #bannerBowler.show,
+body.stat-banner-focus #bannerFOW.show{
+  position:fixed!important;
+  left:50%!important;
+  top:50%!important;
+  right:auto!important;
+  bottom:auto!important;
+  transform:translate(-50%,-50%)!important;
+  width:min(88vw,980px)!important;
+  max-width:980px!important;
+  height:auto!important;
+  min-height:0!important;
+  margin:0!important;
+  padding:0!important;
+  z-index:2147483647!important;
+  visibility:visible!important;
+}
+
+/* Remove any old popup/box appearance from the bowler banner. */
+#bannerBowler.show{
+  border:0!important;
+  border-radius:12px!important;
+  overflow:hidden!important;
+  padding:0!important;
+}
+
+/* Use the project's active theme color as the actual banner background. */
+#bannerPlayer.show .statGraphic,
+#bannerBowler.show .statGraphic,
+#bannerFOW.show .statGraphic{
+  --theme-bg:var(--primary,var(--theme,var(--accent,#1769aa)));
+  background:var(--theme-bg)!important;
+  border:1px solid color-mix(in srgb,var(--theme-bg) 78%,white 22%)!important;
+  border-radius:12px!important;
+  box-shadow:0 14px 40px rgba(0,0,0,.45)!important;
+}
+
+/* Keep every part of the graphic visually inside the selected theme. */
+#bannerPlayer.show .sg-head,
+#bannerBowler.show .sg-head,
+#bannerFOW.show .sg-head{
+  background:color-mix(in srgb,var(--theme-bg) 86%,black 14%)!important;
+  border-bottom:1px solid color-mix(in srgb,var(--theme-bg) 70%,white 30%)!important;
+}
+
+#bannerPlayer.show .sg-labels,
+#bannerBowler.show .sg-labels,
+#bannerFOW.show .sg-labels{
+  background:color-mix(in srgb,var(--theme-bg) 72%,white 28%)!important;
+  color:#fff!important;
+  border-bottom:1px solid color-mix(in srgb,var(--theme-bg) 58%,white 42%)!important;
+}
+
+#bannerPlayer.show .sg-values,
+#bannerBowler.show .sg-values,
+#bannerFOW.show .sg-values{
+  background:color-mix(in srgb,var(--theme-bg) 88%,white 12%)!important;
+  color:#fff!important;
+}
+
+#bannerPlayer.show .sg-head>strong,
+#bannerBowler.show .sg-head>strong,
+#bannerFOW.show .sg-head>strong{
+  color:#fff!important;
+}
+
+#bannerPlayer.show .sg-head>span,
+#bannerBowler.show .sg-head>span,
+#bannerFOW.show .sg-head>span{
+  color:#fff!important;
+}
+
+#bannerPlayer.show .sg-head small,
+#bannerBowler.show .sg-head small,
+#bannerFOW.show .sg-head small{
+  color:rgba(255,255,255,.82)!important;
+}
+
+#bannerPlayer.show .sg-labels>span,
+#bannerBowler.show .sg-labels>span,
+#bannerFOW.show .sg-labels>span,
+#bannerPlayer.show .sg-values>strong,
+#bannerBowler.show .sg-values>strong,
+#bannerFOW.show .sg-values>strong{
+  color:#fff!important;
+}
+
+#bannerPlayer.show .sg-values>strong:not(:last-child),
+#bannerBowler.show .sg-values>strong:not(:last-child),
+#bannerFOW.show .sg-values>strong:not(:last-child),
+#bannerPlayer.show .sg-labels>span:not(:last-child),
+#bannerBowler.show .sg-labels>span:not(:last-child),
+#bannerFOW.show .sg-labels>span:not(:last-child){
+  border-right:1px solid rgba(255,255,255,.30)!important;
+}
+
+#bannerFOW.show .sg-note{
+  background:color-mix(in srgb,var(--theme-bg) 76%,black 24%)!important;
+  color:#fff!important;
+  border-top:1px solid rgba(255,255,255,.18)!important;
+}
+
+/* BOWLER is deliberately identical to B1/B2: name first row, headings second,
+   current match figures third. No separate bowler popup treatment. */
+#bannerBowler.show .statGraphicBowler{
+  grid-template-rows:auto auto auto!important;
+}
+
+#bannerBowler.show .statGraphicBowler .sg-head{
+  min-height:48px!important;
+}
+
+#bannerBowler.show .statGraphicBowler .sg-labels{
+  grid-template-columns:repeat(4,1fr)!important;
+}
+
+#bannerBowler.show .statGraphicBowler .sg-values{
+  grid-template-columns:repeat(4,1fr)!important;
+}
+
+/* Make the whole page disappear behind the selected banner. */
+body.stat-banner-focus #overlay,
+body.stat-banner-focus .overlay,
+body.stat-banner-focus .scoreOverlay,
+body.stat-banner-focus .mainOverlay,
+body.stat-banner-focus .overlay-content,
+body.stat-banner-focus .popup,
+body.stat-banner-focus .modal,
+body.stat-banner-focus .dialog{
+  visibility:hidden!important;
+}
+
+@media(max-width:700px){
+  body.stat-banner-focus #bannerPlayer.show,
+  body.stat-banner-focus #bannerBowler.show,
+  body.stat-banner-focus #bannerFOW.show{
+    width:94vw!important;
+  }
+}
+</style>
+
+<style id="BRKLIVE19-TARGET-RRR-2026-09-08">
+/* Second-innings target: shown only above the bowling team panel. */
+#overlay .bowlerPanel{position:relative!important;}
+#secondInningsTarget{
+  display:none;
+  position:absolute!important;
+  top:5px!important;
+  right:14px!important;
+  z-index:30!important;
+  align-items:center!important;
+  gap:8px!important;
+  padding:4px 10px!important;
+  border:1px solid var(--cyan,#00b8e8)!important;
+  border-radius:5px!important;
+  background:rgba(5,14,28,.94)!important;
+  color:var(--cyan,#00b8e8)!important;
+  box-shadow:0 3px 10px rgba(0,0,0,.28)!important;
+  text-transform:uppercase!important;
+  white-space:nowrap!important;
+  pointer-events:none!important;
+}
+body.second-innings #secondInningsTarget{display:flex!important;}
+#secondInningsTarget .targetLabel{
+  color:var(--cyan,#00b8e8)!important;
+  font-size:clamp(7px,.55vw,11px)!important;
+  font-weight:1000!important;
+  letter-spacing:.1em!important;
+}
+#secondInningsTarget strong{
+  color:var(--cyan,#00b8e8)!important;
+  font-size:clamp(13px,1vw,20px)!important;
+  font-weight:1000!important;
+  line-height:1!important;
+}
+body.stat-banner-focus #secondInningsTarget{visibility:hidden!important;}
+@media(max-width:700px){
+  #secondInningsTarget{top:2px!important;right:7px!important;padding:3px 6px!important;gap:5px!important;}
+  #secondInningsTarget .targetLabel{font-size:6px!important;}
+  #secondInningsTarget strong{font-size:12px!important;}
+}
+</style>
+
+
+<script id="BRKLIVE19-TARGET-RRR-JS-2026-09-08">
+/* Right-side TARGET is rendered by the main live-data updateTarget(d).
+   This block intentionally does not poll guessed globals, which could hide the target. */
+</script>
+
+
+<style id="BRKLIVE19-BOWLER-STATUS-FINAL">
+/* BOWLER status is the same centered three-row graphic as B1/B2.
+   No selection popup is involved when the Overlay Controller BOWLER button
+   is pressed. */
+body.stat-banner-focus #bannerBowler.show{
+  position:fixed!important;
+  left:50%!important;
+  top:50%!important;
+  transform:translate(-50%,-50%)!important;
+  width:min(88vw,980px)!important;
+  margin:0!important;
+  z-index:2147483647!important;
+}
+
+#bannerBowler.show .statGraphicBowler{
+  display:grid!important;
+  grid-template-rows:auto auto auto!important;
+  width:100%!important;
+  border-radius:12px!important;
+  overflow:hidden!important;
+  background:var(--primary,var(--theme,var(--accent,#1769aa)))!important;
+  border:1px solid rgba(255,255,255,.22)!important;
+  box-shadow:0 14px 40px rgba(0,0,0,.45)!important;
+}
+
+#bannerBowler.show .statGraphicBowler .sg-head{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+  padding:10px 16px!important;
+  min-height:48px!important;
+  background:var(--primary,var(--theme,var(--accent,#1769aa)))!important;
+  color:#fff!important;
+}
+
+#bannerBowler.show .statGraphicBowler .sg-head>strong{
+  font-size:clamp(22px,2.2vw,40px)!important;
+  font-weight:1000!important;
+  color:#fff!important;
+}
+
+#bannerBowler.show .statGraphicBowler .sg-head>span{
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:flex-end!important;
+  gap:3px!important;
+  font-size:clamp(10px,.85vw,14px)!important;
+  font-weight:900!important;
+  color:#fff!important;
+  text-transform:uppercase!important;
+}
+
+#bannerBowler.show .statGraphicBowler .sg-head small{
+  color:rgba(255,255,255,.82)!important;
+  font-size:clamp(8px,.65vw,11px)!important;
+}
+
+#bannerBowler.show .statGraphicBowler .sg-labels{
+  display:grid!important;
+  grid-template-columns:repeat(4,1fr)!important;
+  min-height:28px!important;
+  background:color-mix(in srgb,var(--primary,var(--theme,var(--accent,#1769aa))) 76%,white 24%)!important;
+  color:#fff!important;
+}
+
+#bannerBowler.show .statGraphicBowler .sg-values{
+  display:grid!important;
+  grid-template-columns:repeat(4,1fr)!important;
+  min-height:43px!important;
+  background:var(--primary,var(--theme,var(--accent,#1769aa)))!important;
+  color:#fff!important;
+}
+
+#bannerBowler.show .statGraphicBowler .sg-labels span,
+#bannerBowler.show .statGraphicBowler .sg-values strong{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  color:#fff!important;
+  border-right:1px solid rgba(255,255,255,.28)!important;
+}
+
+#bannerBowler.show .statGraphicBowler .sg-labels span:last-child,
+#bannerBowler.show .statGraphicBowler .sg-values strong:last-child{
+  border-right:0!important;
+}
+
+#bannerBowler.show .statGraphicBowler .sg-labels span{
+  font-size:clamp(8px,.62vw,11px)!important;
+  font-weight:1000!important;
+  letter-spacing:.08em!important;
+}
+
+#bannerBowler.show .statGraphicBowler .sg-values strong{
+  font-size:clamp(18px,1.55vw,29px)!important;
+  font-weight:1000!important;
+  font-variant-numeric:tabular-nums!important;
+}
+
+@media(max-width:700px){
+  body.stat-banner-focus #bannerBowler.show{width:94vw!important}
+  #bannerBowler.show .statGraphicBowler .sg-head{padding:7px 10px!important}
+  #bannerBowler.show .statGraphicBowler .sg-head>strong{font-size:clamp(17px,5vw,24px)!important}
+  #bannerBowler.show .statGraphicBowler .sg-values{min-height:34px!important}
+}
+</style>
+
+<style id="BRKLIVE19-TARGET-FULLSCREEN-FINAL">
+/* TARGET button = full-screen target page, never a lower-third overlay */
+#overlay.targetMode #targetTop.targetFullScreen{
+  position:fixed!important;
+  left:0!important;
+  top:0!important;
+  right:0!important;
+  bottom:0!important;
+  width:100vw!important;
+  height:100vh!important;
+  min-height:100vh!important;
+  max-height:none!important;
+  margin:0!important;
+  padding:0!important;
+  transform:none!important;
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  justify-content:center!important;
+  border:0!important;
+  border-radius:0!important;
+  background:linear-gradient(135deg,#06111f 0%,#0b2340 48%,#06111f 100%)!important;
+  box-shadow:none!important;
+  z-index:999999!important;
+  overflow:hidden!important;
+  color:#fff!important;
+  text-align:center!important;
+}
+#overlay.targetMode .frame,
+#overlay.targetMode .broadcastBar,
+#overlay.targetMode .content,
+#overlay.targetMode .refBrandLive{
+  visibility:hidden!important;
+  opacity:0!important;
+}
+#overlay.targetMode #targetTop .targetCorner{
+  position:absolute!important;
+  top:24px!important;
+  right:30px!important;
+  left:auto!important;
+  margin:0!important;
+  font-size:clamp(14px,1.5vw,28px)!important;
+  color:#ffd84d!important;
+  font-weight:900!important;
+}
+#overlay.targetMode #targetTop .targetTournament{
+  position:static!important;
+  margin:0 20px 14px!important;
+  font-size:clamp(20px,2.4vw,48px)!important;
+  line-height:1.1!important;
+  font-weight:1000!important;
+  color:#fff!important;
+  text-transform:uppercase!important;
+}
+#overlay.targetMode #targetTop .targetMatch{
+  position:static!important;
+  margin:0 20px 35px!important;
+  font-size:clamp(16px,1.7vw,34px)!important;
+  font-weight:800!important;
+  color:#dbe7f7!important;
+  text-transform:uppercase!important;
+}
+#overlay.targetMode #targetTop .targetStatsRow{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:clamp(24px,5vw,100px)!important;
+  margin:0 20px 35px!important;
+}
+#overlay.targetMode #targetTop .targetStat{
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  justify-content:center!important;
+  min-width:220px!important;
+}
+#overlay.targetMode #targetTop .targetStat span{
+  font-size:clamp(11px,1vw,20px)!important;
+  font-weight:900!important;
+  letter-spacing:.12em!important;
+  color:#aebfd5!important;
+  margin-bottom:8px!important;
+}
+#overlay.targetMode #targetTop .targetStat strong{
+  font-size:clamp(32px,4vw,76px)!important;
+  line-height:1!important;
+  color:#ffd84d!important;
+  font-weight:1000!important;
+}
+#overlay.targetMode #targetTop .targetStat em{
+  font-size:clamp(12px,1.1vw,22px)!important;
+  font-style:normal!important;
+  font-weight:900!important;
+  color:#fff!important;
+  margin-top:7px!important;
+}
+#overlay.targetMode #targetTop #targetValue{
+  position:static!important;
+  margin:0 20px!important;
+  font-size:clamp(38px,6vw,110px)!important;
+  line-height:1.05!important;
+  font-weight:1000!important;
+  color:#fff!important;
+  background:none!important;
+  -webkit-text-fill-color:#fff!important;
+  text-shadow:0 5px 25px rgba(0,0,0,.45)!important;
+  white-space:normal!important;
+}
+@media(max-width:700px){
+  #overlay.targetMode #targetTop .targetStatsRow{flex-direction:column!important;gap:18px!important;margin-bottom:25px!important}
+  #overlay.targetMode #targetTop .targetStat{min-width:0!important}
+  #overlay.targetMode #targetTop .targetMatch{margin-bottom:24px!important}
+  #overlay.targetMode #targetTop .targetCorner{top:12px!important;right:14px!important}
+}
+</style>
+
+<style id="BRKLIVE19-TARGET-USER-REQUEST-FINAL">
+/* FINAL USER REQUEST:
+   Target button -> full-screen target message only.
+   "Need __ run from ____ ball" centered on screen.
+   Target indicator moved from the right-side corner to the TOP-CENTER of the overlay.
+   Do not alter scorer data/calculation. */
+#overlay.targetMode{
+  position:fixed!important; inset:0!important; width:100vw!important; height:100vh!important;
+  background:transparent!important; z-index:2147483646!important; pointer-events:none!important;
+}
+#overlay.targetMode > *:not(#targetTop){display:none!important;visibility:hidden!important}
+#overlay.targetMode #targetTop.targetFullScreen{
+  position:fixed!important; inset:0!important; left:0!important; top:0!important;
+  width:100vw!important; height:100vh!important; max-width:none!important; max-height:none!important;
+  transform:none!important; margin:0!important; padding:0!important;
+  display:flex!important; visibility:visible!important; pointer-events:none!important;
+  flex-direction:column!important; align-items:center!important; justify-content:center!important;
+  background:transparent!important; border:0!important; border-radius:0!important;
+  box-shadow:none!important; overflow:visible!important;
+}
+/* Target value = the requested full-screen centered message */
+#overlay.targetMode #targetTop #targetValue.targetValueLarge{
+  display:block!important; position:absolute!important; left:50%!important; top:50%!important;
+  transform:translate(-50%,-50%)!important; margin:0!important; padding:0 2vw!important;
+  width:96vw!important; box-sizing:border-box!important;
+  text-align:center!important; white-space:nowrap!important;
+  font-size:clamp(34px,5vw,92px)!important; line-height:1.1!important;
+  font-weight:1000!important; letter-spacing:.02em!important;
+  color:#fff!important; -webkit-text-fill-color:#fff!important;
+  background:none!important; text-shadow:0 4px 18px rgba(0,0,0,.9)!important;
+}
+/* The old right-side target corner is now the TOP-CENTER target indicator. */
+#overlay.targetMode #targetTop .targetCorner{
+  display:block!important; position:absolute!important; top:24px!important; left:50%!important;
+  right:auto!important; bottom:auto!important; transform:translateX(-50%)!important;
+  width:auto!important; min-width:0!important; max-width:92vw!important;
+  margin:0!important; padding:8px 20px!important; box-sizing:border-box!important;
+  text-align:center!important; white-space:nowrap!important;
+  border-radius:999px!important; background:rgba(4,10,25,.9)!important;
+  border:1px solid rgba(255,216,74,.65)!important; color:#ffd84a!important;
+  font-size:clamp(14px,1.3vw,25px)!important; font-weight:1000!important;
+  letter-spacing:.05em!important; text-shadow:0 2px 7px #000!important;
+  z-index:20!important;
+}
+/* Target button mode must show ONLY the requested message; no extra tournament/match/cards. */
+#overlay.targetMode #targetTop .targetTournament,
+#overlay.targetMode #targetTop .targetMatch,
+#overlay.targetMode #targetTop .targetStatsRow{display:none!important;visibility:hidden!important}
+#overlay.targetMode ~ #brkLogo,
+#overlay.targetMode ~ #autoTargetCorner{display:none!important}
+@media(max-width:700px){
+  #overlay.targetMode #targetTop #targetValue.targetValueLarge{
+    white-space:normal!important; width:94vw!important; font-size:clamp(28px,8vw,54px)!important;
+  }
+  #overlay.targetMode #targetTop .targetCorner{top:12px!important;font-size:11px!important;padding:7px 11px!important}
+}
+</style>
+
+<style id="BRKLIVE19-TARGET-CHASE-ONLY">
+/* TARGET BUTTON: show only the chasing team name. No target/runs/balls/rrr/tournament/match text. */
+#overlay #targetTop.targetFullScreen{
+  color:var(--cyan,#00b8e8)!important;
+  border-color:var(--cyan,#00b8e8)!important;
+  background:linear-gradient(180deg,var(--navy,#071a3d),var(--navy2,#07101f))!important;
+  justify-content:flex-start!important;
+  align-items:center!important;
+  padding-top:7vh!important;
+}
+#overlay #chasingTeamName{
+  width:100%!important;
+  margin:0!important;
+  color:var(--cyan,#00b8e8)!important;
+  font-size:clamp(32px,5vw,88px)!important;
+  font-weight:1000!important;
+  line-height:1.05!important;
+  letter-spacing:.04em!important;
+  text-align:center!important;
+  text-transform:uppercase!important;
+  white-space:normal!important;
+  overflow-wrap:anywhere!important;
+  text-shadow:0 0 22px color-mix(in srgb,var(--cyan,#00b8e8) 35%,transparent)!important;
+}
+#overlay #targetCorner,#overlay .targetTournament,#overlay .targetMatch,#overlay .targetStatsRow,#overlay #targetValue,#autoTargetCorner{display:none!important}
+#overlay.targetMode ~ #autoTargetCorner{display:none!important}
+</style>
+
+<style id="BRKLIVE19-TARGET-TEAM-AND-NEED-FINAL">
+/* Target button: same centered position, two lines only, both use selected theme color. */
+#overlay.targetMode #targetTop.targetFullScreen{
+  justify-content:center!important;
+  align-items:center!important;
+  padding:0 4vw!important;
+  gap:clamp(12px,2vh,28px)!important;
+  background:transparent!important;
+  border:0!important;
+  color:var(--cyan,#00b8e8)!important;
+}
+#overlay.targetMode #chasingTeamName,
+#overlay.targetMode #targetNeedText{
+  position:static!important;
+  width:min(94vw,1600px)!important;
+  margin:0!important;
+  padding:0!important;
+  text-align:center!important;
+  color:var(--cyan,#00b8e8)!important;
+  -webkit-text-fill-color:var(--cyan,#00b8e8)!important;
+  background:none!important;
+  text-shadow:0 0 22px color-mix(in srgb,var(--cyan,#00b8e8) 28%,transparent)!important;
+  white-space:normal!important;
+  overflow-wrap:anywhere!important;
+}
+#overlay.targetMode #chasingTeamName{
+  font-size:clamp(34px,5.2vw,92px)!important;
+  line-height:1.05!important;
+  font-weight:1000!important;
+  letter-spacing:.04em!important;
+}
+#overlay.targetMode #targetNeedText{
+  font-size:clamp(24px,3.6vw,68px)!important;
+  line-height:1.1!important;
+  font-weight:1000!important;
+  letter-spacing:.035em!important;
+}
+@media(max-width:700px){
+  #overlay.targetMode #targetTop.targetFullScreen{gap:12px!important;padding:0 3vw!important}
+  #overlay.targetMode #chasingTeamName{font-size:clamp(26px,8vw,54px)!important}
+  #overlay.targetMode #targetNeedText{font-size:clamp(20px,6vw,40px)!important}
+}
+</style>
+
+<style id="BRKLIVE19-CURRENT-OVER-COMPLETE-FIX">
+/* Complete current-over tracker: legal + illegal deliveries. */
+#overlay .currentOver{overflow:visible!important;min-width:0!important;}
+#overlay .currentOverLabel{color:var(--cyan)!important;}
+#overlay .ballList{display:flex!important;align-items:center!important;gap:clamp(3px,.35vw,7px)!important;min-width:0!important;overflow-x:auto!important;overflow-y:hidden!important;scrollbar-width:none!important;}
+#overlay .ballList::-webkit-scrollbar{display:none!important;}
+#overlay .ball{color:var(--cyan)!important;border-color:var(--cyan)!important;}
+#overlay .ball.four,#overlay .ball.six,#overlay .ball.zero,#overlay .ball.run,#overlay .ball.extra,#overlay .ball.wicket{color:var(--cyan)!important;}
+</style>
+<style id="BRKLIVE19-THIS-OVER-FINAL-FIT">
+#overlay .currentOver{display:flex!important;align-items:center!important;min-width:0!important;overflow:visible!important}
+#overlay .currentOverLabel{flex:0 0 auto!important;color:var(--cyan)!important}
+#overlay .ballList{display:flex!important;flex:1 1 auto!important;min-width:0!important;width:100%!important;overflow:hidden!important;align-items:center!important;justify-content:flex-start!important;gap:clamp(2px,.28vw,6px)!important}
+#overlay .ball{width:clamp(18px,2.05vw,30px)!important;height:clamp(18px,2.05vw,30px)!important;min-width:18px!important;flex:1 1 0!important;max-width:30px!important;font-size:clamp(8px,.72vw,13px)!important;line-height:1!important;color:var(--cyan)!important;border-color:var(--cyan)!important;overflow:hidden!important}
+#overlay .ball.latest{box-shadow:0 0 0 2px var(--cyan)!important}
+@media(max-width:700px){#overlay .ball{min-width:16px!important;font-size:8px!important}.ballList{gap:2px!important}}
+</style>
+
+<style id="BRKLIVE19-CURRENT-OVER-LIVE-ONLY">
+#overlay .currentOverTotal{flex:0 0 auto!important;color:var(--cyan)!important;font-weight:1000!important;font-size:clamp(6px,.55vw,11px)!important;white-space:nowrap!important;margin-left:4px!important;}
+#overlay .ballList{overflow:hidden!important;flex:1 1 auto!important;min-width:0!important;}
+#overlay .currentOver{min-width:0!important;overflow:visible!important;}
+#overlay .ball{flex:1 1 0!important;min-width:14px!important;max-width:30px!important;}
+</style>
+<style id="BRKLIVE19-TARGET-RIGHT-SIDE-FINAL">
+/* NORMAL 2ND-INNINGS TARGET: small target card on the right side of bowling panel. */
+#overlay .bowlerPanel{position:relative!important;}
+#overlay #secondInningsTarget{
+  display:none;
+  position:absolute!important;
+  top:2px!important;
+  right:8px!important;
+  left:auto!important;
+  bottom:auto!important;
+  z-index:9999!important;
+  width:auto!important;
+  min-width:0!important;
+  height:auto!important;
+  max-width:45%!important;
+  padding:3px 8px!important;
+  margin:0!important;
+  box-sizing:border-box!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:5px!important;
+  border:1px solid var(--cyan,#00b8e8)!important;
+  border-radius:5px!important;
+  background:rgba(5,14,28,.94)!important;
+  color:var(--cyan,#00b8e8)!important;
+  white-space:nowrap!important;
+  overflow:hidden!important;
+  pointer-events:none!important;
+}
+#overlay #secondInningsTarget .targetLabel,
+#overlay #secondInningsTarget strong{
+  color:var(--cyan,#00b8e8)!important;
+}
+#overlay #secondInningsTarget .targetLabel{font-size:clamp(7px,.55vw,11px)!important;font-weight:1000!important;letter-spacing:.08em!important;}
+#overlay #secondInningsTarget strong{font-size:clamp(13px,1vw,20px)!important;font-weight:1000!important;line-height:1!important;}
+#overlay #secondInningsTarget[hidden]{display:none!important;}
+#overlay #targetTop.targetFullScreen{display:none!important;}
+#overlay.targetMode #targetTop.targetFullScreen{display:none!important;}
+#overlay.targetMode .frame{visibility:visible!important;}
+@media(max-width:900px){
+  #overlay #secondInningsTarget{top:2px!important;right:5px!important;padding:2px 5px!important;gap:3px!important;}
+  #overlay #secondInningsTarget .targetLabel{font-size:6px!important;}
+  #overlay #secondInningsTarget strong{font-size:11px!important;}
+}
+</style>
+
+<style id="BRKLIVE19-TARGET-FINAL-POSITION">
+#overlay .teamPanel.right{position:absolute!important;overflow:visible!important;}
+#overlay .teamPanel.right #secondInningsTarget{display:none;position:absolute!important;top:7px!important;right:18px!important;z-index:50!important;align-items:center!important;justify-content:center!important;gap:6px!important;padding:3px 10px!important;margin:0!important;background:transparent!important;border:0!important;box-shadow:none!important;color:var(--cyan)!important;white-space:nowrap!important;pointer-events:none!important;}
+body.second-innings #overlay .teamPanel.right #secondInningsTarget{display:flex!important;}
+#overlay .teamPanel.right #secondInningsTarget .targetLabel,#overlay .teamPanel.right #secondInningsTarget strong{color:var(--cyan)!important;text-shadow:none!important;}
+#overlay .teamPanel.right #secondInningsTarget .targetLabel{font-size:clamp(10px,.8vw,16px)!important;font-weight:1000!important;letter-spacing:.08em!important;}
+#overlay .teamPanel.right #secondInningsTarget strong{font-size:clamp(17px,1.35vw,27px)!important;font-weight:1000!important;line-height:1!important;}
+@media(max-width:900px){#overlay .teamPanel.right #secondInningsTarget{top:5px!important;right:8px!important;padding:2px 5px!important;gap:4px!important}#overlay .teamPanel.right #secondInningsTarget .targetLabel{font-size:8px!important}#overlay .teamPanel.right #secondInningsTarget strong{font-size:14px!important}}
+</style>
+
+<style id="BRKLIVE19-TARGET-TOP-ROW-EXACT">
+/* TARGET belongs in the top information row — the same row used for the brief
+   tournament/toss/CRR details. It sits on the right, above the bowling-team side. */
+#overlay .broadcastBar{position:fixed!important;}
+#overlay .broadcastInfo{position:relative!important;min-width:0!important;overflow:visible!important;padding-right:120px!important;}
+#overlay #topRowTarget{
+  display:inline-flex!important;
+  position:absolute!important;
+  right:10px!important;
+  top:50%!important;
+  transform:translateY(-50%)!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:7px!important;
+  padding:4px 10px!important;
+  margin:0!important;
+  border:1px solid var(--cyan,#00d8ff)!important;
+  border-radius:5px!important;
+  background:rgba(5,14,28,.96)!important;
+  color:var(--cyan,#00d8ff)!important;
+  font-size:clamp(11px,.9vw,17px)!important;
+  font-weight:1000!important;
+  line-height:1!important;
+  letter-spacing:.06em!important;
+  white-space:nowrap!important;
+  z-index:999999!important;
+  pointer-events:none!important;
+}
+#overlay #topRowTarget .targetLabel,#overlay #topRowTarget strong{color:var(--cyan,#00d8ff)!important;}
+#overlay #topRowTarget .targetLabel{font-size:1em!important;font-weight:1000!important;}
+#overlay #topRowTarget strong{font-size:1.35em!important;font-weight:1000!important;}
+#overlay #secondInningsTarget{display:none!important;}
+@media(max-width:900px){
+ #overlay #topRowTarget{right:6px!important;padding:3px 7px!important;gap:4px!important;font-size:clamp(8px,1.8vw,13px)!important;}
+}
+</style>
+
+<style id="BRKLIVE19-TARGET-FAR-RIGHT-FINAL">
+/* Final target placement: dedicated, always-stable target at the far-right corner of the top row. */
+#overlay .broadcastBar{position:fixed!important;}
+#overlay .broadcastInfo{position:relative!important;padding-right:0!important;overflow:hidden!important;}
+#overlay #topRowTarget{
+  display:none!important;
+  position:absolute!important;
+  right:10px!important;
+  top:50%!important;
+  transform:translateY(-50%)!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:5px!important;
+  padding:4px 8px!important;
+  margin:0!important;
+  border:1px solid var(--cyan,#00d8ff)!important;
+  border-radius:5px!important;
+  background:rgba(5,14,28,.98)!important;
+  color:var(--cyan,#00d8ff)!important;
+  font-size:clamp(9px,.85vw,15px)!important;
+  font-weight:1000!important;
+  line-height:1!important;
+  white-space:nowrap!important;
+  z-index:1000000!important;
+  pointer-events:none!important;
+}
+#overlay #topRowTarget.target-visible{display:inline-flex!important;}
+#overlay #topRowTarget .targetLabel,#overlay #topRowTarget strong{color:var(--cyan,#00d8ff)!important;}
+#overlay #topRowTarget .targetLabel{font-weight:1000!important;}
+#overlay #topRowTarget strong{font-size:1.25em!important;font-weight:1000!important;}
+@media(max-width:900px){#overlay #topRowTarget{right:6px!important;padding:3px 6px!important;font-size:8px!important;}}
+</style>
+<script>
+(function(){
+  function forceTopTarget(){
+    var d=window.__BRKLIVE19_LIVE_DATA__||window.liveData||window.currentData||null;
+    var el=document.getElementById('topRowTarget');
+    var val=document.getElementById('topRowTargetValue');
+    if(!el||!val)return;
+    var innings=Number(d&&d.innings||0);
+    var target=Number(d&&d.target||0);
+    if(innings===2 && target>0){
+      val.textContent=String(Math.round(target));
+      el.classList.add('target-visible');
+    }else{
+      el.classList.remove('target-visible');
+    }
+  }
+  setInterval(forceTopTarget,500);
+  window.addEventListener('storage',forceTopTarget);
+})();
+</script>
+
+<style id="BRKLIVE19-TARGET-BIG-FAR-RIGHT">
+/* TARGET: large, fixed at the absolute far-right corner of the top broadcast row. */
+#overlay .broadcastBar{position:fixed!important;left:0!important;right:0!important;}
+#overlay .broadcastInfo{position:relative!important;overflow:visible!important;}
+#overlay #topRowTarget{
+  display:none!important;
+  position:absolute!important;
+  right:2px!important;
+  left:auto!important;
+  top:50%!important;
+  transform:translateY(-50%)!important;
+  width:auto!important;
+  min-width:0!important;
+  max-width:none!important;
+  height:auto!important;
+  padding:2px 8px!important;
+  margin:0!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:7px!important;
+  border:0!important;
+  background:transparent!important;
+  color:var(--cyan,#00d8ff)!important;
+  font-size:clamp(18px,1.65vw,32px)!important;
+  font-weight:1000!important;
+  line-height:1!important;
+  letter-spacing:.03em!important;
+  white-space:nowrap!important;
+  overflow:visible!important;
+  text-overflow:clip!important;
+  z-index:2147483647!important;
+  pointer-events:none!important;
+  text-shadow:0 0 8px rgba(0,0,0,.8)!important;
+}
+#overlay #topRowTarget.target-visible{display:inline-flex!important;}
+#overlay #topRowTarget .targetLabel{font-size:1em!important;font-weight:1000!important;color:var(--cyan,#00d8ff)!important;}
+#overlay #topRowTarget strong{font-size:1.35em!important;font-weight:1000!important;color:var(--cyan,#00d8ff)!important;}
+@media(max-width:900px){
+ #overlay #topRowTarget{right:1px!important;font-size:clamp(14px,3.8vw,24px)!important;padding:1px 4px!important;gap:4px!important;}
+}
+</style>
+<script id="BRKLIVE19-TARGET-BIG-JS">
+(function(){
+  function forceBigTarget(){
+    var d=window.__BRKLIVE19_LIVE_DATA__||null;
+    var el=document.getElementById('topRowTarget');
+    var val=document.getElementById('topRowTargetValue');
+    if(!el||!val)return;
+    var innings=Number(d&&d.innings||0);
+    var firstRuns=Number(d&&d.firstInnings&&d.firstInnings.runs||0);
+    var target=Number(d&&d.target||0)||(innings===2&&firstRuns>=0?firstRuns+1:0);
+    if(innings===2 && target>0){
+      val.textContent=String(Math.round(target));
+      el.classList.add('target-visible');
+    }else{
+      el.classList.remove('target-visible');
+    }
+  }
+  setInterval(forceBigTarget,250);
+  document.addEventListener('DOMContentLoaded',forceBigTarget);
+})();
+</script>
+<style id="BRKLIVE19-TARGET-FAR-RIGHT-CORNER-FINAL">
+/* Target: lock the complete TARGET - 32 group to the far-right corner of the top row. */
+#overlay .broadcastBar{position:fixed!important;left:0!important;right:0!important;overflow:visible!important;}
+#overlay .broadcastInfo{position:static!important;overflow:visible!important;}
+#overlay #topRowTarget{
+  position:absolute!important;
+  right:0!important;
+  left:auto!important;
+  top:50%!important;
+  transform:translateY(-50%)!important;
+  margin:0!important;
+  padding:0 4px 0 8px!important;
+  width:auto!important;
+  max-width:none!important;
+  white-space:nowrap!important;
+  display:none!important;
+  z-index:2147483647!important;
+}
+#overlay #topRowTarget.target-visible{display:inline-flex!important;}
+#overlay #topRowTarget .targetLabel{font-size:1em!important;}
+#overlay #topRowTarget strong{font-size:1.35em!important;}
+</style>
+<style id="BRKLIVE19-TARGET-LABEL-VISIBLE-FINAL">
+#overlay #topRowTarget .targetLabel{
+  display:inline!important;
+  visibility:visible!important;
+  opacity:1!important;
+  color:var(--cyan,#00d8ff)!important;
+  font-size:clamp(14px,1.35vw,25px)!important;
+  font-weight:1000!important;
+  line-height:1!important;
+  white-space:nowrap!important;
+}
+#overlay #topRowTarget strong{
+  display:inline!important;
+  visibility:visible!important;
+  opacity:1!important;
+  color:var(--cyan,#00d8ff)!important;
+  font-size:clamp(24px,2.2vw,40px)!important;
+  font-weight:1000!important;
+  line-height:1!important;
+}
+#overlay #topRowTarget{gap:7px!important;}
 </style>
