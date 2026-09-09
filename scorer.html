@@ -264,7 +264,6 @@ button { max-width: 100%; }
   <h3 style="color:var(--cyan);margin-top:14px">🖥 Overlay Mode</h3>
   <div class="g4">
     <button class="btn blue" onclick="setMode('default')">DEFAULT</button>
-    <button class="btn good" onclick="setMode('bowler')">BOWLER</button>
     <button class="btn freehit" onclick="setMode('summary')">SUMMARY</button>
     <button class="btn gold" onclick="showInningsScoreboard(1)">1ST INN SCOREBOARD</button>
     <button class="btn gold" onclick="showInningsScoreboard(2)">2ND INN SCOREBOARD</button>
@@ -279,6 +278,8 @@ button { max-width: 100%; }
     <button class="btn custom" onclick="toggleOverlayBanner('match')">⚔️ MATCH</button>
     <button class="btn good" onclick="toggleOverlayBanner('toss')">🪙 TOSS</button>
     <button class="btn custom" onclick="togglePartnership()">🤝 PARTNERSHIP</button>
+    <button class="btn good" onclick="toggleBowlerStatus()">🎯 BOWLER</button>
+    <button class="btn wick" onclick="toggleFOW()">💥 FOW</button>
     <button class="btn blue" onclick="togglePlayerLower('b1')">🏏 B1 STATUS</button>
     <button class="btn blue" onclick="togglePlayerLower('b2')">🏏 B2 STATUS</button>
     <button class="btn dark" onclick="toggleOverlayBanner('result')">🏆 RESULT</button>
@@ -464,7 +465,7 @@ button { max-width: 100%; }
       version:4, started:false, innings:1, battingTeam:"A", bowlingTeam:"B",
       runs:0, wickets:0, legalBalls:0, extras:0, partnershipRuns:0, partnershipBalls:0,
       extraDetail:{ wide:0, noball:0, bye:0, legbye:0 },
-      history:[], events:[], batters:{}, bowlers:{}, fallWickets:[], recentBalls:[],
+      history:[], events:[], batters:{}, bowlers:{}, fallWickets:[], recentBalls:[], currentOverBalls:[],
       striker:"", nonStriker:"", bowler:"", target:0,
       maxOvers:6, theme:"blue", mode:"default",
       tournament:"", venue:"", matchName:"", teamA:"", teamB:"",
@@ -476,7 +477,7 @@ button { max-width: 100%; }
       customColors:{ primary:"#00b8e8", secondary:"#ffd900", accent:"#102875", summaryBg:"#07101f" },
       matchWinner:"", matchResult:"", resultText:"", status:"live",
       overlay:{
-        showTournament:false, showVenue:false, showMatch:false, showToss:false, showResult:false, showBowler:false, showTarget:false,
+        showTournament:false, showVenue:false, showMatch:false, showToss:false, showResult:false, showBowler:false, showFOW:false, showTarget:false,
         positions:{ tournament:"upper", match:"middle", toss:"middle", custom:"upper" },
         scoreVisible:true, intro:false, introDismissedAt:0,
         playerLower:{ active:false, slot:"", player:"" },
@@ -603,13 +604,13 @@ button { max-width: 100%; }
     S.started = false;
     S.innings = 1;
     S.runs = 0; S.wickets = 0; S.legalBalls = 0; S.extras = 0;
-    S.history = []; S.events = []; S.batters = {}; S.bowlers = {}; S.fallWickets=[]; S.recentBalls=[];
+    S.history = []; S.events = []; S.batters = {}; S.bowlers = {}; S.fallWickets=[]; S.recentBalls=[]; S.currentOverBalls=[];
     S.striker = ''; S.nonStriker = ''; S.bowler = ''; S.target = 0;
     S.matchWinner=''; S.matchResult=''; S.resultText=''; S.status='live';
     S.firstInnings = { team:'', runs:0, wickets:0, balls:0, extras:0 };
     S.secondInningsStarted = false;
     S.pendingSecondInnings = false;
-    S.overlay = { showTournament:true, showVenue:false, showMatch:false, showToss:false, showResult:false, showBowler:false, positions:{}, scoreVisible:false, intro:true, playerLower:{active:false,slot:'',player:''}, partnership:{active:false} };
+    S.overlay = { showTournament:true, showVenue:false, showMatch:false, showToss:false, showResult:false, showBowler:false, showFOW:false, positions:{}, scoreVisible:false, intro:true, playerLower:{active:false,slot:'',player:''}, partnership:{active:false} };
     saveNow();
     render();
     toast('Match loaded: ' + match.teamAName + ' vs ' + match.teamBName);
@@ -669,10 +670,26 @@ button { max-width: 100%; }
 
   // ---- Save ----
   function getCurrentOverBalls(){
+    // THIS OVER is a dedicated live-over buffer. It is cleared when a new
+    // bowler is selected, at a new innings, and after an over completes.
+    // Every delivery is appended before the legal-ball counter changes, so
+    // the 6th legal ball and any WD/NB deliveries are retained correctly.
+    if (Array.isArray(S.currentOverBalls)) return S.currentOverBalls;
     const recent = Array.isArray(S.recentBalls) ? S.recentBalls : [];
-    const rem = Number(S.legalBalls || 0) % 6;
-    if (rem === 0) return [];
-    return recent.slice(-rem);
+    const legalBalls = Number(S.legalBalls || 0);
+    const currentOverNo = Math.floor(legalBalls / 6);
+    return recent.filter(b => {
+      const ov = String(b && b.over != null ? b.over : '');
+      const m = ov.match(/^(\d+)\.(\d+)$/);
+      return m ? Number(m[1]) === currentOverNo : false;
+    });
+  }
+
+  function recordCurrentDelivery(label, runs=0, wicket=false){
+    const delivery = {over:oversText(S.legalBalls), label:String(label), runs:Number(runs)||0, wicket:!!wicket};
+    if (!Array.isArray(S.currentOverBalls)) S.currentOverBalls=[];
+    S.currentOverBalls.push(delivery);
+    S.recentBalls = [...(S.recentBalls||[]), delivery].slice(-48);
   }
 
   function ensureSecondInningsTarget(){
@@ -715,6 +732,7 @@ button { max-width: 100%; }
       showTournament:!!S.overlay?.showTournament, showVenue:!!S.overlay?.showVenue, showMatch:!!S.overlay?.showMatch,
       showToss:!!S.overlay?.showToss, showResult:!!S.overlay?.showResult, showTarget:!!S.overlay?.showTarget,
       showBowler:!!S.overlay?.showBowler,
+      showFOW:!!S.overlay?.showFOW,
       battingTeam:S.battingTeam, bowlingTeam:S.bowlingTeam,
       teamAScore:S.battingTeam === "A" ? S.runs : S.firstInnings.runs,
       teamBScore:S.battingTeam === "B" ? S.runs : S.firstInnings.runs,
@@ -786,6 +804,7 @@ button { max-width: 100%; }
     if (!striker || !non || !bowler) { alert("Select striker, non-striker and bowler."); return; }
     if (striker === non) { alert("Striker and Non-Striker must be different."); return; }
     S.started = true;
+    S.currentOverBalls = [];
     S.striker = striker; S.nonStriker = non; S.bowler = bowler;
     S.partnershipRuns = 0; S.partnershipBalls = 0;
     battingStats(striker); battingStats(non); bowlingStats(bowler);
@@ -811,6 +830,7 @@ button { max-width: 100%; }
     }
     swapBatters();
     S.events.push(`OVER ${oversText(S.legalBalls)} COMPLETE`);
+    S.currentOverBalls = [];
     await save();
     render();
     setTimeout(() => { if (S.started) openBowler(true); }, 200);
@@ -874,7 +894,7 @@ button { max-width: 100%; }
     S.bowlingTeam = S.battingTeam === "A" ? "B" : "A";
     S.runs = 0; S.wickets = 0; S.legalBalls = 0; S.extras = 0; S.partnershipRuns=0; S.partnershipBalls=0;
     S.extraDetail = { wide:0, noball:0, bye:0, legbye:0 };
-    S.batters = {}; S.bowlers = {};
+    S.batters = {}; S.bowlers = {}; S.currentOverBalls = [];
     S.striker = ""; S.nonStriker = ""; S.bowler = "";
     S.started = false;
     S.events.push(`▶ 2ND INNINGS — Target ${S.target}`);
@@ -898,7 +918,7 @@ button { max-width: 100%; }
     if (runs === 4) await activateBroadcast("FOUR");
     else if (runs === 6) await activateBroadcast("SIX");
     S.events.push(`${oversText(S.legalBalls)} — ${runs} run`);
-    S.recentBalls = [...(S.recentBalls||[]), {over:oversText(S.legalBalls), label:String(runs), runs:runs, wicket:false}].slice(-24);
+    recordCurrentDelivery(String(runs), runs, false);
     checkMatchResult();
     if (S.started) await checkOver();
     await save();
@@ -927,13 +947,13 @@ button { max-width: 100%; }
       bowler.runs += total;
       if (total % 2 === 1) swapBatters();
       S.events.push(`${extraType.toUpperCase()} — ${total}`);
-      S.recentBalls = [...(S.recentBalls||[]), {over:oversText(S.legalBalls), label:`${extraType.toUpperCase()} ${total}`, runs:total, wicket:false}].slice(-24);
+      recordCurrentDelivery(`${extraType.toUpperCase()} ${total}`, total, false);
     } else {
       S.partnershipBalls += 1;
       addLegalBall();
       if (total % 2 === 1) swapBatters();
       S.events.push(`${extraType.toUpperCase()} — ${total}`);
-      S.recentBalls = [...(S.recentBalls||[]), {over:oversText(S.legalBalls), label:`${extraType.toUpperCase()} ${total}`, runs:total, wicket:false}].slice(-24);
+      recordCurrentDelivery(`${extraType.toUpperCase()} ${total}`, total, false);
       await checkOver();
     }
     checkMatchResult();
@@ -966,8 +986,15 @@ button { max-width: 100%; }
     if (type !== "Run Out") bowler.wickets++;
     S.events.push(`WICKET — ${dismissed} (${type})`);
     batter.dismissal = type;
-    S.fallWickets = [...(S.fallWickets||[]), {wicket:S.wickets, player:dismissed, score:S.runs, overs:oversText(S.legalBalls), type}];
-    S.recentBalls = [...(S.recentBalls||[]), {over:oversText(S.legalBalls), label:"W", runs:runs, wicket:true}].slice(-24);
+    const dismissedStats = battingStats(dismissed);
+    const dismissedTeam = S.battingTeam === "A" ? (S.teamA || "TEAM A") : (S.teamB || "TEAM B");
+    S.fallWickets = [...(S.fallWickets||[]), {
+      wicket:S.wickets, player:dismissed, team:dismissedTeam, score:S.runs, overs:oversText(S.legalBalls), type,
+      bowler:S.bowler || "", runs:Number(dismissedStats.runs)||0, balls:Number(dismissedStats.balls)||0,
+      fours:Number(dismissedStats.fours)||0, sixes:Number(dismissedStats.sixes)||0,
+      sr:dismissedStats.balls ? ((Number(dismissedStats.runs||0)/Number(dismissedStats.balls))*100).toFixed(2) : "0.00"
+    }];
+    recordCurrentDelivery("W", runs, true);
     await activateBroadcast(type === "Run Out" ? "RUN OUT" : "WICKET");
     checkMatchResult();
     if (S.innings === 1 && S.started && S.wickets >= 10) {
@@ -1020,6 +1047,8 @@ button { max-width: 100%; }
     const bowler = $("newBowler").value;
     if (!bowler) return;
     S.bowler = bowler;
+    // Selecting a new bowler starts a fresh THIS OVER display.
+    S.currentOverBalls = [];
     bowlingStats(bowler);
     closeModal("bowlerModal");
     await save();
@@ -1115,7 +1144,7 @@ button { max-width: 100%; }
     S.overlay.intro = false; S.overlay.introDismissedAt = Date.now(); S.overlay.scoreVisible = true;
     if (Number(S.innings) !== 2 || Number(S.target) <= 0 || S.status === "completed") { alert("Target display is available during the 2nd innings only."); return; }
     const wasOn=!!S.overlay.showTarget;
-    ["showTournament","showVenue","showMatch","showToss","showResult","showBowler","showTarget"].forEach(k=>S.overlay[k]=false);
+    ["showTournament","showVenue","showMatch","showToss","showResult","showBowler","showFOW","showTarget"].forEach(k=>S.overlay[k]=false);
     S.overlay.playerLower={active:false,slot:"",player:""}; S.overlay.partnership={active:false}; S.customLower={...(S.customLower||{}),active:false};
     S.overlay.showTarget = !wasOn;
     // Publish immediately so the display reacts even when Firebase is slow.
@@ -1131,7 +1160,7 @@ button { max-width: 100%; }
     S.overlay.scoreVisible = true;
     const key = type === "tournament" ? "showTournament" : type === "venue" ? "showVenue" : type === "match" ? "showMatch" : type === "result" ? "showResult" : "showToss";
     const wasOn=!!S.overlay[key];
-    ["showTournament","showVenue","showMatch","showToss","showResult","showBowler","showTarget"].forEach(k=>S.overlay[k]=false);
+    ["showTournament","showVenue","showMatch","showToss","showResult","showBowler","showFOW","showTarget"].forEach(k=>S.overlay[k]=false);
     S.overlay.playerLower={active:false,slot:"",player:""};
     S.overlay.partnership={active:false};
     S.customLower={...(S.customLower||{}),active:false};
@@ -1145,7 +1174,7 @@ button { max-width: 100%; }
     S.overlay.intro = false; S.overlay.introDismissedAt = Date.now(); S.overlay.scoreVisible = true;
     const name = which === "b1" ? (S.striker || "") : (S.nonStriker || "");
     if(!name) { alert(which==="b1" ? "B1/striker not selected." : "B2/non-striker not selected."); return; }
-    ["showTournament","showVenue","showMatch","showToss","showResult","showBowler","showTarget"].forEach(k=>S.overlay[k]=false);
+    ["showTournament","showVenue","showMatch","showToss","showResult","showBowler","showFOW","showTarget"].forEach(k=>S.overlay[k]=false);
     S.overlay.partnership={active:false};
     S.customLower={...(S.customLower||{}),active:false};
     if(S.overlay.playerLower.active && S.overlay.playerLower.slot === which) {
@@ -1160,6 +1189,54 @@ button { max-width: 100%; }
   window.hidePlayerLower = async function() {
     ensureOverlayState();
     S.overlay.playerLower = { active:false, slot:"", player:"" };
+    await save();
+    render();
+  };
+
+  window.toggleBowlerStatus = async function() {
+    ensureOverlayState();
+    S.overlay.intro = false;
+    S.overlay.introDismissedAt = Date.now();
+    S.overlay.scoreVisible = true;
+
+    if (!S.bowler) {
+      alert("No current bowler is selected.");
+      return;
+    }
+
+    const wasOn = !!S.overlay.showBowler;
+
+    // BOWLER is an overlay status banner, not a bowler-selection action.
+    // Turn off every other overlay status first, exactly like B1/B2.
+    ["showTournament","showVenue","showMatch","showToss","showResult","showBowler","showFOW","showTarget"]
+      .forEach(k => S.overlay[k] = false);
+
+    S.overlay.playerLower = {active:false, slot:"", player:""};
+    S.overlay.partnership = {active:false};
+    S.customLower = {...(S.customLower || {}), active:false};
+
+    if (!wasOn) S.overlay.showBowler = true;
+
+    await save();
+    render();
+  };
+
+  window.toggleFOW = async function() {
+    ensureOverlayState();
+    const list = S.fallWickets || [];
+    if (!list.length) { alert("No wicket has been recorded yet."); return; }
+    S.overlay.intro = false;
+    S.overlay.introDismissedAt = Date.now();
+    S.overlay.scoreVisible = true;
+    const wasOn = !!S.overlay.showFOW;
+    ["showTournament","showVenue","showMatch","showToss","showResult","showBowler","showFOW","showTarget"].forEach(k=>S.overlay[k]=false);
+    S.overlay.playerLower={active:false,slot:"",player:""};
+    S.overlay.partnership={active:false};
+    S.customLower={...(S.customLower||{}),active:false};
+    if (!wasOn) {
+      S.overlay.showFOW = true;
+      S.fow = JSON.parse(JSON.stringify(list[list.length-1]));
+    }
     await save();
     render();
   };
@@ -1190,7 +1267,7 @@ button { max-width: 100%; }
     const text = $("customLowerText").value.trim();
     if (!text) { alert("Enter a lower-third message first."); return; }
     ensureOverlayState();
-    ["showTournament","showVenue","showMatch","showToss","showResult","showBowler","showTarget"].forEach(k=>S.overlay[k]=false);
+    ["showTournament","showVenue","showMatch","showToss","showResult","showBowler","showFOW","showTarget"].forEach(k=>S.overlay[k]=false);
     S.overlay.playerLower={active:false,slot:"",player:""};
     S.overlay.partnership={active:false};
     S.customLower = { text, active:true };
@@ -1240,7 +1317,7 @@ button { max-width: 100%; }
       S.overlay.scoreVisible = true;
       S.mode = 'default';
       const wasOn=!!S.overlay.showBowler;
-      ["showTournament","showVenue","showMatch","showToss","showResult","showBowler","showTarget"].forEach(k=>S.overlay[k]=false);
+      ["showTournament","showVenue","showMatch","showToss","showResult","showBowler","showFOW","showTarget"].forEach(k=>S.overlay[k]=false);
       S.overlay.playerLower={active:false,slot:"",player:""}; S.overlay.partnership={active:false}; S.customLower={...(S.customLower||{}),active:false};
       S.overlay.showBowler = !wasOn;
       await save();
