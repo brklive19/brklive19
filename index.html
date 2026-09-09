@@ -2035,6 +2035,9 @@
 
             function saveMatches(matches) {
                 localStorage.setItem('brklive_matches', JSON.stringify(matches));
+                // Keep sport-specific indexes separate so Cricket and Football never mix.
+                localStorage.setItem('brklive_cricket_matches', JSON.stringify(matches.filter(m => m.sport !== 'football')));
+                localStorage.setItem('brklive_football_matches', JSON.stringify(matches.filter(m => m.sport === 'football')));
                 updateStorageCount();
             }
 
@@ -2044,7 +2047,16 @@
 
             function saveTournaments(t) {
                 localStorage.setItem('brklive_tournaments', JSON.stringify(t));
+                // Separate sport indexes for independent Cricket / Football workflows.
+                localStorage.setItem('brklive_cricket_tournaments', JSON.stringify(t.filter(x => x.sport !== 'football')));
+                localStorage.setItem('brklive_football_tournaments', JSON.stringify(t.filter(x => x.sport === 'football')));
                 updateStorageCount();
+            }
+
+            function getSportData(sport) {
+                const tournaments = getTournaments().filter(t => t.sport === sport);
+                const matches = getMatches().filter(m => m.sport === sport);
+                return { tournaments, matches };
             }
 
             function updateStorageCount() {
@@ -2400,7 +2412,8 @@
             // ── MATCH LIST ──
             function renderMatchList(tournamentId) {
                 const container = document.getElementById('matchListContent');
-                const matches = getMatches().filter(m => m.tournamentId === tournamentId);
+                const tournament = getTournaments().find(t => t.id === tournamentId);
+                const matches = getMatches().filter(m => m.tournamentId === tournamentId && (!tournament?.sport || m.sport === tournament.sport));
                 if (!matches.length) {
                     container.innerHTML = `
                         <div class="empty-state" id="emptyMatchState">
@@ -2716,6 +2729,24 @@
             });
 
             function openScorerThemeSelection() {
+                if (currentMatchId) {
+                    const match = getMatches().find(m => m.id === currentMatchId);
+                    if (match?.sport === 'football') {
+                        // Football matches always open the Football Controller and keep the
+                        // exact Tournament/Match data created in Index.
+                        localStorage.setItem('brklive19_activeFootballMatch', JSON.stringify({
+                            matchId: match.id,
+                            tournamentId: match.tournamentId,
+                            homeTeam: match.teamAName || 'HOME',
+                            awayTeam: match.teamBName || 'AWAY',
+                            duration: match.footballDuration || 90,
+                            halfMinutes: match.footballHalfMinutes || 45,
+                            extraTime: match.footballExtraTime !== false
+                        }));
+                        window.location.href = `./football-control.html?matchId=${encodeURIComponent(currentMatchId)}`;
+                        return;
+                    }
+                }
                 const params = currentMatchId ? `?match=${encodeURIComponent(currentMatchId)}` : '';
                 window.location.href = `./themes.html${params}`;
             }
