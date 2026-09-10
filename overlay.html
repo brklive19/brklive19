@@ -3021,6 +3021,385 @@ body{display:flex!important;align-items:flex-end!important;justify-content:cente
  #overlay.targetMode #targetTop.targetFullScreen{width:94vw!important;height:88vh!important}
 }
 </style>
+
+<!-- BRKLIVE19 FINAL RESPONSIVE HD LOWER-THIRD OVERRIDE -->
+<style id="BRKLIVE19-RESPONSIVE-HD-FIT">
+/*
+  Responsive lower-third:
+  - smaller than the previous 190px/154px versions
+  - always spans the available browser-source width
+  - no fixed 1920x1080 dependency
+  - text scales with viewport width while preserving readability
+  - prevents horizontal clipping/scrolling
+*/
+html,body{
+  width:100%!important;
+  height:100%!important;
+  min-width:0!important;
+  min-height:0!important;
+  margin:0!important;
+  padding:0!important;
+  overflow:hidden!important;
+  background:transparent!important;
+  -webkit-font-smoothing:antialiased!important;
+  -moz-osx-font-smoothing:grayscale!important;
+  text-rendering:geometricPrecision!important;
+}
+
+body{
+  display:flex!important;
+  align-items:flex-end!important;
+  justify-content:center!important;
+  box-sizing:border-box!important;
+}
+
+/* Main scoreboard footprint: approximately 6–10% of screen height, never oversized. */
+#overlay.overlay{
+  position:fixed!important;
+  left:0!important;
+  right:0!important;
+  bottom:0!important;
+  top:auto!important;
+  width:100vw!important;
+  max-width:none!important;
+  min-width:0!important;
+  height:clamp(76px,6vw,116px)!important;
+  max-height:116px!important;
+  margin:0!important;
+  padding:0!important;
+  transform:none!important;
+  overflow:visible!important;
+  transform-origin:bottom center!important;
+}
+
+#overlay .frame{
+  width:100%!important;
+  height:clamp(76px,6vw,116px)!important;
+  min-height:76px!important;
+  max-height:116px!important;
+  margin:0!important;
+  border-radius:clamp(8px,0.8vw,14px)!important;
+  overflow:hidden!important;
+}
+
+#overlay .content{
+  left:17%!important;
+  right:17%!important;
+  top:0!important;
+  bottom:0!important;
+  height:100%!important;
+  min-width:0!important;
+  grid-template-columns:34% 29% 37%!important;
+}
+
+#overlay .teamPanel{
+  width:17%!important;
+  min-width:0!important;
+  padding:0 clamp(7px,1vw,18px)!important;
+  overflow:hidden!important;
+}
+
+#overlay .teamPanel .teamName{
+  max-width:100%!important;
+  min-width:0!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+  white-space:nowrap!important;
+  font-size:clamp(11px,1.35vw,25px)!important;
+  line-height:1!important;
+  letter-spacing:0!important;
+}
+
+#overlay .batters,
+#overlay .bowlerPanel{
+  min-width:0!important;
+  overflow:hidden!important;
+  padding:clamp(5px,0.65vw,12px) clamp(7px,0.9vw,16px)!important;
+}
+
+#overlay .batter{
+  min-width:0!important;
+  gap:clamp(2px,.35vw,6px)!important;
+}
+
+#overlay .batterName{
+  min-width:0!important;
+  max-width:100%!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+  white-space:nowrap!important;
+  font-size:clamp(9px,1.05vw,20px)!important;
+  line-height:1.05!important;
+}
+
+#overlay .batterScore{
+  gap:clamp(2px,.25vw,5px)!important;
+}
+#overlay .batterScore b{
+  font-size:clamp(14px,1.55vw,29px)!important;
+  line-height:1!important;
+}
+#overlay .batterScore span{
+  font-size:clamp(8px,.75vw,14px)!important;
+  line-height:1!important;
+}
+#overlay .strike{
+  font-size:clamp(7px,.65vw,12px)!important;
+}
+
+#overlay .scorePanel{
+  min-width:0!important;
+  overflow:hidden!important;
+  padding:clamp(4px,.5vw,9px) clamp(5px,.65vw,12px)!important;
+}
+#overlay .matchTitle{
+  max-width:100%!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+  white-space:nowrap!important;
+  font-size:clamp(8px,.85vw,16px)!important;
+  line-height:1!important;
+  margin-bottom:clamp(2px,.3vw,5px)!important;
+}
+#overlay .scorePill{
+  min-width:70%!important;
+  max-width:100%!important;
+  padding:clamp(3px,.4vw,7px) clamp(7px,.9vw,17px)!important;
+  border-radius:clamp(7px,.7vw,13px)!important;
+  font-size:clamp(20px,2.45vw,46px)!important;
+  line-height:.9!important;
+  letter-spacing:-.5px!important;
+  white-space:nowrap!important;
+}
+#overlay .scoreMeta{
+  gap:clamp(5px,.9vw,17px)!important;
+  margin-top:clamp(2px,.35vw,6px)!important;
+  font-size:clamp(8px,.8vw,15px)!important;
+  white-space:nowrap!important;
+}
+#overlay .crrRrr{
+  gap:clamp(5px,.9vw,17px)!important;
+  margin-top:clamp(2px,.3vw,5px)!important;
+  font-size:clamp(7px,.65vw,12px)!important;
+  white-space:nowrap!important;
+}
+
+#overlay .bowlerPanel{
+  padding-right:clamp(34px,3.4vw,64px)!important;
+}
+#overlay .bowlerTop{
+  min-width:0!important;
+  gap:clamp(4px,.6vw,10px)!important;
+}
+#overlay .bowlerName{
+  min-width:0!important;
+  max-width:100%!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+  white-space:nowrap!important;
+  font-size:clamp(10px,1.1vw,21px)!important;
+  line-height:1!important;
+}
+#overlay .bowlerStats{
+  font-size:clamp(8px,.72vw,14px)!important;
+  line-height:1!important;
+  white-space:nowrap!important;
+}
+#overlay .bowlerStatus{
+  font-size:clamp(7px,.62vw,12px)!important;
+  line-height:1!important;
+  white-space:nowrap!important;
+}
+#overlay .live{
+  font-size:clamp(7px,.62vw,12px)!important;
+}
+
+#overlay .currentOver{
+  min-width:0!important;
+  margin-top:clamp(3px,.45vw,7px)!important;
+  gap:clamp(2px,.35vw,6px)!important;
+  overflow:hidden!important;
+}
+#overlay .currentOverLabel{
+  flex:0 0 auto!important;
+  font-size:clamp(6px,.55vw,10px)!important;
+}
+#overlay .ballList{
+  min-width:0!important;
+  overflow:hidden!important;
+  gap:clamp(2px,.3vw,5px)!important;
+}
+#overlay .ball{
+  width:clamp(16px,1.55vw,30px)!important;
+  height:clamp(16px,1.55vw,30px)!important;
+  flex:0 0 clamp(16px,1.55vw,30px)!important;
+  font-size:clamp(7px,.65vw,12px)!important;
+}
+
+/* Any normal lower-third/banner/animation uses the same compact footprint. */
+#overlay .banner,
+#overlay .custom,
+#overlay .animation,
+.banner{
+  width:100vw!important;
+  max-width:100vw!important;
+  min-width:0!important;
+  height:clamp(76px,6vw,116px)!important;
+  max-height:116px!important;
+  left:0!important;
+  right:0!important;
+  bottom:0!important;
+  top:auto!important;
+  margin:0!important;
+  padding:0 clamp(10px,2vw,30px)!important;
+  border-radius:clamp(7px,.7vw,12px)!important;
+  box-sizing:border-box!important;
+  overflow:hidden!important;
+  font-size:clamp(17px,2.1vw,40px)!important;
+  line-height:1.05!important;
+  white-space:nowrap!important;
+  text-overflow:ellipsis!important;
+}
+
+#overlay .animation{
+  padding:0 clamp(10px,2vw,30px)!important;
+}
+#overlay .animText{
+  max-width:100%!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+  white-space:nowrap!important;
+  font-size:clamp(30px,4vw,76px)!important;
+  line-height:1!important;
+}
+
+/* Compact custom-text mode: allow wrapping without clipping. */
+#overlay .custom{
+  white-space:normal!important;
+  word-break:break-word!important;
+  overflow-wrap:anywhere!important;
+  text-align:center!important;
+  padding:8px 3vw!important;
+  line-height:1.05!important;
+  font-size:clamp(17px,2.5vw,46px)!important;
+}
+
+/* Theme-5 lower third was using a much larger fixed canvas; compact it too. */
+body.theme-theme5 #theme5Lower{
+  width:100vw!important;
+  max-width:100vw!important;
+  min-width:0!important;
+  height:clamp(76px,6vw,116px)!important;
+  max-height:116px!important;
+  left:50%!important;
+  bottom:0!important;
+  margin:0!important;
+  transform:translateX(-50%)!important;
+  overflow:hidden!important;
+}
+body.theme-theme5 #theme5Lower .t5-top{
+  height:clamp(48px,4vw,78px)!important;
+}
+body.theme-theme5 #theme5Lower .t5-side{
+  height:clamp(42px,3.7vw,72px)!important;
+  top:clamp(8px,.8vw,15px)!important;
+  padding:5px 10px!important;
+  font-size:clamp(8px,.8vw,15px)!important;
+  line-height:1.15!important;
+}
+body.theme-theme5 #theme5Lower .t5-innings{
+  font-size:clamp(9px,.9vw,17px)!important;
+  line-height:1!important;
+}
+body.theme-theme5 #theme5Lower .t5-score{
+  font-size:clamp(18px,1.8vw,34px)!important;
+  line-height:1.05!important;
+}
+body.theme-theme5 #theme5Lower .t5-over{
+  font-size:clamp(10px,1vw,19px)!important;
+  line-height:1!important;
+}
+body.theme-theme5 #theme5Lower .t5-bottom{
+  height:clamp(24px,1.9vw,37px)!important;
+  padding-top:6px!important;
+  font-size:clamp(9px,.9vw,17px)!important;
+  line-height:1!important;
+}
+
+/* Keep top-right BRKLIVE19/LIVE visible but never let it consume scoreboard width. */
+#overlay .refBrandLive,
+#overlay .brkLogo{
+  transform:none!important;
+  max-width:18vw!important;
+}
+#overlay .refBrandText{
+  font-size:clamp(10px,1.05vw,20px)!important;
+}
+#overlay .refBrandLiveLine{
+  font-size:clamp(6px,.55vw,11px)!important;
+  gap:3px!important;
+}
+#overlay .refLiveDot{
+  width:clamp(5px,.45vw,8px)!important;
+  height:clamp(5px,.45vw,8px)!important;
+}
+
+/* Very narrow screens: reserve a little more width for names and keep every field visible. */
+@media (max-width:700px){
+  #overlay.overlay{
+    height:78px!important;
+    max-height:78px!important;
+  }
+  #overlay .frame{
+    height:78px!important;
+    min-height:78px!important;
+    max-height:78px!important;
+    border-radius:8px!important;
+  }
+  #overlay .content{
+    left:16%!important;
+    right:16%!important;
+    grid-template-columns:35% 28% 37%!important;
+  }
+  #overlay .teamPanel{
+    width:16%!important;
+    padding:0 5px!important;
+  }
+  #overlay .batters,#overlay .bowlerPanel{
+    padding-left:5px!important;
+    padding-right:5px!important;
+  }
+  #overlay .bowlerPanel{padding-right:30px!important}
+  #overlay .batterName{font-size:clamp(7px,2.2vw,11px)!important}
+  #overlay .batterScore b{font-size:clamp(11px,3.2vw,16px)!important}
+  #overlay .batterScore span{font-size:clamp(6px,1.7vw,9px)!important}
+  #overlay .bowlerName{font-size:clamp(7px,2.2vw,12px)!important}
+  #overlay .bowlerStats{font-size:clamp(6px,1.8vw,9px)!important}
+  #overlay .scorePill{font-size:clamp(17px,5vw,25px)!important;padding:3px 6px!important}
+  #overlay .scoreMeta{font-size:clamp(6px,1.8vw,9px)!important;gap:4px!important}
+  #overlay .crrRrr{font-size:clamp(5px,1.5vw,8px)!important;gap:4px!important}
+  #overlay .ball{width:15px!important;height:15px!important;flex-basis:15px!important;font-size:6px!important}
+  #overlay .banner,#overlay .custom,#overlay .animation,.banner{
+    height:78px!important;
+    max-height:78px!important;
+    font-size:clamp(14px,4.5vw,24px)!important;
+  }
+}
+
+/* Tiny browser-source windows: shrink typography, never create a horizontal scrollbar. */
+@media (max-width:420px){
+  #overlay .content{left:14%!important;right:14%!important;grid-template-columns:37% 26% 37%!important}
+  #overlay .teamPanel{width:14%!important}
+  #overlay .teamPanel .teamName{font-size:8px!important}
+  #overlay .bowlerPanel{padding-right:25px!important}
+  #overlay .bowlerName{font-size:7px!important}
+  #overlay .bowlerStats{font-size:5.5px!important}
+  #overlay .batterName{font-size:6.5px!important}
+  #overlay .scorePill{font-size:16px!important}
+  #overlay .ball{width:13px!important;height:13px!important;flex-basis:13px!important;font-size:5px!important}
+}
+</style>
+
 </body>
 
 <style id="brklive19-live-summary-fix-v1">
