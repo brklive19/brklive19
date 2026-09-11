@@ -707,6 +707,62 @@ body{display:flex;align-items:flex-end;justify-content:center;padding:0;box-sizi
 .theme-stadium{--cyan:#00f0ff;--cyan2:#a4ffff;--navy:#062d46;--navy2:#0c5272;--yellow:#ffe05a}
 .theme-aurora{--cyan:#65ffdf;--cyan2:#8e7dff;--navy:#102d3acc;--navy2:#3d1e65cc;--yellow:#f2ff75}
 .theme-metallic{--cyan:#d8e2ea;--cyan2:#ffffff;--navy:#26313dcc;--navy2:#4c5b68cc;--yellow:#ffc94f}
+/* THEME 2 — T20 WORLD CUP 2026 INSPIRED (original BRKLIVE19 interpretation) */
+.theme-t20world{--cyan:#ff7a18;--cyan2:#7be7ff;--navy:#061746;--navy2:#0758c9;--yellow:#ffb23e;--pink:#ff4b9b}
+.theme-t20world .frame{
+  height:148px; overflow:visible; border:0; border-radius:0;
+  background:linear-gradient(115deg,#061746 0%,#0a2c78 42%,#0758c9 70%,#061746 100%);
+  box-shadow:0 16px 45px #000c, inset 0 1px #ffffff22;
+  clip-path:polygon(0 8%,3% 0,97% 0,100% 8%,98% 92%,94% 100%,6% 100%,2% 92%);
+  animation:t20Pulse 6s ease-in-out infinite;
+}
+.theme-t20world .frame:before{content:"";position:absolute;inset:0;background:
+  repeating-linear-gradient(135deg,transparent 0 22px,#ffffff08 23px 25px),
+  radial-gradient(circle at 20% 50%,#ff7a1828,transparent 30%),
+  radial-gradient(circle at 80% 50%,#7be7ff18,transparent 32%);pointer-events:none}
+.theme-t20world .frame:after{content:"";position:absolute;inset:-2px;pointer-events:none;background:linear-gradient(115deg,transparent 10%,#fff0 35%,#ffffff35 48%,#fff0 61%,transparent 90%);background-size:250% 100%;animation:t20Sheen 3.8s linear infinite}
+.theme-t20world .teamPanel{width:19.5%;background:linear-gradient(120deg,#ff7a18,#d9430b 78%);clip-path:polygon(0 0,92% 0,100% 50%,92% 100%,0 100%);padding:0 22px;}
+.theme-t20world .teamPanel.right{background:linear-gradient(260deg,#ff7a18,#d9430b 78%);clip-path:polygon(8% 0,100% 0,100% 100%,8% 100%,0 50%);padding:0 22px;}
+.theme-t20world .teamPanel .teamName{font-size:clamp(17px,2vw,36px);text-shadow:0 2px 5px #0008;letter-spacing:.02em}
+.theme-t20world .content{left:18.5%;right:18.5%;grid-template-columns:31% 30% 39%;}
+.theme-t20world .batters{background:linear-gradient(90deg,#08215a,#0b3f96);border-left:2px solid #7be7ff55}
+.theme-t20world .batter.striker{background:linear-gradient(90deg,#ff7a1825,#ffffff08);border-left:3px solid #ff7a18}
+.theme-t20world .strike{color:#ffb23e}
+.theme-t20world .batterScore b{color:#ffb23e}
+.theme-t20world .scorePanel{background:linear-gradient(180deg,#f8fbff,#dbeeff);color:#061746;border-left:0;border-right:0;position:relative;overflow:hidden}
+.theme-t20world .scorePanel:before{width:8px;background:linear-gradient(180deg,#ff7a18,#ffb23e,#7be7ff)}
+.theme-t20world .scorePanel:after{width:8px;background:linear-gradient(180deg,#7be7ff,#0758c9,#ff7a18)}
+.theme-t20world .scorePill{background:linear-gradient(105deg,#0758c9,#0a91df 48%,#ff7a18);border-radius:4px;transform:skewX(-8deg);box-shadow:0 9px 20px #0758c955,inset 0 1px #ffffffaa;animation:t20ScoreGlow 2.8s ease-in-out infinite}
+.theme-t20world .scorePill{padding-left:28px;padding-right:28px}
+.theme-t20world .scoreOverDetail,.theme-t20world .scoreCRR,.theme-t20world .scoreExtraDetail{font-weight:1000}
+.theme-t20world .bowlerPanel{background:linear-gradient(90deg,#0b3f96,#061746);border-right:2px solid #ff7a1855}
+.theme-t20world .bowlerPanel:after{content:"";position:absolute;right:0;top:0;bottom:0;width:8px;background:linear-gradient(180deg,#7be7ff,#0758c9,#ff7a18)}
+.theme-t20world .ball{border-radius:5px;transform:skewX(-8deg);background:#123c85;border:1px solid #7be7ff44}
+.theme-t20world .ball.four{background:#0758c9}.theme-t20world .ball.six{background:#ff7a18}.theme-t20world .ball.wicket{background:#d9234f}.theme-t20world .ball.extra{background:#ffb23e;color:#111}
+.theme-t20world .banner,.theme-t20world .custom,.theme-t20world .target{background:linear-gradient(110deg,#061746,#0758c9 58%,#ff7a18);border:2px solid #7be7ff;box-shadow:0 16px 38px #000b,0 0 22px #0758c955;clip-path:polygon(0 0,98% 0,100% 50%,98% 100%,0 100%,2% 50%);animation:t20BannerIn .55s cubic-bezier(.2,.85,.2,1) both}
+.theme-t20world .banner:before,.theme-t20world .custom:before,.theme-t20world .target:before{content:"";position:absolute;left:0;top:0;bottom:0;width:12px;background:#ff7a18;box-shadow:8px 0 20px #ff7a1888;pointer-events:none}
+.theme-t20world .animation{background:linear-gradient(110deg,#061746,#0758c9 55%,#ff7a18);border-color:#7be7ff;clip-path:polygon(0 0,97% 0,100% 50%,97% 100%,0 100%,3% 50%)}
+.theme-t20world .animation .animText{animation:t20Impact 1.9s ease forwards;text-shadow:0 0 12px #fff,0 0 28px #7be7ff,0 0 55px #ff7a18}
+.theme-t20world .summary-overlay{background:radial-gradient(circle at 50% -10%,#0b4d9b 0,#061746 42%,#020817 100%);padding:18px}
+.theme-t20world .summary-head{border:2px solid #7be7ff;background:#061746;box-shadow:0 10px 30px #0009,0 0 30px #0758c955;clip-path:polygon(0 0,99% 0,100% 50%,99% 100%,0 100%,1% 50%);animation:t20SummaryIn .7s cubic-bezier(.18,.86,.2,1) both}
+.theme-t20world .summary-head .side.a{background:linear-gradient(110deg,#ff7a18,#d9430b);clip-path:polygon(0 0,96% 0,100% 50%,96% 100%,0 100%)}
+.theme-t20world .summary-head .side.b{background:linear-gradient(250deg,#ff7a18,#d9430b);clip-path:polygon(4% 0,100% 0,100% 100%,4% 100%,0 50%)}
+.theme-t20world .summary-head .center{background:linear-gradient(180deg,#08245d,#061746);position:relative}
+.theme-t20world .summary-head .center:after{content:"";position:absolute;left:15%;right:15%;bottom:7px;height:3px;background:linear-gradient(90deg,#ff7a18,#7be7ff,#ff7a18);background-size:200% 100%;animation:t20Flow 2.2s linear infinite}
+.theme-t20world .summary-team{border:2px solid #7be7ff;box-shadow:0 10px 24px #0007;background:#eef7ff;animation:t20SummaryCard .55s ease both}
+.theme-t20world .summary-team-head{background:linear-gradient(90deg,#0758c9,#0a2c78,#ff7a18);}
+.theme-t20world .summary-box .box-head{background:linear-gradient(90deg,#061746,#0758c9);border-bottom:2px solid #ff7a18}
+.theme-t20world .summary-status{background:linear-gradient(90deg,#061746,#0758c9);border-color:#7be7ff;animation:t20SummaryCard .65s ease both}
+.theme-t20world .summary-result{background:linear-gradient(90deg,#0758c9,#0a9bd8,#ff7a18);border-color:#7be7ff;animation:t20SummaryCard .8s ease both}
+@keyframes t20Pulse{0%,100%{filter:saturate(1)}50%{filter:saturate(1.15) brightness(1.05)}}
+@keyframes t20Sheen{0%{background-position:-140% 0}100%{background-position:140% 0}}
+@keyframes t20ScoreGlow{0%,100%{box-shadow:0 9px 20px #0758c955,inset 0 1px #ffffffaa}50%{box-shadow:0 10px 28px #ff7a1877,inset 0 1px #ffffffdd}}
+@keyframes t20BannerIn{0%{opacity:0;transform:translateY(35px) scale(.96)}100%{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes t20Impact{0%{opacity:0;transform:scale(.45) skewX(-8deg)}12%{opacity:1;transform:scale(1.08) skewX(-8deg)}65%{opacity:1;transform:scale(1) skewX(-8deg)}100%{opacity:0;transform:scale(1.02) skewX(-8deg)}}
+@keyframes t20SummaryIn{0%{opacity:0;transform:translateY(-40px) scale(.97)}100%{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes t20SummaryCard{0%{opacity:0;transform:translateY(24px)}100%{opacity:1;transform:translateY(0)}}
+@keyframes t20Flow{0%{background-position:0 0}100%{background-position:200% 0}}
+
 .theme-redblack{--cyan:#ff365f;--cyan2:#ff9bb0;--navy:#180914;--navy2:#3a0c20;--yellow:#ffd44f}
 .theme-ipl{--cyan:#19a8ff;--cyan2:#7fd8ff;--navy:#092b87;--navy2:#1558c8;--yellow:#ffc400}
 .theme-t20world{--cyan:#38c8ff;--cyan2:#a6eeff;--navy:#061746;--navy2:#0e62c9;--yellow:#eaf7ff}
@@ -1029,6 +1085,28 @@ body.theme-theme5{background:#000}
 #theme5Scorecard .t5-right-metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:12px}
 #theme5Scorecard .t5-right-metrics span{background:#111820;color:#8deaf5;border:1px solid #34515a;padding:6px 8px;text-align:center;font-size:clamp(9px,1vw,15px);font-weight:900}
 #theme5Scorecard .t5-right-metrics b{display:block;font-size:clamp(14px,1.5vw,24px);color:#fff}
+
+/* FINAL THEME 2 OVERRIDES — T20 WORLD CUP 2026 RHYTHM / ENERGY INSPIRED */
+.theme-t20world{--cyan:#ff4fd8!important;--cyan2:#7fe8ff!important;--navy:#0b0750!important;--navy2:#25106f!important;--yellow:#ff9f2d!important;--pink:#ff2bbd!important}
+.theme-t20world .frame{height:148px!important;overflow:visible!important;border:2px solid #6c5cff!important;border-radius:2px!important;background:linear-gradient(112deg,#090541 0%,#17106c 34%,#260f73 60%,#090541 100%)!important;box-shadow:0 18px 48px #000d,inset 0 1px #ffffff20,0 0 0 1px #ff2bbd33!important;clip-path:polygon(0 12%,4% 0,96% 0,100% 12%,98% 88%,94% 100%,6% 100%,2% 88%)!important;animation:t20RhythmPulse 5.5s ease-in-out infinite!important}
+.theme-t20world .frame:before{content:""!important;position:absolute!important;inset:0!important;pointer-events:none!important;background:linear-gradient(132deg,transparent 0 17%,#ff2bbd 17.2% 18.5%,transparent 18.7% 33%,#ff9f2d 33.2% 34.3%,transparent 34.5% 100%),linear-gradient(148deg,transparent 0 61%,#00d9ff 61.2% 62.2%,transparent 62.4% 77%,#ff2bbd 77.2% 78.2%,transparent 78.4%),radial-gradient(circle at 20% 50%,#ff2bbd24,transparent 28%),radial-gradient(circle at 78% 50%,#ff9f2d22,transparent 30%)!important;opacity:.9!important}
+.theme-t20world .frame:after{content:""!important;position:absolute!important;inset:-8px!important;pointer-events:none!important;background:linear-gradient(112deg,transparent 5%,#fff0 38%,#ffffff3b 48%,#fff0 58%,transparent 95%)!important;background-size:240% 100%!important;animation:t20EnergySweep 3.2s linear infinite!important}
+.theme-t20world .teamPanel{width:19.5%!important;background:linear-gradient(135deg,#ff2bbd 0%,#8e168c 48%,#ff8b1f 100%)!important;clip-path:polygon(0 0,88% 0,100% 50%,88% 100%,0 100%)!important;padding:0 22px!important;position:relative!important}
+.theme-t20world .teamPanel.right{background:linear-gradient(225deg,#ff8b1f 0%,#8e168c 48%,#ff2bbd 100%)!important;clip-path:polygon(12% 0,100% 0,100% 100%,12% 100%,0 50%)!important}
+.theme-t20world .teamPanel:before{content:""!important;position:absolute!important;top:8%!important;bottom:8%!important;width:4px!important;background:#7fe8ff!important;box-shadow:0 0 14px #7fe8ff!important;opacity:.9!important}
+.theme-t20world .teamPanel.left:before{right:13%!important}.theme-t20world .teamPanel.right:before{left:13%!important}
+.theme-t20world .scorePanel{background:linear-gradient(180deg,#fbf8ff,#e9e3ff)!important;color:#0b0750!important}
+.theme-t20world .scorePanel:before{width:7px!important;background:linear-gradient(180deg,#ff2bbd,#ff9f2d,#7fe8ff)!important}.theme-t20world .scorePanel:after{width:7px!important;background:linear-gradient(180deg,#7fe8ff,#6c5cff,#ff2bbd)!important}
+.theme-t20world .scorePill{background:linear-gradient(105deg,#24107b,#6c2bff 44%,#ff2bbd 72%,#ff9f2d)!important;border-radius:2px!important;transform:skewX(-8deg)!important;box-shadow:0 9px 22px #5c2cff66,inset 0 1px #ffffffaa!important;animation:t20ScorePulse 2.4s ease-in-out infinite!important}
+.theme-t20world .batters{background:linear-gradient(90deg,#10095b,#211078)!important;border-left:2px solid #ff2bbd66!important}.theme-t20world .batter.striker{background:linear-gradient(90deg,#ff2bbd1e,#ffffff06)!important;border-left:3px solid #ff9f2d!important}.theme-t20world .strike,.theme-t20world .batterScore b{color:#ff9f2d!important}
+.theme-t20world .bowlerPanel{background:linear-gradient(90deg,#211078,#10095b)!important;border-right:2px solid #ff9f2d66!important}.theme-t20world .bowlerPanel:after{background:linear-gradient(180deg,#7fe8ff,#6c5cff,#ff9f2d)!important}
+.theme-t20world .ball{border-radius:3px!important;transform:skewX(-8deg)!important;background:#2b1b83!important;border:1px solid #7fe8ff55!important}.theme-t20world .ball.four{background:#6c2bff!important}.theme-t20world .ball.six{background:#ff2bbd!important}.theme-t20world .ball.wicket{background:#e21f57!important}.theme-t20world .ball.extra{background:#ff9f2d!important;color:#111!important}
+.theme-t20world .banner,.theme-t20world .custom,.theme-t20world .target{background:linear-gradient(110deg,#0b0750 0%,#25106f 50%,#8e168c 78%,#ff8b1f 100%)!important;border:2px solid #7fe8ff!important;box-shadow:0 16px 38px #000c,0 0 26px #ff2bbd44!important;clip-path:polygon(0 0,97% 0,100% 50%,97% 100%,0 100%,3% 50%)!important;animation:t20BannerReveal .65s cubic-bezier(.16,.85,.2,1) both!important;overflow:hidden!important}
+.theme-t20world .banner:before,.theme-t20world .custom:before,.theme-t20world .target:before{content:""!important;position:absolute!important;left:-5%!important;top:0!important;bottom:0!important;width:22%!important;background:linear-gradient(135deg,transparent 0 35%,#ff2bbd 36% 52%,#ff9f2d 53% 68%,transparent 69%)!important;opacity:.95!important;animation:t20RibbonMove 2.6s ease-in-out infinite!important}
+.theme-t20world .animation{background:linear-gradient(110deg,#0b0750,#25106f 45%,#ff2bbd 72%,#ff9f2d)!important;border-color:#7fe8ff!important;clip-path:polygon(0 0,97% 0,100% 50%,97% 100%,0 100%,3% 50%)!important}.theme-t20world .animation .animText{animation:t20Impact 1.9s ease forwards!important;text-shadow:0 0 12px #fff,0 0 26px #ff2bbd,0 0 48px #ff9f2d!important}
+.theme-t20world .summary-overlay{background:radial-gradient(circle at 50% -10%,#35168a 0,#0b0750 44%,#03021d 100%)!important}.theme-t20world .summary-head{border:2px solid #7fe8ff!important;background:#0b0750!important;box-shadow:0 10px 30px #000a,0 0 30px #6c2bff55!important;animation:t20SummaryIn .7s cubic-bezier(.18,.86,.2,1) both!important}.theme-t20world .summary-head .side.a{background:linear-gradient(120deg,#ff2bbd,#8e168c,#ff8b1f)!important}.theme-t20world .summary-head .side.b{background:linear-gradient(240deg,#ff8b1f,#8e168c,#ff2bbd)!important}.theme-t20world .summary-head .center{background:linear-gradient(180deg,#211078,#0b0750)!important}.theme-t20world .summary-team-head{background:linear-gradient(90deg,#25106f,#6c2bff,#ff2bbd,#ff9f2d)!important}.theme-t20world .summary-box .box-head{background:linear-gradient(90deg,#0b0750,#35168a)!important;border-bottom:2px solid #ff9f2d!important}.theme-t20world .summary-status{background:linear-gradient(90deg,#0b0750,#35168a,#8e168c)!important;border-color:#7fe8ff!important}.theme-t20world .summary-result{background:linear-gradient(90deg,#6c2bff,#ff2bbd,#ff9f2d)!important;border-color:#7fe8ff!important}
+@keyframes t20RhythmPulse{0%,100%{filter:saturate(1) brightness(1)}50%{filter:saturate(1.16) brightness(1.06)}}@keyframes t20EnergySweep{0%{background-position:-140% 0}100%{background-position:140% 0}}@keyframes t20ScorePulse{0%,100%{box-shadow:0 9px 22px #5c2cff55,inset 0 1px #ffffffaa}50%{box-shadow:0 10px 30px #ff2bbd88,inset 0 1px #ffffffdd}}@keyframes t20BannerReveal{0%{opacity:0;transform:translateY(34px) skewX(-4deg) scale(.96)}100%{opacity:1;transform:translateY(0) skewX(0) scale(1)}}@keyframes t20RibbonMove{0%,100%{transform:translateX(-10%);opacity:.75}50%{transform:translateX(55%);opacity:1}}
+
 </style>
 <script>
 (function(){
@@ -1720,6 +1798,299 @@ body{padding:0 0 .5vh !important}
 }
 </style>
 
+
+<style id="BRKLIVE19-STRUCTURAL-DESIGN-THEMES">
+/* Real structural broadcast themes 17-24. Text remains live HTML; live data remains Firebase driven. */
+.theme-design17 #overlay.overlay{width:min(94vw,1740px)!important;height:118px!important;bottom:20px!important}.theme-design17 #overlay .frame{background:#07152f!important;border:0!important;clip-path:polygon(1.5% 0,98.5% 0,100% 50%,98.5% 100%,1.5% 100%,0 50%)!important;box-shadow:0 10px 30px #0009!important}.theme-design17 #overlay .content{grid-template-columns:29% 28% 43%!important}.theme-design17 #overlay .batters{background:linear-gradient(135deg,#0a3478,#09204d)!important;padding-left:70px!important;border-right:3px solid #18a8ff!important}.theme-design17 #overlay .scorePanel{background:linear-gradient(180deg,#fff,#e9eef7)!important;clip-path:polygon(5% 0,95% 0,100% 50%,95% 100%,5% 100%,0 50%)!important}.theme-design17 #overlay .scorePill{background:linear-gradient(90deg,#0d55bd,#18a8ff)!important;border-radius:8px!important;box-shadow:none!important}.theme-design17 #overlay .bowlerPanel{background:linear-gradient(135deg,#102a60,#06152f)!important;padding-right:70px!important;border-left:3px solid #18a8ff!important}.theme-design17 #overlay .teamPanel{display:flex!important;width:16%!important;background:#0c3e93!important;clip-path:polygon(0 0,100% 0,82% 50%,100% 100%,0 100%)!important}.theme-design17 #overlay .teamPanel.right{background:#16346d!important;clip-path:polygon(0 0,100% 0,100% 100%,0 100%,18% 50%)!important}.theme-design17 #overlay .teamPanel .teamName{font-size:clamp(12px,1.3vw,25px)!important;white-space:normal!important;line-height:1.05!important;text-align:center!important}
+.theme-design18 #overlay.overlay{width:min(92vw,1650px)!important;height:126px!important;bottom:18px!important}.theme-design18 #overlay .frame{background:#0c0d11!important;border:2px solid #e33!important;clip-path:polygon(0 0,97% 0,100% 22%,100% 100%,3% 100%,0 78%)!important}.theme-design18 #overlay .content{grid-template-columns:36% 24% 40%!important}.theme-design18 #overlay .batters{background:#121418!important;padding:10px 18px 10px 86px!important;border-right:4px solid #e33!important}.theme-design18 #overlay .batter.striker{background:linear-gradient(90deg,#e33a2f33,transparent)!important}.theme-design18 #overlay .scorePanel{background:linear-gradient(180deg,#191b21,#08090c)!important;color:#fff!important}.theme-design18 #overlay .scorePill{background:#e12f27!important;border-radius:4px!important;box-shadow:0 5px 0 #8d1713!important}.theme-design18 #overlay .scoreMeta,.theme-design18 #overlay .scoreExtraDetail{color:#fff!important}.theme-design18 #overlay .bowlerPanel{background:#101216!important;padding:10px 84px 10px 18px!important;border-left:4px solid #e33!important}.theme-design18 #overlay .ball{border-radius:5px!important;background:#252a31!important;color:#fff!important;border-color:#68717d!important}.theme-design18 #overlay .ball.four,.theme-design18 #overlay .ball.six{background:#e12f27!important;color:#fff!important}.theme-design18 #overlay .teamPanel{display:flex!important;width:14%!important;background:#e12f27!important;clip-path:polygon(0 0,100% 0,84% 100%,0 100%)!important}.theme-design18 #overlay .teamPanel.right{background:#17191e!important;clip-path:polygon(16% 0,100% 0,100% 100%,0 100%)!important}.theme-design18 #overlay .teamPanel .teamName{font-size:clamp(11px,1.1vw,22px)!important;white-space:normal!important;line-height:1.05!important;text-align:center!important}
+.theme-design19 #overlay.overlay{width:min(95vw,1760px)!important;height:110px!important;bottom:22px!important}.theme-design19 #overlay .frame{background:linear-gradient(135deg,#0c1b35dd,#132f55cc)!important;border:1px solid #8feeff77!important;border-radius:28px!important;backdrop-filter:blur(14px)!important;box-shadow:0 12px 40px #000a,inset 0 1px #ffffff44!important}.theme-design19 #overlay .content{grid-template-columns:34% 27% 39%!important}.theme-design19 #overlay .batters,.theme-design19 #overlay .bowlerPanel{background:transparent!important;border:0!important}.theme-design19 #overlay .batters{padding-left:80px!important}.theme-design19 #overlay .bowlerPanel{padding-right:80px!important}.theme-design19 #overlay .scorePanel{background:#ffffff14!important;color:#fff!important;border-left:1px solid #ffffff22!important;border-right:1px solid #ffffff22!important;backdrop-filter:blur(8px)!important}.theme-design19 #overlay .scorePill{background:linear-gradient(90deg,#0ba9ff,#00e8d0)!important;border-radius:999px!important;box-shadow:0 0 20px #00dfff55!important}.theme-design19 #overlay .teamPanel{display:flex!important;width:12%!important;background:#0e75b8aa!important;clip-path:none!important;backdrop-filter:blur(10px)!important}.theme-design19 #overlay .teamPanel.right{background:#6e25a0aa!important;justify-content:center!important;text-align:center!important}.theme-design19 #overlay .teamPanel .teamName{font-size:clamp(10px,1vw,18px)!important;white-space:normal!important;line-height:1.05!important;text-align:center!important}
+.theme-design20 #overlay.overlay{width:min(94vw,1740px)!important;height:120px!important;bottom:18px!important}.theme-design20 #overlay .frame{background:#241503!important;border:2px solid #ffd24a!important;clip-path:polygon(3% 0,97% 0,100% 50%,97% 100%,3% 100%,0 50%)!important;box-shadow:0 0 25px #ffd24a33!important}.theme-design20 #overlay .content{grid-template-columns:35% 25% 40%!important}.theme-design20 #overlay .batters,.theme-design20 #overlay .bowlerPanel{background:linear-gradient(180deg,#3d2607,#1f1202)!important;border-color:#8d6215!important}.theme-design20 #overlay .batters{padding-left:85px!important}.theme-design20 #overlay .bowlerPanel{padding-right:85px!important}.theme-design20 #overlay .scorePanel{background:linear-gradient(180deg,#fff9df,#e9d8a3)!important;color:#2a1a04!important}.theme-design20 #overlay .scorePill{background:linear-gradient(90deg,#6b4104,#dca52b,#6b4104)!important;border:2px solid #ffe89a!important;border-radius:12px!important}.theme-design20 #overlay .teamPanel{display:flex!important;width:14%!important;background:linear-gradient(135deg,#5e3a06,#b98218)!important;clip-path:polygon(0 0,100% 0,82% 50%,100% 100%,0 100%)!important}.theme-design20 #overlay .teamPanel.right{background:linear-gradient(135deg,#9d6b0d,#4c2e04)!important;clip-path:polygon(0 0,100% 0,100% 100%,0 100%,18% 50%)!important}.theme-design20 #overlay .teamPanel .teamName{font-size:clamp(10px,1vw,19px)!important;white-space:normal!important;line-height:1.05!important;text-align:center!important}
+.theme-design21 #overlay.overlay{width:min(96vw,1600px)!important;height:82px!important;bottom:14px!important}.theme-design21 #overlay .frame{background:#f6f7f9!important;border:1px solid #aeb5bf!important;border-radius:8px!important;box-shadow:0 5px 20px #0005!important}.theme-design21 #overlay .content{grid-template-columns:38% 24% 38%!important}.theme-design21 #overlay .batters,.theme-design21 #overlay .bowlerPanel{background:#fff!important;color:#17213d!important;border-color:#d6dbe2!important}.theme-design21 #overlay .batters{padding-left:15px!important}.theme-design21 #overlay .bowlerPanel{padding-right:15px!important}.theme-design21 #overlay .batterName,.theme-design21 #overlay .bowlerName{color:#17213d!important}.theme-design21 #overlay .batterScore b,.theme-design21 #overlay .bowlerStats{color:#17213d!important}.theme-design21 #overlay .scorePanel{background:#173e93!important;color:#fff!important}.theme-design21 #overlay .scorePill{background:transparent!important;box-shadow:none!important;border-radius:0!important;font-size:clamp(23px,1.9vw,36px)!important}.theme-design21 #overlay .scoreMeta,.theme-design21 #overlay .scoreExtraDetail{color:#fff!important}.theme-design21 #overlay .teamPanel{display:none!important}.theme-design21 #overlay .ball{width:20px!important;height:20px!important;flex-basis:20px!important;font-size:9px!important}
+.theme-design22 #overlay.overlay{width:min(95vw,1720px)!important;height:132px!important;bottom:18px!important}.theme-design22 #overlay .frame{background:linear-gradient(180deg,#101d45,#080f24)!important;border:0!important;border-radius:16px!important;box-shadow:0 12px 35px #000b!important}.theme-design22 #overlay .content{grid-template-columns:31% 29% 40%!important}.theme-design22 #overlay .batters{background:#0d214e!important;padding-left:96px!important;border-right:1px solid #ff5b3d66!important}.theme-design22 #overlay .scorePanel{background:linear-gradient(180deg,#172e65,#0b1838)!important;color:#fff!important;border-top:5px solid #ff5b3d!important;border-bottom:5px solid #ff5b3d!important}.theme-design22 #overlay .scorePill{background:#ff5b3d!important;border-radius:8px!important;box-shadow:0 5px 0 #9c271b!important}.theme-design22 #overlay .bowlerPanel{background:#0a1633!important;padding-right:96px!important;border-left:1px solid #ff5b3d66!important}.theme-design22 #overlay .teamPanel{display:flex!important;width:16%!important;background:#123b88!important;clip-path:polygon(0 0,92% 0,100% 50%,92% 100%,0 100%)!important}.theme-design22 #overlay .teamPanel.right{background:#b92d23!important;clip-path:polygon(8% 0,100% 0,100% 100%,8% 100%,0 50%)!important}.theme-design22 #overlay .teamPanel .teamName{font-size:clamp(11px,1.1vw,22px)!important;white-space:normal!important;line-height:1.05!important;text-align:center!important}
+.theme-design23 #overlay.overlay{width:min(94vw,1760px)!important;height:116px!important;bottom:20px!important}.theme-design23 #overlay .frame{background:#050713!important;border:1px solid #00eaff!important;box-shadow:0 0 25px #00eaff33!important;clip-path:polygon(2% 0,98% 0,100% 20%,100% 80%,98% 100%,2% 100%,0 80%,0 20%)!important}.theme-design23 #overlay .content{grid-template-columns:33% 27% 40%!important}.theme-design23 #overlay .batters{background:linear-gradient(90deg,#091b3d,#11102e)!important;padding-left:78px!important;border-right:2px solid #00eaff!important}.theme-design23 #overlay .scorePanel{background:#0b0f20!important;color:#fff!important;border-left:2px solid #ff32d4!important;border-right:2px solid #ff32d4!important}.theme-design23 #overlay .scorePill{background:linear-gradient(90deg,#00eaff,#ff32d4)!important;border-radius:4px!important;box-shadow:0 0 18px #00eaff44!important}.theme-design23 #overlay .bowlerPanel{background:linear-gradient(90deg,#11102e,#091b3d)!important;padding-right:78px!important;border-left:2px solid #ff32d4!important}.theme-design23 #overlay .teamPanel{display:flex!important;width:13%!important;background:#071c45!important;clip-path:polygon(0 0,100% 0,78% 50%,100% 100%,0 100%)!important}.theme-design23 #overlay .teamPanel.right{background:#301047!important;clip-path:polygon(0 0,100% 0,100% 100%,0 100%,22% 50%)!important}.theme-design23 #overlay .teamPanel .teamName{font-size:clamp(10px,1vw,20px)!important;white-space:normal!important;line-height:1.05!important;text-align:center!important}
+.theme-design24 #overlay.overlay{width:min(93vw,1680px)!important;height:124px!important;bottom:18px!important}.theme-design24 #overlay .frame{background:#111827!important;border:1px solid #4a5568!important;border-radius:4px!important;box-shadow:0 14px 35px #000b!important}.theme-design24 #overlay .content{grid-template-columns:35% 26% 39%!important}.theme-design24 #overlay .batters{background:#151d2c!important;padding-left:84px!important;border-right:1px solid #2f3b50!important}.theme-design24 #overlay .scorePanel{background:#0b1220!important;color:#fff!important;border-top:4px solid #ffcf4a!important;border-bottom:4px solid #ffcf4a!important}.theme-design24 #overlay .scorePill{background:#ffcf4a!important;color:#101722!important;border-radius:2px!important;box-shadow:none!important}.theme-design24 #overlay .bowlerPanel{background:#151d2c!important;padding-right:84px!important;border-left:1px solid #2f3b50!important}.theme-design24 #overlay .teamPanel{display:flex!important;width:13%!important;background:#24324a!important;clip-path:none!important}.theme-design24 #overlay .teamPanel.right{background:#1d2739!important;clip-path:none!important;justify-content:center!important;text-align:center!important}.theme-design24 #overlay .teamPanel .teamName{font-size:clamp(10px,1vw,19px)!important;white-space:normal!important;line-height:1.05!important;text-align:center!important}
+@media(max-width:900px){.theme-design17 #overlay.overlay,.theme-design18 #overlay.overlay,.theme-design19 #overlay.overlay,.theme-design20 #overlay.overlay,.theme-design22 #overlay.overlay,.theme-design23 #overlay.overlay,.theme-design24 #overlay.overlay{width:96vw!important;height:76px!important;bottom:8px!important}.theme-design21 #overlay.overlay{width:97vw!important;height:58px!important;bottom:7px!important}.theme-design17 #overlay .teamPanel,.theme-design18 #overlay .teamPanel,.theme-design20 #overlay .teamPanel,.theme-design22 #overlay .teamPanel,.theme-design23 #overlay .teamPanel,.theme-design24 #overlay .teamPanel{width:11%!important}.theme-design17 #overlay .batters,.theme-design18 #overlay .batters,.theme-design20 #overlay .batters,.theme-design22 #overlay .batters,.theme-design23 #overlay .batters,.theme-design24 #overlay .batters{padding-left:10px!important}.theme-design17 #overlay .bowlerPanel,.theme-design18 #overlay .bowlerPanel,.theme-design20 #overlay .bowlerPanel,.theme-design22 #overlay .bowlerPanel,.theme-design23 #overlay .bowlerPanel,.theme-design24 #overlay .bowlerPanel{padding-right:10px!important}.theme-design17 #overlay .batterName,.theme-design18 #overlay .batterName,.theme-design19 #overlay .batterName,.theme-design20 #overlay .batterName,.theme-design22 #overlay .batterName,.theme-design23 #overlay .batterName,.theme-design24 #overlay .batterName{font-size:7px!important}.theme-design17 #overlay .batterScore b,.theme-design18 #overlay .batterScore b,.theme-design19 #overlay .batterScore b,.theme-design20 #overlay .batterScore b,.theme-design22 #overlay .batterScore b,.theme-design23 #overlay .batterScore b,.theme-design24 #overlay .batterScore b{font-size:11px!important}.theme-design17 #overlay .bowlerName,.theme-design18 #overlay .bowlerName,.theme-design19 #overlay .bowlerName,.theme-design20 #overlay .bowlerName,.theme-design22 #overlay .bowlerName,.theme-design23 #overlay .bowlerName,.theme-design24 #overlay .bowlerName{font-size:8px!important}.theme-design17 #overlay .scorePill,.theme-design18 #overlay .scorePill,.theme-design19 #overlay .scorePill,.theme-design20 #overlay .scorePill,.theme-design22 #overlay .scorePill,.theme-design23 #overlay .scorePill,.theme-design24 #overlay .scorePill{font-size:18px!important;padding:4px 7px!important}.theme-design17 #overlay .scoreMeta,.theme-design18 #overlay .scoreMeta,.theme-design19 #overlay .scoreMeta,.theme-design20 #overlay .scoreMeta,.theme-design22 #overlay .scoreMeta,.theme-design23 #overlay .scoreMeta,.theme-design24 #overlay .scoreMeta{font-size:6px!important;gap:5px!important}.theme-design17 #overlay .ball,.theme-design18 #overlay .ball,.theme-design19 #overlay .ball,.theme-design20 #overlay .ball,.theme-design22 #overlay .ball,.theme-design23 #overlay .ball,.theme-design24 #overlay .ball{width:16px!important;height:16px!important;flex-basis:16px!important;font-size:7px!important}.theme-design17 #overlay .teamPanel .teamName,.theme-design18 #overlay .teamPanel .teamName,.theme-design20 #overlay .teamPanel .teamName,.theme-design22 #overlay .teamPanel .teamName,.theme-design23 #overlay .teamPanel .teamName,.theme-design24 #overlay .teamPanel .teamName{font-size:7px!important}}
+</style>
+
+<style id="BRKLIVE19-THEME2-USER-TEMPLATE">
+/* =========================================================
+   THEME 2 — USER TEMPLATE FORMAT
+   The uploaded reference frames are used as the visual language.
+   Live values remain HTML/Firebase data so text stays sharp.
+   ========================================================= */
+body.theme-t20world #bannerTournament.show,
+body.theme-t20world #bannerMatch.show,
+body.theme-t20world #bannerVenue.show,
+body.theme-t20world #bannerToss.show,
+body.theme-t20world #bannerResult.show,
+body.theme-t20world #bannerPartnership.show,
+body.theme-t20world #custom.show{
+  width:min(90vw,900px)!important;
+  height:auto!important;
+  aspect-ratio:900/179!important;
+  min-height:0!important;
+  padding:0 12%!important;
+  border:0!important;
+  border-radius:0!important;
+  background:transparent url('assets/theme2-template/lower-third.png') center/100% 100% no-repeat!important;
+  box-shadow:none!important;
+  color:#fff!important;
+  text-shadow:0 2px 4px #000,0 0 8px #000!important;
+  font-size:clamp(18px,2.2vw,38px)!important;
+  line-height:1.05!important;
+  letter-spacing:.02em!important;
+  text-align:center!important;
+}
+body.theme-t20world #bannerTournament.show,
+body.theme-t20world #bannerMatch.show,
+body.theme-t20world #bannerVenue.show,
+body.theme-t20world #bannerToss.show,
+body.theme-t20world #bannerResult.show,
+body.theme-t20world #bannerPartnership.show{
+  animation:t2TemplateBannerIn .62s cubic-bezier(.16,.86,.24,1) both!important;
+}
+body.theme-t20world #custom.show{animation:t2TemplateBannerIn .62s cubic-bezier(.16,.86,.24,1) both!important}
+
+/* B1 / B2 / BOWLER / FOW use the uploaded cyan/black player frame. */
+body.theme-t20world #bannerPlayer.show,
+body.theme-t20world #bannerBowler.show,
+body.theme-t20world #bannerFOW.show{
+  width:min(76vw,760px)!important;
+  height:auto!important;
+  aspect-ratio:993/395!important;
+  min-height:0!important;
+  padding:0!important;
+  border:0!important;
+  border-radius:0!important;
+  background:transparent url('assets/theme2-template/b1-b2-bowler.png') center/100% 100% no-repeat!important;
+  box-shadow:none!important;
+  overflow:hidden!important;
+  color:#fff!important;
+  animation:t2PlayerFrameIn .72s cubic-bezier(.16,.86,.24,1) both!important;
+}
+body.theme-t20world #bannerPlayer.show .statGraphic,
+body.theme-t20world #bannerBowler.show .statGraphic,
+body.theme-t20world #bannerFOW.show .statGraphic{
+  position:absolute!important;
+  left:12.5%!important;right:12.5%!important;top:20%!important;bottom:16%!important;
+  width:auto!important;height:auto!important;
+  display:grid!important;
+  grid-template-rows:auto auto auto auto!important;
+  border:0!important;border-radius:0!important;
+  background:transparent!important;box-shadow:none!important;
+  overflow:hidden!important;
+}
+body.theme-t20world #bannerBowler.show .statGraphicBowler{grid-template-rows:auto auto auto!important}
+body.theme-t20world #bannerPlayer.show .sg-head,
+body.theme-t20world #bannerBowler.show .sg-head,
+body.theme-t20world #bannerFOW.show .sg-head{
+  min-height:0!important;padding:3px 10px!important;background:transparent!important;border:0!important;
+}
+body.theme-t20world #bannerPlayer.show .sg-head>strong,
+body.theme-t20world #bannerBowler.show .sg-head>strong,
+body.theme-t20world #bannerFOW.show .sg-head>strong{font-size:clamp(15px,2vw,28px)!important;color:#fff!important;text-shadow:0 2px 3px #000!important}
+body.theme-t20world #bannerPlayer.show .sg-head>span,
+body.theme-t20world #bannerBowler.show .sg-head>span,
+body.theme-t20world #bannerFOW.show .sg-head>span{font-size:clamp(9px,1vw,14px)!important;color:#bff7ff!important}
+body.theme-t20world #bannerPlayer.show .sg-labels,
+body.theme-t20world #bannerBowler.show .sg-labels,
+body.theme-t20world #bannerFOW.show .sg-labels{background:#000!important;color:#7fefff!important;border:0!important}
+body.theme-t20world #bannerPlayer.show .sg-values,
+body.theme-t20world #bannerBowler.show .sg-values,
+body.theme-t20world #bannerFOW.show .sg-values{background:#000!important;color:#fff!important;border:0!important}
+body.theme-t20world #bannerPlayer.show .sg-values strong,
+body.theme-t20world #bannerBowler.show .sg-values strong,
+body.theme-t20world #bannerFOW.show .sg-values strong{font-size:clamp(14px,1.7vw,25px)!important;color:#fff!important}
+body.theme-t20world #bannerPlayer.show .sg-note,
+body.theme-t20world #bannerFOW.show .sg-note{font-size:clamp(8px,.85vw,12px)!important;background:#000!important;color:#9fefff!important}
+
+/* Full scoreboard — uploaded 1365x768 frame with live HTML data placed over it. */
+body.theme-t20world #scorecardOverlay{background:rgba(0,0,0,.82)!important;padding:0!important;backdrop-filter:none!important}
+body.theme-t20world #scorecardOverlay .card{width:min(100vw,177.734vh,1365px)!important;height:auto!important;aspect-ratio:1365/768!important;padding:0!important;border:0!important;border-radius:0!important;background:#000 url('assets/theme2-template/full-scoreboard.jpg') center/100% 100% no-repeat!important;box-shadow:0 0 50px #000!important;overflow:hidden!important;position:relative!important}
+body.theme-t20world #scorecardOverlay .close-btn{z-index:50!important;opacity:.65!important}
+.t2-scorecard{position:absolute;inset:0;color:#050505;font-family:Arial,Helvetica,sans-serif;font-weight:900}
+.t2-sc-team{position:absolute;top:1.2%;height:12%;display:flex;align-items:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:clamp(24px,4vw,62px);line-height:1;text-transform:uppercase;text-shadow:0 1px 1px #fff}
+.t2-sc-team.a{left:4.2%;width:33%;justify-content:center}.t2-sc-team.b{right:3.2%;width:32%;justify-content:center}
+.t2-sc-title{position:absolute;top:1.8%;left:37%;width:26%;height:11%;display:flex;align-items:center;justify-content:center;text-align:center;color:#fff;font-size:clamp(10px,1.2vw,18px);line-height:1.05;text-transform:uppercase;padding:0 18px}
+.t2-sc-innings{position:absolute;top:1.8%;right:3.8%;width:31%;height:11%;display:flex;align-items:center;justify-content:center;font-size:clamp(18px,2.7vw,42px);text-transform:uppercase}
+.t2-sc-table{position:absolute;left:7%;right:5.5%;top:18.5%;height:54%;display:grid;grid-template-columns:58% 42%;color:#000}
+.t2-sc-pane{min-width:0;overflow:hidden}.t2-sc-pane.left{border-right:3px solid #111;padding-right:8px}.t2-sc-pane.right{padding-left:8px}
+.t2-sc-head{height:8%;display:grid;align-items:center;color:#1ec8ec;font-size:clamp(9px,1vw,17px);font-weight:1000;text-transform:uppercase}
+.t2-sc-head.left{grid-template-columns:8% 33% 31% 14% 14%}.t2-sc-head.right{grid-template-columns:9% 39% 18% 14% 10% 10%}
+.t2-sc-row{height:8.25%;display:grid;align-items:center;font-size:clamp(9px,.95vw,16px);font-weight:900;white-space:nowrap;overflow:hidden}
+.t2-sc-row.left{grid-template-columns:8% 33% 31% 14% 14%}.t2-sc-row.right{grid-template-columns:9% 39% 18% 14% 10% 10%}
+.t2-sc-row>span{text-align:center;overflow:hidden;text-overflow:ellipsis}.t2-sc-row>span.name{text-align:left;padding-left:2px}.t2-sc-row>span.dis{text-align:left;padding-left:3px}
+.t2-sc-bottom{position:absolute;left:0;right:0;top:77%;height:10%;display:grid;grid-template-columns:42% 16% 42%;align-items:center;text-align:center;font-size:clamp(15px,2.3vw,34px)}
+.t2-sc-score{font-size:clamp(20px,2.8vw,42px);color:#12bfe9;text-shadow:0 1px 1px #000;font-weight:1000}.t2-sc-bottom .mid{font-size:clamp(20px,2.8vw,42px)}
+.t2-sc-footer{position:absolute;left:37%;width:26%;bottom:1%;height:6%;display:flex;align-items:center;justify-content:center;color:#11c7ed;font-size:clamp(11px,1.5vw,21px);text-align:center}
+.t2-sc-toss{position:absolute;bottom:1%;left:5%;width:29%;height:6%;display:flex;align-items:center;justify-content:center;color:#11c7ed;font-size:clamp(10px,1.3vw,18px);text-transform:uppercase}
+.t2-sc-venue{position:absolute;bottom:1%;right:5%;width:29%;height:6%;display:flex;align-items:center;justify-content:center;color:#11c7ed;font-size:clamp(9px,1.1vw,16px);text-align:center}
+
+/* Match summary — uploaded 1009x953 frame, with live match blocks. */
+body.theme-t20world #summaryOverlay{background:#000!important;padding:0!important;display:none}
+body.theme-t20world #summaryOverlay.show{display:flex!important;align-items:center;justify-content:center}
+.t2-summary{position:relative;width:min(100vw,105.98vh,1009px);height:auto;aspect-ratio:1009/953;background:url('assets/theme2-template/match-summary.jpg') center/100% 100% no-repeat;color:#fff;overflow:hidden}
+.t2-sum-title{position:absolute;top:3%;left:30%;width:40%;height:8%;display:flex;align-items:center;justify-content:center;text-align:center;font-size:clamp(15px,2vw,28px);font-weight:1000;text-transform:uppercase;animation:t2SummaryTitle .7s ease both}
+.t2-sum-sub{position:absolute;top:10%;left:8%;width:84%;height:7%;display:flex;align-items:center;justify-content:center;color:#111;font-size:clamp(11px,1.3vw,20px);font-weight:1000;text-transform:uppercase;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.t2-sum-card{position:absolute;left:13%;width:74%;height:23%;background:#000;display:flex;align-items:center;justify-content:center;text-align:center;padding:10px 18px;animation:t2SummaryCardIn .65s cubic-bezier(.16,.86,.24,1) both}
+.t2-sum-card.a{top:25%}.t2-sum-card.b{top:59%;animation-delay:.12s}
+.t2-sum-card .team{font-size:clamp(18px,2.4vw,34px);font-weight:1000;color:#fff;text-transform:uppercase}.t2-sum-card .score{font-size:clamp(22px,3.3vw,48px);font-weight:1000;color:#7befff;margin-left:22px}.t2-sum-card .details{font-size:clamp(9px,1vw,15px);line-height:1.45;color:#ddd;margin-left:22px;text-align:left}
+.t2-sum-bar{position:absolute;left:7%;width:86%;height:6%;display:flex;align-items:center;justify-content:center;color:#111;font-size:clamp(10px,1.1vw,17px);font-weight:1000;text-transform:uppercase;text-align:center}.t2-sum-bar.one{top:17.5%}.t2-sum-bar.two{top:51.5%}.t2-sum-foot{position:absolute;bottom:4%;left:7%;width:86%;height:7%;display:flex;align-items:center;justify-content:center;color:#111;font-size:clamp(10px,1.1vw,17px);font-weight:1000;text-align:center;animation:t2SummaryCardIn .8s ease both}
+.t2-sum-status{position:absolute;bottom:12%;left:10%;width:80%;height:7%;display:flex;align-items:center;justify-content:center;color:#111;font-size:clamp(11px,1.4vw,20px);font-weight:1000;text-align:center;text-transform:uppercase}
+
+@keyframes t2TemplateBannerIn{0%{opacity:0;transform:translateX(-50%) translateY(28px) scaleX(.82);filter:blur(6px)}55%{opacity:1;transform:translateX(-50%) translateY(-3px) scaleX(1.02);filter:blur(0)}100%{opacity:1;transform:translateX(-50%) translateY(0) scaleX(1)}}
+@keyframes t2PlayerFrameIn{0%{opacity:0;transform:translateX(-50%) translateY(45px) scale(.82);filter:brightness(2) blur(8px)}60%{opacity:1;transform:translateX(-50%) translateY(-4px) scale(1.02);filter:brightness(1) blur(0)}100%{opacity:1;transform:translateX(-50%) translateY(0) scale(1)}}
+@keyframes t2SummaryTitle{0%{opacity:0;transform:translateY(-25px) scaleX(.7)}100%{opacity:1;transform:none}}
+@keyframes t2SummaryCardIn{0%{opacity:0;transform:scaleX(.65);filter:blur(5px)}100%{opacity:1;transform:none;filter:none}}
+body.theme-t20world #scorecardOverlay.show .card{animation:t2ScorecardOpen .75s cubic-bezier(.16,.86,.24,1) both}
+body.theme-t20world #summaryOverlay.show .t2-summary{animation:t2ScorecardOpen .75s cubic-bezier(.16,.86,.24,1) both}
+body.theme-t20world #overlay:not(.hidden) .frame{animation:t2OverlayOpen .65s cubic-bezier(.16,.86,.24,1) both}
+@keyframes t2ScorecardOpen{0%{opacity:0;transform:scale(.92);filter:blur(10px)}65%{opacity:1;transform:scale(1.015);filter:blur(0)}100%{opacity:1;transform:scale(1)}}
+@keyframes t2OverlayOpen{0%{opacity:0;transform:translateY(22px) scaleX(.96)}100%{opacity:1;transform:translateY(0) scaleX(1)}}
+@media(max-width:700px){
+ body.theme-t20world #bannerTournament.show,body.theme-t20world #bannerMatch.show,body.theme-t20world #bannerVenue.show,body.theme-t20world #bannerToss.show,body.theme-t20world #bannerResult.show,body.theme-t20world #bannerPartnership.show,body.theme-t20world #custom.show{width:96vw;font-size:clamp(12px,4vw,22px)}
+ body.theme-t20world #bannerPlayer.show,body.theme-t20world #bannerBowler.show,body.theme-t20world #bannerFOW.show{width:92vw}
+ .t2-sc-team{font-size:clamp(18px,5vw,30px)}.t2-sc-title{font-size:7px}.t2-sc-innings{font-size:clamp(11px,3.5vw,20px)}.t2-sc-row{font-size:7px}.t2-sc-head{font-size:6px}.t2-sc-bottom{font-size:11px}.t2-sc-score{font-size:16px}.t2-sc-footer,.t2-sc-toss,.t2-sc-venue{font-size:7px}
+}
+</style>
+
+<style id="BRKLIVE19-THEME2-USER-FINAL-DATA-FIT">
+/* Theme 2 final data-fit: no clipped team/batter/bowler names; tighter batter runs. */
+body.theme-t20world .teamPanel .teamName{max-width:100%!important;overflow:visible!important;text-overflow:clip!important;white-space:nowrap!important;font-size:clamp(13px,1.65vw,30px)!important;letter-spacing:-.01em!important}
+body.theme-t20world .teamPanel.left{padding-left:20px!important;padding-right:28px!important}
+body.theme-t20world .teamPanel.right{padding-left:28px!important;padding-right:20px!important}
+body.theme-t20world .content{left:17.2%!important;right:17.2%!important;grid-template-columns:31% 31% 38%!important}
+body.theme-t20world .batters{padding:9px 10px 7px!important}
+body.theme-t20world .batter{grid-template-columns:minmax(0,1fr) auto!important;gap:3px!important;height:49%!important}
+body.theme-t20world .batter .strike{display:none!important}
+body.theme-t20world .batterName{min-width:0!important;display:flex!important;align-items:center!important;gap:3px!important;overflow:visible!important;text-overflow:clip!important;white-space:nowrap!important;font-size:clamp(11px,1.25vw,21px)!important}
+body.theme-t20world .batterName>span{min-width:0!important;overflow:hidden!important;text-overflow:ellipsis!important;white-space:nowrap!important}
+body.theme-t20world .batterScore{gap:2px!important;margin-left:0!important}
+body.theme-t20world .batterScore b{font-size:clamp(17px,1.65vw,27px)!important}
+body.theme-t20world .batterScore span{font-size:clamp(10px,.85vw,15px)!important}
+/* Striker bat icon, never shown on non-striker. */
+body.theme-t20world .batter.striker .batterName:after{content:"";display:inline-block;flex:0 0 17px;width:17px;height:22px;margin-left:2px;background-repeat:no-repeat;background-position:center;background-size:contain;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M7 27l14-14 4 4L11 31z' fill='%23ffd34d'/%3E%3Cpath d='M19 11l5-5 4 4-5 5z' fill='%23ff7a18'/%3E%3Cpath d='M21 5l2-2 6 6-2 2z' fill='%23ffffff'/%3E%3C/svg%3E")}
+/* Blinking/rotating match information sits slightly lower and centered. */
+body.theme-t20world #theme2InfoTicker{transform:translateY(8px)!important;margin-top:8px!important;min-height:20px!important;display:flex!important;align-items:center!important;justify-content:center!important;text-align:center!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important;width:100%!important;padding:0 6px!important}
+body.theme-t20world #scoreOverDetail{transform:translateY(5px)!important}
+body.theme-t20world .scorePanel{overflow:visible!important}
+body.theme-t20world .bowlerPanel{padding-left:12px!important;padding-right:12px!important}
+body.theme-t20world .bowlerTop{grid-template-columns:minmax(0,1fr) auto!important;gap:5px!important}
+body.theme-t20world .bowlerName{min-width:0!important;overflow:hidden!important;text-overflow:ellipsis!important;white-space:nowrap!important;font-size:clamp(12px,1.35vw,22px)!important}
+body.theme-t20world .bowlerStats{font-size:clamp(10px,.9vw,16px)!important}
+/* Full scoreboard: use every template row for live batter + bowler figures. */
+body.theme-t20world #scorecardOverlay .card{overflow:hidden!important}
+.t2-sc-head.left,.t2-sc-row.left{grid-template-columns:5% 29% 22% 8% 8% 8% 8% 12%!important}
+.t2-sc-head.right,.t2-sc-row.right{grid-template-columns:7% 34% 14% 12% 12% 10% 11%!important}
+.t2-sc-head{font-size:clamp(7px,.72vw,13px)!important}
+.t2-sc-row{font-size:clamp(7px,.72vw,13px)!important}
+.t2-sc-row>span{min-width:0!important}
+.t2-sc-row>span.name{font-size:clamp(8px,.82vw,14px)!important}
+.t2-sc-row>span.dis{font-size:clamp(6px,.65vw,12px)!important}
+.t2-sc-bottom{top:75.5%!important;height:8%!important}
+.t2-sc-toss{bottom:1.2%!important}
+.t2-sc-footer{bottom:1.2%!important;font-size:clamp(8px,1vw,14px)!important}
+.t2-sc-venue{bottom:1.2%!important;font-size:clamp(7px,.85vw,12px)!important}
+.t2-sc-info-left,.t2-sc-info-right,.t2-sc-recent{position:absolute;display:flex;align-items:center;justify-content:center;text-align:center;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;color:#111;font-weight:900}
+.t2-sc-info-left{left:7%;width:29%;top:85.7%;height:5.2%;font-size:clamp(7px,.75vw,12px)}
+.t2-sc-info-right{right:5.5%;width:29%;top:85.7%;height:5.2%;font-size:clamp(6px,.7vw,11px)}
+.t2-sc-recent{left:30%;width:40%;top:91%;height:4%;font-size:clamp(6px,.7vw,11px);color:#10bfe8!important}
+/* Summary fills both supplied black panels with live data, without overflow. */
+.t2-sum-card{flex-direction:column!important;gap:2px!important;padding:7px 18px!important}
+.t2-sum-card .team{font-size:clamp(14px,2vw,28px)!important}
+.t2-sum-card .score{font-size:clamp(17px,2.6vw,38px)!important;margin:0!important}
+.t2-sum-card .details{width:92%!important;margin:0!important;font-size:clamp(7px,.82vw,12px)!important;line-height:1.35!important;overflow:hidden!important;white-space:nowrap!important;text-overflow:ellipsis!important}
+.t2-sum-card .details b{color:#7befff}
+.t2-sum-foot{white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}
+@media(max-width:700px){
+ body.theme-t20world .teamPanel .teamName{font-size:clamp(10px,2.8vw,18px)!important}
+ body.theme-t20world .batterName{font-size:clamp(8px,2.5vw,14px)!important}
+ body.theme-t20world .batterScore b{font-size:clamp(12px,3.2vw,18px)!important}
+ body.theme-t20world .batter.striker .batterName:after{width:12px;height:16px;flex-basis:12px}
+ .t2-sc-head{font-size:5px!important}.t2-sc-row{font-size:5.5px!important}
+ .t2-sc-row>span.name{font-size:6px!important}.t2-sc-row>span.dis{font-size:5px!important}
+ .t2-sc-info-left,.t2-sc-info-right,.t2-sc-recent{font-size:4.5px!important}
+}
+</style>
+
+
+
+<style id="BRKLIVE19-THEME2-TARGET-SUMMARY-FINAL">
+/* Theme 2 TARGET button: use the same live target data/message as Theme 1. */
+body.theme-t20world #overlay.targetMode{
+  position:fixed!important;inset:0!important;width:100vw!important;height:100vh!important;
+  display:flex!important;align-items:center!important;justify-content:center!important;
+  transform:none!important;padding:0!important;background:transparent!important;
+  z-index:30000!important;
+}
+body.theme-t20world #overlay.targetMode > #targetTop{
+  position:relative!important;inset:auto!important;display:flex!important;visibility:visible!important;opacity:1!important;
+  width:min(92vw,1200px)!important;height:auto!important;min-height:0!important;
+  flex-direction:column!important;align-items:center!important;justify-content:center!important;gap:14px!important;
+  padding:28px 40px!important;background:rgba(7,7,28,.90)!important;
+  border:3px solid #7fe8ff!important;border-radius:18px!important;
+  box-shadow:0 0 35px #ff2bbd55,0 18px 60px #000b!important;
+  box-sizing:border-box!important;
+}
+body.theme-t20world #overlay.targetMode #chasingTeamName{
+  display:block!important;max-width:100%!important;overflow:hidden!important;text-overflow:clip!important;
+  white-space:nowrap!important;text-align:center!important;color:#fff!important;
+  font-size:clamp(28px,5vw,78px)!important;font-weight:1000!important;line-height:1.05!important;
+  text-shadow:0 0 18px #ff2bbd55!important;
+}
+body.theme-t20world #overlay.targetMode #targetNeedText{
+  display:block!important;max-width:100%!important;overflow:hidden!important;text-overflow:clip!important;
+  white-space:nowrap!important;text-align:center!important;color:#7fe8ff!important;
+  font-size:clamp(20px,3.2vw,52px)!important;font-weight:1000!important;line-height:1.1!important;
+}
+/* Theme 2 match summary: stable, no blinking/flowing effects. Remove team names from the top header. */
+body.theme-t20world #summaryOverlay .summary-head{
+  grid-template-columns:1fr!important;animation:none!important;
+  min-height:90px!important;background:#0b0750!important;
+}
+body.theme-t20world #summaryOverlay .summary-head .side{display:none!important}
+body.theme-t20world #summaryOverlay .summary-head .center{
+  grid-column:1!important;width:100%!important;animation:none!important;
+  background:linear-gradient(180deg,#25106f,#0b0750)!important;
+  padding:10px 18px!important;overflow:hidden!important;
+}
+body.theme-t20world #summaryOverlay .summary-head .center:after{display:none!important;animation:none!important}
+body.theme-t20world #summaryOverlay .summary-head .title{
+  font-size:clamp(24px,3vw,48px)!important;line-height:1!important;
+  white-space:nowrap!important;overflow:hidden!important;text-overflow:clip!important;
+}
+body.theme-t20world #summaryOverlay .summary-head .sub{display:none!important}
+body.theme-t20world #summaryOverlay .summary-center-meta{
+  width:100%!important;display:flex!important;align-items:center!important;justify-content:center!important;
+  gap:clamp(10px,2vw,28px)!important;flex-wrap:wrap!important;
+  margin-top:7px!important;overflow:hidden!important;
+}
+body.theme-t20world #summaryOverlay .summary-center-meta span{
+  max-width:48%!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:clip!important;
+  font-size:clamp(10px,1.15vw,19px)!important;line-height:1.1!important;
+}
+body.theme-t20world #summaryOverlay .summary-center-meta span:nth-child(2){display:none!important}
+body.theme-t20world #summaryOverlay .summary-live-pill{animation:none!important}
+body.theme-t20world #summaryOverlay .summary-team-head,
+body.theme-t20world #summaryOverlay .summary-team,
+body.theme-t20world #summaryOverlay .summary-box,
+body.theme-t20world #summaryOverlay .summary-status,
+body.theme-t20world #summaryOverlay .summary-result{animation:none!important}
+body.theme-t20world #summaryOverlay .summary-team-head .name,
+body.theme-t20world #summaryOverlay .summary-team-head .score,
+body.theme-t20world #summaryOverlay .summary-box td,
+body.theme-t20world #summaryOverlay .summary-box th{
+  overflow:hidden!important;text-overflow:clip!important;
+}
+@media(max-width:700px){
+  body.theme-t20world #overlay.targetMode > #targetTop{width:94vw!important;padding:20px 12px!important;gap:9px!important}
+  body.theme-t20world #overlay.targetMode #chasingTeamName{font-size:clamp(22px,8vw,42px)!important}
+  body.theme-t20world #overlay.targetMode #targetNeedText{font-size:clamp(15px,5.5vw,29px)!important}
+  body.theme-t20world #summaryOverlay .summary-head{min-height:70px!important}
+  body.theme-t20world #summaryOverlay .summary-center-meta{gap:6px!important;flex-wrap:nowrap!important}
+  body.theme-t20world #summaryOverlay .summary-center-meta span{max-width:49%!important;font-size:8px!important}
+}
+</style>
 </head>
 <body>
 <!-- BRKLIVE19 LIVE badge: viewport-level, independent of the scoreboard overlay -->
@@ -1794,8 +2165,10 @@ body{padding:0 0 .5vh !important}
       </div>
 
       <div class="scorePanel">
+        <div id="theme2MatchTitle" class="theme2MatchTitle">TEAM A VS TEAM B</div>
         <div id="scoreBattingTeam" class="scoreBattingTeam">TEAM A</div>
-        <div id="scorePill" class="scorePill">0-0</div>
+        <div class="theme2ScoreLine"><div id="scorePill" class="scorePill">0-0</div><div id="theme2OverValue" class="theme2OverValue">0.0</div></div>
+        <div id="theme2InfoTicker" class="theme2InfoTicker" aria-live="polite"></div>
         <div id="scoreOverDetail" class="scoreOverDetail">OVER 0.0 • BALL 0</div>
         <div class="scoreSubRow"><div id="scoreCRR" class="scoreCRR">C.R. 0.00</div></div>
         <div id="scoreExtraDetail" class="scoreExtraDetail">1ST INNINGS</div>
@@ -1896,7 +2269,7 @@ function escapeText(v){return String(v??"")}
 // ---- Apply theme (including custom colors) ----
 function applyTheme(theme, customColors){
   theme = theme || requestedTheme || "blue";
-  const classes=["theme-neon","theme-green","theme-gold","theme-red","theme-rainbow","theme-theme2","theme-theme3","theme-theme4","theme-theme5","theme-theme6","theme-glass","theme-carbon","theme-stadium","theme-aurora","theme-metallic","theme-redblack"];
+  const classes=["theme-neon","theme-green","theme-gold","theme-red","theme-rainbow","theme-theme2","theme-theme3","theme-theme4","theme-theme5","theme-theme6","theme-t20world","theme-glass","theme-carbon","theme-stadium","theme-aurora","theme-metallic","theme-redblack","theme-design17","theme-design18","theme-design19","theme-design20","theme-design21","theme-design22","theme-design23","theme-design24"];
   document.body.classList.remove(...classes);
   document.body.classList.toggle("theme5-special", theme === "theme5");
 
@@ -1988,29 +2361,40 @@ function triggerTargetStartFlash(d){
 }
 
 function updateTarget(d){
-  // Normal overlay target: show ONLY on the right side of the bowling panel
-  // during the live 2nd innings. Never switch the overlay into fullscreen
-  // target mode here.
+  // Theme 1-compatible TARGET button output. The scorer publishes
+  // overlay.showTarget=true; when that flag is on, show the centered
+  // "TO WIN NEED ... FROM ... BALLS" message using the live match data.
   const firstRuns=num(d.firstInnings&&d.firstInnings.runs);
   const target=num(d.target) || (num(d.innings)===2 ? firstRuns+1 : 0);
   const second=num(d.innings)===2;
   const isCompleted = d.status === 'completed' || d.matchWinner || !!deriveResult(d);
+  const showButtonTarget=!!(d.overlay&&d.overlay.showTarget) && second && !!target && !isCompleted;
 
   const rightTarget=document.getElementById("secondInningsTarget");
   const rightTargetValue=document.getElementById("targetScoreValue");
   const topTarget=document.getElementById("topRowTarget");
   const topTargetValue=document.getElementById("topRowTargetValue");
-  const showRight = second && !!target && !isCompleted;
+  const targetTop=document.getElementById("targetTop");
+  const overlayEl=document.getElementById("overlay");
+
+  // Never let the automatic corner target compete with the Target button.
   if(rightTarget){ rightTarget.style.display="none"; rightTarget.hidden=true; }
   if(rightTargetValue && target) rightTargetValue.textContent=String(Math.round(target));
-  if(topTarget){ topTarget.style.display = showRight ? "inline-flex" : "none"; topTarget.hidden = !showRight; topTarget.classList.toggle("target-visible", showRight); }
+  if(topTarget){ topTarget.style.display="none"; topTarget.hidden=true; topTarget.classList.remove("target-visible"); }
   if(topTargetValue && target) topTargetValue.textContent=String(Math.round(target));
 
-  // Keep the separate Target-button/fullscreen graphic hidden during normal scoring.
-  const targetTop=document.getElementById("targetTop");
-  if(targetTop){ targetTop.style.display="none"; targetTop.hidden=true; }
-  const overlayEl=document.getElementById("overlay");
-  if(overlayEl) overlayEl.classList.remove("targetMode");
+  if(targetTop){
+    const chase=teamName(d,d.battingTeam||'B');
+    const ballsLeft=Math.max(num(d.maxOvers||20)*6-num(d.legalBalls),0);
+    const need=Math.max(target-num(d.runs),0);
+    const chasing=document.getElementById("chasingTeamName");
+    const needText=document.getElementById("targetNeedText");
+    if(chasing) chasing.textContent=chase;
+    if(needText) needText.textContent=`TO WIN NEED ${need} RUN${need===1?'':'S'} FROM ${ballsLeft} BALL${ballsLeft===1?'':'S'}`;
+    targetTop.style.display=showButtonTarget?"flex":"none";
+    targetTop.hidden=!showButtonTarget;
+  }
+  if(overlayEl) overlayEl.classList.toggle("targetMode",showButtonTarget);
 }
 
 
@@ -2112,6 +2496,10 @@ setInterval(()=>{
     topInfoIndex=(topInfoIndex+1)%topInfoItems.length;
     const text=topInfoItems[topInfoIndex];
     [$("headerToss"),$("topToss")].filter(Boolean).forEach(el=>{ if(el.style.display!=="none") el.textContent=text; });
+    const ticker=$("theme2InfoTicker");
+    if(ticker && document.body.classList.contains("theme-t20world")){
+      ticker.textContent=text; ticker.classList.remove("tick"); void ticker.offsetWidth; ticker.classList.add("tick");
+    }
   }
 },3000);
 
@@ -2352,6 +2740,122 @@ function renderFullScorecard(d){
     <div class="pref-footer"><span>DATE: ${escapeText(d.date||'--/--/----')}</span><span>VENUE: ${escapeText(d.venue||'----------------')}</span><span>${result?escapeText(result):`INNINGS ${inningsNo} • ${escapeText(battingTeam)} ${runs}/${wickets}`}</span><span>${escapeText(needFooter||'LIVE')}</span></div>`;
 }
 
+
+// ============================================================
+// THEME 2 — USER TEMPLATE RENDERERS
+// ============================================================
+function t2PlayerList(inn,d){
+  const bats=inn.batters||inn.batsmenStats||{};
+  const xi=Array.isArray(inn.xi)?inn.xi:(inn.team==='A'?(d.xiA||[]):(d.xiB||[]));
+  const names=[];
+  Object.keys(bats).forEach(n=>{if(n&&!names.includes(n))names.push(n)});
+  xi.forEach(n=>{if(n&&!names.includes(n))names.push(n)});
+  [inn.striker,inn.nonStriker].forEach(n=>{if(n&&!names.includes(n))names.push(n)});
+  return names;
+}
+function t2ScorecardRows(inn,d){
+  const bats=inn.batters||inn.batsmenStats||{};
+  const names=t2PlayerList(inn,d);
+  const fmap={}; (Array.isArray(inn.fallWickets)?inn.fallWickets:[]).forEach(f=>{if(f?.player)fmap[f.player]=f.type||f.dismissal||'OUT'});
+  const arr=names.map((name,i)=>{
+    const x=bats[name]||{}; const r=num(x.runs),b=num(x.balls),f=num(x.fours),sx=num(x.sixes);
+    const out=x.out===true||!!x.dismissal||!!fmap[name];
+    const crease=!out&&(name===inn.striker||name===inn.nonStriker||name===d.striker||name===d.nonStriker);
+    const has=out||crease||r>0||b>0||f>0||sx>0;
+    return {name,x,r,b,f,sx,out,crease,has,i};
+  });
+  arr.sort((a,b)=>(a.out?0:(a.has?1:2))-(b.out?0:(b.has?1:2))||a.i-b.i);
+  return Array.from({length:11},(_,i)=>{
+    const q=arr[i];
+    if(!q) return `<div class="t2-sc-row left"><span>${i+1}</span><span class="name"></span><span class="dis"></span><span></span><span></span></div>`;
+    const sr=q.b?((q.r/q.b)*100).toFixed(1):'0.0';
+    const dis=q.out?(q.x.dismissal||fmap[q.name]||'OUT'):(q.has?'NOT OUT':'');
+    const name=`${escapeText(q.name)}${q.crease&&!q.out?' *':''}`;
+    // The supplied template has Run/Ball columns only. Keep its exact geometry and
+    // put the extra batting figures as a compact second line inside Player Name.
+    const sub=q.has?`<small class="t2-mini-bat">4s ${q.f} • 6s ${q.sx} • SR ${sr}</small>`:'';
+    return `<div class="t2-sc-row left ${q.out?'out':''}"><span>${i+1}</span><span class="name"><strong>${name}</strong>${sub}</span><span class="dis">${escapeText(dis)}</span><span>${q.has?q.r:''}</span><span>${q.has?q.b:''}</span></div>`;
+  }).join('');
+}
+function t2BowlerRows(inn,d){
+  const bowlers=inn.bowlers||inn.bowlerStats||{};
+  const rows=Object.entries(bowlers);
+  if(inn.bowler && !rows.some(([n])=>n===inn.bowler) && d.bowler && !rows.some(([n])=>n===d.bowler)) rows.push([inn.bowler,{}]);
+  return Array.from({length:8},(_,i)=>{
+    const [n,x]=rows[i]||['',{}]; const balls=num(x.balls),runs=num(x.runs),wickets=num(x.wickets),maidens=num(x.maidens);
+    const econ=balls?(runs/(balls/6)).toFixed(2):'';
+    const sub=n?`<small class="t2-mini-bowl">ECO ${econ||'0.00'}</small>`:'';
+    return `<div class="t2-sc-row right"><span>${i+1}</span><span class="name"><strong>${escapeText(n)}</strong>${sub}</span><span>${n?oversFromBalls(balls):''}</span><span>${n?maidens:''}</span><span>${n?wickets:''}</span><span>${n?runs:''}</span></div>`;
+  }).join('');
+}
+function renderTheme2Scorecard(d){
+ const c=$('scContent');if(!c)return;
+ const requested=String(d.mode||'scorecard1').toLowerCase();
+ const inningsNo=(requested==='scorecard2'||num(d.innings)===2)?2:1;
+ let inn=inningsNo===2?(d.secondInnings||d):(d.innings===1?d:(d.firstInnings||{}));
+ if(!inn || typeof inn!=='object') inn={};
+ const teamA=d.teamA||'TEAM A',teamB=d.teamB||'TEAM B';
+ const side=String(inn.team||inn.battingTeam||d.battingTeam||(inningsNo===1?'A':'B')).toUpperCase();
+ const batTeam=side==='B'?teamB:teamA;
+ const bowlTeam=side==='B'?teamA:teamB;
+ const runs=num(inn.runs??inn.totalRuns),wk=num(inn.wickets??inn.totalWickets);
+ const balls=num(inn.legalBalls??inn.totalBalls??inn.balls),overs=oversFromBalls(balls);
+ const ex=num(inn.extras),rr=balls?(runs/(balls/6)).toFixed(2):'0.00';
+ const target=num(d.target||inn.target),need=Math.max(target-runs,0),maxBalls=Math.max(num(d.maxOvers||20)*6,balls),left=Math.max(maxBalls-balls,0);
+ const rrr=(inningsNo===2&&target&&left)?((need/left)*6).toFixed(2):'-';
+ const toss=d.tossWinner?teamName(d,d.tossWinner)+' • '+(d.tossDecision==='bat'?'BAT FIRST':'BOWL FIRST'):'—';
+ const extras=inn.extraDetail||d.extraDetail||{};
+ const fall=Array.isArray(inn.fallWickets)?inn.fallWickets:[];
+ const recent=Array.isArray(inn.recentBalls)?inn.recentBalls.slice(-12):(Array.isArray(d.recentBalls)?d.recentBalls.slice(-12):[]);
+ const recentText=recent.map(x=>escapeText(x.label??x.runs??'-')).join(' • ')||'—';
+ const partnershipRuns=num(inn.partnershipRuns??d.partnershipRuns),partnershipBalls=num(inn.partnershipBalls??d.partnershipBalls);
+ const result=deriveResult(d)||d.resultText||d.matchResult||'MATCH IN PROGRESS';
+ const date=d.date||d.matchDate||'—',venue=d.venue||d.tournamentVenue||'—';
+ const tournament=d.tournament||d.tournamentName||requestedTournament||'TOURNAMENT';
+ const match=d.matchName||d.match||`${teamA} VS ${teamB}`;
+ const fowText=fall.length?fall.map((f,i)=>`#${i+1} ${escapeText(f.player||'BATTER')} ${num(f.score)}`).join(' • '):'—';
+ c.innerHTML=`<div class="t2-scorecard">
+   <div class="t2-sc-team a" id="t2ScTeamA">${escapeText(teamA)}</div>
+   <div class="t2-sc-title" id="t2ScTournament">${escapeText(tournament)}<small>${escapeText(match)}</small></div>
+   <div class="t2-sc-innings">${inningsNo===1?'1ST':'2ND'} INNINGS</div>
+   <div class="t2-sc-table">
+    <div class="t2-sc-pane left"><div class="t2-sc-head left"><span>SL No.</span><span>Player Name</span><span>Dismissal</span><span>Run</span><span>Ball</span></div>${t2ScorecardRows(inn,d)}</div>
+    <div class="t2-sc-pane right"><div class="t2-sc-head right"><span>SL No.</span><span>BOWLER Name</span><span>Over</span><span>Maiden</span><span>Wicket</span><span>Run</span></div>${t2BowlerRows(inn,d)}</div>
+   </div>
+   <div class="t2-sc-bottom"><span>Extras - ${ex}</span><span class="t2-sc-score">${runs}/${wk}</span><span>Over - ${overs} (${balls%6})</span></div>
+   <div class="t2-sc-toss">Toss : ${escapeText(toss)}</div>
+   <div class="t2-sc-footer">${escapeText(batTeam)} • CRR ${rr} • RRR ${rrr} • PARTNERSHIP ${partnershipRuns} (${partnershipBalls}B)</div>
+   <div class="t2-sc-venue">${escapeText(date)} • ${escapeText(venue)}</div>
+   <div class="t2-sc-info-left">EXTRAS: NB ${num(extras.noball)} • WD ${num(extras.wide)} • B ${num(extras.bye)} • LB ${num(extras.legbye)}</div>
+   <div class="t2-sc-info-right">FOW: ${fowText}</div>
+   <div class="t2-sc-recent">RECENT: ${recentText} • ${escapeText(result)}</div>
+ </div>`;
+}
+function t2SummaryInnings(d,no){const x=inningsData(d,no);return x&&typeof x==='object'?x:{};}
+function renderTheme2Summary(d){
+ const el=$('summaryContent');if(!el)return;
+ const a=t2SummaryInnings(d,1),b=t2SummaryInnings(d,2);
+ const ta=summaryTeamSide(d,1)||d.teamA||'TEAM A',tb=summaryTeamSide(d,2)||d.teamB||'TEAM B';
+ const fmt=(x)=>`${num(x.runs)}/${num(x.wickets)}  (${oversFromBalls(x.legalBalls??x.balls)} OV)`;
+ const batting=(x)=>summaryTopBatters(x).map(([n,s])=>`${n}  ${num(s.runs)}(${num(s.balls)})`).join(' • ')||'NO BATTING DATA';
+ const bowling=(x)=>summaryTopBowlers(x).map(([n,s])=>`${n}  ${oversFromBalls(s.balls)}-${num(s.maidens)}-${num(s.runs)}-${num(s.wickets)}`).join(' • ')||'NO BOWLING DATA';
+ const extras=(x)=>{const e=x.extraDetail||{};return `${num(x.extras)}  (NB ${num(e.noball)} • WD ${num(e.wide)} • B ${num(e.bye)} • LB ${num(e.legbye)})`};
+ const result=deriveResult(d)||d.resultText||d.matchResult||'MATCH IN PROGRESS';
+ const toss=d.tossWinner?`${teamName(d,d.tossWinner)} • ${d.tossDecision==='bat'?'BAT FIRST':'BOWL FIRST'}`:'—';
+ const date=d.date||d.matchDate||'—',venue=d.venue||d.tournamentVenue||'—';
+ const tournament=d.tournament||d.tournamentName||'TOURNAMENT',match=d.matchName||d.match||`${ta} VS ${tb}`;
+ const card=(team,x,cls)=>`<div class="t2-sum-card ${cls}"><div class="sum-main"><span class="team">${escapeText(team)}</span><span class="score">${fmt(x)}</span></div><div class="details"><div><b>BATTING</b> ${escapeText(batting(x))}</div><div><b>BOWLING</b> ${escapeText(bowling(x))}</div><div><b>EXTRAS</b> ${escapeText(extras(x))}</div></div></div>`;
+ const rrr=d.innings===2&&d.target&&num(d.legalBalls)<num(d.maxOvers||20)*6?((Math.max(num(d.target)-num(d.runs),0)/(num(d.maxOvers||20)*6-num(d.legalBalls)))*6).toFixed(2):'-';
+ el.innerHTML=`<div class="t2-summary">
+   <div class="t2-sum-title">MATCH SUMMARY</div>
+   <div class="t2-sum-sub">${escapeText(tournament)} • ${escapeText(match)}</div>
+   <div class="t2-sum-bar one">${escapeText(ta)} • ${fmt(a)}</div>${card(ta,a,'a')}
+   <div class="t2-sum-bar two">${escapeText(tb)} • ${fmt(b)}</div>${card(tb,b,'b')}
+   <div class="t2-sum-status">${escapeText(result)} • ${escapeText(d.innings===2?`TARGET ${num(d.target)} • RRR ${rrr}`:'MATCH IN PROGRESS')}</div>
+   <div class="t2-sum-foot">TOSS: ${escapeText(toss)} • DATE: ${escapeText(date)} • VENUE: ${escapeText(venue)}</div>
+ </div>`;
+}
+
 // ---- Close scorecard ----
 document.getElementById('closeScorecardBtn').addEventListener('click', async () => {
   try {
@@ -2459,11 +2963,16 @@ function normalizeLiveData(raw){
   d.legalBalls = num(d.legalBalls ?? d.totalBalls ?? d.balls ?? d.totalLegalBalls);
   d.maxOvers = num(d.maxOvers ?? d.oversLimit ?? d.totalOversLimit) || 20;
   d.innings = num(d.innings ?? d.currentInnings) || 1;
-  d.b1 = d.b1 || d.striker || d.batsman1 || ""; d.b2 = d.b2 || d.nonStriker || d.batsman2 || "";
-  d.bowler = d.bowler || d.currentBowler || "";
-  d.tournament = d.tournament || d.tournamentName || "";
-  d.venue = d.venue || d.tournamentVenue || "";
-  d.matchName = d.matchName || d.match || "";
+  const mi = d.matchInformation || d.matchInfo || d.matchData || {};
+  d.b1 = d.b1 || d.striker || d.batsman1 || mi.striker || mi.b1 || mi.batsman1 || "";
+  d.b2 = d.b2 || d.nonStriker || d.batsman2 || mi.nonStriker || mi.b2 || mi.batsman2 || "";
+  d.bowler = d.bowler || d.currentBowler || mi.bowler || mi.currentBowler || "";
+  d.battingTeam = d.battingTeam || mi.battingTeam || "A";
+  d.bowlingTeam = d.bowlingTeam || mi.bowlingTeam || (d.battingTeam === "A" ? "B" : "A");
+  d.tournament = d.tournament || d.tournamentName || mi.tournament || mi.tournamentName || "";
+  d.venue = d.venue || d.tournamentVenue || mi.venue || "";
+  d.matchName = d.matchName || d.match || mi.matchName || mi.match || "";
+  d.date = d.date || d.matchDate || mi.date || mi.matchDate || "";
   d.batters = d.batters || {}; d.bowlers = d.bowlers || {};
   d.recentBalls = Array.isArray(d.recentBalls) ? d.recentBalls : (Array.isArray(d.currentOverBalls) ? d.currentOverBalls : []);
   d.currentOverBalls = Array.isArray(d.currentOverBalls) ? d.currentOverBalls : [];
@@ -2484,10 +2993,22 @@ function normalizeLiveData(raw){
   return d;
 }
 
+function fitTheme2Text(el, maxWidthPct, minPx){
+  if(!el || !document.body.classList.contains("theme-t20world")) return;
+  const parent=el.parentElement; if(!parent) return;
+  const original=el.dataset.t2BaseSize || getComputedStyle(el).fontSize;
+  if(!el.dataset.t2BaseSize) el.dataset.t2BaseSize=original;
+  el.style.fontSize=original;
+  let size=parseFloat(getComputedStyle(el).fontSize)||14;
+  const maxWidth=Math.max(20, parent.clientWidth*(maxWidthPct/100));
+  while(el.scrollWidth>maxWidth && size>minPx){ size-=0.5; el.style.fontSize=size+"px"; }
+}
+
 function applyLiveData(d){
   try{ window.__BRKLIVE19_LIVE_DATA__=d; }catch(e){}
  d=normalizeLiveData(d);
  if(!d) return;
+ updateTarget(d);
  // A scorer control action is authoritative: once it sends a packet, the overlay must respond.
  if(d.overlay && (d.overlay.scoreVisible === true || d.overlay.intro === false)) { d.overlay.scoreVisible = true; d.overlay.intro = false; }
  // Latest scorer packet is authoritative; do not reject it because of a stale display URL match id.
@@ -2501,6 +3022,9 @@ function applyLiveData(d){
  renderPlayingXI(d);
 
  // Full-frame modes
+ const isTheme2=(d.theme || requestedTheme || "blue")==='t20world';
+ // Theme 2 uses the SAME full-scoreboard and match-summary data/rendering as Theme 1.
+ // Only the Theme 2 visual skin is different.
  const summaryOn = d.mode === 'summary' && !isTheme5;
  if(summaryOn){
    renderSummary(d);
@@ -2530,10 +3054,19 @@ function applyLiveData(d){
  // for Toss; it now rotates tournament, match, toss, CRR and projected score.
  const topInfo=buildTopInfoItems(d);
  setTopInfoItems(topInfo, d.started === true);
+ const ticker=$("theme2InfoTicker");
+ if(ticker){
+   const tickerText=(d.started===true && topInfo.length) ? topInfo[topInfoIndex % topInfo.length] : "";
+   if(ticker.textContent!==tickerText){
+     ticker.textContent=tickerText;
+     ticker.classList.remove("tick"); void ticker.offsetWidth; ticker.classList.add("tick");
+   }
+ }
  if($("headerMatch")) $("headerMatch").textContent=d.matchName||"LIVE CRICKET";
 
- const b1n=d.b1||d.striker||d.batsman1||"STRIKER";
- const b2n=d.b2||d.nonStriker||d.batsman2||"NON-STRIKER";
+ const matchInfo=d.matchInformation||d.matchInfo||d.matchDetails||{};
+ const b1n=d.b1||d.striker||d.batsman1||matchInfo.striker||matchInfo.b1||matchInfo.batsman1||"STRIKER";
+ const b2n=d.b2||d.nonStriker||d.batsman2||matchInfo.nonStriker||matchInfo.b2||matchInfo.batsman2||"NON-STRIKER";
  const b1=batterStats(d,b1n), b2=batterStats(d,b2n);
  $("b1name").textContent=b1n; $("b2name").textContent=b2n;
  $("b1runs").textContent=num(b1.runs??d.batsman1Runs);
@@ -2584,14 +3117,21 @@ function applyLiveData(d){
  const tossDisplay = d.tossWinner ? (teamName(d,d.tossWinner) + " WON") : "TOSS —";
  if($("scoreToss")) $("scoreToss").textContent = tossDisplay;
  if($("scoreExtraDetail")) $("scoreExtraDetail").textContent = (num(d.innings||1)===1?"1ST":num(d.innings||1)===2?"2ND":num(d.innings||1)+"TH") + " INNINGS";
- const title=d.matchName||"League Match"; $("matchTitle").textContent=title;
+ const title=d.matchName||((d.teamA||"TEAM A")+" VS "+(d.teamB||"TEAM B")); $("matchTitle").textContent=title; if($("theme2MatchTitle")) $("theme2MatchTitle").textContent=title;
  const tournament=d.tournament||requestedTournament||"TOURNAMENT"; if($("tournamentTitle")) $("tournamentTitle").textContent=tournament;
  if($("matchTeams")) $("matchTeams").innerHTML=escapeText(teamName(d,bat))+" <b>VS</b> "+escapeText(teamName(d,bowl));
  if($("extraMeta")) $("extraMeta").textContent="EXTRAS: "+num(d.extras);
- const bow=d.bowler||"BOWLER", bo=bowlerStats(d,bow);
+ const bow=d.bowler||d.currentBowler||matchInfo.bowler||matchInfo.currentBowler||"BOWLER", bo=bowlerStats(d,bow);
  $("bowler").textContent=bow;
- $("bowlerStats").textContent=oversFromBalls(bo.balls)+" O • "+num(bo.runs)+" R • "+num(bo.wickets)+" W";
+ $("bowlerStats").textContent=oversFromBalls(bo.balls)+" "+num(bo.runs)+"-"+num(bo.wickets);
+ if($("theme2OverValue")) $("theme2OverValue").textContent=overText;
  if($("bowlerStatus")) $("bowlerStatus").textContent = (d.status==="completed" ? "MATCH COMPLETED" : "BOWLER STATUS • LIVE");
+
+ fitTheme2Text($("batTeam"), 31, 12);
+ fitTheme2Text($("bowlTeam"), 31, 12);
+ fitTheme2Text($("b1name") , 100, 9);
+ fitTheme2Text($("b2name") , 100, 9);
+ fitTheme2Text($("bowler"), 100, 9);
 
  updateTarget(d);
  renderBalls(d);
@@ -2655,7 +3195,6 @@ try {
   if (matchRef && firebaseReady && typeof onValue === "function") onValue(matchRef, snap => applyLiveData(snap.val()), error => console.warn("Per-match overlay listener unavailable", error));
 } catch(e) { console.warn("Could not attach per-match overlay listener",e); }
 </script>
-
 
 <style id="brklive19-complete-lower-third-fit-v7">
 /* V7 COMPLETE LOWER-THIRD FIT: preserve the original graphic aspect ratio so the
@@ -3022,384 +3561,93 @@ body{display:flex!important;align-items:flex-end!important;justify-content:cente
 }
 </style>
 
-<!-- BRKLIVE19 FINAL RESPONSIVE HD LOWER-THIRD OVERRIDE -->
-<style id="BRKLIVE19-RESPONSIVE-HD-FIT">
-/*
-  Responsive lower-third:
-  - smaller than the previous 190px/154px versions
-  - always spans the available browser-source width
-  - no fixed 1920x1080 dependency
-  - text scales with viewport width while preserving readability
-  - prevents horizontal clipping/scrolling
-*/
-html,body{
-  width:100%!important;
-  height:100%!important;
-  min-width:0!important;
-  min-height:0!important;
-  margin:0!important;
-  padding:0!important;
-  overflow:hidden!important;
-  background:transparent!important;
-  -webkit-font-smoothing:antialiased!important;
-  -moz-osx-font-smoothing:grayscale!important;
-  text-rendering:geometricPrecision!important;
-}
+<style id="BRKLIVE19-THEME2-USER-FORMAT-FINAL-2026-09-11">
+/* Theme 2: exact supplied lower-third silhouette with live match data */
+body.theme-t20world #overlay{position:fixed!important;left:50%!important;right:auto!important;top:auto!important;bottom:0!important;width:min(100vw,calc(100vh * 900 / 179),1800px)!important;height:auto!important;aspect-ratio:900/179!important;transform:translateX(-50%)!important;margin:0!important;padding:0!important;overflow:visible!important;z-index:20!important}
+body.theme-t20world #overlay .broadcastBar,body.theme-t20world #overlay .refBrandLive,body.theme-t20world #overlay .compactCorners,body.theme-t20world #overlay .teamPanel{display:none!important}
+body.theme-t20world #overlay .frame{position:relative!important;width:100%!important;height:100%!important;min-height:0!important;aspect-ratio:900/179!important;overflow:hidden!important;border:0!important;border-radius:0!important;background:transparent url('assets/theme2-template/lower-third.png') center/100% 100% no-repeat!important;box-shadow:none!important;animation:t2UserFrameIn .72s cubic-bezier(.16,.86,.24,1) both!important}
+body.theme-t20world #overlay .frame:before,body.theme-t20world #overlay .frame:after{display:none!important}
+body.theme-t20world #overlay .content{position:absolute!important;inset:0!important;left:0!important;right:0!important;top:0!important;bottom:0!important;display:grid!important;grid-template-columns:31.5% 37% 31.5%!important;z-index:10!important}
+body.theme-t20world #overlay .batters{grid-column:1!important;background:transparent!important;padding:0 4.8% 0 4.5%!important;display:flex!important;justify-content:center!important;gap:0!important;border:0!important;box-shadow:none!important}
+body.theme-t20world #overlay .batter{width:100%!important;height:50%!important;display:grid!important;grid-template-columns:minmax(0,1fr) auto!important;gap:6px!important;align-items:center!important;border:0!important;background:transparent!important;padding:0!important;animation:t2UserDataIn .55s cubic-bezier(.16,.86,.24,1) both!important}
+body.theme-t20world #overlay .batter:nth-child(2){animation-delay:.08s!important}
+body.theme-t20world #overlay .strike{display:none!important}
+body.theme-t20world #overlay .batterName{font-size:clamp(13px,1.55vw,31px)!important;font-weight:1000!important;color:#050505!important;text-shadow:0 1px 0 #fff!important;text-transform:uppercase!important;overflow:hidden!important;text-overflow:ellipsis!important}
+body.theme-t20world #overlay .batterName small{display:none!important}
+body.theme-t20world #overlay .batterScore{font-size:clamp(13px,1.35vw,27px)!important;color:#050505!important;font-weight:1000!important;gap:4px!important}
+body.theme-t20world #overlay .batterScore b,body.theme-t20world #overlay .batterScore span{font-size:inherit!important;color:#050505!important;font-weight:1000!important}
+body.theme-t20world #overlay .batterName:before{content:none!important;display:none!important}
+body.theme-t20world #overlay .batterName span{display:inline!important}
+body.theme-t20world #overlay .scorePanel{grid-column:2!important;background:transparent!important;color:#050505!important;padding:0!important;display:flex!important;align-items:center!important;justify-content:center!important;position:relative!important;box-shadow:none!important;border:0!important;overflow:visible!important}
+body.theme-t20world #overlay .scorePanel:before,body.theme-t20world #overlay .scorePanel:after{display:none!important}
+body.theme-t20world #overlay .theme2MatchTitle{position:absolute!important;top:-1.2%!important;left:15%!important;width:70%!important;height:17%!important;display:flex!important;align-items:center!important;justify-content:center!important;background:#080808!important;color:#fff!important;border-radius:28px 28px 0 0!important;font-size:clamp(13px,1.65vw,32px)!important;font-weight:1000!important;text-transform:uppercase!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important;letter-spacing:.02em!important;animation:t2UserTitleIn .65s cubic-bezier(.16,.86,.24,1) .06s both!important;z-index:4!important}
+body.theme-t20world #overlay .scoreBattingTeam{position:absolute!important;top:22%!important;left:5%!important;width:48%!important;height:25%!important;display:flex!important;align-items:center!important;justify-content:flex-end!important;padding-right:5%!important;color:#fff!important;font-size:clamp(17px,2.7vw,52px)!important;font-weight:1000!important;text-transform:uppercase!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important;text-shadow:0 2px 2px #000!important;z-index:2!important}
+body.theme-t20world #overlay .theme2ScoreLine{position:absolute!important;top:22%!important;left:49%!important;width:47%!important;height:26%!important;display:flex!important;align-items:center!important;gap:3%!important;z-index:3!important;animation:t2UserScoreIn .62s cubic-bezier(.16,.86,.24,1) .1s both!important}
+body.theme-t20world #overlay .scorePill{min-width:0!important;width:66%!important;height:100%!important;padding:0!important;margin:0!important;border-radius:18px!important;display:flex!important;align-items:center!important;justify-content:center!important;background:#5cd3df!important;color:#000!important;box-shadow:none!important;font-size:clamp(22px,3.2vw,60px)!important;font-weight:1000!important;letter-spacing:-.04em!important}
+body.theme-t20world #overlay .theme2OverValue{width:27%!important;height:82%!important;display:flex!important;align-items:center!important;justify-content:center!important;background:#fff!important;color:#111!important;border-radius:15px!important;font-size:clamp(17px,2.3vw,42px)!important;font-weight:1000!important}
+body.theme-t20world #overlay .scoreOverDetail,body.theme-t20world #overlay .scoreSubRow,body.theme-t20world #overlay .scoreExtraDetail{display:none!important}
+body.theme-t20world #overlay .bowlerPanel{grid-column:3!important;background:transparent!important;padding:0 5% 0 4%!important;border:0!important;box-shadow:none!important;display:flex!important;justify-content:center!important;min-width:0!important;position:relative!important}
+body.theme-t20world #overlay .bowlerTop{width:100%!important;display:block!important;position:absolute!important;top:22%!important;left:0!important;right:0!important}
+body.theme-t20world #overlay .bowlerName{width:100%!important;font-size:clamp(13px,1.5vw,30px)!important;font-weight:1000!important;color:#050505!important;text-shadow:0 1px 0 #fff!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important;text-transform:uppercase!important}
+body.theme-t20world #overlay .bowlerName:before{content:"BOWLER  "!important}
+body.theme-t20world #overlay .bowlerPanel .live{display:none!important}
+body.theme-t20world #overlay .bowlerStats{position:absolute!important;top:22%!important;right:3%!important;width:30%!important;color:#050505!important;font-size:clamp(12px,1.35vw,27px)!important;font-weight:1000!important;text-align:left!important;text-shadow:0 1px 0 #fff!important}
+body.theme-t20world #overlay .currentOver{position:absolute!important;right:3%!important;bottom:9%!important;width:70%!important;height:26%!important;margin:0!important;display:flex!important;align-items:center!important;justify-content:flex-end!important;gap:6px!important;overflow:hidden!important}
+body.theme-t20world #overlay .currentOverLabel{font-size:clamp(9px,1vw,18px)!important;color:#050505!important;font-weight:1000!important;letter-spacing:0!important;margin-right:2px!important}
+body.theme-t20world #overlay .ballList{display:flex!important;gap:4px!important;overflow:hidden!important;align-items:center!important;justify-content:flex-end!important}
+body.theme-t20world #overlay .ball{width:clamp(25px,2.2vw,42px)!important;height:clamp(25px,2.2vw,42px)!important;flex:0 0 clamp(25px,2.2vw,42px)!important;border-radius:7px!important;background:#ffdf00!important;color:#050505!important;border:0!important;box-shadow:none!important;font-size:clamp(12px,1.3vw,25px)!important;font-weight:1000!important;animation:t2UserBallIn .4s cubic-bezier(.16,.86,.24,1) both!important}
+body.theme-t20world #overlay .ball.four,body.theme-t20world #overlay .ball.six,body.theme-t20world #overlay .ball.zero,body.theme-t20world #overlay .ball.extra{background:#ffdf00!important;color:#050505!important}
+body.theme-t20world #overlay .ball.wicket{background:#ef3340!important;color:#fff!important}
+body.theme-t20world #overlay .ball.latest{box-shadow:0 0 0 2px #fff,0 0 10px #0007!important}
+body.theme-t20world #overlay .currentOverTotal{display:none!important}
+body.theme-t20world .hiddenCompat{display:none!important}
+body.theme-t20world #bannerTournament.show,body.theme-t20world #bannerMatch.show,body.theme-t20world #bannerVenue.show,body.theme-t20world #bannerToss.show,body.theme-t20world #bannerResult.show,body.theme-t20world #bannerPartnership.show,body.theme-t20world #custom.show{left:50%!important;right:auto!important;bottom:0!important;transform:translateX(-50%)!important;width:min(100vw,calc(100vh * 900 / 179),1800px)!important;height:auto!important;aspect-ratio:900/179!important;padding:0 12%!important;border:0!important;border-radius:0!important;background:transparent url('assets/theme2-template/lower-third.png') center/100% 100% no-repeat!important;box-shadow:none!important;color:#050505!important;font-size:clamp(15px,2.1vw,38px)!important;font-weight:1000!important;text-shadow:0 1px 0 #fff!important;animation:t2UserBannerIn .68s cubic-bezier(.16,.86,.24,1) both!important;z-index:120!important}
+body.theme-t20world #bannerPlayer.show,body.theme-t20world #bannerBowler.show,body.theme-t20world #bannerFOW.show{left:50%!important;right:auto!important;bottom:0!important;transform:translateX(-50%)!important;width:min(94vw,calc(100vh * 993 / 395),1500px)!important;height:auto!important;aspect-ratio:993/395!important;background:transparent url('assets/theme2-template/b1-b2-bowler.png') center/100% 100% no-repeat!important;border:0!important;border-radius:0!important;box-shadow:none!important;padding:0!important;color:#fff!important;animation:t2UserPlayerIn .72s cubic-bezier(.16,.86,.24,1) both!important;z-index:130!important}
+body.theme-t20world #bannerPlayer.show .statGraphic,body.theme-t20world #bannerBowler.show .statGraphic,body.theme-t20world #bannerFOW.show .statGraphic{left:12.5%!important;right:12.5%!important;top:20%!important;bottom:16%!important}
+@keyframes t2UserFrameIn{0%{opacity:0;transform:translateY(34px) scaleX(.93)}55%{opacity:1;transform:translateY(-3px) scaleX(1.015)}100%{opacity:1;transform:translateY(0) scaleX(1)}}
+@keyframes t2UserTitleIn{0%{opacity:0;transform:translateY(-16px) scaleX(.72)}100%{opacity:1;transform:none}}
+@keyframes t2UserScoreIn{0%{opacity:0;transform:scale(.72);filter:blur(5px)}65%{opacity:1;transform:scale(1.04);filter:none}100%{opacity:1;transform:scale(1)}}
+@keyframes t2UserDataIn{0%{opacity:0;transform:translateX(-18px)}100%{opacity:1;transform:none}}
+@keyframes t2UserBallIn{0%{opacity:0;transform:scale(.35) translateY(8px)}70%{opacity:1;transform:scale(1.08) translateY(0)}100%{opacity:1;transform:scale(1)}}
+@keyframes t2UserBannerIn{0%{opacity:0;transform:translateX(-50%) translateY(45px) scaleX(.86);filter:blur(6px)}65%{opacity:1;transform:translateX(-50%) translateY(-3px) scaleX(1.02);filter:none}100%{opacity:1;transform:translateX(-50%) translateY(0) scaleX(1)}}
+@keyframes t2UserPlayerIn{0%{opacity:0;transform:translateX(-50%) translateY(50px) scale(.82);filter:blur(7px)}65%{opacity:1;transform:translateX(-50%) translateY(-4px) scale(1.02);filter:none}100%{opacity:1;transform:translateX(-50%) translateY(0) scale(1)}}
+@media(max-width:900px){body.theme-t20world #overlay{width:100vw!important}body.theme-t20world #overlay .batterName{font-size:clamp(10px,2.5vw,19px)!important}body.theme-t20world #overlay .batterScore{font-size:clamp(10px,2.2vw,18px)!important}body.theme-t20world #overlay .scoreBattingTeam{font-size:clamp(12px,4vw,27px)!important}body.theme-t20world #overlay .theme2MatchTitle{font-size:clamp(9px,3vw,18px)!important}body.theme-t20world #overlay .scorePill{font-size:clamp(16px,6vw,34px)!important;border-radius:9px!important}body.theme-t20world #overlay .theme2OverValue{font-size:clamp(12px,4vw,23px)!important;border-radius:8px!important}body.theme-t20world #overlay .bowlerName{font-size:clamp(10px,2.5vw,18px)!important}body.theme-t20world #overlay .bowlerStats{font-size:clamp(9px,2.2vw,16px)!important}body.theme-t20world #overlay .currentOverLabel{font-size:clamp(7px,1.8vw,12px)!important}}
 
-body{
-  display:flex!important;
-  align-items:flex-end!important;
-  justify-content:center!important;
-  box-sizing:border-box!important;
+/* ===== Theme 2 live-data corrections ===== */
+body.theme-t20world #overlay .currentOver,
+body.theme-t20world #overlay .ballList,
+body.theme-t20world #overlay .ball,
+body.theme-t20world #overlay .ball.latest{
+  animation:none!important;
+  transition:none!important;
 }
+body.theme-t20world #overlay .ball.latest{box-shadow:none!important}
+body.theme-t20world #overlay .currentOver{opacity:1!important;filter:none!important}
 
-/* Main scoreboard footprint: approximately 6–10% of screen height, never oversized. */
-#overlay.overlay{
-  position:fixed!important;
-  left:0!important;
-  right:0!important;
-  bottom:0!important;
-  top:auto!important;
-  width:100vw!important;
-  max-width:none!important;
-  min-width:0!important;
-  height:clamp(76px,6vw,116px)!important;
-  max-height:116px!important;
-  margin:0!important;
-  padding:0!important;
-  transform:none!important;
-  overflow:visible!important;
-  transform-origin:bottom center!important;
+/* Rotating match-information strip: same information family as Theme 1, placed below team/score. */
+body.theme-t20world #overlay .theme2InfoTicker{
+  position:absolute!important;
+  left:4%!important; right:4%!important; top:52%!important; height:16%!important;
+  display:flex!important; align-items:center!important; justify-content:center!important;
+  padding:0 8px!important; box-sizing:border-box!important;
+  color:#111!important; font-size:clamp(8px,.82vw,16px)!important;
+  font-weight:1000!important; letter-spacing:.045em!important;
+  text-transform:uppercase!important; white-space:nowrap!important; overflow:hidden!important;
+  text-overflow:ellipsis!important; text-align:center!important;
+  text-shadow:0 1px 0 #fff!important;
+  opacity:1;
+  z-index:5!important;
 }
+body.theme-t20world #overlay .theme2InfoTicker.tick{animation:t2InfoBlink .5s ease both!important}
+@keyframes t2InfoBlink{0%{opacity:.18;transform:translateY(5px)}100%{opacity:1;transform:translateY(0)}}
 
-#overlay .frame{
-  width:100%!important;
-  height:clamp(76px,6vw,116px)!important;
-  min-height:76px!important;
-  max-height:116px!important;
-  margin:0!important;
-  border-radius:clamp(8px,0.8vw,14px)!important;
-  overflow:hidden!important;
-}
+/* The supplied format has names in the left data slots; role words are not repeated. */
+body.theme-t20world #overlay .batterName{display:block!important}
+body.theme-t20world #overlay .batterName span{display:inline!important}
 
-#overlay .content{
-  left:17%!important;
-  right:17%!important;
-  top:0!important;
-  bottom:0!important;
-  height:100%!important;
-  min-width:0!important;
-  grid-template-columns:34% 29% 37%!important;
-}
-
-#overlay .teamPanel{
-  width:17%!important;
-  min-width:0!important;
-  padding:0 clamp(7px,1vw,18px)!important;
-  overflow:hidden!important;
-}
-
-#overlay .teamPanel .teamName{
-  max-width:100%!important;
-  min-width:0!important;
-  overflow:hidden!important;
-  text-overflow:ellipsis!important;
-  white-space:nowrap!important;
-  font-size:clamp(11px,1.35vw,25px)!important;
-  line-height:1!important;
-  letter-spacing:0!important;
-}
-
-#overlay .batters,
-#overlay .bowlerPanel{
-  min-width:0!important;
-  overflow:hidden!important;
-  padding:clamp(5px,0.65vw,12px) clamp(7px,0.9vw,16px)!important;
-}
-
-#overlay .batter{
-  min-width:0!important;
-  gap:clamp(2px,.35vw,6px)!important;
-}
-
-#overlay .batterName{
-  min-width:0!important;
-  max-width:100%!important;
-  overflow:hidden!important;
-  text-overflow:ellipsis!important;
-  white-space:nowrap!important;
-  font-size:clamp(9px,1.05vw,20px)!important;
-  line-height:1.05!important;
-}
-
-#overlay .batterScore{
-  gap:clamp(2px,.25vw,5px)!important;
-}
-#overlay .batterScore b{
-  font-size:clamp(14px,1.55vw,29px)!important;
-  line-height:1!important;
-}
-#overlay .batterScore span{
-  font-size:clamp(8px,.75vw,14px)!important;
-  line-height:1!important;
-}
-#overlay .strike{
-  font-size:clamp(7px,.65vw,12px)!important;
-}
-
-#overlay .scorePanel{
-  min-width:0!important;
-  overflow:hidden!important;
-  padding:clamp(4px,.5vw,9px) clamp(5px,.65vw,12px)!important;
-}
-#overlay .matchTitle{
-  max-width:100%!important;
-  overflow:hidden!important;
-  text-overflow:ellipsis!important;
-  white-space:nowrap!important;
-  font-size:clamp(8px,.85vw,16px)!important;
-  line-height:1!important;
-  margin-bottom:clamp(2px,.3vw,5px)!important;
-}
-#overlay .scorePill{
-  min-width:70%!important;
-  max-width:100%!important;
-  padding:clamp(3px,.4vw,7px) clamp(7px,.9vw,17px)!important;
-  border-radius:clamp(7px,.7vw,13px)!important;
-  font-size:clamp(20px,2.45vw,46px)!important;
-  line-height:.9!important;
-  letter-spacing:-.5px!important;
-  white-space:nowrap!important;
-}
-#overlay .scoreMeta{
-  gap:clamp(5px,.9vw,17px)!important;
-  margin-top:clamp(2px,.35vw,6px)!important;
-  font-size:clamp(8px,.8vw,15px)!important;
-  white-space:nowrap!important;
-}
-#overlay .crrRrr{
-  gap:clamp(5px,.9vw,17px)!important;
-  margin-top:clamp(2px,.3vw,5px)!important;
-  font-size:clamp(7px,.65vw,12px)!important;
-  white-space:nowrap!important;
-}
-
-#overlay .bowlerPanel{
-  padding-right:clamp(34px,3.4vw,64px)!important;
-}
-#overlay .bowlerTop{
-  min-width:0!important;
-  gap:clamp(4px,.6vw,10px)!important;
-}
-#overlay .bowlerName{
-  min-width:0!important;
-  max-width:100%!important;
-  overflow:hidden!important;
-  text-overflow:ellipsis!important;
-  white-space:nowrap!important;
-  font-size:clamp(10px,1.1vw,21px)!important;
-  line-height:1!important;
-}
-#overlay .bowlerStats{
-  font-size:clamp(8px,.72vw,14px)!important;
-  line-height:1!important;
-  white-space:nowrap!important;
-}
-#overlay .bowlerStatus{
-  font-size:clamp(7px,.62vw,12px)!important;
-  line-height:1!important;
-  white-space:nowrap!important;
-}
-#overlay .live{
-  font-size:clamp(7px,.62vw,12px)!important;
-}
-
-#overlay .currentOver{
-  min-width:0!important;
-  margin-top:clamp(3px,.45vw,7px)!important;
-  gap:clamp(2px,.35vw,6px)!important;
-  overflow:hidden!important;
-}
-#overlay .currentOverLabel{
-  flex:0 0 auto!important;
-  font-size:clamp(6px,.55vw,10px)!important;
-}
-#overlay .ballList{
-  min-width:0!important;
-  overflow:hidden!important;
-  gap:clamp(2px,.3vw,5px)!important;
-}
-#overlay .ball{
-  width:clamp(16px,1.55vw,30px)!important;
-  height:clamp(16px,1.55vw,30px)!important;
-  flex:0 0 clamp(16px,1.55vw,30px)!important;
-  font-size:clamp(7px,.65vw,12px)!important;
-}
-
-/* Any normal lower-third/banner/animation uses the same compact footprint. */
-#overlay .banner,
-#overlay .custom,
-#overlay .animation,
-.banner{
-  width:100vw!important;
-  max-width:100vw!important;
-  min-width:0!important;
-  height:clamp(76px,6vw,116px)!important;
-  max-height:116px!important;
-  left:0!important;
-  right:0!important;
-  bottom:0!important;
-  top:auto!important;
-  margin:0!important;
-  padding:0 clamp(10px,2vw,30px)!important;
-  border-radius:clamp(7px,.7vw,12px)!important;
-  box-sizing:border-box!important;
-  overflow:hidden!important;
-  font-size:clamp(17px,2.1vw,40px)!important;
-  line-height:1.05!important;
-  white-space:nowrap!important;
-  text-overflow:ellipsis!important;
-}
-
-#overlay .animation{
-  padding:0 clamp(10px,2vw,30px)!important;
-}
-#overlay .animText{
-  max-width:100%!important;
-  overflow:hidden!important;
-  text-overflow:ellipsis!important;
-  white-space:nowrap!important;
-  font-size:clamp(30px,4vw,76px)!important;
-  line-height:1!important;
-}
-
-/* Compact custom-text mode: allow wrapping without clipping. */
-#overlay .custom{
-  white-space:normal!important;
-  word-break:break-word!important;
-  overflow-wrap:anywhere!important;
-  text-align:center!important;
-  padding:8px 3vw!important;
-  line-height:1.05!important;
-  font-size:clamp(17px,2.5vw,46px)!important;
-}
-
-/* Theme-5 lower third was using a much larger fixed canvas; compact it too. */
-body.theme-theme5 #theme5Lower{
-  width:100vw!important;
-  max-width:100vw!important;
-  min-width:0!important;
-  height:clamp(76px,6vw,116px)!important;
-  max-height:116px!important;
-  left:50%!important;
-  bottom:0!important;
-  margin:0!important;
-  transform:translateX(-50%)!important;
-  overflow:hidden!important;
-}
-body.theme-theme5 #theme5Lower .t5-top{
-  height:clamp(48px,4vw,78px)!important;
-}
-body.theme-theme5 #theme5Lower .t5-side{
-  height:clamp(42px,3.7vw,72px)!important;
-  top:clamp(8px,.8vw,15px)!important;
-  padding:5px 10px!important;
-  font-size:clamp(8px,.8vw,15px)!important;
-  line-height:1.15!important;
-}
-body.theme-theme5 #theme5Lower .t5-innings{
-  font-size:clamp(9px,.9vw,17px)!important;
-  line-height:1!important;
-}
-body.theme-theme5 #theme5Lower .t5-score{
-  font-size:clamp(18px,1.8vw,34px)!important;
-  line-height:1.05!important;
-}
-body.theme-theme5 #theme5Lower .t5-over{
-  font-size:clamp(10px,1vw,19px)!important;
-  line-height:1!important;
-}
-body.theme-theme5 #theme5Lower .t5-bottom{
-  height:clamp(24px,1.9vw,37px)!important;
-  padding-top:6px!important;
-  font-size:clamp(9px,.9vw,17px)!important;
-  line-height:1!important;
-}
-
-/* Keep top-right BRKLIVE19/LIVE visible but never let it consume scoreboard width. */
-#overlay .refBrandLive,
-#overlay .brkLogo{
-  transform:none!important;
-  max-width:18vw!important;
-}
-#overlay .refBrandText{
-  font-size:clamp(10px,1.05vw,20px)!important;
-}
-#overlay .refBrandLiveLine{
-  font-size:clamp(6px,.55vw,11px)!important;
-  gap:3px!important;
-}
-#overlay .refLiveDot{
-  width:clamp(5px,.45vw,8px)!important;
-  height:clamp(5px,.45vw,8px)!important;
-}
-
-/* Very narrow screens: reserve a little more width for names and keep every field visible. */
-@media (max-width:700px){
-  #overlay.overlay{
-    height:78px!important;
-    max-height:78px!important;
-  }
-  #overlay .frame{
-    height:78px!important;
-    min-height:78px!important;
-    max-height:78px!important;
-    border-radius:8px!important;
-  }
-  #overlay .content{
-    left:16%!important;
-    right:16%!important;
-    grid-template-columns:35% 28% 37%!important;
-  }
-  #overlay .teamPanel{
-    width:16%!important;
-    padding:0 5px!important;
-  }
-  #overlay .batters,#overlay .bowlerPanel{
-    padding-left:5px!important;
-    padding-right:5px!important;
-  }
-  #overlay .bowlerPanel{padding-right:30px!important}
-  #overlay .batterName{font-size:clamp(7px,2.2vw,11px)!important}
-  #overlay .batterScore b{font-size:clamp(11px,3.2vw,16px)!important}
-  #overlay .batterScore span{font-size:clamp(6px,1.7vw,9px)!important}
-  #overlay .bowlerName{font-size:clamp(7px,2.2vw,12px)!important}
-  #overlay .bowlerStats{font-size:clamp(6px,1.8vw,9px)!important}
-  #overlay .scorePill{font-size:clamp(17px,5vw,25px)!important;padding:3px 6px!important}
-  #overlay .scoreMeta{font-size:clamp(6px,1.8vw,9px)!important;gap:4px!important}
-  #overlay .crrRrr{font-size:clamp(5px,1.5vw,8px)!important;gap:4px!important}
-  #overlay .ball{width:15px!important;height:15px!important;flex-basis:15px!important;font-size:6px!important}
-  #overlay .banner,#overlay .custom,#overlay .animation,.banner{
-    height:78px!important;
-    max-height:78px!important;
-    font-size:clamp(14px,4.5vw,24px)!important;
-  }
-}
-
-/* Tiny browser-source windows: shrink typography, never create a horizontal scrollbar. */
-@media (max-width:420px){
-  #overlay .content{left:14%!important;right:14%!important;grid-template-columns:37% 26% 37%!important}
-  #overlay .teamPanel{width:14%!important}
-  #overlay .teamPanel .teamName{font-size:8px!important}
-  #overlay .bowlerPanel{padding-right:25px!important}
-  #overlay .bowlerName{font-size:7px!important}
-  #overlay .bowlerStats{font-size:5.5px!important}
-  #overlay .batterName{font-size:6.5px!important}
-  #overlay .scorePill{font-size:16px!important}
-  #overlay .ball{width:13px!important;height:13px!important;flex-basis:13px!important;font-size:5px!important}
-}
+/* Explicit BOWLER label in the right-side bowler area. */
+body.theme-t20world #overlay .bowlerName:before{content:"BOWLER  "!important}
 </style>
-
 </body>
 
 <style id="brklive19-live-summary-fix-v1">
@@ -3423,6 +3671,44 @@ body.theme-theme5 #theme5Lower .t5-bottom{
   #theme5Summary .t5-summary-title small{font-size:6px;}
   #theme5Summary .t5-summary-title em{font-size:5px;}
 }
+</style>
+
+<style id="BRKLIVE19-THEME2-SAME-AS-THEME1-SCOREBOARD-SUMMARY">
+/* Theme 2: same scoreboard + summary structure/data as Theme 1; Theme 2 only changes the skin. */
+body.theme-t20world #scorecardOverlay{background:rgba(0,0,0,.84)!important;padding:18px!important;display:flex!important;align-items:center!important;justify-content:center!important;backdrop-filter:blur(2px)!important}
+body.theme-t20world #scorecardOverlay .card{width:min(96vw,1365px)!important;height:min(94vh,768px)!important;aspect-ratio:16/9!important;padding:12px!important;border:2px solid #7fe8ff!important;border-radius:12px!important;background:linear-gradient(180deg,#070b18,#0b1230)!important;box-shadow:0 0 45px rgba(127,232,255,.22),0 18px 60px #000b!important;overflow:hidden!important}
+body.theme-t20world #scorecardOverlay .card #scContent{width:100%!important;height:100%!important;overflow:hidden!important}
+body.theme-t20world #scorecardOverlay .pref-broadcast-header{border-color:#7fe8ff!important;background:linear-gradient(180deg,#0b0750,#25106f,#0b0750)!important}
+body.theme-t20world #scorecardOverlay .pref-tournament{background:linear-gradient(90deg,#25106f,#ff2bbd,#ff9f2d,#25106f)!important}
+body.theme-t20world #scorecardOverlay .pref-match-line{color:#fff!important}
+body.theme-t20world #scorecardOverlay .pref-match-line b{color:#7fe8ff!important}
+body.theme-t20world #scorecardOverlay .pref-batting-score{background:linear-gradient(90deg,#0b0750,#35168a,#0b0750)!important}
+body.theme-t20world #scorecardOverlay .pref-batting-team{color:#fff!important}
+body.theme-t20world #scorecardOverlay .pref-batting-score strong{color:#7fe8ff!important}
+body.theme-t20world #scorecardOverlay .pref-batting-score small{color:#ff9f2d!important}
+body.theme-t20world #scorecardOverlay .pref-panel{border-color:#7fe8ff!important;background:#080b18!important}
+body.theme-t20world #scorecardOverlay .pref-title{background:linear-gradient(90deg,#25106f,#8e168c,#25106f)!important;color:#fff!important;border-color:#ff9f2d!important}
+body.theme-t20world #scorecardOverlay .pref-table th{background:#1a1740!important;color:#7fe8ff!important;border-color:#ffffff20!important}
+body.theme-t20world #scorecardOverlay .pref-table td{color:#fff!important;border-color:#ffffff18!important}
+body.theme-t20world #scorecardOverlay .pref-table .blue-total td{background:linear-gradient(90deg,#6c2bff,#ff2bbd)!important;color:#fff!important}
+body.theme-t20world #scorecardOverlay .pref-table .extra-row td{background:#17132f!important;color:#fff!important}
+body.theme-t20world #scorecardOverlay .score-hero{background:linear-gradient(100deg,#0b0750,#35168a,#0b0750)!important}
+body.theme-t20world #scorecardOverlay .score-main{color:#fff!important}
+body.theme-t20world #scorecardOverlay .score-overs{color:#7fe8ff!important}
+body.theme-t20world #scorecardOverlay .score-meta{background:#eeeaff!important}
+body.theme-t20world #scorecardOverlay .score-meta strong{color:#25106f!important}
+body.theme-t20world #scorecardOverlay .pref-footer{background:linear-gradient(90deg,#0b0750,#35168a,#0b0750)!important;color:#fff!important;border-color:#7fe8ff!important}
+body.theme-t20world #summaryOverlay{background:radial-gradient(circle at 50% -10%,#35168a 0,#0b0750 45%,#03021d 100%)!important;padding:18px!important}
+body.theme-t20world #summaryOverlay.show{display:block!important}
+body.theme-t20world #summaryOverlay .summary-head{border-color:#7fe8ff!important;background:#0b0750!important}
+body.theme-t20world #summaryOverlay .summary-head .side.a{background:linear-gradient(110deg,#ff2bbd,#8e168c,#ff9f2d)!important}
+body.theme-t20world #summaryOverlay .summary-head .side.b{background:linear-gradient(250deg,#ff9f2d,#8e168c,#ff2bbd)!important}
+body.theme-t20world #summaryOverlay .summary-head .center{background:linear-gradient(180deg,#25106f,#0b0750)!important}
+body.theme-t20world #summaryOverlay .summary-team{border-color:#7fe8ff!important;background:#eef7ff!important}
+body.theme-t20world #summaryOverlay .summary-team-head{background:linear-gradient(90deg,#25106f,#6c2bff,#ff2bbd,#ff9f2d)!important}
+body.theme-t20world #summaryOverlay .summary-box .box-head{background:linear-gradient(90deg,#0b0750,#35168a)!important;border-bottom-color:#ff9f2d!important}
+body.theme-t20world #summaryOverlay .summary-status{background:linear-gradient(90deg,#0b0750,#35168a,#8e168c)!important;border-color:#7fe8ff!important}
+body.theme-t20world #summaryOverlay .summary-result{background:linear-gradient(90deg,#6c2bff,#ff2bbd,#ff9f2d)!important;border-color:#7fe8ff!important}
 </style>
 </html>
 <style>
@@ -6442,3 +6728,272 @@ body.second-innings #overlay .teamPanel.right #secondInningsTarget{display:flex!
 }
 #overlay #topRowTarget{gap:7px!important;}
 </style>
+
+<!-- BRKLIVE19 TRUE DISTINCT BROADCAST DESIGNS v2 -->
+<style id="BRKLIVE19-DISTINCT-DESIGNS-V2">
+/* Remove the two decorative circles from the team-name panels. */
+body.theme-theme3 .teamPanel.left:after,
+body.theme-theme3 .teamPanel.right:after{display:none!important;content:none!important}
+
+/* Shared readability for the new designs. */
+body[class*="theme-design"] .teamName,
+body[class*="theme-design"] .batterName,
+body[class*="theme-design"] .bowlerName,
+body[class*="theme-design"] .scorePill,
+body[class*="theme-design"] .scoreBattingTeam{font-synthesis:none;-webkit-font-smoothing:antialiased;text-rendering:geometricPrecision}
+
+/* ============================================================
+   17 — RIBBON: thin top team plates + central score + data shelf
+   ============================================================ */
+.theme-design17 .frame{
+  height:150px!important;border-radius:0!important;border:0!important;
+  background:#08101c!important;box-shadow:0 -2px 0 #1e90ff inset,0 10px 30px #000c!important;
+  clip-path:polygon(0 0,100% 0,100% 88%,97% 100%,3% 100%,0 88%);
+}
+.theme-design17 .teamPanel{top:0;height:57px;bottom:auto;width:25%!important;padding:0 22px!important;clip-path:none!important;border:0!important;z-index:6}
+.theme-design17 .teamPanel.left{left:0;background:#123e78!important;justify-content:flex-start;border-left:5px solid #19b5ff!important}
+.theme-design17 .teamPanel.right{right:0;background:#782020!important;justify-content:flex-end;border-right:5px solid #ff4d55!important}
+.theme-design17 .teamPanel .teamName{font-size:clamp(14px,1.65vw,28px);white-space:nowrap;line-height:1}
+.theme-design17 .content{left:0!important;right:0!important;top:57px!important;bottom:0!important;height:auto!important;grid-template-columns:34% 32% 34%!important;gap:0!important;z-index:5}
+.theme-design17 .batters{background:#0d1b2d!important;padding:6px 16px!important;border-top:1px solid #244664;border-bottom:2px solid #19b5ff}
+.theme-design17 .batter{gap:5px;border-color:#ffffff18}
+.theme-design17 .batterName{font-size:clamp(11px,1.15vw,20px)}
+.theme-design17 .batterScore b{font-size:clamp(16px,1.5vw,27px)}
+.theme-design17 .scorePanel{position:relative;background:#f5f7fa!important;color:#101b2b!important;padding:5px 8px!important;border-left:1px solid #b9c8d7;border-right:1px solid #b9c8d7}
+.theme-design17 .scorePanel:before,.theme-design17 .scorePanel:after{display:none}
+.theme-design17 .scorePill{min-width:65%;padding:5px 15px;border-radius:2px!important;background:#111d2e!important;color:#fff!important;border-left:5px solid #19b5ff;border-right:5px solid #ff4d55;box-shadow:none!important;font-size:clamp(27px,2.9vw,50px)}
+.theme-design17 .scoreMeta{margin-top:3px;gap:15px;font-size:clamp(9px,.9vw,15px)}
+.theme-design17 .crrRrr{margin-top:2px;gap:14px;font-size:clamp(8px,.8vw,13px)}
+.theme-design17 .bowlerPanel{background:#101a29!important;padding:6px 16px!important;border-top:1px solid #3a526b;border-bottom:2px solid #ff4d55}
+.theme-design17 .bowlerName{font-size:clamp(12px,1.2vw,21px)}
+.theme-design17 .bowlerStats{font-size:clamp(9px,.9vw,14px)}
+.theme-design17 .currentOver{margin-top:4px;gap:4px}.theme-design17 .ball{width:22px;height:22px;flex-basis:22px;font-size:9px}
+
+/* ============================================================
+   18 — SPLIT SCREEN: diagonal side blades and central white score card
+   ============================================================ */
+.theme-design18 .frame{height:156px!important;background:#090b10!important;border:0!important;border-radius:3px!important;box-shadow:0 14px 40px #000d!important}
+.theme-design18 .frame:before{background:linear-gradient(135deg,#ff382d22,#fff0 35%,#fff0 65%,#ff382d18)!important}
+.theme-design18 .teamPanel{width:27%!important;top:0;bottom:0;padding:0 28px!important;clip-path:none!important;border:0!important}
+.theme-design18 .teamPanel.left{left:0;background:#e9edf2!important;color:#111;clip-path:polygon(0 0,86% 0,100% 50%,86% 100%,0 100%)!important;justify-content:flex-start}
+.theme-design18 .teamPanel.right{right:0;background:#1c1f28!important;color:#fff;clip-path:polygon(14% 0,100% 0,100% 100%,14% 100%,0 50%)!important;justify-content:flex-end}
+.theme-design18 .teamPanel .teamName{font-size:clamp(16px,1.75vw,31px);line-height:1.05;white-space:normal;max-width:80%;text-shadow:none!important;color:#111!important}
+.theme-design18 .teamPanel.right .teamName{color:#fff!important}
+.theme-design18 .content{left:25%!important;right:25%!important;top:0!important;bottom:0!important;grid-template-columns:1fr 1fr!important;grid-template-rows:58% 42%!important;gap:0!important}
+.theme-design18 .batters{grid-column:1;grid-row:1;background:#121722!important;padding:10px 13px!important;border-right:1px solid #313845}
+.theme-design18 .scorePanel{grid-column:1 / span 2;grid-row:1;position:absolute!important;left:50%;top:0;transform:translateX(-50%);width:48%;height:100%;background:#fff!important;color:#111!important;padding:10px!important;z-index:7;clip-path:polygon(8% 0,92% 0,100% 50%,92% 100%,8% 100%,0 50%)}
+.theme-design18 .scorePanel:before,.theme-design18 .scorePanel:after{display:none}
+.theme-design18 .scorePill{min-width:74%;padding:7px 18px;border-radius:0!important;background:#111!important;color:#fff!important;box-shadow:none!important;font-size:clamp(30px,3.2vw,56px);transform:skew(-7deg)}
+.theme-design18 .scoreMeta,.theme-design18 .crrRrr{color:#111;margin-top:5px;gap:16px}
+.theme-design18 .bowlerPanel{grid-column:1 / span 2;grid-row:2;background:#181b23!important;padding:6px 14px!important;border-top:3px solid #ff382d}
+.theme-design18 .bowlerTop{max-width:60%;margin:auto}.theme-design18 .currentOver{justify-content:center;margin-top:3px}.theme-design18 .ball{width:21px;height:21px;flex-basis:21px}
+
+/* ============================================================
+   19 — FLOATING GLASS: separated translucent capsules
+   ============================================================ */
+.theme-design19 .frame{height:148px!important;background:linear-gradient(135deg,#07111f,#0e1e35)!important;border:0!important;border-radius:22px!important;padding:7px!important;box-shadow:0 18px 50px #000b,0 0 50px #45dfff12 inset!important}
+.theme-design19 .teamPanel{top:8px;bottom:8px;width:19%!important;padding:0 20px!important;background:#ffffff0b!important;backdrop-filter:blur(14px);border:1px solid #ffffff20!important;border-radius:16px;clip-path:none!important}
+.theme-design19 .teamPanel.left{left:8px}.theme-design19 .teamPanel.right{right:8px}
+.theme-design19 .teamPanel .teamName{font-size:clamp(15px,1.6vw,28px);white-space:normal;line-height:1.02;text-shadow:0 2px 8px #000}
+.theme-design19 .content{left:20.5%!important;right:20.5%!important;top:8px!important;bottom:8px!important;grid-template-columns:32% 36% 32%!important;gap:7px!important}
+.theme-design19 .batters,.theme-design19 .scorePanel,.theme-design19 .bowlerPanel{border:1px solid #ffffff20!important;border-radius:14px!important;background:#ffffff0b!important;backdrop-filter:blur(15px);box-shadow:none!important}
+.theme-design19 .batters{padding:8px 12px!important}.theme-design19 .batter{border-color:#ffffff18}.theme-design19 .batterName{font-size:clamp(11px,1.2vw,20px)}
+.theme-design19 .scorePanel{color:#fff!important}.theme-design19 .scorePanel:before,.theme-design19 .scorePanel:after{display:none}.theme-design19 .scorePill{background:linear-gradient(135deg,#22d3ee,#7c3aed)!important;border-radius:999px!important;box-shadow:0 10px 35px #22d3ee25!important}
+.theme-design19 .bowlerPanel{padding:9px 12px!important}.theme-design19 .bowlerName{font-size:clamp(12px,1.2vw,21px)}.theme-design19 .ball{width:23px;height:23px;flex-basis:23px}
+
+/* ============================================================
+   20 — CHAMPIONSHIP PLATE: gold crest-like central plate
+   ============================================================ */
+.theme-design20 .frame{height:158px!important;background:linear-gradient(180deg,#1b1204,#080704)!important;border:2px solid #caa43b!important;border-radius:4px!important;box-shadow:0 16px 40px #000d,0 0 0 2px #fff2 inset!important}
+.theme-design20 .frame:before{background:repeating-linear-gradient(90deg,transparent 0 70px,#d7b84d10 71px 72px)!important}
+.theme-design20 .teamPanel{width:23%!important;top:13px;bottom:13px;padding:0 24px!important;clip-path:polygon(0 0,90% 0,100% 50%,90% 100%,0 100%)!important;background:#2a1c06!important;border:1px solid #caa43b!important}
+.theme-design20 .teamPanel.right{clip-path:polygon(10% 0,100% 0,100% 100%,10% 100%,0 50%)!important;justify-content:flex-end;background:#2a1c06!important}
+.theme-design20 .teamPanel .teamName{font-size:clamp(14px,1.65vw,28px);white-space:normal;line-height:1.02;color:#f8e7a6!important;text-shadow:0 1px 0 #000}
+.theme-design20 .content{left:22.5%!important;right:22.5%!important;top:10px!important;bottom:10px!important;grid-template-columns:31% 38% 31%!important;gap:0!important}
+.theme-design20 .batters,.theme-design20 .bowlerPanel{background:#171108!important;border-top:1px solid #765a1e;border-bottom:1px solid #765a1e;padding:10px 13px!important}.theme-design20 .batter{border-color:#6c532018}.theme-design20 .batterName,.theme-design20 .bowlerName{font-size:clamp(11px,1.2vw,20px)}
+.theme-design20 .scorePanel{background:linear-gradient(180deg,#fff7db,#e8d39a)!important;color:#211604!important;border-left:1px solid #caa43b;border-right:1px solid #caa43b;clip-path:polygon(5% 0,95% 0,100% 10%,100% 90%,95% 100%,5% 100%,0 90%,0 10%)}
+.theme-design20 .scorePanel:before,.theme-design20 .scorePanel:after{display:none}.theme-design20 .scorePill{background:#211604!important;color:#f8e7a6!important;border:2px solid #caa43b;border-radius:3px!important;box-shadow:none!important}
+.theme-design20 .scoreMeta,.theme-design20 .crrRrr{color:#211604}.theme-design20 .ball{border-radius:4px;background:#3b2a0e}.theme-design20 .ball.four{background:#caa43b;color:#111}.theme-design20 .ball.six{background:#f1d77a;color:#111}.theme-design20 .ball.wicket{background:#b52b27}
+
+/* ============================================================
+   21 — MINIMAL PILL: tiny premium scorebug, no large panels
+   ============================================================ */
+.theme-design21 .frame{height:94px!important;background:transparent!important;border:0!important;box-shadow:none!important;overflow:visible!important}
+.theme-design21 .teamPanel{top:7px;bottom:7px;width:22%!important;padding:0 18px!important;clip-path:none!important;border-radius:12px;background:#111827!important;border:1px solid #374151!important;box-shadow:0 7px 20px #0009}
+.theme-design21 .teamPanel.left{left:0;border-left:4px solid #60a5fa}.theme-design21 .teamPanel.right{right:0;border-right:4px solid #f87171;justify-content:flex-end;background:#111827!important}
+.theme-design21 .teamPanel .teamName{font-size:clamp(12px,1.25vw,22px);white-space:nowrap}
+.theme-design21 .content{left:21%!important;right:21%!important;top:7px!important;bottom:7px!important;grid-template-columns:35% 30% 35%!important;gap:4px!important}
+.theme-design21 .batters,.theme-design21 .bowlerPanel{background:#111827!important;border:1px solid #374151!important;border-radius:12px;padding:5px 9px!important;box-shadow:0 7px 20px #0009}.theme-design21 .batter{gap:3px}.theme-design21 .batterName{font-size:clamp(8px,.9vw,15px)}.theme-design21 .batterScore b{font-size:clamp(13px,1.2vw,20px)}
+.theme-design21 .scorePanel{background:#fff!important;color:#111827!important;border:1px solid #d1d5db!important;border-radius:14px!important;padding:3px!important;box-shadow:0 7px 20px #0009}.theme-design21 .scorePanel:before,.theme-design21 .scorePanel:after{display:none}.theme-design21 .scorePill{min-width:75%;padding:4px 9px;border-radius:8px!important;background:#111827!important;color:#fff!important;box-shadow:none!important;font-size:clamp(22px,2.3vw,38px)}.theme-design21 .matchTitle,.theme-design21 .scoreMeta,.theme-design21 .crrRrr{margin-top:2px;margin-bottom:1px;font-size:clamp(7px,.7vw,11px)}.theme-design21 .currentOver{margin-top:2px;gap:2px}.theme-design21 .ball{width:17px;height:17px;flex-basis:17px;font-size:7px}
+
+/* ============================================================
+   22 — ARENA: center tower with side data rails
+   ============================================================ */
+.theme-design22 .frame{height:164px!important;background:linear-gradient(90deg,#050914,#111c37 50%,#050914)!important;border:0!important;border-top:3px solid #ff654d;border-bottom:3px solid #ff654d;border-radius:0!important}
+.theme-design22 .teamPanel{width:30%!important;top:0;bottom:0;padding:0 32px!important;clip-path:none!important;background:transparent!important}
+.theme-design22 .teamPanel.left{left:0;justify-content:flex-start;border-right:1px solid #ff654d55}.theme-design22 .teamPanel.right{right:0;justify-content:flex-end;border-left:1px solid #ff654d55}
+.theme-design22 .teamPanel .teamName{font-size:clamp(18px,2vw,35px);white-space:normal;line-height:1.03;max-width:75%}
+.theme-design22 .content{left:28%!important;right:28%!important;top:0!important;bottom:0!important;grid-template-columns:1fr!important;display:block!important}
+.theme-design22 .scorePanel{position:absolute!important;left:50%;top:8px;transform:translateX(-50%);width:72%;height:92%;background:linear-gradient(180deg,#ff704f,#c52e2a)!important;color:#fff!important;border:0!important;clip-path:polygon(8% 0,92% 0,100% 12%,100% 88%,92% 100%,8% 100%,0 88%,0 12%);z-index:6}
+.theme-design22 .scorePanel:before,.theme-design22 .scorePanel:after{display:none}.theme-design22 .scorePill{background:#fff!important;color:#16213d!important;border-radius:4px!important;box-shadow:none!important;border:0!important;font-size:clamp(30px,3.2vw,55px)}
+.theme-design22 .batters{position:absolute;left:-90%;top:0;width:90%;height:100%;background:#0b1224!important;padding:10px 14px!important}.theme-design22 .bowlerPanel{position:absolute;right:-90%;top:0;width:90%;height:100%;background:#0b1224!important;padding:10px 14px!important}.theme-design22 .batterName,.theme-design22 .bowlerName{font-size:clamp(11px,1.2vw,20px)}.theme-design22 .currentOver{justify-content:flex-end}
+
+/* ============================================================
+   23 — FUTURE: asymmetric cyber panels with cut corners
+   ============================================================ */
+.theme-design23 .frame{height:154px!important;background:#03040a!important;border:1px solid #00eaff!important;border-radius:0!important;box-shadow:0 0 0 1px #5b1dff55 inset,0 15px 50px #000d!important}
+.theme-design23 .frame:before{background:linear-gradient(90deg,#00eaff12 1px,transparent 1px),linear-gradient(#5b1dff12 1px,transparent 1px)!important;background-size:28px 28px!important}
+.theme-design23 .teamPanel{width:25%!important;top:8px;bottom:8px;padding:0 22px!important;clip-path:polygon(0 0,92% 0,100% 18%,100% 82%,92% 100%,0 100%,8% 50%)!important;background:#071326!important;border:1px solid #00eaff!important}
+.theme-design23 .teamPanel.right{clip-path:polygon(8% 0,100% 0,100% 100%,8% 100%,0 82%,0 18%)!important;justify-content:flex-end;background:#160b27!important;border-color:#ff35dc!important}
+.theme-design23 .teamPanel .teamName{font-size:clamp(14px,1.55vw,27px);white-space:normal;line-height:1.02;text-shadow:0 0 10px #00eaff55}.theme-design23 .teamPanel.right .teamName{text-shadow:0 0 10px #ff35dc55}
+.theme-design23 .content{left:24%!important;right:24%!important;top:8px!important;bottom:8px!important;grid-template-columns:32% 36% 32%!important;gap:2px!important}
+.theme-design23 .batters{background:#061322!important;border-left:2px solid #00eaff;padding:8px 12px!important}.theme-design23 .bowlerPanel{background:#160a25!important;border-right:2px solid #ff35dc;padding:8px 12px!important}.theme-design23 .scorePanel{background:#090b14!important;color:#fff!important;border-top:2px solid #00eaff;border-bottom:2px solid #ff35dc}.theme-design23 .scorePanel:before,.theme-design23 .scorePanel:after{display:none}
+.theme-design23 .scorePill{background:linear-gradient(90deg,#00eaff,#5b1dff,#ff35dc)!important;border-radius:2px!important;box-shadow:0 0 25px #00eaff22!important}.theme-design23 .ball{border-radius:3px;background:#10253b}.theme-design23 .ball.four{background:#00eaff;color:#041018}.theme-design23 .ball.six{background:#5b1dff}.theme-design23 .ball.wicket{background:#ff35dc}
+
+/* ============================================================
+   24 — NIGHT LEAGUE: left score rail + right stacked player card
+   ============================================================ */
+.theme-design24 .frame{height:158px!important;background:#070a11!important;border:0!important;border-radius:12px!important;box-shadow:0 18px 45px #000e!important;overflow:hidden}
+.theme-design24 .teamPanel{top:0;bottom:0;width:18%!important;padding:0 20px!important;clip-path:none!important;background:#101722!important;border:0!important}
+.theme-design24 .teamPanel.left{left:0;border-left:7px solid #ffcf4a;justify-content:flex-start}.theme-design24 .teamPanel.right{right:0;border-right:7px solid #5b8cff;justify-content:flex-end;background:#101722!important}
+.theme-design24 .teamPanel .teamName{font-size:clamp(13px,1.45vw,25px);white-space:normal;line-height:1.02;max-width:90%}
+.theme-design24 .content{left:18%!important;right:18%!important;top:0!important;bottom:0!important;grid-template-columns:38% 24% 38%!important;gap:0!important}
+.theme-design24 .batters{background:#0d121b!important;padding:9px 12px!important;border-right:1px solid #252d3a}.theme-design24 .bowlerPanel{background:#0d121b!important;padding:9px 12px!important;border-left:1px solid #252d3a}.theme-design24 .batter{border-color:#ffffff12}.theme-design24 .batterName,.theme-design24 .bowlerName{font-size:clamp(10px,1.1vw,19px)}
+.theme-design24 .scorePanel{background:#e9edf4!important;color:#111827!important;padding:6px!important}.theme-design24 .scorePanel:before,.theme-design24 .scorePanel:after{display:none}.theme-design24 .scoreBattingTeam{font-size:clamp(8px,.8vw,13px);letter-spacing:.08em}.theme-design24 .scorePill{background:#101722!important;color:#fff!important;border-radius:6px!important;border-bottom:4px solid #ffcf4a;box-shadow:none!important;font-size:clamp(27px,2.8vw,48px)}.theme-design24 .scoreMeta{gap:9px;font-size:clamp(8px,.8vw,13px)}.theme-design24 .crrRrr{gap:8px;font-size:clamp(7px,.7vw,11px)}.theme-design24 .currentOver{margin-top:5px}.theme-design24 .ball{width:21px;height:21px;flex-basis:21px;border-radius:3px;font-size:8px}
+
+/* New designs stay compact on small screens without rasterizing text. */
+@media(max-width:900px){
+  .theme-design17 .frame,.theme-design18 .frame,.theme-design19 .frame,.theme-design20 .frame,.theme-design22 .frame,.theme-design23 .frame,.theme-design24 .frame{height:112px!important}
+  .theme-design21 .frame{height:72px!important}
+  body[class*="theme-design"] .teamPanel{padding-left:9px!important;padding-right:9px!important}
+  body[class*="theme-design"] .teamPanel .teamName{font-size:clamp(9px,2.1vw,16px)!important}
+  body[class*="theme-design"] .batterName,body[class*="theme-design"] .bowlerName{font-size:clamp(8px,1.8vw,13px)!important}
+  body[class*="theme-design"] .batterScore b{font-size:clamp(12px,2vw,17px)!important}
+  body[class*="theme-design"] .scorePill{font-size:clamp(20px,4.6vw,32px)!important;padding:3px 8px!important}
+  body[class*="theme-design"] .scoreMeta{gap:6px!important;font-size:7px!important}
+  body[class*="theme-design"] .crrRrr{gap:6px!important;font-size:6px!important}
+  body[class*="theme-design"] .ball{width:16px!important;height:16px!important;flex-basis:16px!important;font-size:6px!important}
+}
+</style>
+
+<style id="BRKLIVE19-THEME2-CORRECT-FORMAT-V2">
+/* Exact user-request corrections: tighter batter name/run, safe names, centered ticker,
+   striker-only bat, stable THIS OVER, and complete template data. */
+body.theme-t20world #overlay .batters{padding-left:3.5%!important;padding-right:3.5%!important}
+body.theme-t20world #overlay .batter{display:flex!important;gap:5px!important;align-items:center!important;justify-content:flex-start!important;min-width:0!important}
+body.theme-t20world #overlay .batterName{flex:1 1 auto!important;min-width:0!important;width:auto!important;display:flex!important;align-items:center!important;gap:2px!important;overflow:hidden!important;text-overflow:ellipsis!important;white-space:nowrap!important}
+body.theme-t20world #overlay .batterName span{min-width:0!important;overflow:hidden!important;text-overflow:ellipsis!important;white-space:nowrap!important;display:block!important}
+body.theme-t20world #overlay .batterScore{flex:0 0 auto!important;margin-left:1px!important;gap:2px!important;white-space:nowrap!important}
+body.theme-t20world #overlay .batterScore b{font-size:clamp(14px,1.55vw,25px)!important}
+body.theme-t20world #overlay .batterScore span{font-size:clamp(9px,.78vw,14px)!important}
+/* striker-only bat icon; non-striker has none */
+body.theme-t20world #overlay .batter:not(.striker) .batterName:after{content:none!important;display:none!important}
+body.theme-t20world #overlay .batter.striker .batterName:after{content:'⚔'!important;display:inline-flex!important;align-items:center!important;justify-content:center!important;flex:0 0 auto!important;width:15px!important;height:18px!important;margin-left:2px!important;font-size:15px!important;color:#111!important;transform:rotate(-28deg)!important;text-shadow:0 1px 0 #fff!important}
+/* center team name safely; never let it run into the score */
+body.theme-t20world #overlay .scoreBattingTeam{left:1%!important;width:46%!important;justify-content:center!important;text-align:center!important;padding:0 3%!important;overflow:hidden!important;text-overflow:ellipsis!important;white-space:nowrap!important;font-size:clamp(13px,2.15vw,39px)!important}
+/* blinking Theme-1-style data: lower, centered, but only the text changes/blinks */
+body.theme-t20world #overlay .theme2InfoTicker{top:55%!important;height:14%!important;left:3%!important;right:3%!important;transform:none!important;margin:0!important;display:flex!important;align-items:center!important;justify-content:center!important;text-align:center!important;overflow:hidden!important;white-space:nowrap!important;text-overflow:ellipsis!important}
+body.theme-t20world #overlay .theme2InfoTicker.tick{animation:t2InfoBlinkV2 .55s ease both!important}
+@keyframes t2InfoBlinkV2{0%{opacity:.15;transform:translateY(5px)}100%{opacity:1;transform:translateY(0)}}
+/* THIS OVER is static: data and ball boxes never animate or blink */
+body.theme-t20world #overlay .currentOver,body.theme-t20world #overlay .currentOver *,body.theme-t20world #overlay .ball,body.theme-t20world #overlay .ball.latest{animation:none!important;transition:none!important;filter:none!important;opacity:1!important}
+/* BOWLER label is text, with actual bowler name from live match */
+body.theme-t20world #overlay .bowlerName{display:block!important;max-width:64%!important;overflow:hidden!important;text-overflow:ellipsis!important;white-space:nowrap!important}
+body.theme-t20world #overlay .bowlerName:before{content:'BOWLER  '!important}
+/* scoreboard text fitting */
+body.theme-t20world #scorecardOverlay .card{overflow:hidden!important}
+.t2-sc-title{flex-direction:column!important;gap:2px!important}
+.t2-sc-title small{display:block!important;font-size:clamp(6px,.65vw,11px)!important;opacity:.85!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important;max-width:95%!important}
+.t2-sc-row.left{grid-template-columns:7% 45% 31% 9% 8%!important}
+.t2-sc-head.left{grid-template-columns:7% 45% 31% 9% 8%!important}
+.t2-sc-row.right{grid-template-columns:8% 39% 17% 13% 13% 10%!important}
+.t2-sc-head.right{grid-template-columns:8% 39% 17% 13% 13% 10%!important}
+.t2-sc-row>span.name{display:flex!important;flex-direction:column!important;justify-content:center!important;line-height:1.02!important;min-width:0!important;overflow:hidden!important;text-overflow:ellipsis!important;white-space:nowrap!important}
+.t2-sc-row>span.name strong{display:block!important;overflow:hidden!important;text-overflow:ellipsis!important;white-space:nowrap!important}
+.t2-mini-bat,.t2-mini-bowl{display:block!important;font-size:clamp(5px,.52vw,9px)!important;line-height:1!important;color:#111!important;font-weight:800!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}
+.t2-sc-row.right>span.name{align-items:flex-start!important}
+.t2-sc-bottom{top:76.5%!important;height:10%!important}
+.t2-sc-info-left,.t2-sc-info-right,.t2-sc-recent{white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}
+/* Summary: use the supplied black panels and actually fill both with data */
+.t2-sum-card{display:block!important;padding:8px 16px!important;text-align:center!important;overflow:hidden!important}
+.t2-sum-card .sum-main{height:34%;display:flex!important;align-items:center!important;justify-content:center!important;gap:14px!important;min-width:0!important}
+.t2-sum-card .team{display:block!important;max-width:45%!important;overflow:hidden!important;text-overflow:ellipsis!important;white-space:nowrap!important}
+.t2-sum-card .score{margin:0!important;white-space:nowrap!important}
+.t2-sum-card .details{width:100%!important;margin:2px auto 0!important;font-size:clamp(6px,.78vw,12px)!important;line-height:1.35!important;overflow:hidden!important;text-align:left!important}
+.t2-sum-card .details div{white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}
+.t2-sum-card .details b{color:#7befff!important;margin-right:3px!important}
+.t2-sum-bar{overflow:hidden!important;white-space:nowrap!important;text-overflow:ellipsis!important;padding:0 10px!important;box-sizing:border-box!important}
+.t2-sum-foot{overflow:hidden!important;white-space:nowrap!important;text-overflow:ellipsis!important;padding:0 8px!important;box-sizing:border-box!important}
+@media(max-width:700px){
+ body.theme-t20world #overlay .batterName{font-size:clamp(8px,2.2vw,14px)!important}
+ body.theme-t20world #overlay .batterScore b{font-size:clamp(11px,2.8vw,17px)!important}
+ body.theme-t20world #overlay .scoreBattingTeam{font-size:clamp(10px,3.3vw,20px)!important}
+ body.theme-t20world #overlay .theme2InfoTicker{top:56%!important;font-size:clamp(6px,1.8vw,10px)!important}
+ .t2-mini-bat,.t2-mini-bowl{font-size:4.5px!important}
+}
+</style>
+
+<style id="BRKLIVE19-THEME2-CORRECT-FORMAT-V3">
+/* V3: visual corrections requested after testing the supplied format. */
+body.theme-t20world #overlay .batterName{padding-right:0!important}
+body.theme-t20world #overlay .batterScore{margin-left:0!important}
+body.theme-t20world #overlay .scoreBattingTeam{padding-left:1%!important;padding-right:1%!important}
+body.theme-t20world #overlay .theme2InfoTicker{top:56%!important}
+body.theme-t20world #overlay .bowlerName{max-width:62%!important}
+body.theme-t20world #overlay .bowlerStats{right:1%!important;width:34%!important}
+/* Real bat silhouette, only striker. */
+body.theme-t20world #overlay .batter.striker .batterName:after{
+ content:""!important;width:15px!important;height:20px!important;flex:0 0 15px!important;margin-left:2px!important;
+ background-repeat:no-repeat!important;background-position:center!important;background-size:contain!important;
+ background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Cpath d='M7 34L25 16l5 5L12 39z' fill='%23e4a900'/%3E%3Cpath d='M23 14l7-7 7 7-7 7z' fill='%23202020'/%3E%3Cpath d='M29 7l4-4 4 4-4 4z' fill='%23fff'/%3E%3C/svg%3E")!important;
+}
+body.theme-t20world #overlay .batter:not(.striker) .batterName:after{display:none!important;content:none!important}
+/* Remove clipping from data containers; JS below shrinks text when necessary. */
+body.theme-t20world #overlay .scoreBattingTeam,
+body.theme-t20world #overlay .batterName,
+body.theme-t20world #overlay .bowlerName{overflow:visible!important;text-overflow:clip!important}
+body.theme-t20world #overlay .batterName span{overflow:visible!important;text-overflow:clip!important}
+body.theme-t20world #overlay .bowlerName{overflow:visible!important;text-overflow:clip!important}
+.t2-sc-row>span.name strong,.t2-sc-row>span.dis{overflow:visible!important;text-overflow:clip!important}
+</style>
+<script>
+(function(){
+  function shrink(el,maxWidth,minSize){
+    if(!el)return;
+    const cs=getComputedStyle(el);
+    if(!el.dataset.fitBase) el.dataset.fitBase=cs.fontSize;
+    let size=parseFloat(el.dataset.fitBase)||parseFloat(cs.fontSize)||12;
+    el.style.fontSize=size+'px';
+    let guard=80;
+    while(el.scrollWidth>maxWidth && size>minSize && guard--){size-=0.35;el.style.fontSize=size+'px';}
+  }
+  function fitTheme2(){
+    if(!document.body.classList.contains('theme-t20world'))return;
+    const scoreTeam=document.getElementById('scoreBattingTeam');
+    if(scoreTeam){shrink(scoreTeam,Math.max(30,scoreTeam.clientWidth-4),10);}
+    document.querySelectorAll('#overlay .batter').forEach(row=>{
+      const name=row.querySelector('.batterName span'); const score=row.querySelector('.batterScore');
+      if(name && score){
+        const icon=row.classList.contains('striker')?19:2;
+        const available=Math.max(25,row.clientWidth-score.getBoundingClientRect().width-icon-8);
+        shrink(name,available,7.5);
+      }
+    });
+    const bow=document.getElementById('bowler'), stats=document.getElementById('bowlerStats');
+    if(bow && stats){
+      const available=Math.max(30,bow.parentElement.clientWidth-stats.getBoundingClientRect().width-8);
+      shrink(bow,available,7.5);
+    }
+    document.querySelectorAll('#scorecardOverlay .t2-sc-row .name strong').forEach(el=>{
+      const row=el.closest('.t2-sc-row');
+      if(row) shrink(el,Math.max(15,el.parentElement.clientWidth-2),5.5);
+    });
+    document.querySelectorAll('#scorecardOverlay .t2-sc-row .dis').forEach(el=>shrink(el,Math.max(15,el.clientWidth),5));
+    document.querySelectorAll('#scorecardOverlay .t2-sc-team,#scorecardOverlay .t2-sc-title,#scorecardOverlay .t2-sc-innings').forEach(el=>shrink(el,Math.max(20,el.clientWidth-4),7));
+    document.querySelectorAll('#summaryOverlay .t2-sum-card .team,#summaryOverlay .t2-sum-card .score').forEach(el=>shrink(el,Math.max(20,el.clientWidth-4),7));
+  }
+  window.addEventListener('resize',fitTheme2,{passive:true});
+  setInterval(fitTheme2,350);
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',fitTheme2,{once:true});else fitTheme2();
+})();
+</script>
