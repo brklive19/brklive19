@@ -2091,6 +2091,45 @@ body.theme-t20world #summaryOverlay .summary-box th{
   body.theme-t20world #summaryOverlay .summary-center-meta span{max-width:49%!important;font-size:8px!important}
 }
 </style>
+
+<style id="BRKLIVE19-FINAL-TARGET-STABLE">
+/* FINAL USER REQUEST: target button must always render; target text is stable. */
+#overlay #targetTop.targetFullScreen{
+  position:fixed!important; left:50%!important; top:50%!important; right:auto!important; bottom:auto!important;
+  transform:translate(-50%,-50%)!important;
+  width:94vw!important; height:88vh!important; max-width:1500px!important; max-height:900px!important;
+  background:transparent!important; border:0!important; box-shadow:none!important;
+  display:none!important; visibility:hidden!important; opacity:1!important;
+  animation:none!important;
+  align-items:center!important; justify-content:center!important; flex-direction:column!important;
+  gap:18px!important; padding:4vh 4vw!important; box-sizing:border-box!important;
+  white-space:normal!important; overflow:visible!important; z-index:2147483647!important;
+}
+#overlay.targetMode #targetTop.targetFullScreen{display:flex!important;visibility:visible!important;}
+#overlay.targetMode > *:not(#targetTop){display:none!important;visibility:hidden!important;}
+#overlay.targetMode{position:fixed!important;inset:0!important;width:100vw!important;height:100vh!important;background:transparent!important;z-index:2147483646!important;}
+#overlay.targetMode #targetTop .chasingTeamName{
+  display:block!important; width:100%!important; text-align:center!important;
+  font-size:clamp(28px,5vw,78px)!important; line-height:1.05!important; font-weight:1000!important;
+  color:var(--cyan,#00d8ff)!important; -webkit-text-fill-color:var(--cyan,#00d8ff)!important;
+  text-shadow:0 3px 12px #000!important; animation:none!important;
+}
+#overlay.targetMode #targetTop .targetNeedText{
+  display:block!important; width:100%!important; text-align:center!important;
+  font-size:clamp(24px,4vw,64px)!important; line-height:1.12!important; font-weight:1000!important;
+  color:var(--cyan,#00d8ff)!important; -webkit-text-fill-color:var(--cyan,#00d8ff)!important;
+  text-shadow:0 3px 12px #000!important; animation:none!important; white-space:normal!important;
+}
+/* Keep the small TARGET - 25 indicator steady; no blink/rotation. */
+#overlay #topRowTarget, #overlay #topRowTarget.target-visible{animation:none!important;transition:none!important;opacity:1!important;}
+#overlay #topRowTarget{display:none!important;}
+/* Remove CRR/RRR/other metadata from the compact score section. */
+#overlay .scorePanel .scoreCRR,#overlay .scorePanel .scoreSubRow,#overlay .scorePanel .scoreExtraDetail,#overlay .scorePanel .scoreOverDetail,#overlay .scorePanel .theme2InfoTicker,#overlay .scorePanel .theme2MatchTitle{display:none!important;}
+#overlay .scorePanel .scoreBattingTeam{display:block!important;}
+#overlay .scorePanel .scorePill{display:block!important;}
+#overlay .scorePanel .theme2ScoreLine{display:block!important;}
+#overlay .scorePanel .theme2ScoreLine .theme2OverValue{display:block!important;}
+</style>
 </head>
 <body>
 <!-- BRKLIVE19 LIVE badge: viewport-level, independent of the scoreboard overlay -->
@@ -2229,6 +2268,32 @@ body.theme-t20world #summaryOverlay .summary-box th{
 
 <!-- ===== ANIMATION ===== -->
 <div id="animation" class="animation"><div id="animText" class="animText">FOUR!</div></div>
+
+<style id="BRKLIVE19-INNINGS-DETAIL-SCREENS">
+/* Requested innings batting/bowling detail screens. Existing lower-third overlay is untouched. */
+.innings-detail-overlay{position:fixed!important;inset:0!important;display:none;z-index:8000;background:transparent!important;padding:0!important;overflow:hidden!important;align-items:center;justify-content:center}
+.innings-detail-overlay.show{display:flex!important}
+.innings-detail-shell{width:100vw;height:100vh;max-width:none;max-height:none;display:flex;flex-direction:column;padding:clamp(10px,1.5vw,28px);gap:clamp(7px,1vh,14px);font-family:Arial,Helvetica,sans-serif;color:#fff;background:linear-gradient(135deg,color-mix(in srgb,var(--navy,#071a58) 94%,#000),color-mix(in srgb,var(--cyan,#00b8e8) 20%,#050912));box-sizing:border-box;overflow:hidden}
+.innings-detail-head{flex:0 0 auto;text-align:center;border:2px solid color-mix(in srgb,var(--cyan,#00b8e8) 75%,#fff);border-radius:10px;background:linear-gradient(90deg,color-mix(in srgb,var(--navy,#071a58) 92%,#000),color-mix(in srgb,var(--cyan,#00b8e8) 20%,#07101f),color-mix(in srgb,var(--navy,#071a58) 92%,#000));padding:clamp(7px,1vh,14px) clamp(12px,2vw,30px);box-shadow:0 5px 22px #0008}
+.innings-detail-tournament{font-size:clamp(18px,2.2vw,42px);font-weight:1000;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--yellow,#ffd900)}
+.innings-detail-row{display:flex;justify-content:center;align-items:center;gap:clamp(8px,2vw,28px);font-size:clamp(10px,1.15vw,20px);font-weight:800;text-transform:uppercase;flex-wrap:wrap;margin-top:4px}
+.innings-detail-row b{color:var(--cyan2,#08d7ff)}
+.innings-detail-match{font-size:clamp(13px,1.4vw,25px);font-weight:1000;text-transform:uppercase;margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.innings-detail-title{flex:0 0 auto;text-align:center;text-transform:uppercase;font-size:clamp(16px,1.8vw,32px);font-weight:1000;padding:4px 10px;color:#fff;border-bottom:3px solid var(--cyan,#00b8e8)}
+.innings-detail-table-wrap{flex:1 1 auto;min-height:0;overflow:hidden;border:1px solid #ffffff35;border-radius:8px;background:#02060dcc}
+.innings-detail-table{width:100%;height:100%;border-collapse:collapse;table-layout:fixed;font-size:clamp(10px,.98vw,19px)}
+.innings-detail-table th{height:7%;background:linear-gradient(90deg,color-mix(in srgb,var(--cyan,#00b8e8) 42%,#07101f),color-mix(in srgb,var(--navy,#071a58) 75%,#000));color:#fff;text-transform:uppercase;font-size:clamp(9px,.82vw,15px);padding:4px 5px;border:1px solid #ffffff25;white-space:nowrap}
+.innings-detail-table td{height:7.4%;padding:3px 5px;border:1px solid #ffffff18;color:#fff;text-align:center;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.innings-detail-table tbody tr:nth-child(even){background:#ffffff08}
+.innings-detail-table td.player{text-align:left;font-weight:1000;text-transform:uppercase}
+.innings-detail-table td.out{color:#ff526d}.innings-detail-table td.notout{color:#52e39a}.innings-detail-table td.blank{color:transparent}
+.innings-detail-footer{flex:0 0 auto;display:flex;justify-content:space-between;align-items:center;gap:12px;padding:6px 12px;border-top:2px solid var(--cyan,#00b8e8);font-size:clamp(10px,1vw,17px);font-weight:900;text-transform:uppercase}
+.innings-detail-score{font-size:clamp(18px,2.2vw,38px);color:var(--yellow,#ffd900);font-weight:1000}
+@media(max-width:700px){.innings-detail-shell{padding:6px;gap:5px}.innings-detail-head{padding:5px}.innings-detail-row{gap:5px}.innings-detail-table{font-size:clamp(8px,1.8vw,12px)}.innings-detail-table th{font-size:clamp(7px,1.45vw,10px);padding:2px}.innings-detail-table td{padding:2px}.innings-detail-footer{font-size:8px}.innings-detail-score{font-size:18px}}
+</style>
+<div id="inningsDetailOverlay" class="innings-detail-overlay">
+  <div id="inningsDetailContent" class="innings-detail-shell"></div>
+</div>
 <script type="module">
 // ============================================================
 // FIREBASE SETUP
@@ -2368,7 +2433,7 @@ function updateTarget(d){
   const target=num(d.target) || (num(d.innings)===2 ? firstRuns+1 : 0);
   const second=num(d.innings)===2;
   const isCompleted = d.status === 'completed' || d.matchWinner || !!deriveResult(d);
-  const showButtonTarget=!!(d.overlay&&d.overlay.showTarget) && second && !!target && !isCompleted;
+  const showButtonTarget=!!(d.overlay&&d.overlay.showTarget) && !!target && !isCompleted;
 
   const rightTarget=document.getElementById("secondInningsTarget");
   const rightTargetValue=document.getElementById("targetScoreValue");
@@ -2390,7 +2455,7 @@ function updateTarget(d){
     const chasing=document.getElementById("chasingTeamName");
     const needText=document.getElementById("targetNeedText");
     if(chasing) chasing.textContent=chase;
-    if(needText) needText.textContent=`TO WIN NEED ${need} RUN${need===1?'':'S'} FROM ${ballsLeft} BALL${ballsLeft===1?'':'S'}`;
+    if(needText) needText.textContent=`NEED ${need} RUN${need===1?'':'S'} FROM ${ballsLeft} BALL${ballsLeft===1?'':'S'}`;
     targetTop.style.display=showButtonTarget?"flex":"none";
     targetTop.hidden=!showButtonTarget;
   }
@@ -2678,6 +2743,55 @@ function renderSummary(d){
 }
 
 // ---- Full scorecard render ----
+
+function renderInningsDetail(d){
+  const ov=$('inningsDetailOverlay'), c=$('inningsDetailContent');
+  if(!ov||!c)return;
+  const mode=String(d.mode||'');
+  const on=['batting1','batting2','bowling1','bowling2'].includes(mode);
+  ov.classList.toggle('show',on);
+  if(!on)return;
+  const inningsNo=mode.endsWith('2')?2:1;
+  let inn;
+  if(inningsNo===1) inn=(d.firstInnings&&Object.keys(d.firstInnings).length?d.firstInnings:d);
+  else inn=(d.secondInnings&&Object.keys(d.secondInnings).length?d.secondInnings:d);
+  if(!inn||typeof inn!=='object')inn={};
+  const side=String(inn.team||inn.battingTeam||(inningsNo===1?d.battingTeam:'')).toUpperCase();
+  const battingSide=side==='B'?'B':'A';
+  const bowlingSide=battingSide==='A'?'B':'A';
+  const batTeam=battingSide==='A'?(d.teamA||'TEAM A'):(d.teamB||'TEAM B');
+  const bowlTeam=bowlingSide==='A'?(d.teamA||'TEAM A'):(d.teamB||'TEAM B');
+  const tournament=d.tournament||d.tournamentName||requestedTournament||'TOURNAMENT';
+  const match=d.matchName||`${d.teamA||'TEAM A'} VS ${d.teamB||'TEAM B'}`;
+  const toss=d.tossWinner?`${teamName(d,d.tossWinner)} WON THE TOSS • ${d.tossDecision==='bat'?'ELECTED TO BAT':'ELECTED TO BOWL'}`:'TOSS —';
+  const runs=num(inn.runs), wickets=num(inn.wickets), balls=num(inn.legalBalls??inn.balls), overs=oversFromBalls(balls);
+  const isBat=mode.startsWith('batting');
+  const stats=inn.batters||{};
+  let xi=Array.isArray(inn.xi)?inn.xi.slice():(battingSide==='A'?(d.xiA||[]):(d.xiB||[]));
+  Object.keys(stats).forEach(n=>{if(n&&!xi.includes(n))xi.push(n)});
+  [inn.striker,inn.nonStriker].forEach(n=>{if(n&&!xi.includes(n))xi.push(n)});
+  xi=xi.filter(Boolean).slice(0,11);
+  while(xi.length<11)xi.push('');
+  const fmap={};(Array.isArray(inn.fallWickets)?inn.fallWickets:[]).forEach(f=>{if(f?.player)fmap[f.player]=f.type||f.dismissal||'OUT'});
+  const batRows=xi.map((name,i)=>{
+    const st=name?(stats[name]||{}):{}; const r=num(st.runs),b=num(st.balls),f=num(st.fours),sx=num(st.sixes);
+    const out=!!name&&(st.out===true||!!st.dismissal||!!fmap[name]);
+    const active=!!name&&(name===inn.striker||name===inn.nonStriker);
+    const has=out||active||r>0||b>0||f>0||sx>0;
+    const sr=b?((r/b)*100).toFixed(2):'';
+    const dis=out?(st.dismissal||fmap[name]||'OUT'):(has?'NOT OUT':'');
+    return `<tr><td>${i+1}</td><td class="player">${name?escapeText(name)+(active&&!out?' *':''):''}</td><td class="${out?'out':has?'notout':'blank'}">${escapeText(dis)}</td><td>${has?r:''}</td><td>${has?b:''}</td><td>${has?f:''}</td><td>${has?sx:''}</td><td>${has?sr:''}</td></tr>`;
+  }).join('');
+  const bowlers=inn.bowlers||{}; let bn=Object.keys(bowlers);
+  const bxi=Array.isArray(inn.bowlingXI)?inn.bowlingXI:(bowlingSide==='A'?(d.xiA||[]):(d.xiB||[]));
+  bxi.forEach(n=>{if(n&&!bn.includes(n))bn.push(n)}); if(inn.bowler&&!bn.includes(inn.bowler))bn.push(inn.bowler);
+  bn=bn.filter(Boolean).slice(0,11);while(bn.length<11)bn.push('');
+  const bowlRows=bn.map((name,i)=>{const st=name?(bowlers[name]||{}):{};const bb=num(st.balls),r=num(st.runs),w=num(st.wickets),m=num(st.maidens);const eco=bb?(r/(bb/6)).toFixed(2):'';return `<tr><td>${i+1}</td><td class="player">${escapeText(name)}</td><td>${name?oversFromBalls(bb):''}</td><td>${name?m:''}</td><td>${name?w:''}</td><td>${name?r:''}</td><td>${name?eco:''}</td></tr>`}).join('');
+  const title=`${batTeam} • ${inningsNo===1?'1ST':'2ND'} INNINGS • ${isBat?'BATTING':'BOWLING'}`;
+  const footer=isBat?`SCORE ${runs}/${wickets} • ${overs} OV`:`${bowlTeam} BOWLING • ${overs} OV`;
+  c.innerHTML=`<div class="innings-detail-head"><div class="innings-detail-tournament">${escapeText(tournament)}</div><div class="innings-detail-row"><span><b>TOSS:</b> ${escapeText(toss)}</span></div><div class="innings-detail-match">${escapeText(match)}</div></div><div class="innings-detail-title">${escapeText(title)}</div><div class="innings-detail-table-wrap"><table class="innings-detail-table">${isBat?`<colgroup><col style="width:6%"><col style="width:27%"><col style="width:24%"><col style="width:9%"><col style="width:9%"><col style="width:8%"><col style="width:8%"><col style="width:9%"></colgroup><thead><tr><th>Sl No.</th><th>Player Name</th><th>Dismissal</th><th>Run</th><th>Ball</th><th>4s</th><th>6s</th><th>SR</th></tr></thead><tbody>${batRows}</tbody>`:`<colgroup><col style="width:6%"><col style="width:38%"><col style="width:14%"><col style="width:12%"><col style="width:12%"><col style="width:9%"><col style="width:9%"></colgroup><thead><tr><th>Sl No.</th><th>Bowler Name</th><th>Over</th><th>Maiden</th><th>Wicket</th><th>Run</th><th>Economy</th></tr></thead><tbody>${bowlRows}</tbody>`}</table></div><div class="innings-detail-footer"><span>${escapeText(batTeam)} • ${inningsNo===1?'1ST':'2ND'} INNINGS</span><span class="innings-detail-score">${escapeText(footer)}</span><span>${escapeText(d.venue||'')}</span></div>`;
+}
+
 function renderFullScorecard(d){
   const container=document.getElementById('scContent'); if(!container) return;
   const mode=String(d.mode||'scorecard1');
@@ -3020,6 +3134,7 @@ function applyLiveData(d){
  const isTheme5=(d.theme || requestedTheme || "blue")==="theme5";
  renderTheme5All(d,scoreVisible);
  renderPlayingXI(d);
+ renderInningsDetail(d);
 
  // Full-frame modes
  const isTheme2=(d.theme || requestedTheme || "blue")==='t20world';
@@ -3032,7 +3147,7 @@ function applyLiveData(d){
  }else{
    $("summaryOverlay").classList.remove('show');
  }
- if(!isTheme5 && (d.mode === 'scorecard' || d.mode === 'scorecard1' || d.mode === 'scorecard2')){
+ if(!['batting1','batting2','bowling1','bowling2'].includes(String(d.mode||'')) && !isTheme5 && (d.mode === 'scorecard' || d.mode === 'scorecard1' || d.mode === 'scorecard2')){
    renderFullScorecard(d);
    toggleScorecardOverlay(true);
  } else {
@@ -3647,6 +3762,151 @@ body.theme-t20world #overlay .batterName span{display:inline!important}
 
 /* Explicit BOWLER label in the right-side bowler area. */
 body.theme-t20world #overlay .bowlerName:before{content:"BOWLER  "!important}
+</style>
+<style id="BRKLIVE19-EXACT-SCORE-TARGET-FIX">
+/* ==========================================================
+   EXACT REQUEST: SIMPLE SCORE + FULL TRANSPARENT TARGET
+   ========================================================== */
+/* Score section: ONLY batting team, score/wickets, overs. */
+#overlay .scorePanel{
+  display:flex!important;
+  flex-direction:column!important;
+  justify-content:center!important;
+  align-items:center!important;
+  gap:0!important;
+  padding:5px 8px!important;
+}
+#overlay .scorePanel .theme2MatchTitle,
+#overlay .scorePanel .theme2InfoTicker,
+#overlay .scorePanel .scoreOverDetail,
+#overlay .scorePanel .scoreSubRow,
+#overlay .scorePanel .scoreExtraDetail,
+#overlay .scorePanel .matchTitle,
+#overlay .scorePanel .scoreMeta,
+#overlay .scorePanel .crrRrr{
+  display:none!important;
+}
+#overlay .scorePanel .scoreBattingTeam{
+  display:flex!important;
+  order:1!important;
+  position:static!important;
+  width:100%!important;
+  min-width:0!important;
+  height:auto!important;
+  margin:0!important;
+  padding:0 5px!important;
+  justify-content:center!important;
+  align-items:center!important;
+  text-align:center!important;
+  color:#fff!important;
+  font-size:clamp(13px,1.65vw,30px)!important;
+  line-height:1.05!important;
+  font-weight:1000!important;
+  text-transform:uppercase!important;
+  white-space:nowrap!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+  text-shadow:0 2px 5px #0008!important;
+}
+#overlay .scorePanel .theme2ScoreLine{
+  order:2!important;
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  justify-content:center!important;
+  width:100%!important;
+  margin:1px 0 0!important;
+  gap:0!important;
+}
+#overlay .scorePanel .scorePill{
+  min-width:0!important;
+  width:auto!important;
+  margin:0!important;
+  padding:2px 10px!important;
+  border-radius:5px!important;
+  font-size:clamp(28px,3.15vw,55px)!important;
+  line-height:.98!important;
+  font-weight:1000!important;
+  white-space:nowrap!important;
+}
+#overlay .scorePanel .theme2OverValue{
+  display:block!important;
+  order:3!important;
+  margin:2px 0 0!important;
+  color:#17205a!important;
+  font-size:clamp(13px,1.25vw,23px)!important;
+  line-height:1!important;
+  font-weight:1000!important;
+  white-space:nowrap!important;
+}
+/* Do not show any automatic target/corner while normal score is active. */
+#overlay #topRowTarget,#overlay #secondInningsTarget{display:none!important;}
+
+/* TARGET button: transparent, centered, large, responsive, no flashing. */
+#overlay.targetMode .frame{visibility:hidden!important;}
+#overlay.targetMode .broadcastBar{display:none!important;}
+#overlay.targetMode .target{
+  display:flex!important;
+  position:fixed!important;
+  inset:0!important;
+  width:100vw!important;
+  height:100vh!important;
+  min-height:0!important;
+  margin:0!important;
+  padding:5vh 4vw!important;
+  transform:none!important;
+  border:0!important;
+  border-radius:0!important;
+  background:transparent!important;
+  box-shadow:none!important;
+  color:#fff!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:1.5vh!important;
+  white-space:normal!important;
+  overflow:hidden!important;
+  text-align:center!important;
+  text-transform:none!important;
+  z-index:99999!important;
+  animation:none!important;
+}
+#overlay.targetMode .target:before{display:none!important;content:none!important;}
+#overlay.targetMode #chasingTeamName{
+  display:block!important;
+  width:100%!important;
+  max-width:96vw!important;
+  color:#fff!important;
+  font-size:clamp(30px,7vw,110px)!important;
+  line-height:1.05!important;
+  font-weight:1000!important;
+  text-transform:uppercase!important;
+  white-space:nowrap!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+  text-shadow:0 4px 16px #000,0 0 30px #000!important;
+}
+#overlay.targetMode #targetNeedText{
+  display:block!important;
+  width:100%!important;
+  max-width:96vw!important;
+  color:#fff!important;
+  font-size:clamp(24px,5.2vw,78px)!important;
+  line-height:1.12!important;
+  font-weight:1000!important;
+  letter-spacing:.02em!important;
+  white-space:normal!important;
+  overflow-wrap:anywhere!important;
+  text-align:center!important;
+  text-shadow:0 4px 16px #000,0 0 30px #000!important;
+}
+@media(max-width:700px){
+ #overlay .scorePanel .scoreBattingTeam{font-size:clamp(10px,3.2vw,18px)!important}
+ #overlay .scorePanel .scorePill{font-size:clamp(22px,7vw,36px)!important;padding:2px 7px!important}
+ #overlay .scorePanel .theme2OverValue{font-size:clamp(10px,3vw,17px)!important}
+ #overlay.targetMode #chasingTeamName{font-size:clamp(24px,9vw,52px)!important}
+ #overlay.targetMode #targetNeedText{font-size:clamp(17px,6.5vw,34px)!important}
+}
 </style>
 </body>
 
@@ -6997,3 +7257,32 @@ body.theme-t20world #overlay .bowlerName{overflow:visible!important;text-overflo
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',fitTheme2,{once:true});else fitTheme2();
 })();
 </script>
+<style id="BRKLIVE19-TARGET-THEME-COLOR-FINAL">
+/* TARGET text follows the currently selected overlay theme color. */
+#overlay #targetTop.target,
+#overlay #targetTop.target .chasingTeamName,
+#overlay #targetTop.target .targetNeedText {
+  color: var(--cyan, var(--th-main, var(--accent, #ffffff))) !important;
+}
+#overlay #targetTop.target {
+  text-shadow: 0 0 14px color-mix(in srgb, var(--cyan, #fff) 35%, transparent) !important;
+}
+</style>
+
+<style id="BRKLIVE19-TARGET-ABSOLUTE-FINAL">
+/* FINAL TARGET FIX: the Target button must always display the chase message. */
+#overlay.targetMode{position:fixed!important;inset:0!important;width:100vw!important;height:100vh!important;background:transparent!important;z-index:2147483646!important;pointer-events:none!important;}
+#overlay.targetMode > #targetTop.targetFullScreen{display:flex!important;visibility:visible!important;opacity:1!important;position:fixed!important;inset:0!important;width:100vw!important;height:100vh!important;min-height:100vh!important;max-height:none!important;margin:0!important;padding:0 4vw!important;transform:none!important;background:transparent!important;border:0!important;box-shadow:none!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;gap:clamp(10px,2vh,24px)!important;z-index:2147483647!important;box-sizing:border-box!important;white-space:normal!important;}
+#overlay.targetMode > *:not(#targetTop){display:none!important;visibility:hidden!important;}
+#overlay.targetMode #targetTop .targetCorner,#overlay.targetMode #targetTop .targetTournament,#overlay.targetMode #targetTop .targetMatch,#overlay.targetMode #targetTop .targetStatsRow,#overlay.targetMode #targetTop #targetValue{display:none!important;visibility:hidden!important;}
+#overlay.targetMode #targetTop #chasingTeamName{display:block!important;visibility:visible!important;opacity:1!important;width:100%!important;text-align:center!important;color:var(--th-main,var(--cyan,#00b8e8))!important;font-size:clamp(30px,7vw,86px)!important;line-height:1.05!important;font-weight:1000!important;letter-spacing:.025em!important;text-transform:uppercase!important;text-shadow:0 3px 12px #000,0 0 20px color-mix(in srgb,var(--th-main,var(--cyan,#00b8e8)) 35%,transparent)!important;overflow-wrap:anywhere!important;}
+#overlay.targetMode #targetNeedText{display:block!important;visibility:visible!important;opacity:1!important;width:100%!important;text-align:center!important;color:var(--th-main,var(--cyan,#00b8e8))!important;font-size:clamp(24px,5vw,64px)!important;line-height:1.12!important;font-weight:1000!important;letter-spacing:.02em!important;text-transform:uppercase!important;text-shadow:0 3px 12px #000,0 0 18px color-mix(in srgb,var(--th-main,var(--cyan,#00b8e8)) 30%,transparent)!important;overflow-wrap:anywhere!important;}
+/* Stable automatic TARGET-25/32/etc. indicator: no blink or animation. */
+#overlay #topRowTarget,#overlay #topRowTarget *,#overlay #secondInningsTarget,#overlay #secondInningsTarget *{animation:none!important;transition:none!important;}
+</style>
+<style id="BRKLIVE19-SCORE-BATTING-TEAM-COLOR-ONLY">
+/* ONLY CHANGE: batting team name text inside the score section. */
+#overlay .scorePanel #scoreBattingTeam{
+  color:var(--th-main,var(--cyan,#00b8e8))!important;
+}
+</style>
