@@ -265,8 +265,10 @@ button { max-width: 100%; }
   <div class="g4">
     <button class="btn blue" onclick="setMode('default')">DEFAULT</button>
     <button class="btn freehit" onclick="setMode('summary')">SUMMARY</button>
-    <button class="btn gold" onclick="showInningsScoreboard(1)">1ST INN SCOREBOARD</button>
-    <button class="btn gold" onclick="showInningsScoreboard(2)">2ND INN SCOREBOARD</button>
+    <button class="btn gold" onclick="showInningsDetail('batting1')">1ST INN BATTING</button>
+    <button class="btn gold" onclick="showInningsDetail('batting2')">2ND INN BATTING</button>
+    <button class="btn blue" onclick="showInningsDetail('bowling1')">1ST INN BOWLING</button>
+    <button class="btn blue" onclick="showInningsDetail('bowling2')">2ND INN BOWLING</button>
     <button class="btn gold" onclick="toggleTargetOverlay()">🎯 TARGET</button>
     <button class="btn custom" onclick="setMode('playingxi')">👥 PLAYING XI</button>
   </div>
@@ -1142,7 +1144,14 @@ button { max-width: 100%; }
     ensureOverlayState();
     ensureSecondInningsTarget();
     S.overlay.intro = false; S.overlay.introDismissedAt = Date.now(); S.overlay.scoreVisible = true;
-    if (Number(S.innings) !== 2 || Number(S.target) <= 0 || S.status === "completed") { alert("Target display is available during the 2nd innings only."); return; }
+    // TARGET button: ensure a usable chase target before publishing.
+    if (Number(S.target) <= 0) {
+      // Build target from the completed 1st innings when available.
+      const firstRuns = Number(S.firstInnings?.runs ?? S.runs ?? 0);
+      if (firstRuns >= 0) S.target = firstRuns + 1;
+    }
+    if (Number(S.target) <= 0) { ensureSecondInningsTarget(); }
+    if (Number(S.target) <= 0 || S.status === "completed") { alert("Target is not available for this match."); return; }
     const wasOn=!!S.overlay.showTarget;
     ["showTournament","showVenue","showMatch","showToss","showResult","showBowler","showFOW","showTarget"].forEach(k=>S.overlay[k]=false);
     S.overlay.playerLower={active:false,slot:"",player:""}; S.overlay.partnership={active:false}; S.customLower={...(S.customLower||{}),active:false};
@@ -1279,6 +1288,26 @@ button { max-width: 100%; }
   window.hideCustomLower = async function() {
     S.customLower = { text:"", active:false };
     $("lowerPreview").textContent = "Preview";
+    await save();
+    render();
+  };
+
+  window.showInningsDetail = async function(mode) {
+    ensureOverlayState();
+    const m = String(mode||'');
+    const inningsNo = /2$/.test(m) ? 2 : 1;
+    if (inningsNo === 2 && S.innings < 2 && !S.secondInnings) {
+      alert("2nd innings has not started yet.");
+      return;
+    }
+    S.overlay.intro = false;
+    S.overlay.introDismissedAt = Date.now();
+    S.overlay.scoreVisible = true;
+    ["showTournament","showVenue","showMatch","showToss","showResult","showBowler","showFOW","showTarget"].forEach(k=>S.overlay[k]=false);
+    S.overlay.playerLower={active:false,slot:"",player:""};
+    S.overlay.partnership={active:false};
+    S.customLower={...(S.customLower||{}),active:false};
+    S.mode = m;
     await save();
     render();
   };
