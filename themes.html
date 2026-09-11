@@ -7,7 +7,10 @@
 <style>
 :root{--bg:#070b16;--card:#10182b;--line:#263653;--text:#f5f7ff;--muted:#9aa9c4;--cyan:#00d9ff;--gold:#ffd34d}
 *{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 50% -10%,#182c5a,#070b16 48%);font-family:Arial,Helvetica,sans-serif;color:var(--text);min-height:100vh;padding:18px}
-.wrap{max-width:1050px;margin:auto}.top{display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:18px}.brand{font-size:28px;font-weight:1000;letter-spacing:.04em}.sub{color:var(--muted);margin-top:4px}.btn{border:1px solid var(--line);background:#121c31;color:#fff;border-radius:10px;padding:10px 15px;font-weight:800;cursor:pointer}.btn:hover{border-color:var(--cyan);box-shadow:0 0 15px #00d9ff22}.panel{background:linear-gradient(145deg,#0e1627,#111d34);border:1px solid var(--line);border-radius:16px;padding:16px;box-shadow:0 15px 45px #0008}.theme-list{display:flex;flex-direction:column;gap:10px;margin-top:14px}.theme-row{display:grid;grid-template-columns:74px minmax(0,1fr) auto;gap:14px;align-items:center;padding:12px;border:1px solid #2b3b5a;border-radius:14px;background:#0c1425;position:relative;overflow:hidden}.theme-row:before{content:"";position:absolute;inset:0;background:linear-gradient(100deg,var(--sw1),var(--sw2));opacity:.13;pointer-events:none}.num{position:relative;width:58px;height:58px;border-radius:14px;display:grid;place-items:center;font-size:20px;font-weight:1000;background:linear-gradient(145deg,var(--sw1),var(--sw2));box-shadow:inset 0 1px #fff6,0 8px 22px #0008}.info{position:relative;min-width:0}.name{font-size:17px;font-weight:1000}.desc{color:var(--muted);font-size:12px;margin-top:4px;line-height:1.35}.actions{position:relative;display:flex;gap:8px;align-items:center;flex-wrap:wrap;justify-content:flex-end}.select{background:linear-gradient(135deg,var(--sw1),var(--sw2));border:0}.link{background:#07101e}.link.copied{border-color:#49f0a4;color:#49f0a4}.current{display:inline-block;margin-left:8px;padding:3px 7px;border-radius:999px;background:#00d9ff18;color:#73edff;border:1px solid #00d9ff44;font-size:10px}.note{margin-top:14px;color:var(--muted);font-size:12px;line-height:1.5}.custom{margin-top:16px;display:flex;gap:10px;align-items:center;flex-wrap:wrap}.color{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--muted)}.color input{width:44px;height:34px;padding:2px;background:transparent;border:1px solid var(--line);border-radius:7px}
+.wrap{max-width:1050px;margin:auto}.top{display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:18px}.brand{font-size:28px;font-weight:1000;letter-spacing:.04em}.sub{color:var(--muted);margin-top:4px}.btn{border:1px solid var(--line);background:#121c31;color:#fff;border-radius:10px;padding:10px 15px;font-weight:800;cursor:pointer}.btn:hover{border-color:var(--cyan);box-shadow:0 0 15px #00d9ff22}.panel{background:linear-gradient(145deg,#0e1627,#111d34);border:1px solid var(--line);border-radius:16px;padding:16px;box-shadow:0 15px 45px #0008}.theme-list{display:flex;flex-direction:column;gap:10px;margin-top:0}
+.theme-section{margin-top:14px;border:1px solid #2b3b5a;border-radius:15px;overflow:hidden;background:#091221}.theme-section-head{width:100%;display:flex;justify-content:space-between;align-items:center;border:0;background:linear-gradient(90deg,#111f38,#0b1527);color:#fff;padding:14px 16px;font-size:16px;text-align:left;cursor:pointer}.theme-section-head small{color:var(--muted);font-size:12px;font-weight:600}.chevron{font-size:20px;transition:transform .2s}.theme-section:not(.open) .chevron{transform:rotate(-90deg)}.theme-section:not(.open) .theme-list{display:none}.theme-list{padding:10px}
+.theme-row{border-radius:11px}
+.theme-row{display:grid;grid-template-columns:74px minmax(0,1fr) auto;gap:14px;align-items:center;padding:12px;border:1px solid #2b3b5a;border-radius:14px;background:#0c1425;position:relative;overflow:hidden}.theme-row:before{content:"";position:absolute;inset:0;background:linear-gradient(100deg,var(--sw1),var(--sw2));opacity:.13;pointer-events:none}.num{position:relative;width:58px;height:58px;border-radius:14px;display:grid;place-items:center;font-size:20px;font-weight:1000;background:linear-gradient(145deg,var(--sw1),var(--sw2));box-shadow:inset 0 1px #fff6,0 8px 22px #0008}.info{position:relative;min-width:0}.name{font-size:17px;font-weight:1000}.desc{color:var(--muted);font-size:12px;margin-top:4px;line-height:1.35}.actions{position:relative;display:flex;gap:8px;align-items:center;flex-wrap:wrap;justify-content:flex-end}.select{background:linear-gradient(135deg,var(--sw1),var(--sw2));border:0}.link{background:#07101e}.link.copied{border-color:#49f0a4;color:#49f0a4}.current{display:inline-block;margin-left:8px;padding:3px 7px;border-radius:999px;background:#00d9ff18;color:#73edff;border:1px solid #00d9ff44;font-size:10px}.note{margin-top:14px;color:var(--muted);font-size:12px;line-height:1.5}.custom{margin-top:16px;display:flex;gap:10px;align-items:center;flex-wrap:wrap}.color{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--muted)}.color input{width:44px;height:34px;padding:2px;background:transparent;border:1px solid var(--line);border-radius:7px}
 @media(max-width:700px){body{padding:10px}.theme-row{grid-template-columns:58px 1fr}.actions{grid-column:2;justify-content:flex-start}.brand{font-size:22px}}
 
 /* Theme preview cards */
@@ -19,9 +22,26 @@
 <div class="wrap">
   <div class="top"><div><div class="brand">🏏 BRKLIVE19</div><div class="sub">Professional Overlay Theme Selection</div></div><button class="btn" onclick="goBack()">← BACK TO SCORER</button></div>
   <div class="panel">
-    <h2 style="margin:0">🎨 Select Overlay Theme</h2>
-    <div class="note">Choose a theme to apply to the live overlay. The <b>WEB LINK</b> on the right is the browser-source link for that exact theme.</div>
-    <div id="themeList" class="theme-list"></div>
+    <h2 style="margin:0">🎨 Overlay Themes</h2>
+    <div class="note">Open a theme section and select a design. <b>Theme 1</b> contains 15 broadcast styles. <b>Theme 2</b> contains the new Metallic design.</div>
+    <div class="theme-section open" id="themeSection1">
+      <button class="theme-section-head" type="button" onclick="toggleThemeSection(1)">
+        <span><b>THEME 1</b><small> • Broadcast Style Collection</small></span><span class="chevron">▾</span>
+      </button>
+      <div id="themeList" class="theme-list"></div>
+    </div>
+    <div class="theme-section" id="themeSection2">
+      <button class="theme-section-head" type="button" onclick="toggleThemeSection(2)">
+        <span><b>THEME 2</b><small> • T20 World Cup 2026 Rhythm / Energy Collection</small></span><span class="chevron">▾</span>
+      </button>
+      <div class="theme-list">
+        <div class="theme-row" style="--sw1:#ff2bbd;--sw2:#ff9f2d">
+          <div class="preview" style="--p:#ff2bbd;--s:#ff9f2d"><span>01</span><i></i><b></b><em></em></div>
+          <div class="info"><div class="name">T20 WORLD CUP 2026 — RHYTHM</div><div class="desc">Theme 2 • Original BRKLIVE19 design inspired by the published 2026 navy, magenta, orange and high-energy visual direction</div><div class="swatches"><span style="background:#ff2bbd"></span><span style="background:#ff9f2d"></span><span style="background:#7fe8ff"></span><span style="background:#0b0750"></span></div></div>
+          <div class="actions"><button class="btn select" onclick="chooseTheme('t20world')">✓ SELECT</button><button class="btn link" onclick="copyThemeLink('t20world',this)">🔗 WEB LINK</button></div>
+        </div>
+      </div>
+    </div>
     <div class="custom">
       <label class="color">Primary <input type="color" id="cp" value="#00b8e8"></label>
       <label class="color">Secondary <input type="color" id="cs" value="#ffd900"></label>
@@ -51,11 +71,30 @@ window.publishThemeToLiveScore=async function(theme, matchId){
 <script>
 (function(){
 const themes=[
-['blue','01','BLUE','Classic angular broadcast','#0876d1','#081f58'],['neon','02','NEON','Cyber neon glass broadcast','#b02cff','#092cff'],['green','03','GREEN','Stadium green broadcast','#19c968','#063c2b'],['gold','04','GOLD','Luxury gold premium broadcast','#ffd34d','#6b3a00'],['theme2','05','ROYAL','Royal blue premium broadcast','#2367ff','#101a68'],['theme3','06','VIOLET','Modern violet broadcast','#a14cff','#32105e'],['theme4','07','CRIMSON','Bold red sports broadcast','#ff3158','#5b0718'],['theme5','08','METALLIC','Metallic cyan professional broadcast','#35e7ff','#1b5eaa'],['theme6','09','EMERALD','Emerald tactical broadcast','#35d37a','#064b35'],['glass','10','GLASS','Frosted glass modern broadcast','#55d8ff','#183d67'],['carbon','11','CARBON','Carbon dark premium broadcast','#8e9aaa','#171b22'],['stadium','12','STADIUM','Bright stadium energy broadcast','#32e875','#07522f'],['aurora','13','AURORA','Aurora gradient broadcast','#62f0d1','#6038ff'],['metallic','14','STEEL','Steel blue premium broadcast','#b9d4e8','#284d68'],['redblack','15','RED BLACK','High-impact red & black broadcast','#ff365f','#180914'],['rainbow','16','RAINBOW','Colorful celebration broadcast','#ff4d6d','#6d5dfc']];
+['blue','01','BLUE','Theme 1 • Blue broadcast design','#0876d1','#081f58'],
+['neon','02','NEON','Theme 1 • Neon broadcast design','#b02cff','#092cff'],
+['green','03','GREEN','Theme 1 • Green broadcast design','#19c968','#063c2b'],
+['gold','04','GOLD','Theme 1 • Gold broadcast design','#ffd34d','#6b3a00'],
+['theme2','05','ROYAL','Theme 1 • Royal broadcast design','#2367ff','#101a68'],
+['theme3','06','VIOLET','Theme 1 • Violet broadcast design','#a14cff','#32105e'],
+['theme4','07','CRIMSON','Theme 1 • Crimson broadcast design','#ff3158','#5b0718'],
+['theme6','08','EMERALD','Theme 1 • Emerald broadcast design','#35d37a','#064b35'],
+['glass','09','GLASS','Theme 1 • Glass broadcast design','#55d8ff','#183d67'],
+['carbon','10','CARBON','Theme 1 • Carbon broadcast design','#8e9aaa','#171b22'],
+['stadium','11','STADIUM','Theme 1 • Stadium broadcast design','#32e875','#07522f'],
+['aurora','12','AURORA','Theme 1 • Aurora broadcast design','#62f0d1','#6038ff'],
+['metallic','13','STEEL','Theme 1 • Steel broadcast design','#b9d4e8','#284d68'],
+['redblack','14','RED BLACK','Theme 1 • Red Black broadcast design','#ff365f','#180914'],
+['rainbow','15','RAINBOW','Theme 1 • Rainbow broadcast design','#ff4d6d','#6d5dfc']
+];
 const p=new URLSearchParams(location.search); let selected=p.get('selected')||localStorage.getItem('brklive19_pending_theme')||'blue'; let match=p.get('match')||localStorage.getItem('brklive19_theme_match')||''; let tournament=p.get('tournament')||'';
 try{const b=JSON.parse(localStorage.getItem('brklive19_score_bridge')||'null');if(b){if(!match)match=b.matchId||'';if(!tournament)tournament=b.tournamentName||b.tournament||'';}}catch(e){}
 const esc=s=>String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
 function overlayLink(theme){const u=new URL('./overlay.html',location.href);u.searchParams.set('theme',theme);if(match)u.searchParams.set('match',match);if(tournament)u.searchParams.set('tournament',tournament);return u.href;}
+window.toggleThemeSection=function(n){
+  const el=document.getElementById('themeSection'+n);
+  if(el) el.classList.toggle('open');
+};
 function render(){const list=document.getElementById('themeList');if(!list)return;list.innerHTML=themes.map(t=>`<div class="theme-row" style="--sw1:${t[4]};--sw2:${t[5]}"><div class="preview" style="--p:${t[4]};--s:${t[5]}"><span>${t[1]}</span><i></i><b></b><em></em></div><div class="info"><div class="name">${esc(t[2])}${selected===t[0]?'<span class="current">SELECTED</span>':''}</div><div class="desc">${esc(t[3])}</div><div class="swatches"><span style="background:${t[4]}"></span><span style="background:${t[5]}"></span></div></div><div class="actions"><button class="btn select" onclick="chooseTheme('${t[0]}')">✓ SELECT</button><button class="btn link" onclick="copyThemeLink('${t[0]}',this)">🔗 WEB LINK</button></div></div>`).join('');}
 window.chooseTheme=async function(theme){
  selected=theme;
