@@ -124,6 +124,27 @@ textarea{min-height:130px;resize:vertical}
 
 
 
+
+/* BRKLIVE19: all overlay text uppercase */
+body, body * { text-transform: uppercase; }
+
+/* BRKLIVE19: responsive overlay, never force a minimum viewport width */
+html, body { width:100%; min-width:0 !important; max-width:100%; }
+body { overflow:hidden; box-sizing:border-box; }
+*, *::before, *::after { box-sizing:border-box; }
+
+/* Keep the lower third inside the available viewport */
+.overlay, .scorebar, .main-overlay, .theme-overlay, .lower-third {
+  max-width:100vw !important;
+  min-width:0 !important;
+  width:100% !important;
+}
+
+/* Prevent text from being clipped */
+.overlay span, .overlay div, .scorebar span, .scorebar div {
+  overflow:visible;
+  min-width:0;
+}
 </style>
 <script>
   // Standalone/local-file safe mode: never redirect away from scorer.html.
@@ -160,6 +181,109 @@ button { max-width: 100%; }
   font-size:11px!important; padding:5px 7px!important; min-height:29px!important; border-radius:6px!important;
 }
 </style>
+<style>html,body{min-height:100%;height:auto;overflow-x:hidden!important;overflow-y:auto!important;-webkit-overflow-scrolling:touch;} body{overscroll-behavior-y:auto;}</style>
+<style id="brklive19-scroll-preserve">
+html{min-height:100%;height:auto;overflow-x:hidden!important;overflow-y:auto!important;-webkit-overflow-scrolling:touch!important;}
+body{min-height:100vh;height:auto;overflow-x:hidden!important;overflow-y:auto!important;}
+</style>
+<style>
+
+/* BRKLIVE19 THEME 2 — CENTER ALL BATTING & BOWLING SCOREBOARD DATA */
+body.theme-2 .scoreboard,
+body.theme-2 .batting-scoreboard,
+body.theme-2 .bowling-scoreboard,
+body.theme-2 .scorecard,
+body.theme-2 .batting-table,
+body.theme-2 .bowling-table,
+.theme-2 .scoreboard,
+.theme-2 .batting-scoreboard,
+.theme-2 .bowling-scoreboard,
+.theme-2 .scorecard,
+.theme-2 .batting-table,
+.theme-2 .bowling-table {
+  animation: none !important;
+  transition: none !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  text-align: center !important;
+}
+
+body.theme-2 .scoreboard table,
+body.theme-2 .batting-scoreboard table,
+body.theme-2 .bowling-scoreboard table,
+body.theme-2 .scorecard table,
+.theme-2 .scoreboard table,
+.theme-2 .batting-scoreboard table,
+.theme-2 .bowling-scoreboard table,
+.theme-2 .scorecard table {
+  animation: none !important;
+  transition: none !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  text-align: center !important;
+}
+
+body.theme-2 .scoreboard th,
+body.theme-2 .scoreboard td,
+body.theme-2 .batting-scoreboard th,
+body.theme-2 .batting-scoreboard td,
+body.theme-2 .bowling-scoreboard th,
+body.theme-2 .bowling-scoreboard td,
+body.theme-2 .scorecard th,
+body.theme-2 .scorecard td,
+body.theme-2 .batting-table th,
+body.theme-2 .batting-table td,
+body.theme-2 .bowling-table th,
+body.theme-2 .bowling-table td,
+.theme-2 .scoreboard th,
+.theme-2 .scoreboard td,
+.theme-2 .batting-scoreboard th,
+.theme-2 .batting-scoreboard td,
+.theme-2 .bowling-scoreboard th,
+.theme-2 .bowling-scoreboard td,
+.theme-2 .scorecard th,
+.theme-2 .scorecard td,
+.theme-2 .batting-table th,
+.theme-2 .batting-table td,
+.theme-2 .bowling-table th,
+.theme-2 .bowling-table td {
+  animation: none !important;
+  transition: none !important;
+  text-align: center !important;
+  vertical-align: middle !important;
+}
+
+body.theme-2 .scoreboard .player-name,
+body.theme-2 .scoreboard .player,
+body.theme-2 .batting-scoreboard .player-name,
+body.theme-2 .batting-scoreboard .player,
+body.theme-2 .bowling-scoreboard .player-name,
+body.theme-2 .bowling-scoreboard .player,
+.theme-2 .scoreboard .player-name,
+.theme-2 .scoreboard .player,
+.theme-2 .batting-scoreboard .player-name,
+.theme-2 .batting-scoreboard .player,
+.theme-2 .bowling-scoreboard .player-name,
+.theme-2 .bowling-scoreboard .player {
+  animation: none !important;
+  transition: none !important;
+  text-align: center !important;
+}
+
+body.theme-2 .scoreboard tr > *,
+body.theme-2 .batting-scoreboard tr > *,
+body.theme-2 .bowling-scoreboard tr > *,
+.theme-2 .scoreboard tr > *,
+.theme-2 .batting-scoreboard tr > *,
+.theme-2 .bowling-scoreboard tr > * {
+  animation: none !important;
+  transition: none !important;
+  text-align: center !important;
+  vertical-align: middle !important;
+}
+
+</style>
+<link rel="stylesheet" href="theme4_stable_scoreboard.css">
 </head>
 <body>
 
@@ -493,8 +617,11 @@ button { max-width: 100%; }
   let syncing = false;
   let currentMatchId = null;
 
-  const urlTheme = new URLSearchParams(window.location.search).get('theme') || localStorage.getItem('brklive19_pending_theme') || '';
-  if (['blue','neon','green','gold','theme2','theme3','theme4','theme5','theme6','glass','carbon','stadium','aurora','metallic','redblack','rainbow','custom'].includes(urlTheme)) S.theme = urlTheme;
+  const urlTheme = new URLSearchParams(window.location.search).get('theme') || localStorage.getItem('brklive19_pending_theme') || localStorage.getItem('brklive19_selected_theme') || '';
+  if (['blue','neon','green','gold','theme2','theme3','theme4','theme5','theme6','theme7','glass','carbon','stadium','aurora','metallic','redblack','rainbow','custom'].includes(urlTheme)) S.theme = urlTheme;
+  if (urlTheme) {
+    try { localStorage.setItem('brklive19_selected_theme', urlTheme); } catch(e) {}
+  }
   localStorage.removeItem('brklive19_pending_theme');
   const overlayIntroKey = Date.now();
 
@@ -510,7 +637,14 @@ button { max-width: 100%; }
       let saved = null;
       try { saved = JSON.parse(localStorage.getItem('brklive19_match_state_' + (matchId || b.matchId)) || 'null'); } catch(e) {}
       if (saved && typeof saved === 'object') {
+        // Restore the saved match state, but NEVER overwrite a theme explicitly
+        // selected from the Theme section / URL. The selected theme is a UI
+        // command and must be applied to the live overlay immediately.
+        const requestedThemeForMatch = new URLSearchParams(window.location.search).get('theme') || '';
         S = { ...createDefaultState(), ...saved };
+        if (requestedThemeForMatch && ['blue','neon','green','gold','theme2','theme3','theme4','theme5','theme6','theme7','glass','carbon','stadium','aurora','metallic','redblack','rainbow','t20world','custom'].includes(requestedThemeForMatch)) {
+          S.theme = requestedThemeForMatch;
+        }
       }
 
       S.tournament = b.tournamentName || b.tournament || S.tournament || '';
@@ -775,7 +909,7 @@ button { max-width: 100%; }
       striker:S.striker, nonStriker:S.nonStriker, bowler:S.bowler,
       events:[...S.events], target:S.target, fallWickets:JSON.parse(JSON.stringify(S.fallWickets||[])), recentBalls:JSON.parse(JSON.stringify(S.recentBalls||[])),
       innings:S.innings, battingTeam:S.battingTeam, bowlingTeam:S.bowlingTeam,
-      started:S.started, firstInnings:{...S.firstInnings}, partnershipRuns:S.partnershipRuns, partnershipBalls:S.partnershipBalls
+      started:S.started, firstInnings:{...(S.firstInnings||{}), team:S.innings===1?S.battingTeam:(S.firstInnings?.team||""), runs:S.innings===1?Number(S.runs)||0:Number(S.firstInnings?.runs)||0, wickets:S.innings===1?Number(S.wickets)||0:Number(S.firstInnings?.wickets)||0, balls:S.innings===1?Number(S.legalBalls)||0:Number(S.firstInnings?.balls)||0, extras:S.innings===1?Number(S.extras)||0:Number(S.firstInnings?.extras)||0, batters:S.innings===1?JSON.parse(JSON.stringify(S.batters||{})):JSON.parse(JSON.stringify(S.firstInnings?.batters||{})), bowlers:S.innings===1?JSON.parse(JSON.stringify(S.bowlers||{})):JSON.parse(JSON.stringify(S.firstInnings?.bowlers||{})), xi:S.innings===1?Array.from(players(S.battingTeam)||[]):Array.from(S.firstInnings?.xi||[])}, secondInnings:(S.innings===2?{team:S.battingTeam,runs:Number(S.runs)||0,wickets:Number(S.wickets)||0,balls:Number(S.legalBalls)||0,extras:Number(S.extras)||0,extraDetail:{...(S.extraDetail||{})},batters:JSON.parse(JSON.stringify(S.batters||{})),bowlers:JSON.parse(JSON.stringify(S.bowlers||{})),fallWickets:JSON.parse(JSON.stringify(S.fallWickets||[])),xi:Array.from(players(S.battingTeam)||[])}:(S.secondInnings||{})), partnershipRuns:S.partnershipRuns, partnershipBalls:S.partnershipBalls
     }));
     if (S.history.length > 20) S.history.shift();
   }
@@ -1099,7 +1233,20 @@ button { max-width: 100%; }
   // ---- broadcast ----
   async function activateBroadcast(type) {
     const eventId = String(Date.now()) + "-" + Math.random().toString(36).slice(2,8);
-    S.broadcast = { type, text:type, active:true, id:eventId, eventId:eventId, createdAt:Date.now() };
+    const eventType = String(type || "").toUpperCase();
+    S.broadcast = { type:eventType, text:eventType, active:true, id:eventId, eventId:eventId, createdAt:Date.now() };
+    // Dedicated animation channel: do not depend on the score save/render cycle.
+    // This guarantees event graphics reach an already-open overlay immediately.
+    try {
+      const packet = { type:eventType, text:eventType, id:eventId, eventId:eventId, createdAt:Date.now(), matchId:S.matchId || "", __brklive19Animation:true };
+      // Publish the event through BOTH same-origin channels and Firebase.
+      // This makes the animation reliable when the scorer and overlay are
+      // opened in different tabs/windows or through different file origins.
+      localStorage.setItem("brklive19_animation_event", JSON.stringify(packet));
+      localStorage.setItem("brklive19_animation_tick", String(Date.now()));
+      try { if (liveChannel) liveChannel.postMessage({type:"BRKLIVE19_ANIMATION", data:packet}); } catch(e) {}
+      try { if (firebaseReady && db) await set(ref(db,"liveAnimation"), packet); } catch(e) { console.warn("Animation Firebase bridge failed",e); }
+    } catch(e) {}
     S.overlay = {...(S.overlay||{}), scoreVisible:true, intro:false, introDismissedAt:Date.now()};
     await save();
     setTimeout(async () => {
@@ -1113,9 +1260,10 @@ button { max-width: 100%; }
   }
 
   window.broadcastEvent = async function(type) {
-    // Graphics buttons (FOUR/SIX/WICKET/FREE HIT/HAT-TRICK) are allowed even
-    // when the scorer is not currently running, so the operator can test the display.
-    if (!S.started && !["FREE HIT","HAT-TRICK BALL","FOUR","SIX","WICKET","RUN OUT"].includes(String(type).toUpperCase())) { alert("Start the match first."); return; }
+    // Every event graphic is a standalone overlay command and can be tested
+    // even before the scoring clock is started.
+    const graphicTypes = ["FREE HIT","HAT-TRICK BALL","FOUR","SIX","WICKET","RUN OUT","BALL","RUN"];
+    if (!S.started && !graphicTypes.includes(String(type).toUpperCase())) { alert("Start the match first."); return; }
     await activateBroadcast(type);
     render();
   };
@@ -1174,8 +1322,17 @@ button { max-width: 100%; }
     S.overlay.partnership={active:false};
     S.customLower={...(S.customLower||{}),active:false};
     S.overlay[key]=!wasOn;
+    // Publish banner commands immediately to the overlay bridge.
+    // Tournament needs the same immediate bridge update as the other banner buttons.
+    try {
+      publishLocalBridge({ ...S, tournament: S.tournament || S.tournamentName || 'BRKLIVE19 CRICKET TOURNAMENT', tournamentName: S.tournament || S.tournamentName || 'BRKLIVE19 CRICKET TOURNAMENT', overlay:{...S.overlay}, updatedAt:Date.now(), __bridgeUpdatedAt:Date.now() });
+    } catch(e) { console.warn('Tournament/banner bridge publish failed', e); }
     await save();
     render();
+    // Re-publish after save so the latest persisted state wins.
+    try {
+      publishLocalBridge({ ...S, tournament: S.tournament || S.tournamentName || 'BRKLIVE19 CRICKET TOURNAMENT', tournamentName: S.tournament || S.tournamentName || 'BRKLIVE19 CRICKET TOURNAMENT', overlay:{...S.overlay}, updatedAt:Date.now(), __bridgeUpdatedAt:Date.now() });
+    } catch(e) {}
   };
 
   window.togglePlayerLower = async function(which) {
@@ -1193,6 +1350,11 @@ button { max-width: 100%; }
     }
     await save();
     render();
+    // B1/B2 must behave exactly like Tournament: immediately switch the
+    // overlay into banner mode even when Firebase is delayed/offline.
+    try {
+      publishLocalBridge({ ...S, overlay:{...S.overlay}, updatedAt:Date.now(), __bridgeUpdatedAt:Date.now() });
+    } catch(e) { console.warn("B1/B2 banner bridge publish failed", e); }
   };
 
   window.hidePlayerLower = async function() {
@@ -1228,6 +1390,10 @@ button { max-width: 100%; }
 
     await save();
     render();
+    // BOWLER must immediately hide the live overlay and show its banner.
+    try {
+      publishLocalBridge({ ...S, overlay:{...S.overlay}, updatedAt:Date.now(), __bridgeUpdatedAt:Date.now() });
+    } catch(e) { console.warn("Bowler banner bridge publish failed", e); }
   };
 
   window.toggleFOW = async function() {
@@ -1248,6 +1414,10 @@ button { max-width: 100%; }
     }
     await save();
     render();
+    // FOW must immediately behave like the Tournament banner button.
+    try {
+      publishLocalBridge({ ...S, overlay:{...S.overlay}, fow:S.fow, updatedAt:Date.now(), __bridgeUpdatedAt:Date.now() });
+    } catch(e) { console.warn("FOW banner bridge publish failed", e); }
   };
 
   window.togglePartnership = async function() {
@@ -1365,6 +1535,8 @@ button { max-width: 100%; }
     S.overlay.intro = false;
     S.overlay.introDismissedAt = Date.now();
     S.overlay.scoreVisible = true;
+    // Publish the mode immediately so Theme 4 overlay changes without waiting for Firebase.
+    try { publishLocalBridge({ ...S, mode, updatedAt:Date.now(), __bridgeUpdatedAt:Date.now(), overlay:{...(S.overlay||{})}, firstInnings:{...(S.firstInnings||{}), batters:JSON.parse(JSON.stringify(S.batters||S.firstInnings?.batters||{})), bowlers:JSON.parse(JSON.stringify(S.bowlers||S.firstInnings?.bowlers||{})), xi:Array.from(players(S.firstInnings?.team||S.battingTeam)||[])}, secondInnings:S.innings===2?{team:S.battingTeam,runs:S.runs,wickets:S.wickets,balls:S.legalBalls,batters:JSON.parse(JSON.stringify(S.batters||{})),bowlers:JSON.parse(JSON.stringify(S.bowlers||{})),fallWickets:JSON.parse(JSON.stringify(S.fallWickets||[])),xi:Array.from(players(S.battingTeam)||[])}:S.secondInnings}); } catch(e) {}
     await save();
     render();
   };
@@ -1379,7 +1551,14 @@ button { max-width: 100%; }
 
   window.setTheme = async function(theme) {
     S.theme = theme;
-    try { localStorage.setItem("brklive19_pending_theme", theme); } catch(e) {}
+    try {
+      localStorage.setItem("brklive19_pending_theme", theme);
+      const packet = { ...S, theme, themeUpdatedAt: Date.now(), __brklive19Bridge:true, __bridgeVersion:4, __bridgeUpdatedAt:Date.now() };
+      localStorage.setItem("brklive19_liveScore", JSON.stringify(packet));
+      localStorage.setItem("brklive19_last_liveScore", JSON.stringify(packet));
+      localStorage.setItem("brklive19_liveScore_tick", String(Date.now()));
+      if (liveChannel) liveChannel.postMessage({type:"LIVE_SCORE", data:packet});
+    } catch(e) {}
     document.querySelectorAll('.theme').forEach(b => b.classList.toggle('active', b.dataset.theme === theme));
     await save();
     render();
@@ -1537,8 +1716,10 @@ button { max-width: 100%; }
 
       // Preserve the Index bridge if the Firebase record is missing those fields.
       const current = S;
-      const preferredTheme = urlTheme || current.theme || 'blue';
-      S = { ...createDefaultState(), ...data };
+      const preferredTheme = urlTheme || data.theme || current.theme || 'blue';
+      // Firebase may receive a sparse theme update. Merge it onto the current
+      // scorer state instead of replacing the score/players with defaults.
+      S = { ...createDefaultState(), ...current, ...data };
       if (preferredTheme) S.theme = preferredTheme;
       if (!S.teamA) S.teamA = current.teamA;
       if (!S.teamB) S.teamB = current.teamB;
@@ -1664,6 +1845,7 @@ button { max-width: 100%; }
 
   console.log("BRKLIVE19 V4 Scorer loaded.");
 </script>
+<script src="theme4_scoreboard_stability.js"></script>
 </body>
 </html>
 
@@ -1692,3 +1874,27 @@ button { max-width: 100%; }
   text-shadow:0 0 14px rgba(0,210,255,.28)!important;
 }
 </style>
+
+<script>
+(function(){
+  try{
+    const old=window.save;
+    if(typeof old==='function' && !window.__t5BattingHook){
+      window.__t5BattingHook=true;
+      window.save=function(){
+        const r=old.apply(this,arguments);
+        try{
+          const raw=localStorage.getItem('brkLiveState');
+          if(raw){
+            const d=JSON.parse(raw);
+            const n=d.battingTeam||d.batting_team||d.batting||d.battingShort||
+              (Number(d.innings)===2?d.teamB:d.teamA)||'';
+            if(n){ d.battingTeamName=String(n).toUpperCase(); localStorage.setItem('brkLiveState',JSON.stringify(d)); }
+          }
+        }catch(e){}
+        return r;
+      };
+    }
+  }catch(e){}
+})();
+</script>
