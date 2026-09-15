@@ -283,7 +283,27 @@ body.theme-2 .bowling-scoreboard tr > *,
 }
 
 </style>
-<link rel="stylesheet" href="theme4_stable_scoreboard.css">
+
+<style id="theme5-bold-text-fix">
+/* Theme 5: larger, bold stable MUDING and over text */
+.theme5 #battingTeam,.theme5 .batting-team,.theme5 #teamName,.theme5 .team-name{font-size:1.18em !important;font-weight:800 !important;}
+.theme5 #over,.theme5 .over,.theme5 .over-text{font-size:1.15em !important;font-weight:800 !important;}
+/* Target is hidden by default; JS may enable it only for innings 2. */
+.theme5 #targetBox,.theme5 .target-box,.theme5 #target-box{display:none;}
+</style>
+
+<style id="BRKLIVE19_THEME5_SCORER_CAPS">
+/* Theme 5 scorer controls only */
+body.theme-theme5 .btn,
+body.theme-theme5 button,
+body.theme-theme5 .banner,
+body.theme-theme5 .overlay,
+body.theme-theme5 [data-theme="theme5"]{
+  text-transform:uppercase !important;
+  font-weight:900 !important;
+}
+</style>
+
 </head>
 <body>
 
@@ -618,7 +638,7 @@ body.theme-2 .bowling-scoreboard tr > *,
   let currentMatchId = null;
 
   const urlTheme = new URLSearchParams(window.location.search).get('theme') || localStorage.getItem('brklive19_pending_theme') || localStorage.getItem('brklive19_selected_theme') || '';
-  if (['blue','neon','green','gold','theme2','theme3','theme4','theme5','theme6','theme7','glass','carbon','stadium','aurora','metallic','redblack','rainbow','custom'].includes(urlTheme)) S.theme = urlTheme;
+  if (['blue','neon','green','gold','theme2','theme3','theme5','theme6','theme7','glass','carbon','stadium','aurora','metallic','redblack','rainbow','custom'].includes(urlTheme)) S.theme = urlTheme;
   if (urlTheme) {
     try { localStorage.setItem('brklive19_selected_theme', urlTheme); } catch(e) {}
   }
@@ -642,7 +662,7 @@ body.theme-2 .bowling-scoreboard tr > *,
         // command and must be applied to the live overlay immediately.
         const requestedThemeForMatch = new URLSearchParams(window.location.search).get('theme') || '';
         S = { ...createDefaultState(), ...saved };
-        if (requestedThemeForMatch && ['blue','neon','green','gold','theme2','theme3','theme4','theme5','theme6','theme7','glass','carbon','stadium','aurora','metallic','redblack','rainbow','t20world','custom'].includes(requestedThemeForMatch)) {
+        if (requestedThemeForMatch && ['blue','neon','green','gold','theme2','theme3','theme5','theme6','theme7','glass','carbon','stadium','aurora','metallic','redblack','rainbow','t20world','custom'].includes(requestedThemeForMatch)) {
           S.theme = requestedThemeForMatch;
         }
       }
@@ -1535,7 +1555,7 @@ body.theme-2 .bowling-scoreboard tr > *,
     S.overlay.intro = false;
     S.overlay.introDismissedAt = Date.now();
     S.overlay.scoreVisible = true;
-    // Publish the mode immediately so Theme 4 overlay changes without waiting for Firebase.
+    // Publish the mode immediately so the overlay changes without waiting for Firebase.
     try { publishLocalBridge({ ...S, mode, updatedAt:Date.now(), __bridgeUpdatedAt:Date.now(), overlay:{...(S.overlay||{})}, firstInnings:{...(S.firstInnings||{}), batters:JSON.parse(JSON.stringify(S.batters||S.firstInnings?.batters||{})), bowlers:JSON.parse(JSON.stringify(S.bowlers||S.firstInnings?.bowlers||{})), xi:Array.from(players(S.firstInnings?.team||S.battingTeam)||[])}, secondInnings:S.innings===2?{team:S.battingTeam,runs:S.runs,wickets:S.wickets,balls:S.legalBalls,batters:JSON.parse(JSON.stringify(S.batters||{})),bowlers:JSON.parse(JSON.stringify(S.bowlers||{})),fallWickets:JSON.parse(JSON.stringify(S.fallWickets||[])),xi:Array.from(players(S.battingTeam)||[])}:S.secondInnings}); } catch(e) {}
     await save();
     render();
@@ -1845,7 +1865,7 @@ body.theme-2 .bowling-scoreboard tr > *,
 
   console.log("BRKLIVE19 V4 Scorer loaded.");
 </script>
-<script src="theme4_scoreboard_stability.js"></script>
+
 </body>
 </html>
 
