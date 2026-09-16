@@ -1036,37 +1036,27 @@
 
         /* ── SCORECARD TAB ── */
         .scorecard-container {
-  animation: none !important;
-  transition: none !important;
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 20px;
         }
         .scorecard-section {
-  animation: none !important;
-  transition: none !important;
             background: var(--card-bg);
             border: 1px solid var(--card-border);
             border-radius: var(--radius);
             padding: 16px 18px;
         }
         .scorecard-section h4 {
-  animation: none !important;
-  transition: none !important;
             font-size: 16px;
             font-weight: 700;
             margin-bottom: 10px;
         }
         .scorecard-section table {
-  animation: none !important;
-  transition: none !important;
             width: 100%;
             border-collapse: collapse;
             font-size: 14px;
         }
         .scorecard-section th {
-  animation: none !important;
-  transition: none !important;
             text-align: left;
             color: var(--text-muted);
             font-weight: 600;
@@ -1077,14 +1067,10 @@
             border-bottom: 1px solid var(--card-border);
         }
         .scorecard-section td {
-  animation: none !important;
-  transition: none !important;
             padding: 4px 6px;
             border-bottom: 1px solid rgba(255, 255, 255, 0.03);
         }
         .scorecard-section tr:last-child td {
-  animation: none !important;
-  transition: none !important;
             border-bottom: none;
         }
 
@@ -1304,8 +1290,6 @@
                 grid-template-columns: 1fr;
             }
             .scorecard-container {
-  animation: none !important;
-  transition: none !important;
                 grid-template-columns: 1fr;
             }
             .sb-teams {
@@ -1380,116 +1364,6 @@ body { overflow:hidden; box-sizing:border-box; }
   overflow:visible;
   min-width:0;
 }
-</style>
-<style>html,body{min-height:100%;height:auto;overflow-x:hidden!important;overflow-y:auto!important;-webkit-overflow-scrolling:touch;} body{overscroll-behavior-y:auto;}</style>
-<style id="brklive19-scroll-preserve">
-html{min-height:100%;height:auto;overflow-x:hidden!important;overflow-y:auto!important;-webkit-overflow-scrolling:touch!important;}
-body{min-height:100vh;height:auto;overflow-x:hidden!important;overflow-y:auto!important;}
-</style>
-<style>
-
-/* BRKLIVE19 THEME 2 — CENTER ALL BATTING & BOWLING SCOREBOARD DATA */
-body.theme-2 .scoreboard,
-body.theme-2 .batting-scoreboard,
-body.theme-2 .bowling-scoreboard,
-body.theme-2 .scorecard,
-body.theme-2 .batting-table,
-body.theme-2 .bowling-table,
-.theme-2 .scoreboard,
-.theme-2 .batting-scoreboard,
-.theme-2 .bowling-scoreboard,
-.theme-2 .scorecard,
-.theme-2 .batting-table,
-.theme-2 .bowling-table {
-  animation: none !important;
-  transition: none !important;
-  margin-left: auto !important;
-  margin-right: auto !important;
-  text-align: center !important;
-}
-
-body.theme-2 .scoreboard table,
-body.theme-2 .batting-scoreboard table,
-body.theme-2 .bowling-scoreboard table,
-body.theme-2 .scorecard table,
-.theme-2 .scoreboard table,
-.theme-2 .batting-scoreboard table,
-.theme-2 .bowling-scoreboard table,
-.theme-2 .scorecard table {
-  animation: none !important;
-  transition: none !important;
-  margin-left: auto !important;
-  margin-right: auto !important;
-  text-align: center !important;
-}
-
-body.theme-2 .scoreboard th,
-body.theme-2 .scoreboard td,
-body.theme-2 .batting-scoreboard th,
-body.theme-2 .batting-scoreboard td,
-body.theme-2 .bowling-scoreboard th,
-body.theme-2 .bowling-scoreboard td,
-body.theme-2 .scorecard th,
-body.theme-2 .scorecard td,
-body.theme-2 .batting-table th,
-body.theme-2 .batting-table td,
-body.theme-2 .bowling-table th,
-body.theme-2 .bowling-table td,
-.theme-2 .scoreboard th,
-.theme-2 .scoreboard td,
-.theme-2 .batting-scoreboard th,
-.theme-2 .batting-scoreboard td,
-.theme-2 .bowling-scoreboard th,
-.theme-2 .bowling-scoreboard td,
-.theme-2 .scorecard th,
-.theme-2 .scorecard td,
-.theme-2 .batting-table th,
-.theme-2 .batting-table td,
-.theme-2 .bowling-table th,
-.theme-2 .bowling-table td {
-  animation: none !important;
-  transition: none !important;
-  text-align: center !important;
-  vertical-align: middle !important;
-}
-
-body.theme-2 .scoreboard .player-name,
-body.theme-2 .scoreboard .player,
-body.theme-2 .batting-scoreboard .player-name,
-body.theme-2 .batting-scoreboard .player,
-body.theme-2 .bowling-scoreboard .player-name,
-body.theme-2 .bowling-scoreboard .player,
-.theme-2 .scoreboard .player-name,
-.theme-2 .scoreboard .player,
-.theme-2 .batting-scoreboard .player-name,
-.theme-2 .batting-scoreboard .player,
-.theme-2 .bowling-scoreboard .player-name,
-.theme-2 .bowling-scoreboard .player {
-  animation: none !important;
-  transition: none !important;
-  text-align: center !important;
-}
-
-body.theme-2 .scoreboard tr > *,
-body.theme-2 .batting-scoreboard tr > *,
-body.theme-2 .bowling-scoreboard tr > *,
-.theme-2 .scoreboard tr > *,
-.theme-2 .batting-scoreboard tr > *,
-.theme-2 .bowling-scoreboard tr > * {
-  animation: none !important;
-  transition: none !important;
-  text-align: center !important;
-  vertical-align: middle !important;
-}
-
-</style>
-
-<style id="theme5-bold-text-fix">
-/* Theme 5: larger, bold stable MUDING and over text */
-.theme5 #battingTeam,.theme5 .batting-team,.theme5 #teamName,.theme5 .team-name{font-size:1.18em !important;font-weight:800 !important;}
-.theme5 #over,.theme5 .over,.theme5 .over-text{font-size:1.15em !important;font-weight:800 !important;}
-/* Target is hidden by default; JS may enable it only for innings 2. */
-.theme5 #targetBox,.theme5 .target-box,.theme5 #target-box{display:none;}
 </style>
 </head>
 <body>
@@ -1588,6 +1462,7 @@ body.theme-2 .bowling-scoreboard tr > *,
                 <button type="button" class="theme-picker-btn theme-blue" data-pick-theme="blue"><span class="preview"></span><strong>01 • BLUE</strong></button>
                 <button type="button" class="theme-picker-btn theme-two" data-pick-theme="theme2"><span class="preview"></span><strong>02 • THEME 2</strong></button>
                 <button type="button" class="theme-picker-btn theme-three" data-pick-theme="theme3"><span class="preview"></span><strong>03 • THEME 3</strong></button>
+                <button type="button" class="theme-picker-btn theme-four" data-pick-theme="theme4"><span class="preview"></span><strong>04 • THEME 4</strong></button>
                 <button type="button" class="theme-picker-btn theme-five" data-pick-theme="theme5"><span class="preview"></span><strong>05 • THEME 5</strong></button>
                 <button type="button" class="theme-picker-btn theme-six" data-pick-theme="theme6"><span class="preview"></span><strong>06 • THEME 6</strong></button>
             </div>
@@ -1911,7 +1786,7 @@ body.theme-2 .bowling-scoreboard tr > *,
                 <div id="authSection">
                     <button class="btn-login" id="loginBtn">Log in</button>
                     <div id="userBadge" style="display:none;" class="user-badge">
-                        <span class="avatar" id="userAvatar">MUDING</span>
+                        <span class="avatar" id="userAvatar">A</span>
                         <span id="userNameDisplay">User</span>
                         <button class="btn-logout" id="logoutBtn">Logout</button>
                     </div>
@@ -2047,7 +1922,7 @@ body.theme-2 .bowling-scoreboard tr > *,
                             <div class="scorecard-section">
                                 <h4>🏏 Batting</h4>
                                 <table id="battingTable">
-                                    <thead><tr><th>Batsman</th><th>R</th><th>MUDING</th><th>4s</th><th>6s</th><th>Dismissal</th><th>SR</th></tr></thead>
+                                    <thead><tr><th>Batsman</th><th>R</th><th>B</th><th>4s</th><th>6s</th><th>Dismissal</th><th>SR</th></tr></thead>
                                     <tbody id="battingBody"></tbody>
                                 </table>
                             </div>
@@ -2918,6 +2793,8 @@ body.theme-2 .bowling-scoreboard tr > *,
                     tournamentVenue: tournament.venue || match.tournamentVenue || '',
                     venue: match.venue || tournament.venue || '',
                     matchName: match.matchName || `${match.teamAName} vs ${match.teamBName}`,
+                    matchNo: match.matchNo || 1,
+                    matchType: match.matchType || 't20',
                     teamA: match.teamAName, teamB: match.teamBName, maxOvers: match.maxOvers,
                     tossWinner: match.tossWinner === 'teamA' ? 'A' : (match.tossWinner === 'teamB' ? 'B' : (match.tossWinner || '')),
                     tossDecision: match.tossDecision, xiA: match.xiTeamA || [], xiB: match.xiTeamB || [], matchId: match.id
@@ -2927,7 +2804,7 @@ body.theme-2 .bowling-scoreboard tr > *,
                 const scorerData = encodeURIComponent(JSON.stringify({
                     id: match.id, tournamentName: tournament.name || match.tournamentName || '',
                     tournamentVenue: tournament.venue || match.tournamentVenue || '', venue: match.venue || tournament.venue || '',
-                    matchName: match.matchName || `${match.teamAName} vs ${match.teamBName}`, teamAName: match.teamAName, teamBName: match.teamBName,
+                    matchName: match.matchName || `${match.teamAName} vs ${match.teamBName}`, matchNo: match.matchNo || 1, matchType: match.matchType || 't20', teamAName: match.teamAName, teamBName: match.teamBName,
                     maxOvers: match.maxOvers, tossWinner: match.tossWinner, tossDecision: match.tossDecision,
                     xiTeamA: match.xiTeamA || [], xiTeamB: match.xiTeamB || []
                 }));
@@ -3510,6 +3387,47 @@ body.theme-2 .bowling-scoreboard tr > *,
 
         })();
     </script>
-
 </body>
+
+<style id="BRKLIVE19-GLOBAL-SCROLL-FIX">
+
+/* =========================================================
+   BRKLIVE19 GLOBAL PAGE SCROLL FIX
+   All control/setup pages can scroll when content exceeds
+   the viewport. Broadcast overlays remain unchanged.
+   ========================================================= */
+html {
+  min-height: 100% !important;
+  height: auto !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  scroll-behavior: smooth;
+}
+body {
+  min-height: 100vh !important;
+  height: auto !important;
+  max-height: none !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  overscroll-behavior-y: auto;
+  padding-bottom: 48px !important;
+}
+/* Never let a full page be clipped by a fixed-height wrapper. */
+.page, .container, .wrap, .main, .content, .content-area,
+.dashboard, .app, .app-container, .main-content, .section,
+.sections, .settings, .form-container, .score-container {
+  max-height: none;
+}
+/* Long forms/tables remain reachable on small screens. */
+table {
+  max-width: 100%;
+}
+pre, textarea {
+  max-width: 100%;
+}
+@media (max-width: 700px) {
+  body { padding-left: 10px !important; padding-right: 10px !important; }
+}
+
+</style>
 </html>
