@@ -1,4 +1,25 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>BRKLIVE19 Football Controller</title><style>body{margin:0;padding:16px;background:#06111d;color:#fff;font-family:Arial,sans-serif}*{box-sizing:border-box}.wrap{max-width:900px;margin:auto}.card{background:linear-gradient(145deg,#0c2338,#07131f);border:1px solid #1e5a4a;border-radius:18px;padding:16px;margin:12px 0;box-shadow:0 15px 40px #0008}h1{text-align:center;color:#53e89a}label{display:block;color:#a8c8c0;font-size:13px;margin-top:8px}input,select{width:100%;padding:12px;border-radius:10px;border:1px solid #31516b;background:#071421;color:#fff;margin:5px 0}.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.btn{border:0;border-radius:11px;padding:13px;color:#fff;font-weight:900;cursor:pointer;width:100%;margin-top:7px}.green{background:linear-gradient(135deg,#087d4b,#20d77c)}.yellow{background:linear-gradient(135deg,#9b6900,#ffd34d);color:#111}.red{background:linear-gradient(135deg,#8e0922,#ff3158)}.blue{background:linear-gradient(135deg,#075cc9,#36b8ff)}.dark{background:#24354b}.score{text-align:center;font-size:64px;font-weight:900}.timer{text-align:center;font-size:48px;font-weight:900;color:#ffe26d}.status{text-align:center;padding:10px;border-radius:10px;background:#092a20;margin-top:10px}.links{display:grid;grid-template-columns:1fr 1fr;gap:10px}@media(max-width:650px){.grid,.links{grid-template-columns:1fr}}</style></head><body><script>if(!localStorage.getItem("brklive_user")){location.href="./index.html?login=1"}</script><div class="wrap"><h1>⚽ BRKLIVE19 FOOTBALL CONTROL</h1><div class="card"><div class="grid"><div><label>Home Team</label><input id="home" value="HOME"></div><div><label>Away Team</label><input id="away" value="AWAY"></div></div><div class="grid"><div><label>Period</label><select id="period"><option>1H</option><option>HT</option><option>2H</option><option>ET1</option><option>ET2</option><option>PEN</option><option>FT</option></select></div><div><label>Added / Extra Time (minutes)</label><input id="added" type="number" min="0" value="0"></div></div></div><div class="grid"><div class="card"><h2 id="homeName">HOME</h2><div class="score" id="homeScore">0</div><button class="btn green" id="homeGoal">⚽ + GOAL</button><button class="btn yellow" id="homeYellow">🟨 YELLOW</button><button class="btn red" id="homeRed">🟥 RED</button></div><div class="card"><h2 id="awayName">AWAY</h2><div class="score" id="awayScore">0</div><button class="btn green" id="awayGoal">⚽ + GOAL</button><button class="btn yellow" id="awayYellow">🟨 YELLOW</button><button class="btn red" id="awayRed">🟥 RED</button></div></div><div class="card"><div class="timer" id="timer">00:00</div><div class="grid"><button class="btn green" id="start">▶ START</button><button class="btn yellow" id="pause">⏸ PAUSE</button></div><button class="btn dark" id="reset">↺ RESET</button><button class="btn blue" id="save">💾 SEND SCORE TO OVERLAY</button><div class="status" id="status">Ready</div></div><div class="card"><h2>📋 Football Broadcast Details</h2><div class="grid"><div><label>Tournament Name</label><input id="tournament" placeholder="Tournament name"></div><div><label>Match Name</label><input id="match" placeholder="Match name"></div></div><label>Custom Text / Lower Third</label><input id="customText" maxlength="120" placeholder="Enter custom text to show on Football Overlay"><div class="grid"><button class="btn blue" id="showTournament">🏆 TOURNAMENT</button><button class="btn blue" id="showMatch">⚽ MATCH</button></div><button class="btn green" id="showCustom">✍️ SHOW CUSTOM TEXT ON OVERLAY</button><button class="btn dark" id="hideGraphic">✖ HIDE GRAPHIC</button><div class="status" id="graphicStatus">No graphic selected</div></div><div class="card"><h2>👥 Football Player Graphics</h2><div class="grid"><button class="btn blue" id="showPlayXI">👥 PLAY XI</button><button class="btn blue" id="showPlayerChange">🔄 PLAYER CHANGE</button></div><div id="playerChangeForm" style="display:none;margin-top:12px"><div class="grid"><div><label>Team</label><select id="changeTeam"><option value="home">Home Team</option><option value="away">Away Team</option></select></div><div><label>Player OUT</label><select id="playerOut"><option value="">— Select Player —</option></select></div><div><label>Player IN</label><select id="playerIn"><option value="">— Select Player —</option></select></div></div><button class="btn green" id="sendPlayerChange">SHOW PLAYER CHANGE</button></div><div class="status" id="playerGraphicStatus">No player graphic selected</div></div><div class="card"><h2>🎨 Football Overlay Colours</h2><div class="grid"><div><label>Primary Colour</label><input id="primaryColor" type="color" value="#087d4b"></div><div><label>Accent Colour</label><input id="accentColor" type="color" value="#53e89a"></div><div><label>Score Background</label><input id="scoreColor" type="color" value="#061b35"></div><div><label>Goal Animation Colour</label><input id="goalColor" type="color" value="#16c784"></div></div><button class="btn blue" id="applyColors">APPLY COLOURS</button></div><div class="card"><h2>📺 Football Broadcast</h2><div class="links"><button class="btn blue" id="openOverlay">OPEN FOOTBALL OVERLAY</button><button class="btn dark" id="copyOverlay">COPY OVERLAY LINK</button></div></div></div><script type="module">
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>BRKLIVE19 Football Controller</title><style>body{margin:0;padding:16px;background:#06111d;color:#fff;font-family:Arial,sans-serif}*{box-sizing:border-box}.wrap{max-width:900px;margin:auto}.card{background:linear-gradient(145deg,#0c2338,#07131f);border:1px solid #1e5a4a;border-radius:18px;padding:16px;margin:12px 0;box-shadow:0 15px 40px #0008}h1{text-align:center;color:#53e89a}label{display:block;color:#a8c8c0;font-size:13px;margin-top:8px}input,select{width:100%;padding:12px;border-radius:10px;border:1px solid #31516b;background:#071421;color:#fff;margin:5px 0}.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.btn{border:0;border-radius:11px;padding:13px;color:#fff;font-weight:900;cursor:pointer;width:100%;margin-top:7px}.green{background:linear-gradient(135deg,#087d4b,#20d77c)}.yellow{background:linear-gradient(135deg,#9b6900,#ffd34d);color:#111}.red{background:linear-gradient(135deg,#8e0922,#ff3158)}.blue{background:linear-gradient(135deg,#075cc9,#36b8ff)}.dark{background:#24354b}.score{text-align:center;font-size:64px;font-weight:900}.timer{text-align:center;font-size:48px;font-weight:900;color:#ffe26d}.status{text-align:center;padding:10px;border-radius:10px;background:#092a20;margin-top:10px}.links{display:grid;grid-template-columns:1fr 1fr;gap:10px}@media(max-width:650px){.grid,.links{grid-template-columns:1fr}}
+/* BRKLIVE19: all overlay text uppercase */
+body, body * { text-transform: uppercase; }
+
+/* BRKLIVE19: responsive overlay, never force a minimum viewport width */
+html, body { width:100%; min-width:0 !important; max-width:100%; }
+body { overflow:hidden; box-sizing:border-box; }
+*, *::before, *::after { box-sizing:border-box; }
+
+/* Keep the lower third inside the available viewport */
+.overlay, .scorebar, .main-overlay, .theme-overlay, .lower-third {
+  max-width:100vw !important;
+  min-width:0 !important;
+  width:100% !important;
+}
+
+/* Prevent text from being clipped */
+.overlay span, .overlay div, .scorebar span, .scorebar div {
+  overflow:visible;
+  min-width:0;
+}
+</style></head><body><script>if(!localStorage.getItem("brklive_user")){location.href="./index.html?login=1"}</script><div class="wrap"><h1>⚽ BRKLIVE19 FOOTBALL CONTROL</h1><div class="card"><div class="grid"><div><label>Home Team</label><input id="home" value="HOME"></div><div><label>Away Team</label><input id="away" value="AWAY"></div></div><div class="grid"><div><label>Period</label><select id="period"><option>1H</option><option>HT</option><option>2H</option><option>ET1</option><option>ET2</option><option>PEN</option><option>FT</option></select></div><div><label>Added / Extra Time (minutes)</label><input id="added" type="number" min="0" value="0"></div></div></div><div class="grid"><div class="card"><h2 id="homeName">HOME</h2><div class="score" id="homeScore">0</div><button class="btn green" id="homeGoal">⚽ + GOAL</button><button class="btn yellow" id="homeYellow">🟨 YELLOW</button><button class="btn red" id="homeRed">🟥 RED</button></div><div class="card"><h2 id="awayName">AWAY</h2><div class="score" id="awayScore">0</div><button class="btn green" id="awayGoal">⚽ + GOAL</button><button class="btn yellow" id="awayYellow">🟨 YELLOW</button><button class="btn red" id="awayRed">🟥 RED</button></div></div><div class="card"><div class="timer" id="timer">00:00</div><div class="grid"><button class="btn green" id="start">▶ START</button><button class="btn yellow" id="pause">⏸ PAUSE</button></div><button class="btn dark" id="reset">↺ RESET</button><button class="btn blue" id="save">💾 SEND SCORE TO OVERLAY</button><div class="status" id="status">Ready</div></div><div class="card"><h2>📋 Football Broadcast Details</h2><div class="grid"><div><label>Tournament Name</label><input id="tournament" placeholder="Tournament name"></div><div><label>Match Name</label><input id="match" placeholder="Match name"></div></div><label>Custom Text / Lower Third</label><input id="customText" maxlength="120" placeholder="Enter custom text to show on Football Overlay"><div class="grid"><button class="btn blue" id="showTournament">🏆 TOURNAMENT</button><button class="btn blue" id="showMatch">⚽ MATCH</button></div><button class="btn green" id="showCustom">✍️ SHOW CUSTOM TEXT ON OVERLAY</button><button class="btn dark" id="hideGraphic">✖ HIDE GRAPHIC</button><div class="status" id="graphicStatus">No graphic selected</div></div><div class="card"><h2>👥 Football Player Graphics</h2><div class="grid"><button class="btn blue" id="showPlayXI">👥 PLAY XI</button><button class="btn blue" id="showPlayerChange">🔄 PLAYER CHANGE</button></div><div id="playerChangeForm" style="display:none;margin-top:12px"><div class="grid"><div><label>Team</label><select id="changeTeam"><option value="home">Home Team</option><option value="away">Away Team</option></select></div><div><label>Player OUT</label><select id="playerOut"><option value="">— Select Player —</option></select></div><div><label>Player IN</label><select id="playerIn"><option value="">— Select Player —</option></select></div></div><button class="btn green" id="sendPlayerChange">SHOW PLAYER CHANGE</button></div><div class="status" id="playerGraphicStatus">No player graphic selected</div></div><div class="card"><h2>🎨 Football Overlay Colours</h2><div class="grid"><div><label>Primary Colour</label><input id="primaryColor" type="color" value="#087d4b"></div><div><label>Accent Colour</label><input id="accentColor" type="color" value="#53e89a"></div><div><label>Score Background</label><input id="scoreColor" type="color" value="#061b35"></div><div><label>Goal Animation Colour</label><input id="goalColor" type="color" value="#16c784"></div></div><button class="btn blue" id="applyColors">APPLY COLOURS</button></div><div class="card"><h2>📺 Football Broadcast</h2><div class="links"><button class="btn blue" id="openOverlay">OPEN FOOTBALL OVERLAY</button><button class="btn dark" id="copyOverlay">COPY OVERLAY LINK</button></div></div></div><script type="module">
 import{initializeApp}from'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
 import{getDatabase,ref,set,get}from'https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js';
 const cfg={apiKey:'AIzaSyBLWq1bqJ32F2cg3mqYQ0uwXcS3zvTA3A4',authDomain:'brklive19-2bab4.firebaseapp.com',databaseURL:'https://brklive19-2bab4-default-rtdb.asia-southeast1.firebasedatabase.app',projectId:'brklive19-2bab4',storageBucket:'brklive19-2bab4.firebasestorage.app',messagingSenderId:'294058533898',appId:'1:294058533898:web:4996705937e969939cabf3'};
@@ -69,4 +90,46 @@ $('save').onclick=send;
 ['home','away','period','added'].forEach(id=>{$(id).addEventListener('change',syncNow);$(id).addEventListener('input',()=>{render();publishLocal()})});
 const overlayUrl=()=>location.href.replace(/football(?:-control)?\.html.*/i,'football-overlay.html');$('openOverlay').onclick=()=>window.open(overlayUrl(),'_blank');$('copyOverlay').onclick=()=>navigator.clipboard.writeText(overlayUrl()).then(()=>alert('Overlay link copied'));
 render();publishLocal();publishCloud();
-</script></body></html>
+</script></body>
+<style id="BRKLIVE19-GLOBAL-SCROLL-FIX">
+
+/* =========================================================
+   BRKLIVE19 GLOBAL PAGE SCROLL FIX
+   All control/setup pages can scroll when content exceeds
+   the viewport. Broadcast overlays remain unchanged.
+   ========================================================= */
+html {
+  min-height: 100% !important;
+  height: auto !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  scroll-behavior: smooth;
+}
+body {
+  min-height: 100vh !important;
+  height: auto !important;
+  max-height: none !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  overscroll-behavior-y: auto;
+  padding-bottom: 48px !important;
+}
+/* Never let a full page be clipped by a fixed-height wrapper. */
+.page, .container, .wrap, .main, .content, .content-area,
+.dashboard, .app, .app-container, .main-content, .section,
+.sections, .settings, .form-container, .score-container {
+  max-height: none;
+}
+/* Long forms/tables remain reachable on small screens. */
+table {
+  max-width: 100%;
+}
+pre, textarea {
+  max-width: 100%;
+}
+@media (max-width: 700px) {
+  body { padding-left: 10px !important; padding-right: 10px !important; }
+}
+
+</style>
+</html>
