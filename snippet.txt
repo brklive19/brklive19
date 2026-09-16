@@ -1,0 +1,361 @@
+  position:absolute; left:50%; transform:translateX(-50%);
+  top:-34px; font-size:18px; font-weight:900; letter-spacing:1px;
+  padding:5px 18px; background:#f5c400; color:#111; border-radius:3px;
+}
+@media(max-width:900px){
+  #playerDetailScreen{width:96vw;}
+  #playerDetailScreen .pds-row{min-height:42px;padding:5px 12px;}
+  #playerDetailScreen .pds-left,#playerDetailScreen .pds-right{font-size:17px;}
+  #playerDetailScreen .pds-head{min-height:34px;font-size:11px;}
+  #playerDetailScreen .pds-data{min-height:43px;font-size:17px;}
+}
+</style>
+
+<div id="playerDetailScreen" aria-hidden="true">
+  <div class="pds-caption" id="pdsCaption">PLAYER DETAILS</div>
+  <div class="pds-row">
+    <div class="pds-left" id="pdsTeam">TEAM</div>
+    <div class="pds-right" id="pdsBowler">BOWLER</div>
+  </div>
+  <div class="pds-row pds-head">
+    <div>PLAYER</div><div>RUN</div><div>BALL</div><div>4S</div><div>6S</div><div>SR</div>
+  </div>
+  <div class="pds-row pds-data">
+    <div class="pds-player" id="pdsPlayer">—</div>
+    <div id="pdsRun">0</div>
+    <div id="pdsBall">0</div>
+    <div id="pds4s">0</div>
+    <div id="pds6s">0</div>
+    <div id="pdsSr">0.00</div>
+  </div>
+</div>
+
+<script>
+(function(){
+  const q=id=>document.getElementById(id);
+  function n(v,d=0){const x=Number(v);return Number.isFinite(x)?x:d;}
+  function nameOf(x){return String(x||"").trim();}
+  function getState(){
+    return window.currentData || window.overlayData || window.matchData ||
+           window.scoreData || window.data || {};
+  }
+  function findPlayer(d, which){
+    const list=d.batters||d.batsmen||d.players||d.batsmenStats||[];
+    if(Array.isArray(list)){
+      return list.find(x=>x && (x.id===which||x.name===which||x.playerName===which)) ||
+             list[0] || {};
+    }
+    if(list && typeof list==="object"){
+      return list[which] || Object.values(list).find(x=>x && (x.name===which||x.playerName===which)) || {};
+    }
+    return {};
+  }
+  function playerFromData(d, role){
+    const candidates=role==="B1"
+      ? [d.b1,d.B1,d.striker,d.strikerName,d.batter1,d.batter1Name]
+      : [d.b2,d.B2,d.nonStriker,d.nonStrikerName,d.batter2,d.batter2Name];
+    for(const c of candidates){
+      if(c && typeof c==="object") return c;
+      if(c) return findPlayer(d,String(c));
+    }
+    return {};
+  }
+  function render(role){
+    const d=getState();
+    const p=role==="BOWLER"
+      ? (d.bowler && typeof d.bowler==="object" ? d.bowler :
+         findPlayer(d,d.bowler||d.bowlerName||d.currentBowler||""))
+      : role==="FOW"
+      ? (d.fowPlayer && typeof d.fowPlayer==="object" ? d.fowPlayer :
+         findPlayer(d,d.fowPlayer||d.outPlayer||d.dismissedPlayer||""))
+      : playerFromData(d,role);
+
+    const team=nameOf(p.team||p.teamName||d.battingTeam||d.battingTeamName||d.teamA||"TEAM");
+    const bowler=nameOf(d.bowlerName||d.currentBowlerName||(d.bowler&&d.bowler.name)||"BOWLER");
+    const player=nameOf(p.name||p.playerName||p.batterName||p.bowlerName||"PLAYER");
+
+    const run=n(p.runs??p.run??p.totalRuns);
+    const ball=n(p.balls??p.ball??p.ballsFaced);
+    const fours=n(p.fours??p["4s"]??p.boundary4);
+    const sixes=n(p.sixes??p["6s"]??p.boundary6);
+    const sr=ball ? (run/ball*100).toFixed(2) : "0.00";
+
+    q("pdsTeam").textContent=team;
+    q("pdsBowler").textContent=role==="BOWLER" ? player : bowler;
+    q("pdsPlayer").textContent=player;
+    q("pdsRun").textContent=run;
+    q("pdsBall").textContent=ball;
+    q("pds4s").textContent=fours;
+    q("pds6s").textContent=sixes;
+    q("pdsSr").textContent=sr;
+    q("pdsCaption").textContent=role==="FOW" ? "FALL OF WICKET" : role;
+  }
+  window.showPlayerDetail=function(role){
+    role=String(role||"").toUpperCase();
+    if(!["B1","B2","BOWLER","FOW"].includes(role)) return;
+    render(role);
+    q("playerDetailScreen").classList.add("show");
+    q("playerDetailScreen").setAttribute("aria-hidden","false");
+  };
+  window.hidePlayerDetail=function(){
+    q("playerDetailScreen").classList.remove("show");
+    q("playerDetailScreen").setAttribute("aria-hidden","true");
+  };
+  window.addEventListener("message",e=>{
+    const d=e.data||{};
+    const role=d.playerDetail||d.detailScreen||d.showPlayerDetail;
+    if(role) window.showPlayerDetail(role===true ? "B1" : role);
+    if(d.hidePlayerDetail) window.hidePlayerDetail();
+  });
+})();
+</script>
+
+
+<script id="brklive19-detail-button-hook">
+(function(){
+  function roleFromText(t){
+    t=String(t||"").trim().toUpperCase();
+    if(t==="B1" || t.includes("B1")) return "B1";
+    if(t==="B2" || t.includes("B2")) return "B2";
+    if(t.includes("BOWLER") || t==="BOWER") return "BOWLER";
+    if(t.includes("FOW")) return "FOW";
+    return "";
+  }
+  document.addEventListener("click",function(e){
+    const b=e.target.closest("button,[role='button'],input[type='button'],input[type='submit']");
+    if(!b) return;
+    const role=roleFromText(b.textContent||b.value||b.getAttribute("aria-label"));
+    if(role && window.showPlayerDetail) {
+      setTimeout(function(){ window.showPlayerDetail(role); },0);
+    }
+  },true);
+})();
+</script>
+
+
+<style id="brklive19-pds-aligned-data-row">
+#playerDetailScreen .pds-head,
+#playerDetailScreen .pds-data{
+  grid-template-columns:1.8fr 1fr 1fr 1fr 1fr 1fr !important;
+}
+#playerDetailScreen .pds-head > div,
+#playerDetailScreen .pds-data > div{
+  min-width:0 !important;
+  box-sizing:border-box !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  overflow:hidden !important;
+  white-space:nowrap !important;
+  text-overflow:ellipsis !important;
+}
+#playerDetailScreen .pds-data .pds-player{
+  justify-content:flex-start !important;
+}
+</style>
+
+
+<script id="brklive19-pds-match-data-refresh">
+(function(){
+  function n(v,d=0){const x=Number(v);return Number.isFinite(x)?x:d;}
+  function txt(v,fallback=""){return String(v??fallback).trim();}
+  function getBat(d,name){
+    return d.batters && name && d.batters[name] ? d.batters[name] : {};
+  }
+  function getBowl(d,name){
+    return d.bowlers && name && d.bowlers[name] ? d.bowlers[name] : {};
+  }
+  function lastFow(d){
+    const a=Array.isArray(d.fallWickets)?d.fallWickets:[];
+    return d.fow || (a.length ? a[a.length-1] : {}) || {};
+  }
+
+  window.renderBRKPlayerDetail=function(role,d){
+    const box=document.getElementById("playerDetailScreen");
+    if(!box || !d) return;
+    role=String(role||"").toUpperCase();
+
+    const getBatter=(n)=>{
+      try{
+        const x=(d.batters&&n&&d.batters[n]) ||
+          (d.batsmanStats&&n&&d.batsmanStats[n]) ||
+          (d.currentMatch&&d.currentMatch.batters&&d.currentMatch.batters[n]) || {};
+        return Object.keys(x).length ? x : (typeof batterStats==="function"?batterStats(d,n):{});
+      }catch(e){return (d.batters&&d.batters[n])||{};}
+    };
+    const getBowler=(n)=>{
+      try{
+        const x=(d.bowlers&&n&&d.bowlers[n]) ||
+          (d.bowlerStats&&n&&d.bowlerStats[n]) ||
+          (d.currentMatch&&d.currentMatch.bowlers&&d.currentMatch.bowlers[n]) || {};
+        return Object.keys(x).length ? x : (typeof bowlerStats==="function"?bowlerStats(d,n):{});
+      }catch(e){return (d.bowlers&&d.bowlers[n])||{};}
+    };
+
+    let player="", team="", st={};
+    const bowlerName=String(d.bowler||d.currentBowler||d.bowlerName||"BOWLER");
+    const battingTeam=String(d.battingTeam||"A");
+
+    if(role==="B1"){
+      player=String(d.b1||d.striker||d.batsman1||"B1");
+      st=getBatter(player);
+      team=String(d.battingTeamName||teamName(d,battingTeam));
+    }else if(role==="B2"){
+      player=String(d.b2||d.nonStriker||d.batsman2||"B2");
+      st=getBatter(player);
+      team=String(d.battingTeamName||teamName(d,battingTeam));
+    }else if(role==="BOWLER"){
+      player=bowlerName;
+      st=getBowler(player);
+      const side=String(d.bowlingTeam||((battingTeam==="A")?"B":"A"));
+      team=String(d.bowlingTeamName||teamName(d,side));
+    }else if(role==="FOW"){
+      const arr=Array.isArray(d.fallWickets)?d.fallWickets:[];
+      const f=d.fow || (arr.length?arr[arr.length-1]:{});
+      player=String(f.player||f.playerName||f.name||f.batsman||"FOW");
+      st=getBatter(player);
+      if(f.runs!=null) st={...st,runs:f.runs};
+      if(f.balls!=null) st={...st,balls:f.balls};
+      if(f.fours!=null) st={...st,fours:f.fours};
+      if(f.sixes!=null) st={...st,sixes:f.sixes};
+      team=String(f.teamName||f.team||d.battingTeamName||teamName(d,battingTeam));
+    }
+
+    const run=Number(st.runs??st.run??0)||0;
+    const ball=Number(st.balls??st.ball??st.ballsFaced??0)||0;
+    const fours=Number(st.fours??st["4s"]??0)||0;
+    const sixes=Number(st.sixes??st["6s"]??0)||0;
+    const sr=ball ? (run/ball*100).toFixed(2) : "0.00";
+
+    const set=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=String(v);};
+    set("pdsTeam",team||"TEAM");
+    set("pdsBowler",bowlerName||"BOWLER");
+    set("pdsPlayer",player||"PLAYER");
+    set("pdsRun",run);
+    set("pdsBall",ball);
+    set("pds4s",fours);
+    set("pds6s",sixes);
+    set("pdsSr",sr);
+    set("pdsCaption",role==="FOW"?"FALL OF WICKET":role);
+
+    box.classList.add("show");
+    box.setAttribute("aria-hidden","false");
+  };
+  window.hideBRKPlayerDetail=function(){
+    const box=document.getElementById("playerDetailScreen");
+    if(box){
+      box.classList.remove("show");
+      box.setAttribute("aria-hidden","true");
+    }
+  };
+})();
+</script>
+
+
+<style id="brklive19-pds-right-corner-header">
+#playerDetailScreen .pds-row:first-of-type{
+  display:flex !important;
+  justify-content:flex-end !important;
+  align-items:center !important;
+  text-align:right !important;
+  gap:28px !important;
+}
+#playerDetailScreen .pds-row:first-of-type .pds-left,
+#playerDetailScreen .pds-row:first-of-type .pds-right{
+  text-align:right !important;
+  flex:0 0 auto !important;
+}
+#playerDetailScreen .pds-row:first-of-type .pds-left{
+  order:1 !important;
+}
+#playerDetailScreen .pds-row:first-of-type .pds-right{
+  order:2 !important;
+}
+</style>
+
+
+<style id="brklive19-pds-working-final">
+#playerDetailScreen{
+  position:fixed !important;
+  left:50% !important;
+  top:50% !important;
+  transform:translate(-50%,-50%) !important;
+  width:min(92vw,1500px) !important;
+  z-index:100000 !important;
+}
+#playerDetailScreen .pds-row:first-of-type{
+  display:flex !important;
+  justify-content:flex-end !important;
+  align-items:center !important;
+  gap:30px !important;
+  text-align:right !important;
+}
+#playerDetailScreen .pds-row:first-of-type .pds-left,
+#playerDetailScreen .pds-row:first-of-type .pds-right{
+  flex:0 0 auto !important;
+  text-align:right !important;
+}
+#playerDetailScreen .pds-head,
+#playerDetailScreen .pds-data{
+  grid-template-columns:1.8fr 1fr 1fr 1fr 1fr 1fr !important;
+}
+</style>
+
+
+<style id="brklive19-player-detail-force-visible">
+#playerDetailScreen.show{
+  display:block !important;
+  visibility:visible !important;
+  opacity:1 !important;
+  z-index:2147483000 !important;
+}
+</style>
+
+
+<style id="brklive19-detail-mode-hide-all-overlay">
+/* PLAYER DETAIL MODE: hide every normal overlay layer while B1/B2/BOWLER/FOW
+   is active. The player detail banner remains visible above everything. */
+body.brk-player-detail-mode .overlay,
+body.brk-player-detail-mode #scoreOverlay,
+body.brk-player-detail-mode .score-overlay,
+body.brk-player-detail-mode .lower-third,
+body.brk-player-detail-mode .target-overlay,
+body.brk-player-detail-mode .banner-overlay,
+body.brk-player-detail-mode .tournament-overlay,
+body.brk-player-detail-mode .match-overlay,
+body.brk-player-detail-mode .venue-overlay,
+body.brk-player-detail-mode .toss-overlay,
+body.brk-player-detail-mode .result-overlay,
+body.brk-player-detail-mode .bowler-overlay,
+body.brk-player-detail-mode .fow-overlay {
+  visibility:hidden !important;
+  opacity:0 !important;
+  pointer-events:none !important;
+}
+body.brk-player-detail-mode #playerDetailScreen {
+  visibility:visible !important;
+  opacity:1 !important;
+  display:block !important;
+  z-index:2147483647 !important;
+}
+</style>
+<script id="brklive19-detail-mode-controller">
+(function(){
+  function setDetailMode(on){
+    document.body.classList.toggle("brk-player-detail-mode",!!on);
+  }
+  window.setBRKPlayerDetailMode=setDetailMode;
+  window.addEventListener("storage",function(){});
+  const oldRender=window.renderBRKPlayerDetail;
+  if(typeof oldRender==="function"){
+    window.renderBRKPlayerDetail=function(role,d){
+      setDetailMode(true);
+      return oldRender(role,d);
+    };
+  }
+  const oldHide=window.hideBRKPlayerDetail;
+  if(typeof oldHide==="function"){
+    window.hideBRKPlayerDetail=function(){
+      setDetailMode(false);
+      return oldHide();
+    };
