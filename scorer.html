@@ -181,129 +181,6 @@ button { max-width: 100%; }
   font-size:11px!important; padding:5px 7px!important; min-height:29px!important; border-radius:6px!important;
 }
 </style>
-<style>html,body{min-height:100%;height:auto;overflow-x:hidden!important;overflow-y:auto!important;-webkit-overflow-scrolling:touch;} body{overscroll-behavior-y:auto;}</style>
-<style id="brklive19-scroll-preserve">
-html{min-height:100%;height:auto;overflow-x:hidden!important;overflow-y:auto!important;-webkit-overflow-scrolling:touch!important;}
-body{min-height:100vh;height:auto;overflow-x:hidden!important;overflow-y:auto!important;}
-</style>
-<style>
-
-/* BRKLIVE19 THEME 2 — CENTER ALL BATTING & BOWLING SCOREBOARD DATA */
-body.theme-2 .scoreboard,
-body.theme-2 .batting-scoreboard,
-body.theme-2 .bowling-scoreboard,
-body.theme-2 .scorecard,
-body.theme-2 .batting-table,
-body.theme-2 .bowling-table,
-.theme-2 .scoreboard,
-.theme-2 .batting-scoreboard,
-.theme-2 .bowling-scoreboard,
-.theme-2 .scorecard,
-.theme-2 .batting-table,
-.theme-2 .bowling-table {
-  animation: none !important;
-  transition: none !important;
-  margin-left: auto !important;
-  margin-right: auto !important;
-  text-align: center !important;
-}
-
-body.theme-2 .scoreboard table,
-body.theme-2 .batting-scoreboard table,
-body.theme-2 .bowling-scoreboard table,
-body.theme-2 .scorecard table,
-.theme-2 .scoreboard table,
-.theme-2 .batting-scoreboard table,
-.theme-2 .bowling-scoreboard table,
-.theme-2 .scorecard table {
-  animation: none !important;
-  transition: none !important;
-  margin-left: auto !important;
-  margin-right: auto !important;
-  text-align: center !important;
-}
-
-body.theme-2 .scoreboard th,
-body.theme-2 .scoreboard td,
-body.theme-2 .batting-scoreboard th,
-body.theme-2 .batting-scoreboard td,
-body.theme-2 .bowling-scoreboard th,
-body.theme-2 .bowling-scoreboard td,
-body.theme-2 .scorecard th,
-body.theme-2 .scorecard td,
-body.theme-2 .batting-table th,
-body.theme-2 .batting-table td,
-body.theme-2 .bowling-table th,
-body.theme-2 .bowling-table td,
-.theme-2 .scoreboard th,
-.theme-2 .scoreboard td,
-.theme-2 .batting-scoreboard th,
-.theme-2 .batting-scoreboard td,
-.theme-2 .bowling-scoreboard th,
-.theme-2 .bowling-scoreboard td,
-.theme-2 .scorecard th,
-.theme-2 .scorecard td,
-.theme-2 .batting-table th,
-.theme-2 .batting-table td,
-.theme-2 .bowling-table th,
-.theme-2 .bowling-table td {
-  animation: none !important;
-  transition: none !important;
-  text-align: center !important;
-  vertical-align: middle !important;
-}
-
-body.theme-2 .scoreboard .player-name,
-body.theme-2 .scoreboard .player,
-body.theme-2 .batting-scoreboard .player-name,
-body.theme-2 .batting-scoreboard .player,
-body.theme-2 .bowling-scoreboard .player-name,
-body.theme-2 .bowling-scoreboard .player,
-.theme-2 .scoreboard .player-name,
-.theme-2 .scoreboard .player,
-.theme-2 .batting-scoreboard .player-name,
-.theme-2 .batting-scoreboard .player,
-.theme-2 .bowling-scoreboard .player-name,
-.theme-2 .bowling-scoreboard .player {
-  animation: none !important;
-  transition: none !important;
-  text-align: center !important;
-}
-
-body.theme-2 .scoreboard tr > *,
-body.theme-2 .batting-scoreboard tr > *,
-body.theme-2 .bowling-scoreboard tr > *,
-.theme-2 .scoreboard tr > *,
-.theme-2 .batting-scoreboard tr > *,
-.theme-2 .bowling-scoreboard tr > * {
-  animation: none !important;
-  transition: none !important;
-  text-align: center !important;
-  vertical-align: middle !important;
-}
-
-</style>
-
-<style id="theme5-bold-text-fix">
-/* Theme 5: larger, bold stable MUDING and over text */
-.theme5 #battingTeam,.theme5 .batting-team,.theme5 #teamName,.theme5 .team-name{font-size:1.18em !important;font-weight:800 !important;}
-.theme5 #over,.theme5 .over,.theme5 .over-text{font-size:1.15em !important;font-weight:800 !important;}
-/* Target is hidden by default; JS may enable it only for innings 2. */
-.theme5 #targetBox,.theme5 .target-box,.theme5 #target-box{display:none;}
-</style>
-
-<style id="BRKLIVE19_THEME5_SCORER_CAPS">
-/* Theme 5 scorer controls only */
-body.theme-theme5 .btn,
-body.theme-theme5 button,
-body.theme-theme5 .banner,
-body.theme-theme5 .overlay,
-body.theme-theme5 [data-theme="theme5"]{
-  text-transform:uppercase !important;
-  font-weight:900 !important;
-}
-</style>
-
 </head>
 <body>
 
@@ -614,7 +491,7 @@ body.theme-theme5 [data-theme="theme5"]{
       history:[], events:[], batters:{}, bowlers:{}, fallWickets:[], recentBalls:[], currentOverBalls:[],
       striker:"", nonStriker:"", bowler:"", target:0,
       maxOvers:6, theme:"blue", mode:"default",
-      tournament:"", venue:"", matchName:"", teamA:"", teamB:"",
+      tournament:"", venue:"", matchName:"", matchNo:1, matchType:"t20", teamA:"", teamB:"",
       tossWinner:"", tossDecision:"", xiA:[], xiB:[],
       firstInnings:{ team:"", runs:0, wickets:0, balls:0, extras:0 },
       secondInningsStarted:false, pendingSecondInnings:false,
@@ -638,7 +515,7 @@ body.theme-theme5 [data-theme="theme5"]{
   let currentMatchId = null;
 
   const urlTheme = new URLSearchParams(window.location.search).get('theme') || localStorage.getItem('brklive19_pending_theme') || localStorage.getItem('brklive19_selected_theme') || '';
-  if (['blue','neon','green','gold','theme2','theme3','theme5','theme6','theme7','glass','carbon','stadium','aurora','metallic','redblack','rainbow','custom'].includes(urlTheme)) S.theme = urlTheme;
+  if (['blue','neon','green','gold','theme2','theme3','theme4','theme5','theme6','glass','carbon','stadium','aurora','metallic','redblack','rainbow','custom'].includes(urlTheme)) S.theme = urlTheme;
   if (urlTheme) {
     try { localStorage.setItem('brklive19_selected_theme', urlTheme); } catch(e) {}
   }
@@ -662,7 +539,7 @@ body.theme-theme5 [data-theme="theme5"]{
         // command and must be applied to the live overlay immediately.
         const requestedThemeForMatch = new URLSearchParams(window.location.search).get('theme') || '';
         S = { ...createDefaultState(), ...saved };
-        if (requestedThemeForMatch && ['blue','neon','green','gold','theme2','theme3','theme5','theme6','theme7','glass','carbon','stadium','aurora','metallic','redblack','rainbow','t20world','custom'].includes(requestedThemeForMatch)) {
+        if (requestedThemeForMatch && ['blue','neon','green','gold','theme2','theme3','theme4','theme5','theme6','glass','carbon','stadium','aurora','metallic','redblack','rainbow','t20world','custom'].includes(requestedThemeForMatch)) {
           S.theme = requestedThemeForMatch;
         }
       }
@@ -670,6 +547,8 @@ body.theme-theme5 [data-theme="theme5"]{
       S.tournament = b.tournamentName || b.tournament || S.tournament || '';
       S.venue = b.venue || b.tournamentVenue || S.venue || '';
       S.matchName = b.matchName || S.matchName || '';
+      S.matchNo = Number(b.matchNo) || Number(S.matchNo) || 1;
+      S.matchType = b.matchType || S.matchType || 't20';
       S.teamA = b.teamA || S.teamA || 'Team A';
       S.teamB = b.teamB || S.teamB || 'Team B';
       S.maxOvers = Number(b.maxOvers) || S.maxOvers || 20;
@@ -744,6 +623,8 @@ body.theme-theme5 [data-theme="theme5"]{
       tournamentVenue: tournament.venue || match.tournamentVenue || '',
       venue: match.venue || tournament.venue || '',
       matchName: match.matchName || `${match.teamAName} vs ${match.teamBName}`,
+      matchNo: Number(match.matchNo) || 1,
+      matchType: match.matchType || 't20',
       teamA: match.teamAName || 'Team A',
       teamB: match.teamBName || 'Team B',
       maxOvers: match.maxOvers || 20,
@@ -766,7 +647,7 @@ body.theme-theme5 [data-theme="theme5"]{
     S.firstInnings = { team:'', runs:0, wickets:0, balls:0, extras:0 };
     S.secondInningsStarted = false;
     S.pendingSecondInnings = false;
-    S.overlay = { showTournament:true, showVenue:false, showMatch:false, showToss:false, showResult:false, showBowler:false, showFOW:false, positions:{}, scoreVisible:false, intro:true, playerLower:{active:false,slot:'',player:''}, partnership:{active:false} };
+    S.overlay = { showTournament:true, showVenue:false, showMatch:false, showToss:false, showResult:false, showBowler:false, showFOW:false, positions:{}, scoreVisible:false, intro:true, playerLower:{active:false,slot:'',player:''}, partnership:{active:false}, view:"default" };
     saveNow();
     render();
     toast('Match loaded: ' + match.teamAName + ' vs ' + match.teamBName);
@@ -857,6 +738,7 @@ body.theme-theme5 [data-theme="theme5"]{
 
   async function save() {
     ensureSecondInningsTarget();
+    if (S.overlay) S.overlay.controlAt = Date.now();
     try { if (S.matchId) localStorage.setItem("brklive19_match_state_" + S.matchId, JSON.stringify(S)); } catch(e) {}
     syncing = true;
     const strikerStats = battingStats(S.striker);
@@ -884,7 +766,12 @@ body.theme-theme5 [data-theme="theme5"]{
       currentRunRate:currentRunRate(), requiredRunRate:requiredRunRate(),
       ballsRemaining:legalBallsRemaining(), runsToWin:runsToWin(), target:S.target,
       fallWickets:[...(S.fallWickets||[])], recentBalls:[...(S.recentBalls||[])], currentOverBalls:getCurrentOverBalls(),
+      // Always publish complete per-innings snapshots so the overlay can render
+      // the current match data even before an innings is formally completed.
+      firstInnings: (S.innings===1 ? {team:S.battingTeam,runs:Number(S.runs)||0,wickets:Number(S.wickets)||0,balls:Number(S.legalBalls)||0,extras:Number(S.extras)||0,extraDetail:{...(S.extraDetail||{})},batters:JSON.parse(JSON.stringify(S.batters||{})),bowlers:JSON.parse(JSON.stringify(S.bowlers||{})),fallWickets:JSON.parse(JSON.stringify(S.fallWickets||[])),xi:Array.from(players(S.battingTeam)||[])} : JSON.parse(JSON.stringify(S.firstInnings||{}))),
+      secondInnings: (S.innings===2 ? {team:S.battingTeam,runs:Number(S.runs)||0,wickets:Number(S.wickets)||0,balls:Number(S.legalBalls)||0,extras:Number(S.extras)||0,extraDetail:{...(S.extraDetail||{})},batters:JSON.parse(JSON.stringify(S.batters||{})),bowlers:JSON.parse(JSON.stringify(S.bowlers||{})),fallWickets:JSON.parse(JSON.stringify(S.fallWickets||[])),xi:Array.from(players(S.battingTeam)||[])} : (S.secondInnings ? JSON.parse(JSON.stringify(S.secondInnings)) : null)),
       customLower:{...(S.customLower||{})}, overlay:{...(S.overlay||{})},
+      overlayView:String(S.overlay?.view||"default"), overlayControlAt:Number(S.overlay?.controlAt||Date.now()),
       showTournament:!!S.overlay?.showTournament, showVenue:!!S.overlay?.showVenue, showMatch:!!S.overlay?.showMatch,
       showToss:!!S.overlay?.showToss, showResult:!!S.overlay?.showResult, showTarget:!!S.overlay?.showTarget,
       showBowler:!!S.overlay?.showBowler,
@@ -929,7 +816,7 @@ body.theme-theme5 [data-theme="theme5"]{
       striker:S.striker, nonStriker:S.nonStriker, bowler:S.bowler,
       events:[...S.events], target:S.target, fallWickets:JSON.parse(JSON.stringify(S.fallWickets||[])), recentBalls:JSON.parse(JSON.stringify(S.recentBalls||[])),
       innings:S.innings, battingTeam:S.battingTeam, bowlingTeam:S.bowlingTeam,
-      started:S.started, firstInnings:{...(S.firstInnings||{}), team:S.innings===1?S.battingTeam:(S.firstInnings?.team||""), runs:S.innings===1?Number(S.runs)||0:Number(S.firstInnings?.runs)||0, wickets:S.innings===1?Number(S.wickets)||0:Number(S.firstInnings?.wickets)||0, balls:S.innings===1?Number(S.legalBalls)||0:Number(S.firstInnings?.balls)||0, extras:S.innings===1?Number(S.extras)||0:Number(S.firstInnings?.extras)||0, batters:S.innings===1?JSON.parse(JSON.stringify(S.batters||{})):JSON.parse(JSON.stringify(S.firstInnings?.batters||{})), bowlers:S.innings===1?JSON.parse(JSON.stringify(S.bowlers||{})):JSON.parse(JSON.stringify(S.firstInnings?.bowlers||{})), xi:S.innings===1?Array.from(players(S.battingTeam)||[]):Array.from(S.firstInnings?.xi||[])}, secondInnings:(S.innings===2?{team:S.battingTeam,runs:Number(S.runs)||0,wickets:Number(S.wickets)||0,balls:Number(S.legalBalls)||0,extras:Number(S.extras)||0,extraDetail:{...(S.extraDetail||{})},batters:JSON.parse(JSON.stringify(S.batters||{})),bowlers:JSON.parse(JSON.stringify(S.bowlers||{})),fallWickets:JSON.parse(JSON.stringify(S.fallWickets||[])),xi:Array.from(players(S.battingTeam)||[])}:(S.secondInnings||{})), partnershipRuns:S.partnershipRuns, partnershipBalls:S.partnershipBalls
+      started:S.started, firstInnings:{...S.firstInnings}, partnershipRuns:S.partnershipRuns, partnershipBalls:S.partnershipBalls
     }));
     if (S.history.length > 20) S.history.shift();
   }
@@ -1253,20 +1140,7 @@ body.theme-theme5 [data-theme="theme5"]{
   // ---- broadcast ----
   async function activateBroadcast(type) {
     const eventId = String(Date.now()) + "-" + Math.random().toString(36).slice(2,8);
-    const eventType = String(type || "").toUpperCase();
-    S.broadcast = { type:eventType, text:eventType, active:true, id:eventId, eventId:eventId, createdAt:Date.now() };
-    // Dedicated animation channel: do not depend on the score save/render cycle.
-    // This guarantees event graphics reach an already-open overlay immediately.
-    try {
-      const packet = { type:eventType, text:eventType, id:eventId, eventId:eventId, createdAt:Date.now(), matchId:S.matchId || "", __brklive19Animation:true };
-      // Publish the event through BOTH same-origin channels and Firebase.
-      // This makes the animation reliable when the scorer and overlay are
-      // opened in different tabs/windows or through different file origins.
-      localStorage.setItem("brklive19_animation_event", JSON.stringify(packet));
-      localStorage.setItem("brklive19_animation_tick", String(Date.now()));
-      try { if (liveChannel) liveChannel.postMessage({type:"BRKLIVE19_ANIMATION", data:packet}); } catch(e) {}
-      try { if (firebaseReady && db) await set(ref(db,"liveAnimation"), packet); } catch(e) { console.warn("Animation Firebase bridge failed",e); }
-    } catch(e) {}
+    S.broadcast = { type, text:type, active:true, id:eventId, eventId:eventId, createdAt:Date.now() };
     S.overlay = {...(S.overlay||{}), scoreVisible:true, intro:false, introDismissedAt:Date.now()};
     await save();
     setTimeout(async () => {
@@ -1280,10 +1154,9 @@ body.theme-theme5 [data-theme="theme5"]{
   }
 
   window.broadcastEvent = async function(type) {
-    // Every event graphic is a standalone overlay command and can be tested
-    // even before the scoring clock is started.
-    const graphicTypes = ["FREE HIT","HAT-TRICK BALL","FOUR","SIX","WICKET","RUN OUT","BALL","RUN"];
-    if (!S.started && !graphicTypes.includes(String(type).toUpperCase())) { alert("Start the match first."); return; }
+    // Graphics buttons (FOUR/SIX/WICKET/FREE HIT/HAT-TRICK) are allowed even
+    // when the scorer is not currently running, so the operator can test the display.
+    if (!S.started && !["FREE HIT","HAT-TRICK BALL","FOUR","SIX","WICKET","RUN OUT"].includes(String(type).toUpperCase())) { alert("Start the match first."); return; }
     await activateBroadcast(type);
     render();
   };
@@ -1304,7 +1177,8 @@ body.theme-theme5 [data-theme="theme5"]{
       intro: S.overlay.intro === true,
       introDismissedAt: Number(S.overlay.introDismissedAt)||0,
       playerLower:S.overlay.playerLower||{active:false,slot:"",player:""},
-      partnership:S.overlay.partnership||{active:false}
+      partnership:S.overlay.partnership||{active:false},
+      view:String(S.overlay.view||"default")
     };
   }
 
@@ -1324,6 +1198,7 @@ body.theme-theme5 [data-theme="theme5"]{
     ["showTournament","showVenue","showMatch","showToss","showResult","showBowler","showFOW","showTarget"].forEach(k=>S.overlay[k]=false);
     S.overlay.playerLower={active:false,slot:"",player:""}; S.overlay.partnership={active:false}; S.customLower={...(S.customLower||{}),active:false};
     S.overlay.showTarget = !wasOn;
+    S.overlay.view = S.overlay.showTarget ? "target" : "default";
     // Publish immediately so the display reacts even when Firebase is slow.
     await save();
     render();
@@ -1342,39 +1217,42 @@ body.theme-theme5 [data-theme="theme5"]{
     S.overlay.partnership={active:false};
     S.customLower={...(S.customLower||{}),active:false};
     S.overlay[key]=!wasOn;
-    // Publish banner commands immediately to the overlay bridge.
-    // Tournament needs the same immediate bridge update as the other banner buttons.
-    try {
-      publishLocalBridge({ ...S, tournament: S.tournament || S.tournamentName || 'BRKLIVE19 CRICKET TOURNAMENT', tournamentName: S.tournament || S.tournamentName || 'BRKLIVE19 CRICKET TOURNAMENT', overlay:{...S.overlay}, updatedAt:Date.now(), __bridgeUpdatedAt:Date.now() });
-    } catch(e) { console.warn('Tournament/banner bridge publish failed', e); }
+    S.overlay.view = S.overlay[key] ? key : "default";
     await save();
     render();
-    // Re-publish after save so the latest persisted state wins.
-    try {
-      publishLocalBridge({ ...S, tournament: S.tournament || S.tournamentName || 'BRKLIVE19 CRICKET TOURNAMENT', tournamentName: S.tournament || S.tournamentName || 'BRKLIVE19 CRICKET TOURNAMENT', overlay:{...S.overlay}, updatedAt:Date.now(), __bridgeUpdatedAt:Date.now() });
-    } catch(e) {}
   };
 
   window.togglePlayerLower = async function(which) {
     ensureOverlayState();
-    S.overlay.intro = false; S.overlay.introDismissedAt = Date.now(); S.overlay.scoreVisible = true;
-    const name = which === "b1" ? (S.striker || "") : (S.nonStriker || "");
-    if(!name) { alert(which==="b1" ? "B1/striker not selected." : "B2/non-striker not selected."); return; }
-    ["showTournament","showVenue","showMatch","showToss","showResult","showBowler","showFOW","showTarget"].forEach(k=>S.overlay[k]=false);
-    S.overlay.partnership={active:false};
-    S.customLower={...(S.customLower||{}),active:false};
-    if(S.overlay.playerLower.active && S.overlay.playerLower.slot === which) {
-      S.overlay.playerLower = { active:false, slot:"", player:"" };
-    } else {
-      S.overlay.playerLower = { active:true, slot:which, player:name };
+    const slot = String(which || "").toLowerCase() === "b2" ? "b2" : "b1";
+    S.overlay.intro = false;
+    S.overlay.introDismissedAt = Date.now();
+    S.overlay.scoreVisible = false;
+
+    const name = slot === "b1" ? (S.striker || "") : (S.nonStriker || "");
+    if (!name) {
+      alert(slot === "b1" ? "B1/striker not selected." : "B2/non-striker not selected.");
+      return;
     }
+
+    // B1/B2 are exclusive player-detail views. Clear FOW, bowler and every
+    // other banner before publishing so an older FOW packet cannot win a race.
+    ["showTournament","showVenue","showMatch","showToss","showResult","showBowler","showFOW","showTarget"]
+      .forEach(k => S.overlay[k] = false);
+    S.overlay.partnership = {active:false};
+    S.customLower = {...(S.customLower || {}), active:false};
+
+    const alreadyOn = S.overlay.playerLower &&
+      S.overlay.playerLower.active &&
+      String(S.overlay.playerLower.slot).toLowerCase() === slot;
+
+    S.overlay.playerLower = alreadyOn
+      ? {active:false, slot:"", player:""}
+      : {active:true, slot, player:name};
+    S.overlay.view = alreadyOn ? "default" : (slot === "b1" ? "B1" : "B2");
+
     await save();
     render();
-    // B1/B2 must behave exactly like Tournament: immediately switch the
-    // overlay into banner mode even when Firebase is delayed/offline.
-    try {
-      publishLocalBridge({ ...S, overlay:{...S.overlay}, updatedAt:Date.now(), __bridgeUpdatedAt:Date.now() });
-    } catch(e) { console.warn("B1/B2 banner bridge publish failed", e); }
   };
 
   window.hidePlayerLower = async function() {
@@ -1388,7 +1266,7 @@ body.theme-theme5 [data-theme="theme5"]{
     ensureOverlayState();
     S.overlay.intro = false;
     S.overlay.introDismissedAt = Date.now();
-    S.overlay.scoreVisible = true;
+    S.overlay.scoreVisible = false;
 
     if (!S.bowler) {
       alert("No current bowler is selected.");
@@ -1406,14 +1284,15 @@ body.theme-theme5 [data-theme="theme5"]{
     S.overlay.partnership = {active:false};
     S.customLower = {...(S.customLower || {}), active:false};
 
-    if (!wasOn) S.overlay.showBowler = true;
+    if (!wasOn) {
+      S.overlay.showBowler = true;
+      S.overlay.view = "BOWLER";
+    } else {
+      S.overlay.view = "default";
+    }
 
     await save();
     render();
-    // BOWLER must immediately hide the live overlay and show its banner.
-    try {
-      publishLocalBridge({ ...S, overlay:{...S.overlay}, updatedAt:Date.now(), __bridgeUpdatedAt:Date.now() });
-    } catch(e) { console.warn("Bowler banner bridge publish failed", e); }
   };
 
   window.toggleFOW = async function() {
@@ -1422,7 +1301,7 @@ body.theme-theme5 [data-theme="theme5"]{
     if (!list.length) { alert("No wicket has been recorded yet."); return; }
     S.overlay.intro = false;
     S.overlay.introDismissedAt = Date.now();
-    S.overlay.scoreVisible = true;
+    S.overlay.scoreVisible = false;
     const wasOn = !!S.overlay.showFOW;
     ["showTournament","showVenue","showMatch","showToss","showResult","showBowler","showFOW","showTarget"].forEach(k=>S.overlay[k]=false);
     S.overlay.playerLower={active:false,slot:"",player:""};
@@ -1430,14 +1309,13 @@ body.theme-theme5 [data-theme="theme5"]{
     S.customLower={...(S.customLower||{}),active:false};
     if (!wasOn) {
       S.overlay.showFOW = true;
+      S.overlay.view = "FOW";
       S.fow = JSON.parse(JSON.stringify(list[list.length-1]));
+    } else {
+      S.overlay.view = "default";
     }
     await save();
     render();
-    // FOW must immediately behave like the Tournament banner button.
-    try {
-      publishLocalBridge({ ...S, overlay:{...S.overlay}, fow:S.fow, updatedAt:Date.now(), __bridgeUpdatedAt:Date.now() });
-    } catch(e) { console.warn("FOW banner bridge publish failed", e); }
   };
 
   window.togglePartnership = async function() {
@@ -1445,6 +1323,7 @@ body.theme-theme5 [data-theme="theme5"]{
     S.overlay.intro = false; S.overlay.introDismissedAt = Date.now(); S.overlay.scoreVisible = true;
     if (!S.striker || !S.nonStriker) { alert("Select both current batters first."); return; }
     S.overlay.partnership.active = !S.overlay.partnership.active;
+    S.overlay.view = S.overlay.partnership.active ? "partnership" : "default";
     await save();
     render();
   };
@@ -1470,6 +1349,7 @@ body.theme-theme5 [data-theme="theme5"]{
     S.overlay.playerLower={active:false,slot:"",player:""};
     S.overlay.partnership={active:false};
     S.customLower = { text, active:true };
+    S.overlay.view = "custom";
     $("lowerPreview").textContent = text;
     await save();
     render();
@@ -1492,7 +1372,7 @@ body.theme-theme5 [data-theme="theme5"]{
     }
     S.overlay.intro = false;
     S.overlay.introDismissedAt = Date.now();
-    S.overlay.scoreVisible = true;
+    S.overlay.scoreVisible = false;
     ["showTournament","showVenue","showMatch","showToss","showResult","showBowler","showFOW","showTarget"].forEach(k=>S.overlay[k]=false);
     S.overlay.playerLower={active:false,slot:"",player:""};
     S.overlay.partnership={active:false};
@@ -1522,7 +1402,7 @@ body.theme-theme5 [data-theme="theme5"]{
       S.mode='playingxi';
       S.overlay.intro=false;
       S.overlay.introDismissedAt=Date.now();
-      S.overlay.scoreVisible=true;
+      S.overlay.scoreVisible=false;
       S.overlay.showTournament=false; S.overlay.showVenue=false; S.overlay.showMatch=false; S.overlay.showToss=false; S.overlay.showResult=false; S.overlay.showBowler=false; S.overlay.showTarget=false;
       S.overlay.playerLower={active:false,slot:'',player:''};
       S.overlay.partnership={active:false};
@@ -1539,6 +1419,7 @@ body.theme-theme5 [data-theme="theme5"]{
       ["showTournament","showVenue","showMatch","showToss","showResult","showBowler","showFOW","showTarget"].forEach(k=>S.overlay[k]=false);
       S.overlay.playerLower={active:false,slot:"",player:""}; S.overlay.partnership={active:false}; S.customLower={...(S.customLower||{}),active:false};
       S.overlay.showBowler = !wasOn;
+      S.overlay.view = !wasOn ? "BOWLER" : "default";
       await save();
       render();
       return;
@@ -1547,16 +1428,20 @@ body.theme-theme5 [data-theme="theme5"]{
       S.mode='default';
       S.overlay.intro = false;
       S.overlay.introDismissedAt = Date.now();
-      S.overlay.showTournament = false;
+      ["showTournament","showVenue","showMatch","showToss","showResult","showBowler","showFOW","showTarget"]
+        .forEach(k => S.overlay[k] = false);
+      S.overlay.playerLower = {active:false,slot:"",player:""};
+      S.overlay.partnership = {active:false};
+      S.customLower = {...(S.customLower || {}), active:false};
+      S.overlay.view = "default";
       S.overlay.scoreVisible = true;
       await save(); render(); return;
     }
+    if (mode === 'summary') S.overlay.scoreVisible = false;
     S.mode = mode;
     S.overlay.intro = false;
     S.overlay.introDismissedAt = Date.now();
     S.overlay.scoreVisible = true;
-    // Publish the mode immediately so the overlay changes without waiting for Firebase.
-    try { publishLocalBridge({ ...S, mode, updatedAt:Date.now(), __bridgeUpdatedAt:Date.now(), overlay:{...(S.overlay||{})}, firstInnings:{...(S.firstInnings||{}), batters:JSON.parse(JSON.stringify(S.batters||S.firstInnings?.batters||{})), bowlers:JSON.parse(JSON.stringify(S.bowlers||S.firstInnings?.bowlers||{})), xi:Array.from(players(S.firstInnings?.team||S.battingTeam)||[])}, secondInnings:S.innings===2?{team:S.battingTeam,runs:S.runs,wickets:S.wickets,balls:S.legalBalls,batters:JSON.parse(JSON.stringify(S.batters||{})),bowlers:JSON.parse(JSON.stringify(S.bowlers||{})),fallWickets:JSON.parse(JSON.stringify(S.fallWickets||[])),xi:Array.from(players(S.battingTeam)||[])}:S.secondInnings}); } catch(e) {}
     await save();
     render();
   };
@@ -1865,8 +1750,49 @@ body.theme-theme5 [data-theme="theme5"]{
 
   console.log("BRKLIVE19 V4 Scorer loaded.");
 </script>
-
 </body>
+
+<style id="BRKLIVE19-GLOBAL-SCROLL-FIX">
+
+/* =========================================================
+   BRKLIVE19 GLOBAL PAGE SCROLL FIX
+   All control/setup pages can scroll when content exceeds
+   the viewport. Broadcast overlays remain unchanged.
+   ========================================================= */
+html {
+  min-height: 100% !important;
+  height: auto !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  scroll-behavior: smooth;
+}
+body {
+  min-height: 100vh !important;
+  height: auto !important;
+  max-height: none !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  overscroll-behavior-y: auto;
+  padding-bottom: 48px !important;
+}
+/* Never let a full page be clipped by a fixed-height wrapper. */
+.page, .container, .wrap, .main, .content, .content-area,
+.dashboard, .app, .app-container, .main-content, .section,
+.sections, .settings, .form-container, .score-container {
+  max-height: none;
+}
+/* Long forms/tables remain reachable on small screens. */
+table {
+  max-width: 100%;
+}
+pre, textarea {
+  max-width: 100%;
+}
+@media (max-width: 700px) {
+  body { padding-left: 10px !important; padding-right: 10px !important; }
+}
+
+</style>
 </html>
 
 <style id="BRKLIVE19-TARGET-CONTROLLER-FINAL">
@@ -1918,3 +1844,110 @@ body.theme-theme5 [data-theme="theme5"]{
   }catch(e){}
 })();
 </script>
+
+
+<style id="brklive19-scorer-compact">
+/* COMPACT SCORER UI
+   Make the control page fit more information on one screen so scrolling is
+   needed much less, without changing button IDs, JavaScript or data flow. */
+html, body {
+  zoom: 0.90 !important;
+}
+body {
+  overflow-x: hidden !important;
+}
+.container, .main-container, .app-container, .page-container, .content, main {
+  max-width: 100% !important;
+}
+.card, .panel, .section, .control-section, .match-status,
+.batting-section, .bowling-section, .overlay-section, .score-section {
+  margin-top: 6px !important;
+  margin-bottom: 6px !important;
+  padding-top: 7px !important;
+  padding-bottom: 7px !important;
+}
+h1, h2, h3, h4 {
+  margin-top: 4px !important;
+  margin-bottom: 5px !important;
+}
+label {
+  margin-bottom: 2px !important;
+}
+button, input, select, textarea {
+  min-height: 30px !important;
+}
+button {
+  padding: 5px 9px !important;
+  margin: 2px !important;
+  line-height: 1.05 !important;
+}
+input, select, textarea {
+  padding: 5px 7px !important;
+}
+table th, table td {
+  padding: 3px 5px !important;
+}
+.grid, .row, .button-row, .controls, .control-grid {
+  gap: 4px !important;
+}
+</style>
+
+
+<style id="brklive19-scorer-extra-compact">
+/* EXTRA COMPACT SCORER CONTROLS */
+html, body {
+  zoom: 0.80 !important;
+}
+
+/* Prevent wide buttons; let labels fit naturally without huge horizontal padding. */
+button,
+.btn,
+button[type="button"],
+button[type="submit"],
+input[type="button"],
+input[type="submit"] {
+  width: auto !important;
+  min-width: 0 !important;
+  max-width: 150px !important;
+  min-height: 26px !important;
+  height: 26px !important;
+  padding: 3px 7px !important;
+  margin: 1px !important;
+  font-size: 11px !important;
+  line-height: 1 !important;
+  white-space: nowrap !important;
+}
+
+/* Compact controls and sections further. */
+.card, .panel, .section, .control-section, .match-status,
+.batting-section, .bowling-section, .overlay-section, .score-section {
+  margin: 3px 0 !important;
+  padding: 4px 6px !important;
+}
+
+h1, h2, h3, h4 {
+  margin: 2px 0 3px !important;
+  line-height: 1.1 !important;
+}
+
+label {
+  margin: 0 !important;
+  line-height: 1.1 !important;
+}
+
+input, select, textarea {
+  min-height: 25px !important;
+  height: 25px !important;
+  padding: 3px 5px !important;
+  font-size: 11px !important;
+}
+
+table th, table td {
+  padding: 2px 4px !important;
+  font-size: 11px !important;
+}
+
+.grid, .row, .button-row, .controls, .control-grid {
+  gap: 2px !important;
+}
+</style>
