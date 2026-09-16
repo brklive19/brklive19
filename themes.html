@@ -46,123 +46,13 @@ body { min-height:100vh; height:auto; overflow-x:hidden !important; overflow-y:a
   min-width:0;
 }
 </style>
-<style>html,body{min-height:100%;height:auto;overflow-x:hidden!important;overflow-y:auto!important;-webkit-overflow-scrolling:touch;} body{overscroll-behavior-y:auto;}</style>
-<style id="brklive19-scroll-preserve">
-html{min-height:100%;height:auto;overflow-x:hidden!important;overflow-y:auto!important;-webkit-overflow-scrolling:touch!important;}
-body{min-height:100vh;height:auto;overflow-x:hidden!important;overflow-y:auto!important;}
-</style>
-<style>
-
-/* BRKLIVE19 THEME 2 — CENTER ALL BATTING & BOWLING SCOREBOARD DATA */
-body.theme-2 .scoreboard,
-body.theme-2 .batting-scoreboard,
-body.theme-2 .bowling-scoreboard,
-body.theme-2 .scorecard,
-body.theme-2 .batting-table,
-body.theme-2 .bowling-table,
-.theme-2 .scoreboard,
-.theme-2 .batting-scoreboard,
-.theme-2 .bowling-scoreboard,
-.theme-2 .scorecard,
-.theme-2 .batting-table,
-.theme-2 .bowling-table {
-  animation: none !important;
-  transition: none !important;
-  margin-left: auto !important;
-  margin-right: auto !important;
-  text-align: center !important;
-}
-
-body.theme-2 .scoreboard table,
-body.theme-2 .batting-scoreboard table,
-body.theme-2 .bowling-scoreboard table,
-body.theme-2 .scorecard table,
-.theme-2 .scoreboard table,
-.theme-2 .batting-scoreboard table,
-.theme-2 .bowling-scoreboard table,
-.theme-2 .scorecard table {
-  animation: none !important;
-  transition: none !important;
-  margin-left: auto !important;
-  margin-right: auto !important;
-  text-align: center !important;
-}
-
-body.theme-2 .scoreboard th,
-body.theme-2 .scoreboard td,
-body.theme-2 .batting-scoreboard th,
-body.theme-2 .batting-scoreboard td,
-body.theme-2 .bowling-scoreboard th,
-body.theme-2 .bowling-scoreboard td,
-body.theme-2 .scorecard th,
-body.theme-2 .scorecard td,
-body.theme-2 .batting-table th,
-body.theme-2 .batting-table td,
-body.theme-2 .bowling-table th,
-body.theme-2 .bowling-table td,
-.theme-2 .scoreboard th,
-.theme-2 .scoreboard td,
-.theme-2 .batting-scoreboard th,
-.theme-2 .batting-scoreboard td,
-.theme-2 .bowling-scoreboard th,
-.theme-2 .bowling-scoreboard td,
-.theme-2 .scorecard th,
-.theme-2 .scorecard td,
-.theme-2 .batting-table th,
-.theme-2 .batting-table td,
-.theme-2 .bowling-table th,
-.theme-2 .bowling-table td {
-  animation: none !important;
-  transition: none !important;
-  text-align: center !important;
-  vertical-align: middle !important;
-}
-
-body.theme-2 .scoreboard .player-name,
-body.theme-2 .scoreboard .player,
-body.theme-2 .batting-scoreboard .player-name,
-body.theme-2 .batting-scoreboard .player,
-body.theme-2 .bowling-scoreboard .player-name,
-body.theme-2 .bowling-scoreboard .player,
-.theme-2 .scoreboard .player-name,
-.theme-2 .scoreboard .player,
-.theme-2 .batting-scoreboard .player-name,
-.theme-2 .batting-scoreboard .player,
-.theme-2 .bowling-scoreboard .player-name,
-.theme-2 .bowling-scoreboard .player {
-  animation: none !important;
-  transition: none !important;
-  text-align: center !important;
-}
-
-body.theme-2 .scoreboard tr > *,
-body.theme-2 .batting-scoreboard tr > *,
-body.theme-2 .bowling-scoreboard tr > *,
-.theme-2 .scoreboard tr > *,
-.theme-2 .batting-scoreboard tr > *,
-.theme-2 .bowling-scoreboard tr > * {
-  animation: none !important;
-  transition: none !important;
-  text-align: center !important;
-  vertical-align: middle !important;
-}
-
-</style>
-
-<style id="theme5-bold-text-fix">
-/* Theme 5: larger, bold stable MUDING and over text */
-.theme5 #battingTeam,.theme5 .batting-team,.theme5 #teamName,.theme5 .team-name{font-size:1.18em !important;font-weight:800 !important;}
-.theme5 #over,.theme5 .over,.theme5 .over-text{font-size:1.15em !important;font-weight:800 !important;}
-/* Target is hidden by default; JS may enable it only for innings 2. */
-.theme5 #targetBox,.theme5 .target-box,.theme5 #target-box{display:none;}
-</style>
 </head>
 <body>
 <div class="wrap">
   <div class="top"><div><div class="brand">🏏 BRKLIVE19</div><div class="sub">Professional Overlay Theme Selection</div></div><button class="btn" onclick="goBack()">← BACK TO SCORER</button></div>
   <div class="panel">
     <h2 style="margin:0">🎨 Overlay Themes</h2>
-    <div class="note">Choose a theme to apply to the live overlay. <b>THEME 1</b> contains the standard broadcast collection. <b>THEME 2 and THEME 3</b> are copied from Project 2 with their original overlay designs. <b>THEME 5</b> is the supplied pink/navy cricket design. <b>THEME 6</b> is the new white-pill design based on the supplied reference. <b>THEME 7</b> is the new ICC CWC 2023-style purple/pink broadcast design.</div>
+    <div class="note">Choose a theme to apply to the live overlay. <b>THEME 1</b> contains the standard broadcast collection. <b>THEME 2, THEME 3 and THEME 4</b> are copied from Project 2 with their original overlay designs. <b>THEME 5</b> is the supplied pink/navy cricket design. <b>THEME 6</b> is the white-pill design based on the supplied reference.</div>
     <div class="theme-section open" id="themeSection1">
       <button class="theme-section-head" type="button" onclick="toggleThemeSection(1)">
         <span><b>THEME 1</b><small> • Broadcast Style Collection</small></span><span class="chevron">▾</span>
@@ -192,7 +82,20 @@ body.theme-2 .bowling-scoreboard tr > *,
           <div class="actions"><button class="btn select" onclick="chooseTheme('theme3')">✓ SELECT</button><button class="btn link" onclick="copyThemeLink('theme3',this)">🔗 WEB LINK</button></div>
         </div>
       </div>
-    </div><div class="theme-section" id="themeSection5">
+    </div>
+    <div class="theme-section" id="themeSection4">
+      <button class="theme-section-head" type="button" onclick="toggleThemeSection(4)">
+        <span><b>THEME 4</b><small> • PROJECT 2 DESIGN</small></span><span class="chevron">▾</span>
+      </button>
+      <div class="theme-list">
+        <div class="theme-row" style="--sw1:#cc1118;--sw2:#0a2b59">
+          <div class="preview" style="--p:#cc1118;--s:#0a2b59"><span>04</span><i></i><b></b><em></em></div>
+          <div class="info"><div class="name">THEME 4 — PROJECT 2</div><div class="desc">Original Project 2 red, white and blue broadcast scoreboard reference design.</div><div class="swatches"><span style="background:#cc1118"></span><span style="background:#0a2b59"></span></div></div>
+          <div class="actions"><button class="btn select" onclick="chooseTheme('theme4')">✓ SELECT</button><button class="btn link" onclick="copyThemeLink('theme4',this)">🔗 WEB LINK</button></div>
+        </div>
+      </div>
+    </div>
+    <div class="theme-section" id="themeSection5">
       <button class="theme-section-head" type="button" onclick="toggleThemeSection(5)">
         <span><b>THEME 5</b><small> • USER SUPPLIED DESIGN</small></span><span class="chevron">▾</span>
       </button>
@@ -216,19 +119,7 @@ body.theme-2 .bowling-scoreboard tr > *,
         </div>
       </div>
     </div>
-    <div class="theme-section" id="themeSection7">
-      <button class="theme-section-head" type="button" onclick="toggleThemeSection(7)">
-        <span><b>THEME 7</b><small> • ICC CWC 2023 BROADCAST</small></span><span class="chevron">▾</span>
-      </button>
-      <div class="theme-list">
-        <div class="theme-row" style="--sw1:#ec4899;--sw2:#1e1b4b">
-          <div class="preview" style="--p:#ec4899;--s:#1e1b4b"><span>07</span><i></i><b></b><em></em></div>
-          <div class="info"><div class="name">THEME 7 — CWC 2023 / PURPLE PINK</div><div class="desc">Compact ICC-style broadcast lower-third based on the supplied reference: deep purple center, hot-pink score badge, amber phase tag, batting and bowling data, and flag panels.</div><div class="swatches"><span style="background:#ec4899"></span><span style="background:#1e1b4b"></span><span style="background:#fbbf24"></span></div></div>
-          <div class="actions"><button class="btn select" onclick="chooseTheme('theme7')">✓ SELECT</button><button class="btn link" onclick="copyThemeLink('theme7',this)">🔗 WEB LINK</button></div>
-        </div>
-      </div>
-    </div>
-    <div class="custom">
+<div class="custom">
       <label class="color">Primary <input type="color" id="cp" value="#00b8e8"></label>
       <label class="color">Secondary <input type="color" id="cs" value="#ffd900"></label>
       <label class="color">Deep Blue <input type="color" id="cb" value="#071a58"></label>
@@ -267,7 +158,7 @@ const themes=[
 ['gold','04','GOLD','Theme 1 • Gold broadcast design','#ffd34d','#6b3a00'],
 ['theme2','05','ROYAL','Theme 1 • Royal broadcast design','#2367ff','#101a68'],
 ['theme3','06','VIOLET','Theme 1 • Violet broadcast design','#a14cff','#32105e'],
-
+['theme4','07','CRIMSON','Theme 1 • Crimson broadcast design','#ff3158','#5b0718'],
 ['theme6','08','EMERALD','Theme 1 • Emerald broadcast design','#35d37a','#064b35'],
 ['glass','09','GLASS','Theme 1 • Glass broadcast design','#55d8ff','#183d67'],
 ['carbon','10','CARBON','Theme 1 • Carbon broadcast design','#8e9aaa','#171b22'],
@@ -289,7 +180,6 @@ function render(){const list=document.getElementById('themeList');if(!list)retur
 window.chooseTheme=async function(theme){
  selected=theme;
  localStorage.setItem('brklive19_pending_theme',theme);
- localStorage.setItem('brklive19_selected_theme',theme);
  if(match)localStorage.setItem('brklive19_theme_match',match);
  // Immediately push theme to the same-device display bridge.
  try{
@@ -324,6 +214,47 @@ window.goBack=function(){const u=new URL('./scorer.html',location.href);if(selec
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',render);else render();
 })();
 </script>
-
 </body>
+
+<style id="BRKLIVE19-GLOBAL-SCROLL-FIX">
+
+/* =========================================================
+   BRKLIVE19 GLOBAL PAGE SCROLL FIX
+   All control/setup pages can scroll when content exceeds
+   the viewport. Broadcast overlays remain unchanged.
+   ========================================================= */
+html {
+  min-height: 100% !important;
+  height: auto !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  scroll-behavior: smooth;
+}
+body {
+  min-height: 100vh !important;
+  height: auto !important;
+  max-height: none !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  overscroll-behavior-y: auto;
+  padding-bottom: 48px !important;
+}
+/* Never let a full page be clipped by a fixed-height wrapper. */
+.page, .container, .wrap, .main, .content, .content-area,
+.dashboard, .app, .app-container, .main-content, .section,
+.sections, .settings, .form-container, .score-container {
+  max-height: none;
+}
+/* Long forms/tables remain reachable on small screens. */
+table {
+  max-width: 100%;
+}
+pre, textarea {
+  max-width: 100%;
+}
+@media (max-width: 700px) {
+  body { padding-left: 10px !important; padding-right: 10px !important; }
+}
+
+</style>
 </html>
