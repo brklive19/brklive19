@@ -1952,3 +1952,42 @@ body.auth-required #loginModal .modal-content{max-width:460px;}
 .sport-choice .sport-icon{font-size:34px}.sport-choice strong{font-size:16px}.sport-choice span{font-size:11px;color:var(--text-muted)}
 #forgotPasswordLink,#backToLoginLink,#showRegisterLink,#showLoginLink{cursor:pointer}
 @media(max-width:650px){.sports-picker{grid-template-columns:1fr}.sport-choice{flex-direction:row;text-align:left;padding:12px}.sport-choice .sport-icon{font-size:28px}}
+
+
+/* =========================================================
+   BRKLIVE19 GLOBAL PAGE SCROLL FIX
+   All control/setup pages can scroll when content exceeds
+   the viewport. Broadcast overlays remain unchanged.
+   ========================================================= */
+html {
+  min-height: 100% !important;
+  height: auto !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  scroll-behavior: smooth;
+}
+body {
+  min-height: 100vh !important;
+  height: auto !important;
+  max-height: none !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  overscroll-behavior-y: auto;
+  padding-bottom: 48px !important;
+}
+/* Never let a full page be clipped by a fixed-height wrapper. */
+.page, .container, .wrap, .main, .content, .content-area,
+.dashboard, .app, .app-container, .main-content, .section,
+.sections, .settings, .form-container, .score-container {
+  max-height: none;
+}
+/* Long forms/tables remain reachable on small screens. */
+table {
+  max-width: 100%;
+}
+pre, textarea {
+  max-width: 100%;
+}
+@media (max-width: 700px) {
+  body { padding-left: 10px !important; padding-right: 10px !important; }
+}
