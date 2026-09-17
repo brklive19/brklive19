@@ -1449,8 +1449,8 @@ body.theme-theme3 .t3Innings * {
 
 <style id="theme2-reference-overlay-final">
 /* Theme 2 only — do not affect any other theme. */
-body.theme-theme2 .frame{
-  position:relative!important;width:min(1920px,100vw)!important;height:156px!important;
+body.theme-theme2 .frame{bottom: 0;
+  position:relative!important;width:min(1920px,100vw)!important;height: 11vh;
   margin:0 auto!important;background:transparent!important;border:0!important;border-radius:0!important;
   box-shadow:none!important;backdrop-filter:none!important;overflow:visible!important;
 }
@@ -1458,7 +1458,7 @@ body.theme-theme2 .frame>.teamPanel,
 body.theme-theme2 .frame>.content,
 body.theme-theme2 .theme3Footer{display:none!important;}
 body.theme-theme2 .t2Ref{
-  position:absolute!important;left:1.2%;right:1.2%;bottom:0;height:154px;z-index:80;
+  position:absolute!important;left:1.2%;right:1.2%;bottom: 0;height: 11vh;z-index:80;
   display:grid!important;grid-template-columns:24% 20% 19% 17% 20%;grid-template-rows:118px 36px;
   border:2px solid #e7edf2;border-radius:10px 10px 9px 9px;overflow:hidden;
   font-family:Arial,Helvetica,sans-serif;box-sizing:border-box;
@@ -1467,16 +1467,16 @@ body.theme-theme2 .t2Ref{
 body.theme-theme2 .t2TeamPanel{display:flex;align-items:center;justify-content:center;gap:10px;min-width:0;padding:8px 14px;color:#fff;font-weight:900;text-transform:uppercase;text-align:center;overflow:hidden;}
 body.theme-theme2 .t2LeftTeam{background:linear-gradient(135deg,#103c9c 0%,#173e96 55%,#0a1e56 100%);border-right:2px solid #cbd5e1;clip-path:polygon(4% 0,100% 0,96% 100%,0 100%);}
 body.theme-theme2 .t2RightTeam{background:linear-gradient(135deg,#4c087b 0%,#6f0e9c 50%,#31045a 100%);border-left:2px solid #cbd5e1;clip-path:polygon(0 0,96% 0,100% 100%,4% 100%);}
-body.theme-theme2 .t2TeamName{font-size:clamp(16px,1.55vw,30px);line-height:1.08;white-space:normal;overflow:hidden;text-shadow:1px 2px 2px rgba(0,0,0,.55);}
-body.theme-theme2 .t2Logo{width:58px;height:58px;flex:0 0 58px;border-radius:12px;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.45);font-size:28px;overflow:hidden;}
-body.theme-theme2 .t2Logo img{width:100%;height:100%;object-fit:contain;}
-body.theme-theme2 .t2ScorePanel{position:relative;display:grid;grid-template-columns:1fr 72px;grid-template-rows:82px 36px;align-items:center;text-align:center;background:linear-gradient(135deg,#f5f7f8,#cfd5da 52%,#f8fafb);color:#111;border-right:1px solid #b5bdc5;overflow:hidden;}
-body.theme-theme2 .t2Score{font-size:clamp(35px,3.1vw,61px);font-weight:1000;letter-spacing:-.04em;color:#e21b23;line-height:1;text-shadow:0 2px #fff;}
-body.theme-theme2 .t2Overs{font-size:clamp(13px,1.15vw,22px);font-weight:1000;line-height:1.02;}
+body.theme-theme2 .t2TeamName{font-size:clamp(16px,1.55vw,30px);line-height: 11vh;white-space:normal;overflow:hidden;text-shadow:1px 2px 2px rgba(0,0,0,.55);}
+body.theme-theme2 .t2Logo{width:58px;height: 11vh;flex:0 0 58px;border-radius:12px;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.45);font-size:28px;overflow:hidden;}
+body.theme-theme2 .t2Logo img{width:100%;height: 11vh;object-fit:contain;}
+body.theme-theme2 .t2ScorePanel{bottom: 0;position:relative;display:grid;grid-template-columns:1fr 72px;grid-template-rows:82px 36px;align-items:center;text-align:center;background:linear-gradient(135deg,#f5f7f8,#cfd5da 52%,#f8fafb);color:#111;border-right:1px solid #b5bdc5;overflow:hidden;}
+body.theme-theme2 .t2Score{font-size:clamp(35px,3.1vw,61px);font-weight:1000;letter-spacing:-.04em;color:#e21b23;line-height: 11vh;text-shadow:0 2px #fff;}
+body.theme-theme2 .t2Overs{font-size:clamp(13px,1.15vw,22px);font-weight:1000;line-height: 11vh;}
 body.theme-theme2 .t2Overs span{font-size:.62em;letter-spacing:.04em;}
 body.theme-theme2 .t2Target{grid-column:1/-1;display:flex;align-items:center;justify-content:center;font-size:clamp(11px,.9vw,17px);font-weight:1000;border-top:1px solid #aeb6bd;background:rgba(255,255,255,.68);white-space:nowrap;}
 body.theme-theme2 .t2BatPanel{display:flex;flex-direction:column;justify-content:center;padding:7px 13px;background:linear-gradient(135deg,#173d91,#0d285f);color:#fff;overflow:hidden;}
-body.theme-theme2 .t2BatRow{display:grid;grid-template-columns:16px minmax(0,1fr) 40px 34px;align-items:center;gap:6px;height:50%;border-bottom:1px solid rgba(255,255,255,.25);min-width:0;}
+body.theme-theme2 .t2BatRow{display:grid;grid-template-columns:16px minmax(0,1fr) 40px 34px;align-items:center;gap:6px;height: 11vh;border-bottom:1px solid rgba(255,255,255,.25);min-width:0;}
 body.theme-theme2 .t2BatRow:last-child{border-bottom:0;}
 body.theme-theme2 .t2BatRow b{font-size:clamp(12px,1.1vw,21px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 body.theme-theme2 .t2BatRow strong{font-size:clamp(17px,1.3vw,25px);text-align:right;}
@@ -1486,15 +1486,15 @@ body.theme-theme2 .t2BowPanel{display:grid;grid-template-columns:minmax(0,1fr) a
 body.theme-theme2 .t2BowName{font-size:clamp(13px,1.05vw,20px);font-weight:1000;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 body.theme-theme2 .t2BowStat{font-size:clamp(16px,1.25vw,25px);font-weight:1000;white-space:nowrap;}
 body.theme-theme2 .t2OverBalls{grid-column:1/-1;display:flex;align-items:center;gap:8px;white-space:nowrap;overflow:hidden;font-size:18px;font-weight:900;}
-body.theme-theme2 .t2OverBalls span{width:29px;height:29px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;border:2px solid #777;background:#fff;}
+body.theme-theme2 .t2OverBalls span{width:29px;height: 11vh;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;border:2px solid #777;background:#fff;}
 body.theme-theme2 .t2Footer{grid-column:1/-1;display:flex;align-items:center;justify-content:space-evenly;gap:9px;padding:0 13px;background:linear-gradient(180deg,#153b91,#071b48);color:#fff;font-size:clamp(8px,.75vw,15px);font-weight:800;white-space:nowrap;overflow:hidden;}
 body.theme-theme2 .t2Footer span{overflow:hidden;text-overflow:ellipsis;}
 body.theme-theme2 .t2Footer em{font-style:normal;font-weight:900;}
-body.theme-theme2 .t2Footer i{height:20px;width:1px;background:rgba(255,255,255,.75);flex:0 0 1px;}
+body.theme-theme2 .t2Footer i{height: 11vh;width:1px;background:rgba(255,255,255,.75);flex:0 0 1px;}
 @media(max-width:900px){
- body.theme-theme2 .frame{height:130px!important}
- body.theme-theme2 .t2Ref{height:128px;grid-template-rows:98px 30px;left:.5%;right:.5%;}
- body.theme-theme2 .t2Logo{width:40px;height:40px;flex-basis:40px;font-size:20px;}
+ body.theme-theme2 .frame{height: 11vh}
+ body.theme-theme2 .t2Ref{height: 11vh;grid-template-rows:98px 30px;left:.5%;right:.5%;}
+ body.theme-theme2 .t2Logo{width:40px;height: 11vh;flex-basis:40px;font-size:20px;}
  body.theme-theme2 .t2TeamName{font-size:clamp(10px,1.8vw,17px);}
  body.theme-theme2 .t2ScorePanel{grid-template-columns:1fr 50px;grid-template-rows:68px 30px;}
  body.theme-theme2 .t2BowPanel{grid-template-rows:46px 52px;}
@@ -1503,8 +1503,8 @@ body.theme-theme2 .t2Footer i{height:20px;width:1px;background:rgba(255,255,255,
  body.theme-theme2 .t2Footer{font-size:clamp(6px,1.1vw,10px);gap:4px;padding:0 5px;}
 }
 @media(max-width:600px){
- body.theme-theme2 .frame{height:108px!important}
- body.theme-theme2 .t2Ref{height:106px;grid-template-rows:80px 26px;border-width:1px;}
+ body.theme-theme2 .frame{height: 11vh}
+ body.theme-theme2 .t2Ref{height: 11vh;grid-template-rows:80px 26px;border-width:1px;}
  body.theme-theme2 .t2Logo{display:none;}
  body.theme-theme2 .t2TeamName{font-size:clamp(8px,2.2vw,13px);}
  body.theme-theme2 .t2Score{font-size:clamp(22px,5vw,34px);}
@@ -1642,18 +1642,503 @@ body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.th
 body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) .teamPanel.left #batTeam{display:block;text-align:left}
 body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) .teamPanel.right .panelLogo{display:none!important}
 .theme1BowlTeam{display:none}
-body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) .theme1BowlTeam{display:block;position:absolute;right:18px;top:50%;transform:translateY(-50%);max-width:calc(100% - 30px);font-size:clamp(13px,1.7vw,28px);font-weight:1000;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#071029;text-align:right;z-index:5}
+body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) .theme1BowlTeam{bottom: 0;display:block;position:absolute;right:18px;top:50%;transform: translateY(0);max-width:calc(100% - 30px);font-size:clamp(13px,1.7vw,28px);font-weight:1000;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#071029;text-align:right;z-index:5}
 body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) .bowlerStats{font-size:clamp(12px,1.05vw,18px)!important;letter-spacing:.12em}
 </style>
 
 <style id="theme1-final-team-bowler-layout">
 /* THEME 1: batting team above score; bowler figures on same row */
 body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) .theme1ScoreBatTeam{
- display:block!important; width:100%; text-align:center; font-size:clamp(11px,1.05vw,18px); line-height:1.05; font-weight:1000; text-transform:uppercase; color:#142052; margin:0 0 3px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+ display:block!important; width:100%; text-align:center; font-size:clamp(11px,1.05vw,18px); line-height: 11vh; font-weight:1000; text-transform:uppercase; color:#142052; margin:0 0 3px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
 }
 body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) .bowlerPanel .bowlerTop{grid-template-columns:minmax(0,1fr) auto!important; gap:clamp(22px,2.5vw,55px)!important; width:100%;}
 body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) .bowlerPanel .bowlerStats{font-size:clamp(12px,1.05vw,18px)!important; letter-spacing:.14em; justify-self:end; white-space:nowrap; margin:0!important; overflow:visible!important; text-overflow:clip!important;}
 body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) .bowlerPanel .bowlerName{margin:0!important;}
+</style>
+
+<style id="brklive19-theme2-height-only-final">
+/* THEME 2 ONLY: reduce lower-third height. Do not modify Theme 1 or any other theme. */
+body.theme-theme2 .frame{height: 11vh;}
+body.theme-theme2 .t2Ref{height: 11vh;grid-template-rows:102px 32px!important;}
+</style>
+
+<style id="theme2-bottom-compact-override">
+/* Theme 2 ONLY: compact lower-third and attach it to the bottom edge. */
+body.theme-2 .lower-third,
+body.theme2 .lower-third,
+[data-theme="2"] .lower-third,
+.theme-2 .overlay,
+.theme2 .overlay {
+  height: 10vh !important;
+  min-height: 0 !important;
+  bottom: 0 !important;
+  top: auto !important;
+  margin-bottom: 0 !important;
+  transform: none !important;
+}
+</style>
+
+
+<style id="theme2-data-safe-final">
+/* THEME 2 ONLY — compact bottom overlay, with every data field kept visible */
+body.theme-theme2 .frame{
+  height:125px !important;
+  min-height:125px !important;
+  max-height:125px !important;
+  overflow:visible !important;
+  position:relative !important;
+}
+body.theme-theme2 .t2Ref{
+  height:125px !important;
+  min-height:125px !important;
+  max-height:125px !important;
+  bottom:0 !important;
+  overflow:visible !important;
+  grid-template-rows:92px 31px !important;
+}
+body.theme-theme2 .t2TeamPanel{
+  overflow:visible !important;
+  padding:6px 10px !important;
+}
+body.theme-theme2 .t2TeamName{
+  height:auto !important;
+  line-height:1.05 !important;
+  white-space:normal !important;
+  overflow:visible !important;
+  text-overflow:clip !important;
+  overflow-wrap:anywhere !important;
+}
+body.theme-theme2 .t2Logo{
+  width:52px !important;
+  height:64px !important;
+  flex-basis:52px !important;
+}
+body.theme-theme2 .t2Logo img{
+  height:64px !important;
+  max-height:64px !important;
+}
+body.theme-theme2 .t2ScorePanel{
+  grid-template-rows:60px 31px !important;
+  overflow:visible !important;
+}
+body.theme-theme2 .t2Score{
+  line-height:1 !important;
+  font-size:clamp(28px,3vw,54px) !important;
+  white-space:nowrap !important;
+  overflow:visible !important;
+}
+body.theme-theme2 .t2Overs{
+  line-height:1 !important;
+  white-space:nowrap !important;
+  overflow:visible !important;
+}
+body.theme-theme2 .t2Target{
+  min-width:0 !important;
+  overflow:visible !important;
+  white-space:nowrap !important;
+  font-size:clamp(9px,.82vw,15px) !important;
+}
+body.theme-theme2 .t2BatPanel{
+  padding:4px 8px !important;
+  overflow:visible !important;
+}
+body.theme-theme2 .t2BatRow{
+  height:41px !important;
+  min-height:0 !important;
+  overflow:visible !important;
+}
+body.theme-theme2 .t2BatRow b{
+  overflow:visible !important;
+  text-overflow:clip !important;
+  white-space:nowrap !important;
+  font-size:clamp(10px,1vw,18px) !important;
+}
+body.theme-theme2 .t2BatRow strong,
+body.theme-theme2 .t2BatRow small{
+  overflow:visible !important;
+  white-space:nowrap !important;
+}
+body.theme-theme2 .t2BowPanel{
+  grid-template-rows:43px 49px !important;
+  overflow:visible !important;
+}
+body.theme-theme2 .t2BowName,
+body.theme-theme2 .t2BowStat{
+  overflow:visible !important;
+  text-overflow:clip !important;
+  white-space:nowrap !important;
+}
+body.theme-theme2 .t2OverBalls{
+  overflow:visible !important;
+  white-space:nowrap !important;
+  gap:5px !important;
+  font-size:14px !important;
+}
+body.theme-theme2 .t2OverBalls span{
+  width:24px !important;
+  height:24px !important;
+  flex:0 0 24px !important;
+}
+body.theme-theme2 .t2Footer{
+  overflow:visible !important;
+  min-width:0 !important;
+}
+body.theme-theme2 .t2Footer span{
+  overflow:visible !important;
+  text-overflow:clip !important;
+  white-space:nowrap !important;
+}
+@media(max-width:900px){
+  body.theme-theme2 .frame,
+  body.theme-theme2 .t2Ref{
+    height:105px !important;
+    min-height:105px !important;
+    max-height:105px !important;
+  }
+  body.theme-theme2 .t2Ref{grid-template-rows:79px 25px !important;}
+  body.theme-theme2 .t2Logo{width:38px !important;height:50px !important;flex-basis:38px !important;}
+  body.theme-theme2 .t2Logo img{height:50px !important;max-height:50px !important;}
+  body.theme-theme2 .t2BatRow{height:34px !important;}
+  body.theme-theme2 .t2ScorePanel{grid-template-rows:53px 25px !important;}
+  body.theme-theme2 .t2BowPanel{grid-template-rows:36px 42px !important;}
+}
+@media(max-width:600px){
+  body.theme-theme2 .frame,
+  body.theme-theme2 .t2Ref{
+    height:88px !important;
+    min-height:88px !important;
+    max-height:88px !important;
+  }
+  body.theme-theme2 .t2Ref{grid-template-rows:67px 20px !important;}
+  body.theme-theme2 .t2Logo{display:none !important;}
+  body.theme-theme2 .t2BatRow{height:29px !important;}
+  body.theme-theme2 .t2ScorePanel{grid-template-rows:47px 20px !important;}
+  body.theme-theme2 .t2BowPanel{grid-template-rows:30px 36px !important;}
+  body.theme-theme2 .t2OverBalls span{width:19px !important;height:19px !important;flex-basis:19px !important;}
+}
+</style>
+
+
+<style id="theme2-final-compact-visible">
+/* THEME 2 ONLY — slightly shorter while preserving every data field */
+body.theme-theme2 .frame,
+body.theme-theme2 .t2Ref {
+  height:115px !important;
+  min-height:115px !important;
+  max-height:115px !important;
+  bottom:0 !important;
+  top:auto !important;
+  overflow:visible !important;
+}
+body.theme-theme2 .t2Ref {
+  grid-template-rows:84px 30px !important;
+}
+body.theme-theme2 .t2TeamPanel,
+body.theme-theme2 .t2ScorePanel,
+body.theme-theme2 .t2BatPanel,
+body.theme-theme2 .t2BowPanel,
+body.theme-theme2 .t2Footer {
+  overflow:visible !important;
+}
+body.theme-theme2 .t2TeamName,
+body.theme-theme2 .t2Score,
+body.theme-theme2 .t2Overs,
+body.theme-theme2 .t2Target,
+body.theme-theme2 .t2BatRow b,
+body.theme-theme2 .t2BowName,
+body.theme-theme2 .t2BowStat,
+body.theme-theme2 .t2Footer span {
+  overflow:visible !important;
+  text-overflow:clip !important;
+}
+body.theme-theme2 .t2BatRow {
+  height:38px !important;
+  min-height:0 !important;
+}
+body.theme-theme2 .t2ScorePanel {
+  grid-template-rows:55px 29px !important;
+}
+body.theme-theme2 .t2BowPanel {
+  grid-template-rows:39px 44px !important;
+}
+body.theme-theme2 .t2Logo,
+body.theme-theme2 .t2Logo img {
+  max-height:58px !important;
+}
+@media(max-width:900px){
+  body.theme-theme2 .frame,
+  body.theme-theme2 .t2Ref {
+    height:98px !important;
+    min-height:98px !important;
+    max-height:98px !important;
+  }
+  body.theme-theme2 .t2Ref { grid-template-rows:72px 25px !important; }
+  body.theme-theme2 .t2BatRow { height:32px !important; }
+  body.theme-theme2 .t2ScorePanel { grid-template-rows:48px 24px !important; }
+  body.theme-theme2 .t2BowPanel { grid-template-rows:34px 39px !important; }
+}
+@media(max-width:600px){
+  body.theme-theme2 .frame,
+  body.theme-theme2 .t2Ref {
+    height:84px !important;
+    min-height:84px !important;
+    max-height:84px !important;
+  }
+  body.theme-theme2 .t2Ref { grid-template-rows:64px 19px !important; }
+  body.theme-theme2 .t2BatRow { height:27px !important; }
+  body.theme-theme2 .t2ScorePanel { grid-template-rows:44px 19px !important; }
+  body.theme-theme2 .t2BowPanel { grid-template-rows:29px 34px !important; }
+}
+</style>
+
+<style id="theme2-slight-compress-bottom">
+/* THEME 2 ONLY */
+body.theme-theme2 .frame, body.theme-theme2 .t2Ref{
+  height:108px!important; min-height:108px!important; max-height:108px!important;
+  top:auto!important; bottom:0!important; margin-bottom:0!important;
+  transform:none!important; overflow:visible!important;
+}
+body.theme-theme2 .t2Ref{grid-template-rows:79px 28px!important}
+body.theme-theme2 .t2BatRow{height:36px!important}
+body.theme-theme2 .t2ScorePanel{grid-template-rows:52px 27px!important}
+body.theme-theme2 .t2BowPanel{grid-template-rows:37px 41px!important}
+body.theme-theme2 .t2TeamPanel,body.theme-theme2 .t2ScorePanel,body.theme-theme2 .t2BatPanel,
+body.theme-theme2 .t2BowPanel,body.theme-theme2 .t2Footer{overflow:visible!important}
+body.theme-theme2 .t2TeamName,body.theme-theme2 .t2Score,body.theme-theme2 .t2Overs,
+body.theme-theme2 .t2Target,body.theme-theme2 .t2BatRow b,body.theme-theme2 .t2BowName,
+body.theme-theme2 .t2BowStat,body.theme-theme2 .t2Footer span{
+  overflow:visible!important;text-overflow:clip!important;
+}
+@media(max-width:900px){
+ body.theme-theme2 .frame,body.theme-theme2 .t2Ref{
+  height:94px!important;min-height:94px!important;max-height:94px!important;bottom:0!important}
+ body.theme-theme2 .t2Ref{grid-template-rows:69px 24px!important}
+ body.theme-theme2 .t2BatRow{height:30px!important}
+ body.theme-theme2 .t2ScorePanel{grid-template-rows:46px 23px!important}
+ body.theme-theme2 .t2BowPanel{grid-template-rows:32px 37px!important}
+}
+@media(max-width:600px){
+ body.theme-theme2 .frame,body.theme-theme2 .t2Ref{
+  height:80px!important;min-height:80px!important;max-height:80px!important;bottom:0!important}
+ body.theme-theme2 .t2Ref{grid-template-rows:61px 18px!important}
+}
+</style>
+
+<style id="theme2-bottom-gap-fix">
+/* THEME 2 ONLY — remove bottom gap and keep overlay flush with viewport bottom */
+body.theme-theme2 {
+  margin:0!important;
+  padding:0!important;
+  overflow:hidden!important;
+}
+body.theme-theme2 .frame,
+body.theme-theme2 .t2Ref {
+  position:fixed!important;
+  left:0!important;
+  right:0!important;
+  bottom:0!important;
+  top:auto!important;
+  margin:0!important;
+  transform:none!important;
+}
+body.theme-theme2 .t2Ref {
+  width:100vw!important;
+  box-sizing:border-box!important;
+}
+body.theme-theme2 .frame {
+  width:100vw!important;
+  box-sizing:border-box!important;
+}
+</style>
+
+<style id="theme2-locked-display-colors">
+/* THEME 2 LOCK — lower-third geometry stays unchanged. */
+/* THEME 2 ONLY — blue/purple/white/red display-screen background treatment. */
+body.theme-theme2 .display-screen,
+body.theme-theme2 .displayScreen,
+body.theme-theme2 .screen-display,
+body.theme-theme2 .announcement-screen,
+body.theme-theme2 .banner-screen,
+body.theme-theme2 .full-display,
+body.theme-theme2 .screen {
+  background:
+    radial-gradient(circle at 18% 35%, rgba(255,255,255,.92) 0 8%, transparent 28%),
+    radial-gradient(circle at 82% 22%, rgba(255,40,70,.95) 0 7%, transparent 28%),
+    radial-gradient(circle at 65% 78%, rgba(120,55,255,.92) 0 12%, transparent 34%),
+    linear-gradient(125deg, #145BFF 0%, #5424C7 38%, #FFFFFF 57%, #E31D3F 100%) !important;
+  background-size: 100% 100% !important;
+}
+
+/* Catch common existing screen wrappers without changing non-Theme-2 screens. */
+body.theme-theme2 .screen-content,
+body.theme-theme2 .display-content,
+body.theme-theme2 .banner-content,
+body.theme-theme2 .announcement-content {
+  background:
+    linear-gradient(135deg, rgba(20,91,255,.96), rgba(84,36,199,.94) 40%,
+                rgba(255,255,255,.96) 60%, rgba(227,29,63,.96)) !important;
+}
+
+/* Keep text readable against the four-color Theme 2 background. */
+body.theme-theme2 .display-screen *,
+body.theme-theme2 .displayScreen *,
+body.theme-theme2 .screen-display *,
+body.theme-theme2 .announcement-screen *,
+body.theme-theme2 .banner-screen *,
+body.theme-theme2 .full-display *,
+body.theme-theme2 .screen * {
+  text-shadow: 0 2px 5px rgba(0,0,0,.45);
+}
+
+/* Theme 2 lower-third remains locked to its already-correct bottom position. */
+body.theme-theme2 .frame,
+body.theme-theme2 .t2Ref {
+  top:auto !important;
+  bottom:0 !important;
+  margin-bottom:0 !important;
+  transform:none !important;
+}
+</style>
+
+
+<style id="theme2-all-display-background-fixed">
+/* =========================================================
+   THEME 2 ONLY — ALL DISPLAY SCREENS
+   Palette: BLUE + PURPLE + WHITE + RED
+   The normal Theme 2 lower-third remains locked/unchanged.
+   ========================================================= */
+
+/* Full-screen data/summary/scorecard displays */
+body.theme-theme2 #brkDataScreen,
+body.theme-theme2 #summaryOverlay,
+body.theme-theme2 .summary-overlay,
+body.theme-theme2 .scorecard-overlay {
+  background:
+    radial-gradient(circle at 12% 20%, rgba(255,255,255,.98) 0 7%, transparent 27%),
+    radial-gradient(circle at 88% 18%, rgba(239,35,60,.98) 0 8%, transparent 28%),
+    radial-gradient(circle at 72% 82%, rgba(116,45,220,.98) 0 13%, transparent 34%),
+    linear-gradient(125deg, #155EEF 0%, #155EEF 22%, #6D28D9 48%, #FFFFFF 66%, #E11D48 100%) !important;
+  background-size: cover !important;
+  background-position:center !important;
+}
+
+/* All content-area display screens used by the scorer buttons */
+body.theme-theme2 #brkDataScreen .brkds-shell,
+body.theme-theme2 #brkDataScreen .brkds-wrap,
+body.theme-theme2 #brkDataScreen .brkds-content,
+body.theme-theme2 #summaryOverlay .summary-shell,
+body.theme-theme2 .summary-overlay .summary-shell,
+body.theme-theme2 .scorecard-overlay .card {
+  background: transparent !important;
+}
+
+/* Tournament / Match / Venue / Toss / Result / Target / animation display screens */
+body.theme-theme2 .banner,
+body.theme-theme2 .target,
+body.theme-theme2 .custom,
+body.theme-theme2 #tournamentScreen,
+body.theme-theme2 #matchScreen,
+body.theme-theme2 #venueScreen,
+body.theme-theme2 #tossScreen,
+body.theme-theme2 #resultScreen,
+body.theme-theme2 #targetScreen,
+body.theme-theme2 #animationScreen {
+  background:
+    radial-gradient(circle at 15% 30%, rgba(255,255,255,.95) 0 6%, transparent 26%),
+    radial-gradient(circle at 84% 25%, rgba(225,29,72,.95) 0 7%, transparent 27%),
+    linear-gradient(120deg, #155EEF 0%, #6D28D9 48%, #FFFFFF 67%, #E11D48 100%) !important;
+  background-size:cover !important;
+  background-position:center !important;
+}
+
+/* Player/B1/B2/Bowler/FOW display surface when it is rendered as a screen */
+body.theme-theme2 #playerDetailScreen {
+  background:
+    linear-gradient(120deg, #155EEF 0%, #6D28D9 45%, #FFFFFF 68%, #E11D48 100%) !important;
+  background-size:cover !important;
+}
+
+/* Remove the old global yellow/blue/sky display treatment for Theme 2 */
+body.theme-theme2 #brkDataScreen,
+body.theme-theme2 #summaryOverlay,
+body.theme-theme2 .summary-overlay,
+body.theme-theme2 .scorecard-overlay,
+body.theme-theme2 .banner,
+body.theme-theme2 .target,
+body.theme-theme2 .custom {
+  --brk-three-color-bg:none !important;
+}
+
+/* Keep the Theme 2 lower-third exactly at the locked bottom position. */
+body.theme-theme2 .frame,
+body.theme-theme2 .t2Ref {
+  top:auto !important;
+  bottom:0 !important;
+  margin-bottom:0 !important;
+  transform:none !important;
+}
+</style>
+
+<style id="theme2-b1-b2-bowler-fow-colors">
+/* THEME 2 ONLY — B1 / B2 / BOWLER / FOW display screens */
+body.theme-theme2 #b1Screen,
+body.theme-theme2 #b2Screen,
+body.theme-theme2 #bowlerScreen,
+body.theme-theme2 #bowerScreen,
+body.theme-theme2 #fowScreen,
+body.theme-theme2 #B1Screen,
+body.theme-theme2 #B2Screen,
+body.theme-theme2 #BowlerScreen,
+body.theme-theme2 #FOWScreen,
+body.theme-theme2 .b1-screen,
+body.theme-theme2 .b2-screen,
+body.theme-theme2 .bowler-screen,
+body.theme-theme2 .bower-screen,
+body.theme-theme2 .fow-screen,
+body.theme-theme2 .b1Screen,
+body.theme-theme2 .b2Screen,
+body.theme-theme2 .bowlerScreen,
+body.theme-theme2 .bowerScreen,
+body.theme-theme2 .fowScreen,
+body.theme-theme2 .player-display-screen {
+  background:
+    radial-gradient(circle at 15% 25%, rgba(255,255,255,.98) 0 8%, transparent 28%),
+    radial-gradient(circle at 85% 20%, rgba(225,29,72,.98) 0 9%, transparent 30%),
+    radial-gradient(circle at 70% 80%, rgba(109,40,217,.98) 0 14%, transparent 35%),
+    linear-gradient(125deg, #155EEF 0%, #155EEF 23%, #6D28D9 48%, #FFFFFF 66%, #E11D48 100%) !important;
+  background-size: cover !important;
+  background-position: center !important;
+}
+
+/* Also color the immediate full-screen wrapper so no old background leaks through. */
+body.theme-theme2 .b1-overlay,
+body.theme-theme2 .b2-overlay,
+body.theme-theme2 .bowler-overlay,
+body.theme-theme2 .bower-overlay,
+body.theme-theme2 .fow-overlay,
+body.theme-theme2 .b1-display,
+body.theme-theme2 .b2-display,
+body.theme-theme2 .bowler-display,
+body.theme-theme2 .bower-display,
+body.theme-theme2 .fow-display {
+  background:
+    linear-gradient(125deg, #155EEF 0%, #6D28D9 48%, #FFFFFF 66%, #E11D48 100%) !important;
+  background-size: cover !important;
+}
+
+/* Preserve readability */
+body.theme-theme2 #b1Screen *,
+body.theme-theme2 #b2Screen *,
+body.theme-theme2 #bowlerScreen *,
+body.theme-theme2 #bowerScreen *,
+body.theme-theme2 #fowScreen *,
+body.theme-theme2 .b1-screen *,
+body.theme-theme2 .b2-screen *,
+body.theme-theme2 .bowler-screen *,
+body.theme-theme2 .bower-screen *,
+body.theme-theme2 .fow-screen * {
+  text-shadow: 0 2px 5px rgba(0,0,0,.45);
+}
 </style>
 </head>
 <body>
@@ -2832,7 +3317,7 @@ body.theme-theme6 .t5Ball{width:16px!important;height:16px!important;min-width:1
 <style id="brklive19-theme1-height-theme6-isolation">
 /* THEME 1 (default blue): compact the standard lower-third without changing its design. */
 body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) .frame{
-  height:108px!important;
+  height: 11vh;
 }
 /* THEME 6: absolutely no legacy Theme 1/base overlay behind the selected white-pill overlay. */
 body.theme-theme6 .frame{
@@ -2850,7 +3335,7 @@ body.theme-theme6 .t5Ref{display:grid!important;visibility:visible!important;opa
 body.theme-theme6 .banner,
 body.theme-theme6 .animation{z-index:-1!important;}
 @media(max-width:900px){
-  body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) .frame{height:88px!important;}
+  body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) .frame{height: 11vh;}
 }
 </style>
 
@@ -2860,7 +3345,7 @@ body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.th
   width:min(1760px,97vw)!important;
 }
 body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) .frame{
-  height:96px!important;
+  height: 11vh;
 }
 body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) .teamPanel{
   padding:0 15px!important;
@@ -2896,14 +3381,14 @@ body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.th
   margin-top:4px!important;
 }
 body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) .ball{
-  width:23px!important;height:23px!important;flex-basis:23px!important;font-size:11px!important;
+  width:23px!important;height: 11vh;flex-basis:23px!important;font-size:11px!important;
 }
 @media(max-width:900px){
-  body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) .frame{height:78px!important}
+  body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) .frame{height: 11vh}
   body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) .teamPanel{padding:0 9px!important}
   body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) .batters{padding:4px 7px!important}
   body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) .bowlerPanel{padding:4px 7px!important}
-  body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) .ball{width:18px!important;height:18px!important;flex-basis:18px!important;font-size:9px!important}
+  body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) .ball{width:18px!important;height: 11vh;flex-basis:18px!important;font-size:9px!important}
 }
 </style>
 <script id="theme1-no-cut-fit">
@@ -2938,8 +3423,8 @@ body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.th
   padding:0 1vw!important;
 }
 body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) .frame{
-  height:82px!important;
-  max-height:82px!important;
+  height: 11vh;
+  max-height: 11vh;
   box-sizing:border-box!important;
 }
 body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) .teamPanel{
@@ -2988,18 +3473,18 @@ body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.th
   margin-top:3px!important;gap:4px!important;
 }
 body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) .ball{
-  width:20px!important;height:20px!important;flex-basis:20px!important;font-size:9px!important;
+  width:20px!important;height: 11vh;flex-basis:20px!important;font-size:9px!important;
 }
 @media(max-width:900px){
  body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) .overlay{padding:0!important}
- body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) .frame{height:70px!important;max-height:70px!important}
+ body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) .frame{height: 11vh;max-height: 11vh}
 }
 @media(max-width:600px){
- body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) .frame{height:62px!important;max-height:62px!important}
+ body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) .frame{height: 11vh;max-height: 11vh}
  body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) .teamPanel{padding:0 6px!important}
  body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) .batterName{font-size:clamp(8px,2.5vw,13px)!important}
  body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) .scorePill{font-size:clamp(17px,5vw,28px)!important;padding:3px 7px!important}
- body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) .ball{width:15px!important;height:15px!important;flex-basis:15px!important;font-size:7px!important}
+ body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) .ball{width:15px!important;height: 11vh;flex-basis:15px!important;font-size:7px!important}
 }
 </style>
 
@@ -3703,16 +4188,16 @@ body:not(.theme-theme5):not(.theme-theme6) .t5Ref{display:none!important;visibil
 /* FINAL: move the actual Theme 1 lower-third slightly toward the bottom.
    This uses transform on the visible overlay itself so the position changes reliably. */
 body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) #overlay{
-  transform:translateY(-12px)!important;
+  transform: translateY(0)!important;
 }
 @media(max-width:900px){
  body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) #overlay{
-  transform:translateY(-8px)!important;
+  transform: translateY(0)!important;
  }
 }
 @media(max-width:600px){
  body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) #overlay{
-  transform:translateY(-5px)!important;
+  transform: translateY(0)!important;
  }
 }
 </style>
@@ -3737,7 +4222,7 @@ body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.th
   width:100vw!important;max-width:100vw!important;left:0!important;right:0!important;margin:0!important;padding:0!important;box-sizing:border-box!important;
 }
 body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) #overlay .frame{
-  width:100%!important;max-width:none!important;height:74px!important;max-height:74px!important;box-sizing:border-box!important;
+  width:100%!important;max-width:none!important;height: 11vh;max-height: 11vh;box-sizing:border-box!important;
 }
 body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) #overlay .content{
   left:15.5%!important;right:15.5%!important;
@@ -3751,15 +4236,15 @@ body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.th
   min-width:0!important;box-sizing:border-box!important;overflow:hidden!important;
 }
 body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) #overlay .rotatingInfo{
-  min-width:0!important;max-width:100%!important;overflow:hidden!important;white-space:nowrap!important;text-overflow:clip!important;font-size:clamp(9px,.9vw,16px)!important;line-height:1!important;
+  min-width:0!important;max-width:100%!important;overflow:hidden!important;white-space:nowrap!important;text-overflow:clip!important;font-size:clamp(9px,.9vw,16px)!important;line-height: 11vh;
 }
 @media(max-width:900px){
- body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) #overlay .frame{height:64px!important;max-height:64px!important}
+ body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) #overlay .frame{height: 11vh;max-height: 11vh}
  body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) #overlay .content{left:15%!important;right:15%!important}
  body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) #overlay .rotatingInfo{font-size:clamp(8px,1.7vw,13px)!important}
 }
 @media(max-width:600px){
- body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) #overlay .frame{height:58px!important;max-height:58px!important}
+ body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) #overlay .frame{height: 11vh;max-height: 11vh}
  body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) #overlay .content{left:13%!important;right:13%!important}
  body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) #overlay .rotatingInfo{font-size:clamp(7px,2.2vw,11px)!important}
 }
@@ -3794,14 +4279,14 @@ body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.th
   max-width: 100vw !important;
   margin: 0 !important;
   padding: 0 !important;
-  transform: translateY(8px) !important; /* slightly DOWN */
+  transform: translateY(0) !important; /* slightly DOWN */
 }
 
 body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) .frame {
   width: 100% !important;
-  height: 90px !important;
-  min-height: 90px !important;
-  max-height: 90px !important;
+  height: 11vh;
+  min-height: 0;
+  max-height: 11vh;
   box-sizing: border-box !important;
   overflow: hidden !important;
 }
@@ -3809,31 +4294,31 @@ body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.th
 /* Keep the lower third readable at the actual 1920-wide broadcast canvas. */
 @media (min-width: 1400px) {
   body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) .frame {
-    height: 108px !important;
-    min-height: 108px !important;
-    max-height: 108px !important;
+    height: 11vh;
+    min-height: 0;
+    max-height: 11vh;
   }
 }
 
 @media (max-width: 900px) {
   body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) .overlay {
-    transform: translateY(5px) !important;
+    transform: translateY(0) !important;
   }
   body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) .frame {
-    height: 92px !important;
-    min-height: 92px !important;
-    max-height: 92px !important;
+    height: 11vh;
+    min-height: 0;
+    max-height: 11vh;
   }
 }
 
 @media (max-width: 600px) {
   body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) .overlay {
-    transform: translateY(3px) !important;
+    transform: translateY(0) !important;
   }
   body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) .frame {
-    height: 78px !important;
-    min-height: 78px !important;
-    max-height: 78px !important;
+    height: 11vh;
+    min-height: 0;
+    max-height: 11vh;
   }
 }
 </style>
@@ -4458,3 +4943,51 @@ body.brk-player-detail-mode #playerDetailScreen{
 /* Keep the actual lower-third overlay itself transparent/unchanged. */
 html,body{background:transparent !important;}
 </style>
+
+
+<style id="theme2-final-blue-purple-red-background">
+/* THEME 2 ONLY — FINAL DISPLAY BACKGROUND OVERRIDE
+   This is deliberately placed last so it overrides the older
+   Yellow/Blue/Sky background rules. */
+body.theme-theme2,
+body.theme-theme2 #brkDataScreen,
+body.theme-theme2 #summaryOverlay,
+body.theme-theme2 .summary-overlay,
+body.theme-theme2 .scorecard-overlay {
+  background:
+    radial-gradient(circle at 12% 20%, rgba(255,255,255,.95) 0 7%, transparent 28%),
+    radial-gradient(circle at 88% 18%, rgba(239,30,60,.98) 0 9%, transparent 30%),
+    radial-gradient(circle at 68% 82%, rgba(111,45,210,.98) 0 14%, transparent 36%),
+    linear-gradient(125deg,#155EEF 0%,#155EEF 25%,#6D28D9 52%,#FFFFFF 70%,#E11D3F 100%) !important;
+  background-size:cover !important;
+  background-position:center !important;
+}
+
+/* B1 / B2 / BOWLER / FOW are rendered through playerDetailScreen. */
+body.theme-theme2 #playerDetailScreen,
+body.theme-theme2 #playerDetailScreen .pds-row,
+body.theme-theme2 #playerDetailScreen .pds-head,
+body.theme-theme2 #playerDetailScreen .pds-data {
+  background:
+    linear-gradient(125deg,#155EEF 0%,#155EEF 25%,#6D28D9 52%,#FFFFFF 70%,#E11D3F 100%) !important;
+  background-size:cover !important;
+  background-position:center !important;
+}
+
+/* Other button-driven display screens */
+body.theme-theme2 .banner,
+body.theme-theme2 .target,
+body.theme-theme2 .custom,
+body.theme-theme2 .animation {
+  background:
+    linear-gradient(125deg,#155EEF 0%,#6D28D9 48%,#FFFFFF 70%,#E11D3F 100%) !important;
+  background-size:cover !important;
+  background-position:center !important;
+}
+
+/* Remove the old three-color variable only for Theme 2. */
+body.theme-theme2 {
+  --brk-three-color-bg: linear-gradient(125deg,#155EEF,#6D28D9,#FFFFFF,#E11D3F) !important;
+}
+</style>
+
