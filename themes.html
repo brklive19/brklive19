@@ -46,6 +46,196 @@ body { min-height:100vh; height:auto; overflow-x:hidden !important; overflow-y:a
   min-width:0;
 }
 </style>
+
+<style id="theme2-locked-display-colors">
+/* THEME 2 LOCK — lower-third geometry stays unchanged. */
+/* THEME 2 ONLY — blue/purple/white/red display-screen background treatment. */
+body.theme-theme2 .display-screen,
+body.theme-theme2 .displayScreen,
+body.theme-theme2 .screen-display,
+body.theme-theme2 .announcement-screen,
+body.theme-theme2 .banner-screen,
+body.theme-theme2 .full-display,
+body.theme-theme2 .screen {
+  background:
+    radial-gradient(circle at 18% 35%, rgba(255,255,255,.92) 0 8%, transparent 28%),
+    radial-gradient(circle at 82% 22%, rgba(255,40,70,.95) 0 7%, transparent 28%),
+    radial-gradient(circle at 65% 78%, rgba(120,55,255,.92) 0 12%, transparent 34%),
+    linear-gradient(125deg, #145BFF 0%, #5424C7 38%, #FFFFFF 57%, #E31D3F 100%) !important;
+  background-size: 100% 100% !important;
+}
+
+/* Catch common existing screen wrappers without changing non-Theme-2 screens. */
+body.theme-theme2 .screen-content,
+body.theme-theme2 .display-content,
+body.theme-theme2 .banner-content,
+body.theme-theme2 .announcement-content {
+  background:
+    linear-gradient(135deg, rgba(20,91,255,.96), rgba(84,36,199,.94) 40%,
+                rgba(255,255,255,.96) 60%, rgba(227,29,63,.96)) !important;
+}
+
+/* Keep text readable against the four-color Theme 2 background. */
+body.theme-theme2 .display-screen *,
+body.theme-theme2 .displayScreen *,
+body.theme-theme2 .screen-display *,
+body.theme-theme2 .announcement-screen *,
+body.theme-theme2 .banner-screen *,
+body.theme-theme2 .full-display *,
+body.theme-theme2 .screen * {
+  text-shadow: 0 2px 5px rgba(0,0,0,.45);
+}
+
+/* Theme 2 lower-third remains locked to its already-correct bottom position. */
+body.theme-theme2 .frame,
+body.theme-theme2 .t2Ref {
+  top:auto !important;
+  bottom:0 !important;
+  margin-bottom:0 !important;
+  transform:none !important;
+}
+</style>
+
+
+<style id="theme2-all-display-background-fixed">
+/* =========================================================
+   THEME 2 ONLY — ALL DISPLAY SCREENS
+   Palette: BLUE + PURPLE + WHITE + RED
+   The normal Theme 2 lower-third remains locked/unchanged.
+   ========================================================= */
+
+/* Full-screen data/summary/scorecard displays */
+body.theme-theme2 #brkDataScreen,
+body.theme-theme2 #summaryOverlay,
+body.theme-theme2 .summary-overlay,
+body.theme-theme2 .scorecard-overlay {
+  background:
+    radial-gradient(circle at 12% 20%, rgba(255,255,255,.98) 0 7%, transparent 27%),
+    radial-gradient(circle at 88% 18%, rgba(239,35,60,.98) 0 8%, transparent 28%),
+    radial-gradient(circle at 72% 82%, rgba(116,45,220,.98) 0 13%, transparent 34%),
+    linear-gradient(125deg, #155EEF 0%, #155EEF 22%, #6D28D9 48%, #FFFFFF 66%, #E11D48 100%) !important;
+  background-size: cover !important;
+  background-position:center !important;
+}
+
+/* All content-area display screens used by the scorer buttons */
+body.theme-theme2 #brkDataScreen .brkds-shell,
+body.theme-theme2 #brkDataScreen .brkds-wrap,
+body.theme-theme2 #brkDataScreen .brkds-content,
+body.theme-theme2 #summaryOverlay .summary-shell,
+body.theme-theme2 .summary-overlay .summary-shell,
+body.theme-theme2 .scorecard-overlay .card {
+  background: transparent !important;
+}
+
+/* Tournament / Match / Venue / Toss / Result / Target / animation display screens */
+body.theme-theme2 .banner,
+body.theme-theme2 .target,
+body.theme-theme2 .custom,
+body.theme-theme2 #tournamentScreen,
+body.theme-theme2 #matchScreen,
+body.theme-theme2 #venueScreen,
+body.theme-theme2 #tossScreen,
+body.theme-theme2 #resultScreen,
+body.theme-theme2 #targetScreen,
+body.theme-theme2 #animationScreen {
+  background:
+    radial-gradient(circle at 15% 30%, rgba(255,255,255,.95) 0 6%, transparent 26%),
+    radial-gradient(circle at 84% 25%, rgba(225,29,72,.95) 0 7%, transparent 27%),
+    linear-gradient(120deg, #155EEF 0%, #6D28D9 48%, #FFFFFF 67%, #E11D48 100%) !important;
+  background-size:cover !important;
+  background-position:center !important;
+}
+
+/* Player/B1/B2/Bowler/FOW display surface when it is rendered as a screen */
+body.theme-theme2 #playerDetailScreen {
+  background:
+    linear-gradient(120deg, #155EEF 0%, #6D28D9 45%, #FFFFFF 68%, #E11D48 100%) !important;
+  background-size:cover !important;
+}
+
+/* Remove the old global yellow/blue/sky display treatment for Theme 2 */
+body.theme-theme2 #brkDataScreen,
+body.theme-theme2 #summaryOverlay,
+body.theme-theme2 .summary-overlay,
+body.theme-theme2 .scorecard-overlay,
+body.theme-theme2 .banner,
+body.theme-theme2 .target,
+body.theme-theme2 .custom {
+  --brk-three-color-bg:none !important;
+}
+
+/* Keep the Theme 2 lower-third exactly at the locked bottom position. */
+body.theme-theme2 .frame,
+body.theme-theme2 .t2Ref {
+  top:auto !important;
+  bottom:0 !important;
+  margin-bottom:0 !important;
+  transform:none !important;
+}
+</style>
+
+<style id="theme2-b1-b2-bowler-fow-colors">
+/* THEME 2 ONLY — B1 / B2 / BOWLER / FOW display screens */
+body.theme-theme2 #b1Screen,
+body.theme-theme2 #b2Screen,
+body.theme-theme2 #bowlerScreen,
+body.theme-theme2 #bowerScreen,
+body.theme-theme2 #fowScreen,
+body.theme-theme2 #B1Screen,
+body.theme-theme2 #B2Screen,
+body.theme-theme2 #BowlerScreen,
+body.theme-theme2 #FOWScreen,
+body.theme-theme2 .b1-screen,
+body.theme-theme2 .b2-screen,
+body.theme-theme2 .bowler-screen,
+body.theme-theme2 .bower-screen,
+body.theme-theme2 .fow-screen,
+body.theme-theme2 .b1Screen,
+body.theme-theme2 .b2Screen,
+body.theme-theme2 .bowlerScreen,
+body.theme-theme2 .bowerScreen,
+body.theme-theme2 .fowScreen,
+body.theme-theme2 .player-display-screen {
+  background:
+    radial-gradient(circle at 15% 25%, rgba(255,255,255,.98) 0 8%, transparent 28%),
+    radial-gradient(circle at 85% 20%, rgba(225,29,72,.98) 0 9%, transparent 30%),
+    radial-gradient(circle at 70% 80%, rgba(109,40,217,.98) 0 14%, transparent 35%),
+    linear-gradient(125deg, #155EEF 0%, #155EEF 23%, #6D28D9 48%, #FFFFFF 66%, #E11D48 100%) !important;
+  background-size: cover !important;
+  background-position: center !important;
+}
+
+/* Also color the immediate full-screen wrapper so no old background leaks through. */
+body.theme-theme2 .b1-overlay,
+body.theme-theme2 .b2-overlay,
+body.theme-theme2 .bowler-overlay,
+body.theme-theme2 .bower-overlay,
+body.theme-theme2 .fow-overlay,
+body.theme-theme2 .b1-display,
+body.theme-theme2 .b2-display,
+body.theme-theme2 .bowler-display,
+body.theme-theme2 .bower-display,
+body.theme-theme2 .fow-display {
+  background:
+    linear-gradient(125deg, #155EEF 0%, #6D28D9 48%, #FFFFFF 66%, #E11D48 100%) !important;
+  background-size: cover !important;
+}
+
+/* Preserve readability */
+body.theme-theme2 #b1Screen *,
+body.theme-theme2 #b2Screen *,
+body.theme-theme2 #bowlerScreen *,
+body.theme-theme2 #bowerScreen *,
+body.theme-theme2 #fowScreen *,
+body.theme-theme2 .b1-screen *,
+body.theme-theme2 .b2-screen *,
+body.theme-theme2 .bowler-screen *,
+body.theme-theme2 .bower-screen *,
+body.theme-theme2 .fow-screen * {
+  text-shadow: 0 2px 5px rgba(0,0,0,.45);
+}
+</style>
 </head>
 <body>
 <div class="wrap">
@@ -152,21 +342,7 @@ window.publishThemeToLiveScore=async function(theme, matchId){
 <script>
 (function(){
 const themes=[
-['blue','01','BLUE','Theme 1 • Blue broadcast design','#0876d1','#081f58'],
-['neon','02','NEON','Theme 1 • Neon broadcast design','#b02cff','#092cff'],
-['green','03','GREEN','Theme 1 • Green broadcast design','#19c968','#063c2b'],
-['gold','04','GOLD','Theme 1 • Gold broadcast design','#ffd34d','#6b3a00'],
-['theme2','05','ROYAL','Theme 1 • Royal broadcast design','#2367ff','#101a68'],
-['theme3','06','VIOLET','Theme 1 • Violet broadcast design','#a14cff','#32105e'],
-['theme4','07','CRIMSON','Theme 1 • Crimson broadcast design','#ff3158','#5b0718'],
-['theme6','08','EMERALD','Theme 1 • Emerald broadcast design','#35d37a','#064b35'],
-['glass','09','GLASS','Theme 1 • Glass broadcast design','#55d8ff','#183d67'],
-['carbon','10','CARBON','Theme 1 • Carbon broadcast design','#8e9aaa','#171b22'],
-['stadium','11','STADIUM','Theme 1 • Stadium broadcast design','#32e875','#07522f'],
-['aurora','12','AURORA','Theme 1 • Aurora broadcast design','#62f0d1','#6038ff'],
-['metallic','13','STEEL','Theme 1 • Steel broadcast design','#b9d4e8','#284d68'],
-['redblack','14','RED BLACK','Theme 1 • Red Black broadcast design','#ff365f','#180914'],
-['rainbow','15','RAINBOW','Theme 1 • Rainbow broadcast design','#ff4d6d','#6d5dfc']
+['blue','01','BLUE','Theme 1 • Blue broadcast design','#0876d1','#081f58']
 ];
 const p=new URLSearchParams(location.search); let selected=p.get('selected')||localStorage.getItem('brklive19_pending_theme')||'blue'; let match=p.get('match')||localStorage.getItem('brklive19_theme_match')||''; let tournament=p.get('tournament')||'';
 try{const b=JSON.parse(localStorage.getItem('brklive19_score_bridge')||'null');if(b){if(!match)match=b.matchId||'';if(!tournament)tournament=b.tournamentName||b.tournament||'';}}catch(e){}
@@ -258,3 +434,51 @@ pre, textarea {
 
 </style>
 </html>
+
+
+<style id="theme2-final-blue-purple-red-background">
+/* THEME 2 ONLY — FINAL DISPLAY BACKGROUND OVERRIDE
+   This is deliberately placed last so it overrides the older
+   Yellow/Blue/Sky background rules. */
+body.theme-theme2,
+body.theme-theme2 #brkDataScreen,
+body.theme-theme2 #summaryOverlay,
+body.theme-theme2 .summary-overlay,
+body.theme-theme2 .scorecard-overlay {
+  background:
+    radial-gradient(circle at 12% 20%, rgba(255,255,255,.95) 0 7%, transparent 28%),
+    radial-gradient(circle at 88% 18%, rgba(239,30,60,.98) 0 9%, transparent 30%),
+    radial-gradient(circle at 68% 82%, rgba(111,45,210,.98) 0 14%, transparent 36%),
+    linear-gradient(125deg,#155EEF 0%,#155EEF 25%,#6D28D9 52%,#FFFFFF 70%,#E11D3F 100%) !important;
+  background-size:cover !important;
+  background-position:center !important;
+}
+
+/* B1 / B2 / BOWLER / FOW are rendered through playerDetailScreen. */
+body.theme-theme2 #playerDetailScreen,
+body.theme-theme2 #playerDetailScreen .pds-row,
+body.theme-theme2 #playerDetailScreen .pds-head,
+body.theme-theme2 #playerDetailScreen .pds-data {
+  background:
+    linear-gradient(125deg,#155EEF 0%,#155EEF 25%,#6D28D9 52%,#FFFFFF 70%,#E11D3F 100%) !important;
+  background-size:cover !important;
+  background-position:center !important;
+}
+
+/* Other button-driven display screens */
+body.theme-theme2 .banner,
+body.theme-theme2 .target,
+body.theme-theme2 .custom,
+body.theme-theme2 .animation {
+  background:
+    linear-gradient(125deg,#155EEF 0%,#6D28D9 48%,#FFFFFF 70%,#E11D3F 100%) !important;
+  background-size:cover !important;
+  background-position:center !important;
+}
+
+/* Remove the old three-color variable only for Theme 2. */
+body.theme-theme2 {
+  --brk-three-color-bg: linear-gradient(125deg,#155EEF,#6D28D9,#FFFFFF,#E11D3F) !important;
+}
+</style>
+
