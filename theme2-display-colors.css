@@ -1,0 +1,49 @@
+
+<style id="theme2-locked-display-colors">
+/* THEME 2 LOCK — lower-third geometry stays unchanged. */
+/* THEME 2 ONLY — blue/purple/white/red display-screen background treatment. */
+body.theme-theme2 .display-screen,
+body.theme-theme2 .displayScreen,
+body.theme-theme2 .screen-display,
+body.theme-theme2 .announcement-screen,
+body.theme-theme2 .banner-screen,
+body.theme-theme2 .full-display,
+body.theme-theme2 .screen {
+  background:
+    radial-gradient(circle at 18% 35%, rgba(255,255,255,.92) 0 8%, transparent 28%),
+    radial-gradient(circle at 82% 22%, rgba(255,40,70,.95) 0 7%, transparent 28%),
+    radial-gradient(circle at 65% 78%, rgba(120,55,255,.92) 0 12%, transparent 34%),
+    linear-gradient(125deg, #145BFF 0%, #5424C7 38%, #FFFFFF 57%, #E31D3F 100%) !important;
+  background-size: 100% 100% !important;
+}
+
+/* Catch common existing screen wrappers without changing non-Theme-2 screens. */
+body.theme-theme2 .screen-content,
+body.theme-theme2 .display-content,
+body.theme-theme2 .banner-content,
+body.theme-theme2 .announcement-content {
+  background:
+    linear-gradient(135deg, rgba(20,91,255,.96), rgba(84,36,199,.94) 40%,
+                rgba(255,255,255,.96) 60%, rgba(227,29,63,.96)) !important;
+}
+
+/* Keep text readable against the four-color Theme 2 background. */
+body.theme-theme2 .display-screen *,
+body.theme-theme2 .displayScreen *,
+body.theme-theme2 .screen-display *,
+body.theme-theme2 .announcement-screen *,
+body.theme-theme2 .banner-screen *,
+body.theme-theme2 .full-display *,
+body.theme-theme2 .screen * {
+  text-shadow: 0 2px 5px rgba(0,0,0,.45);
+}
+
+/* Theme 2 lower-third remains locked to its already-correct bottom position. */
+body.theme-theme2 .frame,
+body.theme-theme2 .t2Ref {
+  top:auto !important;
+  bottom:0 !important;
+  margin-bottom:0 !important;
+  transform:none !important;
+}
+</style>
