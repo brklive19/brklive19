@@ -2140,6 +2140,240 @@ body.theme-theme2 .fow-screen * {
   text-shadow: 0 2px 5px rgba(0,0,0,.45);
 }
 </style>
+
+<style id="BRKLIVE19_THEME1_REBUILT_MIDDLE_SCORE">
+/* =========================================================
+   BRKLIVE19 THEME 1 — REBUILT LOWER THIRD
+   Only the default/Theme 1 lower-third is changed here.
+   Theme 2/3/4/etc. are intentionally untouched.
+   Layout:
+     LEFT  = team panel
+     MIDDLE WHITE = batting team / score / over / innings / rotating info
+     RIGHT = existing opponent/bowler-side panel
+   ========================================================= */
+
+body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) #overlay .frame{
+  height:132px !important;
+  min-height:132px !important;
+  max-height:132px !important;
+  overflow:visible !important;
+  width:100vw !important;
+  position:relative !important;
+  bottom:0 !important;
+}
+
+/* Keep the colored side panels, but give the white middle enough room. */
+body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) #overlay .teamPanel{
+  width:20% !important;
+  padding:0 18px !important;
+  overflow:hidden !important;
+}
+body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) #overlay .content{
+  left:20% !important;
+  right:20% !important;
+  width:60% !important;
+  top:0 !important;
+  bottom:0 !important;
+  display:grid !important;
+  grid-template-columns:0fr minmax(0,1fr) 0fr !important;
+  z-index:3 !important;
+}
+
+/* The old batter and bowler blocks are not part of the rebuilt Theme 1
+   middle section. Their data is still maintained by the existing JS. */
+body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) #overlay .batters,
+body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) #overlay .bowlerPanel{
+  display:none !important;
+}
+
+/* WHITE CENTER — rebuilt from the existing scorePanel/data elements. */
+body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) #overlay .scorePanel{
+  grid-column:2 !important;
+  width:100% !important;
+  height:100% !important;
+  min-width:0 !important;
+  min-height:0 !important;
+  padding:8px 18px 7px !important;
+  display:grid !important;
+  grid-template-columns:minmax(0,1fr) auto minmax(0,1fr) !important;
+  grid-template-rows:30px 50px 22px 22px !important;
+  column-gap:16px !important;
+  row-gap:0 !important;
+  align-items:center !important;
+  justify-content:stretch !important;
+  overflow:visible !important;
+  background:#fff !important;
+  color:#142052 !important;
+}
+
+/* Batting team: top-left of the white score section. */
+body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) #overlay #theme1ScoreBatTeam{
+  grid-column:1 / 4 !important;
+  grid-row:1 !important;
+  width:100% !important;
+  height:auto !important;
+  margin:0 !important;
+  padding:0 8px !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  text-align:center !important;
+  font-size:clamp(13px,1.35vw,23px) !important;
+  line-height:1 !important;
+  font-weight:1000 !important;
+  letter-spacing:.035em !important;
+  color:#142052 !important;
+  white-space:nowrap !important;
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
+}
+
+/* Score = runs-wickets in the middle. */
+body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) #overlay #scorePill{
+  grid-column:2 !important;
+  grid-row:2 !important;
+  justify-self:center !important;
+  align-self:center !important;
+  width:auto !important;
+  min-width:150px !important;
+  max-width:100% !important;
+  height:48px !important;
+  margin:0 !important;
+  padding:4px 24px !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  border-radius:12px !important;
+  font-size:clamp(34px,3.8vw,60px) !important;
+  line-height:1 !important;
+  letter-spacing:-.03em !important;
+  white-space:nowrap !important;
+  overflow:visible !important;
+}
+
+/* Existing match title is unnecessary in the rebuilt middle score. */
+body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) #overlay #matchTitle{
+  display:none !important;
+}
+
+/* Under the score: overs and innings number. */
+body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) #overlay .scoreMeta{
+  grid-column:1 / 4 !important;
+  grid-row:3 !important;
+  width:100% !important;
+  height:22px !important;
+  margin:0 !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  gap:28px !important;
+  font-size:clamp(12px,1.15vw,19px) !important;
+  line-height:1 !important;
+  font-weight:1000 !important;
+  white-space:nowrap !important;
+  overflow:visible !important;
+}
+body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) #overlay .scoreMeta span{
+  display:inline-flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+}
+
+/* Keep the existing CRR/RRR data available, but place it into the
+   rotating line rather than consuming vertical space in the white section. */
+body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) #overlay #scoreRates{
+  display:none !important;
+}
+
+/* Existing blinking/rotating information stays at the bottom of the white section. */
+body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) #overlay #rotatingInfo{
+  grid-column:1 / 4 !important;
+  grid-row:4 !important;
+  width:100% !important;
+  min-width:0 !important;
+  height:22px !important;
+  min-height:22px !important;
+  margin:0 !important;
+  padding:0 10px !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  color:#142052 !important;
+  text-shadow:none !important;
+  font-size:clamp(9px,.95vw,16px) !important;
+  line-height:1 !important;
+  font-weight:1000 !important;
+  letter-spacing:.04em !important;
+  white-space:nowrap !important;
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
+  border-top:1px solid rgba(20,32,82,.15) !important;
+  animation:theme1RotatingBlink 1.8s ease-in-out infinite !important;
+}
+body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) #overlay #rotatingInfo.swap{
+  animation:rotatingInfoSwap .45s ease both, theme1RotatingBlink 1.8s ease-in-out infinite !important;
+}
+@keyframes theme1RotatingBlink{
+  0%,100%{opacity:1}
+  50%{opacity:.35}
+}
+
+/* Ensure nothing in the rebuilt center gets clipped by an old rule. */
+body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) #overlay .scorePanel *,
+body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) #overlay .scorePanel{
+  box-sizing:border-box !important;
+}
+body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) #overlay .scorePanel *{
+  max-width:100% !important;
+}
+
+@media(max-width:900px){
+  body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) #overlay .frame{
+    height:112px !important; min-height:112px !important; max-height:112px !important;
+  }
+  body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) #overlay .scorePanel{
+    grid-template-rows:25px 42px 20px 20px !important;
+    padding:5px 12px !important;
+    column-gap:10px !important;
+  }
+  body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) #overlay .scorePill{height:40px !important;min-width:130px !important;font-size:clamp(28px,4.2vw,48px) !important}
+}
+@media(max-width:600px){
+  body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) #overlay .frame{
+    height:94px !important; min-height:94px !important; max-height:94px !important;
+  }
+  body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) #overlay .teamPanel{padding:0 9px !important}
+  body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) #overlay .scorePanel{
+    grid-template-rows:22px 34px 18px 17px !important;
+    padding:3px 7px !important;
+    column-gap:5px !important;
+  }
+  body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) #overlay #theme1ScoreBatTeam{font-size:clamp(10px,2.6vw,15px) !important}
+  body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) #overlay #scorePill{height:33px !important;min-width:105px !important;padding:3px 10px !important;font-size:clamp(23px,5.8vw,34px) !important}
+  body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) #overlay .scoreMeta{font-size:clamp(9px,2.7vw,13px) !important;gap:12px !important}
+  body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) #overlay #rotatingInfo{font-size:clamp(7px,2.3vw,11px) !important;padding:0 4px !important}
+}
+</style>
+
+<style id="brklive19-result-summary-final">
+.top-performance-result .match-status-big{margin:10px 14px 2px;text-align:center;font-weight:1000;font-size:clamp(20px,3vw,48px);line-height:1.05;text-transform:uppercase;word-break:break-word}.top-performance-result .match-score-big{margin:2px 14px 12px;text-align:center;font-weight:1000;font-size:clamp(28px,5vw,78px);line-height:1.05;color:#ffd83d;text-shadow:0 2px 8px #0008;word-break:break-word}.top-performance-result .match-status-big.finished{color:#7dff9b}.top-performance-result .match-status-big.progress{color:#fff}
+</style>
+<style id="brklive19-summary-readability-final">
+/* Match Summary: smaller, readable text so Theme 1 and Theme 2 show all fields without clipping. */
+#brkDataScreen .brkds-summary .box h3{font-size:clamp(10px,.85vw,15px)!important;padding:6px 9px!important;line-height:1.15!important}
+#brkDataScreen .brkds-summary .mini-table{font-size:clamp(7px,.62vw,12px)!important}
+#brkDataScreen .brkds-summary .mini-table th,#brkDataScreen .brkds-summary .mini-table td{padding:2px 4px!important;line-height:1.2!important}
+#brkDataScreen .brkds-summary .box-body{padding:5px!important;gap:5px!important}
+#brkDataScreen .brkds-summary .summary-result-row{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center;gap:8px;min-height:44px;padding:5px 10px;border-top:1px solid rgba(255,255,255,.16);text-align:center;font-weight:1000;box-sizing:border-box}
+#brkDataScreen .brkds-summary .summary-result-row.progress{background:rgba(25,80,160,.32)}
+#brkDataScreen .brkds-summary .summary-result-row.finished{background:rgba(0,120,55,.3)}
+#brkDataScreen .summary-result-status{font-size:clamp(9px,.8vw,15px);line-height:1.1;white-space:normal}
+#brkDataScreen .summary-result-score{font-size:clamp(16px,1.55vw,28px);line-height:1.05;white-space:normal}
+#brkDataScreen .summary-result-need{font-size:clamp(8px,.72vw,14px);line-height:1.15;white-space:normal}
+#brkDataScreen .brkds-summary .summary-team-head .name{font-size:clamp(12px,1.15vw,21px)!important}
+#brkDataScreen .brkds-summary .summary-team-head .score{font-size:clamp(16px,1.55vw,28px)!important;padding:1px 8px!important}
+@media(max-width:800px){#brkDataScreen .brkds-summary .summary-result-row{grid-template-columns:1fr;gap:2px;min-height:0;padding:5px 7px}.summary-result-status,.summary-result-score,.summary-result-need{font-size:9px!important}.summary-result-score{font-size:17px!important}}
+</style>
 </head>
 <body>
 <!-- ===== TOP RIGHT LIVE INDICATOR ===== -->
@@ -2433,27 +2667,39 @@ function currentOverEvents(data){
   return events.slice(start).map(parseBallEvent).filter(Boolean);
 }
 function renderBalls(data){
-  const box=$("balls");box.innerHTML="";
-  const list=currentOverEvents(data).slice(-6);
+  const box=$("balls"); if(!box)return;
+  box.innerHTML="";
+  const list=currentOverEvents(data);
+  box.style.setProperty("--this-over-count", String(Math.max(list.length,1)));
   if(!list.length){const x=document.createElement("span");x.className="ball";x.textContent="—";box.appendChild(x);return}
-  list.forEach((b,i)=>{const x=document.createElement("span");x.className="ball "+(b.c||"")+(i===list.length-1?" latest":"");x.textContent=b.v;box.appendChild(x)})
+  list.forEach((b,i)=>{const x=document.createElement("span");x.className="ball "+(b.c||"")+(i===list.length-1?" latest":"");x.textContent=b.v;x.title=`Delivery ${i+1}: ${b.v}`;box.appendChild(x);});
+  const fit=()=>{const items=[...box.children];if(!items.length)return;const n=items.length;let size=Math.min(11,Math.max(5,box.clientWidth/Math.max(n*2.2,1)));items.forEach(el=>el.style.fontSize=size+"px");};
+  requestAnimationFrame(fit);
 }
 
 function calcCRR(d){const balls=num(d.legalBalls);return balls?(num(d.runs)/(balls/6)).toFixed(2):"0.00"}
 function calcRRR(d){if(num(d.innings)!==2||!num(d.target))return"0.00";const need=Math.max(num(d.target)-num(d.runs),0),left=Math.max(num(d.maxOvers)*6-num(d.legalBalls),0);return need&&left?((need/left)*6).toFixed(2):"0.00"}
 
 function deriveResult(d){
-  const saved=d.resultText||d.matchResult||"";
+  const saved=String(d.resultText||d.matchResult||d.result||"").trim();
   if(saved)return saved;
-  if(num(d.innings)!==2||!num(d.target))return "";
-  const runs=num(d.runs), target=num(d.target), ballsLeft=Math.max(num(d.maxOvers)*6-num(d.legalBalls),0);
-  const chasing=teamName(d,d.battingTeam||"A"), defending=teamName(d,(d.firstInnings||{}).team||((d.battingTeam||"A")==="A"?"B":"A"));
-  if(runs>=target)return `${chasing} WON BY ${Math.max(10-num(d.wickets),0)} WICKETS`;
-  if(num(d.wickets)>=10||ballsLeft<=0){
-    if(runs===target-1)return "MATCH TIED";
-    return `${defending} WON BY ${Math.max(target-1-runs,0)} RUNS`;
+  const winner=String(d.matchWinner||d.winner||"").trim();
+  if(winner){
+    if(/^match\s+tied$/i.test(winner)) return "MATCH TIED";
+    const margin=String(d.winMargin??"").trim(), type=String(d.winMarginType||"").trim();
+    return winner.toUpperCase()+(margin!==""?` WON BY ${margin}${type?" "+type.toUpperCase():""}`:" WON");
   }
-  return "";
+  if(d.status!=="completed") return "";
+  const i2=d.secondInnings||{}, first=d.firstInnings||{};
+  const target=num(d.target)||num(i2.target), runs=num(d.runs??i2.runs), wickets=num(d.wickets??i2.wickets), balls=num(d.legalBalls??i2.legalBalls??i2.balls);
+  const firstRuns=num(first.runs), maxOvers=num(d.maxOvers)||num(i2.maxOvers), ballsLeft=Math.max(maxOvers*6-balls,0);
+  const chasing=teamName(d,d.battingTeam||i2.battingTeam||"A"), defending=teamName(d,first.team||((d.battingTeam||"A")==="A"?"B":"A"));
+  if(target){
+    if(runs>=target)return `${chasing.toUpperCase()} WON BY ${Math.max(10-wickets,0)} WICKETS`;
+    if(wickets>=10||ballsLeft<=0){if(runs===target-1)return "MATCH TIED";return `${defending.toUpperCase()} WON BY ${Math.max(target-1-runs,0)} RUNS`;}
+  }
+  if(firstRuns>0){if(runs>firstRuns)return `${chasing.toUpperCase()} WON BY ${Math.max(10-wickets,0)} WICKETS`;if(runs===firstRuns)return "MATCH TIED";return `${defending.toUpperCase()} WON BY ${firstRuns-runs} RUNS`;}
+  return "MATCH FINISHED";
 }
 
 // ---- updateTarget: automatically show target in 2nd innings ----
@@ -2628,7 +2874,8 @@ function bannerText(d){
   const showTournament=!!(t.showTournament??d.showTournament??false);
   const showMatch=!!(t.showMatch??d.showMatch??false);
   const showToss=!!(t.showToss??d.showToss??false);
-  const showResult=!!(t.showResult??d.showResult??false);
+  const completed=d.status==='completed'||!!d.matchWinner||!!d.winner;
+  const showResult=completed || !!(t.showResult??d.showResult??false);
   const playerLower=t.playerLower||{};
   const partnership=t.partnership||{};
 
@@ -2874,7 +3121,7 @@ function syncTheme2Reference(d={}){
   set("t2Match",d.matchName||"—"); set("t2Venue",d.venue||d.location||"—"); set("t2Toss",toss); set("t2Bowling",teamName(d,bowl));
   $("t2Strike1")?.style.setProperty("opacity",b1n===d.striker?"1":"0");
   $("t2Strike2")?.style.setProperty("opacity",b2n===d.striker?"1":"0");
-  const box=$("t2Balls"); if(box){box.innerHTML="";const list=currentOverEvents(d).slice(-6); if(!list.length){box.textContent="—";} else list.forEach(b=>{const x=document.createElement("span");x.textContent=b.v;box.appendChild(x);});}
+  const box=$("t2Balls"); if(box){box.innerHTML="";const list=currentOverEvents(d); if(!list.length){box.textContent="—";} else list.forEach(b=>{const x=document.createElement("span");x.textContent=b.v;box.appendChild(x);});}
   // Optional team logos when supplied by the scorer/match data.
   [["t2LogoA",d.teamALogo||d.logoA],["t2LogoB",d.teamBLogo||d.logoB]].forEach(([id,url])=>{const e=$(id);if(e&&url){e.innerHTML="";const img=document.createElement("img");img.src=url;img.alt="";e.appendChild(img);}});
 }
@@ -2899,7 +3146,7 @@ function syncTheme4Reference(d={}){
   const arrow=$("t4Strike2"); if(arrow)arrow.style.display=(b2n===d.striker?"inline-block":"none");
   const renderLogo=(id,url)=>{const e=$(id);if(!e)return;if(url){e.innerHTML="";const img=document.createElement("img");img.src=url;img.alt="";e.appendChild(img)}else if(!e.textContent.trim())e.textContent="🏏"};
   renderLogo("t4LogoA",d.teamALogo||d.logoA); renderLogo("t4LogoB",d.teamBLogo||d.logoB);
-  const over=$("t4ThisOver"); if(over){over.innerHTML=""; const list=currentOverEvents(d).slice(-6); list.forEach(b=>{const x=document.createElement("span");x.className=b.c||"";x.textContent=b.v;over.appendChild(x);});}
+  const over=$("t4ThisOver"); if(over){over.innerHTML=""; const list=currentOverEvents(d); list.forEach(b=>{const x=document.createElement("span");x.className=b.c||"";x.textContent=b.v;over.appendChild(x);});}
 }
 
 function syncTheme3Exact(d={}){
@@ -2927,7 +3174,7 @@ function syncTheme3Exact(d={}){
   }
   const out=$("t3Balls");
   if(out){
-    out.innerHTML=""; const list=currentOverEvents(d).slice(-6);
+    out.innerHTML=""; const list=currentOverEvents(d);
     if(!list.length){const x=document.createElement("span");x.className="t3Ball";x.textContent="—";out.appendChild(x);}
     else list.forEach((b,i)=>{const x=document.createElement("span");x.className="t3Ball "+(b.c||"")+(i===list.length-1?" latest":"");x.textContent=b.v;out.appendChild(x);});
   }
@@ -3039,7 +3286,7 @@ function syncTheme5Reference(d={}){
   const box=$("t5Balls");
   if(box){
     box.innerHTML='';
-    const list=currentOverEvents(d).slice(-6);
+    const list=currentOverEvents(d);
     for(let i=0;i<6;i++){
       const b=list[i]; const x=document.createElement('span');
       x.className='t5Ball '+(b?.c||'')+(b&&i===list.length-1?' latest':'');
@@ -3126,20 +3373,12 @@ function processBRKOverlayPacket(d){
  if(scoreCrrEl) scoreCrrEl.textContent=currentRunRate;
  if(scoreRrrEl) scoreRrrEl.textContent=requiredRunRate;
  if(scoreRrrWrap) scoreRrrWrap.style.display=inningsNow===2 && !!targetNow ? "inline-flex" : "none";
- const directResult = deriveResult(d) || (d.matchWinner ? d.matchWinner+" WON" : "");
- const isCompleted = d.status === 'completed' || d.matchWinner || !!directResult;
- if(isCompleted && directResult){
-   $("scorePill").textContent = directResult;
-   $("scorePill").style.background = "linear-gradient(90deg, #00c853, #00e676)";
-   $("scorePill").style.color = "#000";
-   $("inningsLabel").textContent = "MATCH DECIDED";
- } else {
-   $("scorePill").textContent = runs+"-"+w;
-   $("scorePill").style.background = "";
-   $("scorePill").style.color = "";
-   const inn = num(d.innings||1);
-   $("inningsLabel").textContent = inn === 1 ? "1ST INNINGS" : (inn === 2 ? "2ND INNINGS" : "INNINGS "+inn);
- }
+ // Theme 1 scoring section stays SCORE / WICKETS. The match result is shown by the common result banner.
+ $("scorePill").textContent = runs+"-"+w;
+ $("scorePill").style.background = "";
+ $("scorePill").style.color = "";
+ const inn = num(d.innings||1);
+ $("inningsLabel").textContent = inn === 1 ? "1ST INNINGS" : (inn === 2 ? "2ND INNINGS" : "INNINGS "+inn);
 
  $("overs").textContent = oversFromBalls(balls)+" ("+balls+")";
  const title=d.matchName||"League Match"; $("matchTitle").textContent=title;
@@ -3595,8 +3834,22 @@ body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.th
     const currentTeam=team(d,d.battingTeam||'A');
     const target=N(d.target);
     const toss=d.tossWinner ? `${team(d,d.tossWinner)} • ${d.tossDecision==='bat'?'BAT FIRST':'BOWL FIRST'}` : '—';
-    const status=d.resultText||d.matchResult||d.matchWinner||d.status||'MATCH IN PROGRESS';
-    return `<div class="brkds"><div>${head(d,'MATCH SUMMARY')}</div><div class="brkds-summary">${performance('1ST INNINGS',a,has1)}${performance('2ND INNINGS',b,has2)}<div class="box"><h3>TOP PERFORMANCE • BOTH TEAMS</h3><div class="box-body"><table class="mini-table"><tr><th>BATTER</th><th>R</th><th>B</th></tr>${[...topBat(a),...topBat(b)].sort((x,y)=>N(y[1]?.runs)-N(x[1]?.runs)).slice(0,6).map(x=>`<tr><td>${esc(x[0])}</td><td>${N(x[1]?.runs)}</td><td>${N(x[1]?.balls)}</td></tr>`).join('')||'<tr><td colspan="3">NO BATTING DATA</td></tr>'}</table><table class="mini-table"><tr><th>BOWLER</th><th>W</th><th>R</th></tr>${[...topBowl(a),...topBowl(b)].sort((x,y)=>N(y[1]?.wickets)-N(x[1]?.wickets)||N(x[1]?.runs)-N(y[1]?.runs)).slice(0,6).map(x=>`<tr><td>${esc(x[0])}</td><td>${N(x[1]?.wickets)}</td><td>${N(x[1]?.runs)}</td></tr>`).join('')||'<tr><td colspan="3">NO BOWLING DATA</td></tr>'}</table></div></div><div class="box"><h3>MATCH INFORMATION</h3><div class="box-body" style="display:block;font-size:clamp(11px,1.1vw,20px);line-height:1.55"><b>TOURNAMENT:</b> ${esc(d.tournament||'—')}<br><b>MATCH:</b> ${esc(d.matchName||'—')}<br><b>VENUE:</b> ${esc(d.venue||'—')}<br><b>TOSS:</b> ${esc(toss)}<br><b>CURRENT BATTING:</b> ${esc(currentTeam)}<br><b>STATUS:</b> ${esc(status)}<br><b>TARGET:</b> ${target?target:'—'}</div></div></div><div class="brkds-foot"><span>BRKLIVE19 LIVE</span><span>${esc(d.venue||'')}</span><span>${esc(d.date||'')}</span></div></div>`;
+    const completed=d.status==='completed'||!!d.matchWinner||!!d.winner||!!deriveResult(d);
+     const result=deriveResult(d)||d.resultText||d.matchResult||'';
+     const currentInningsNo=Number(d.innings||1);
+     const currentInn=currentInningsNo===2?b:a;
+     const liveScore=`${team(d,currentInn.team||currentInn.battingTeam||d.battingTeam||'A')} ${N(currentInn.runs??d.runs)}/${N(currentInn.wickets??d.wickets)} (${overs(currentInn.legalBalls??currentInn.balls??d.legalBalls)} OV)`;
+     const status=completed ? result : 'MATCH IN PROGRESS';
+     const bigScore=completed ? result : liveScore;
+     const targetValue=N(d.target)||N(d.targetRuns)||N(d.runsToChase)||(currentInningsNo===2?N(a.runs)+1:0);
+     const currentRuns=N(currentInn.runs??d.runs);
+     const currentBalls=N(currentInn.legalBalls??currentInn.balls??d.legalBalls);
+     const maxBalls=N(d.maxOvers||d.oversLimit||20)*6;
+     const ballsLeft=Math.max(maxBalls-currentBalls,0);
+     const needRuns=Math.max(targetValue-currentRuns,0);
+     const chaseLine=(!completed && currentInningsNo===2 && targetValue) ? `${team(d,currentInn.team||currentInn.battingTeam||d.battingTeam||'A')} NEED ${needRuns} RUN${needRuns===1?'':'S'} FROM ${ballsLeft} BALL${ballsLeft===1?'':'S'}` : '';
+     const resultRow=`<div class="summary-result-row ${completed?'finished':'progress'}"><span class="summary-result-status">${esc(status)}</span><span class="summary-result-score">${esc(bigScore)}</span>${chaseLine?`<span class="summary-result-need">${esc(chaseLine)}</span>`:''}</div>`;
+    return `<div class="brkds"><div>${head(d,'MATCH SUMMARY')}</div><div class="brkds-summary">${performance('1ST INNINGS',a,has1)}${performance('2ND INNINGS',b,has2)}<div class="box top-performance-result"><h3>TOP PERFORMANCE • BOTH TEAMS</h3><div class="box-body"><table class="mini-table"><tr><th>BATTER</th><th>R</th><th>B</th></tr>${[...topBat(a),...topBat(b)].sort((x,y)=>N(y[1]?.runs)-N(x[1]?.runs)).slice(0,6).map(x=>`<tr><td>${esc(x[0])}</td><td>${N(x[1]?.runs)}</td><td>${N(x[1]?.balls)}</td></tr>`).join('')||'<tr><td colspan="3">NO BATTING DATA</td></tr>'}</table><table class="mini-table"><tr><th>BOWLER</th><th>W</th><th>R</th></tr>${[...topBowl(a),...topBowl(b)].sort((x,y)=>N(y[1]?.wickets)-N(x[1]?.wickets)||N(x[1]?.runs)-N(y[1]?.runs)).slice(0,6).map(x=>`<tr><td>${esc(x[0])}</td><td>${N(x[1]?.wickets)}</td><td>${N(x[1]?.runs)}</td></tr>`).join('')||'<tr><td colspan="3">NO BOWLING DATA</td></tr>'}</table></div>${resultRow}</div><div class="box"><h3>MATCH INFORMATION</h3><div class="box-body" style="display:block;font-size:clamp(9px,.8vw,15px);line-height:1.35"><b>TOURNAMENT:</b> ${esc(d.tournament||'—')}<br><b>MATCH:</b> ${esc(d.matchName||'—')}<br><b>VENUE:</b> ${esc(d.venue||'—')}<br><b>TOSS:</b> ${esc(toss)}<br><b>CURRENT BATTING:</b> ${esc(currentTeam)}<br><b>STATUS:</b> ${esc(status)}<br><b>TARGET:</b> ${targetValue?targetValue:'—'}</div></div></div><div class="brkds-foot"><span>BRKLIVE19 LIVE</span><span>${esc(d.venue||'')}</span><span>${esc(d.date||'')}</span></div></div>`;
   }
   function xi(d){const arr=(s)=>xiFor(d,s).slice(0,11).map(x=>typeof x==='string'?x:(x?.name||x?.playerName||''));let A=arr('A'),B=arr('B');return `<div class="brkds"><div>${head(d,'PLAYING XI')}</div><div class="brkds-xi"><div class="xi-col"><h3>${esc(d.teamA||'TEAM A')}</h3><ol>${Array.from({length:11},(_,i)=>`<li>${esc(A[i]||'—')}</li>`).join('')}</ol></div><div class="xi-col"><h3>${esc(d.teamB||'TEAM B')}</h3><ol>${Array.from({length:11},(_,i)=>`<li>${esc(B[i]||'—')}</li>`).join('')}</ol></div></div><div class="brkds-foot"><span>${esc(d.tournament||'')}</span><span>${esc(d.matchName||'')}</span><span>PLAYING XI</span></div></div>`}
   function playerScreen(role,d){const p=player(role,d);const isBow=role==='BOWLER';return `<div class="brkds"><div>${head(d,p.title)}</div><div class="brkds-player"><div class="player-card"><div class="caption">${esc(p.title)}</div><div class="player-top"><div>TEAM: ${esc(isBow?(d.bowlingTeamName||team(d,(d.battingTeam||'A')==='A'?'B':'A')):(d.battingTeamName||team(d,d.battingTeam||'A')))}</div><div>${isBow?'BOWLER':''}</div></div><div class="player-name">${esc(p.name)}</div><div class="stats"><div class="stat"><b>${p.r}</b><span>RUNS</span></div><div class="stat"><b>${p.bl}</b><span>BALLS</span></div><div class="stat"><b>${p.f}</b><span>4S</span></div><div class="stat"><b>${p.s}</b><span>6S</span></div><div class="stat"><b>${p.sr}</b><span>${isBow?'ECON':'STRIKE RATE'}</span></div><div class="stat"><b>${isBow?N(p.st.wickets):esc(p.st.dismissal||'NOT OUT')}</b><span>${isBow?'WICKETS':'STATUS'}</span></div></div></div></div><div class="brkds-foot"><span>${esc(d.tournament||'')}</span><span>${esc(d.matchName||'')}</span><span>LIVE MATCH DATA</span></div></div>`}
@@ -4991,3 +5244,935 @@ body.theme-theme2 {
 }
 </style>
 
+
+
+<style id="theme2-banner-frame-only-final">
+/* THEME 2 ONLY:
+   Remove the full-screen background treatment.
+   Apply Blue/Purple/Red only to the actual lower-third/banner frame. */
+body.theme-theme2 {
+  background: transparent !important;
+}
+
+/* Reset display-screen backgrounds so the camera/full screen stays unchanged. */
+body.theme-theme2 #brkDataScreen,
+body.theme-theme2 #summaryOverlay,
+body.theme-theme2 .summary-overlay,
+body.theme-theme2 .scorecard-overlay,
+body.theme-theme2 #playerDetailScreen,
+body.theme-theme2 .banner,
+body.theme-theme2 .target,
+body.theme-theme2 .custom,
+body.theme-theme2 .animation {
+  background: transparent !important;
+}
+
+/* Only the Theme 2 lower-third/banner frame gets the color background. */
+body.theme-theme2 .frame,
+body.theme-theme2 .t2Ref {
+  background:
+    linear-gradient(110deg,
+      #155EEF 0%,
+      #155EEF 28%,
+      #6D28D9 55%,
+      #E11D3F 100%) !important;
+  background-size:100% 100% !important;
+  background-position:center !important;
+  top:auto !important;
+  bottom:0 !important;
+  margin-bottom:0 !important;
+  transform:none !important;
+}
+
+/* Keep child panels transparent so the banner frame itself carries the color. */
+body.theme-theme2 .frame > *,
+body.theme-theme2 .t2Ref > * {
+  background-color: transparent !important;
+}
+</style>
+
+
+
+<style id="theme2-final-display-frame-color-compress20">
+/* =========================================================
+   THEME 2 ONLY
+   Deep Blue + Purple + Red on every display frame.
+   Display screens requested: 1st/2nd Inn Batting,
+   1st/2nd Inn Bowling, Match Summary, Playing XI.
+   Compress these display screens by ~20% while keeping
+   their data visible and preventing clipping.
+   ========================================================= */
+
+/* Color ONLY the actual display/frame surfaces — never the full screen. */
+body.theme-theme2 .display-frame,
+body.theme-theme2 .displayFrame,
+body.theme-theme2 .display-card,
+body.theme-theme2 .displayCard,
+body.theme-theme2 .score-display-frame,
+body.theme-theme2 .scoreDisplayFrame,
+body.theme-theme2 .summary-frame,
+body.theme-theme2 .summaryFrame,
+body.theme-theme2 .playing-xi-frame,
+body.theme-theme2 .playingXIFrame,
+body.theme-theme2 .screen-frame,
+body.theme-theme2 .screenFrame,
+body.theme-theme2 .banner-frame,
+body.theme-theme2 .bannerFrame {
+  background: linear-gradient(115deg,
+    #061B52 0%,
+    #102A78 32%,
+    #5B21B6 62%,
+    #B91C3A 100%) !important;
+  background-size: 100% 100% !important;
+}
+
+/* Common display containers: use the same Theme 2 frame colors. */
+body.theme-theme2 #battingScreen,
+body.theme-theme2 #bowlingScreen,
+body.theme-theme2 #matchSummaryScreen,
+body.theme-theme2 #playingXIScreen,
+body.theme-theme2 #firstInningsBatting,
+body.theme-theme2 #secondInningsBatting,
+body.theme-theme2 #firstInningsBowling,
+body.theme-theme2 #secondInningsBowling,
+body.theme-theme2 .batting-screen,
+body.theme-theme2 .bowling-screen,
+body.theme-theme2 .match-summary-screen,
+body.theme-theme2 .playing-xi-screen,
+body.theme-theme2 .battingDisplay,
+body.theme-theme2 .bowlingDisplay,
+body.theme-theme2 .matchSummaryDisplay,
+body.theme-theme2 .playingXIDisplay {
+  background: linear-gradient(115deg,
+    #061B52 0%,
+    #102A78 32%,
+    #5B21B6 62%,
+    #B91C3A 100%) !important;
+}
+
+/* Compress the requested display screen itself by 20%, but do not
+   scale text/data separately. Use max-height + tighter internal spacing
+   so information remains readable and visible. */
+body.theme-theme2 .batting-screen,
+body.theme-theme2 .bowling-screen,
+body.theme-theme2 .match-summary-screen,
+body.theme-theme2 .playing-xi-screen,
+body.theme-theme2 #battingScreen,
+body.theme-theme2 #bowlingScreen,
+body.theme-theme2 #matchSummaryScreen,
+body.theme-theme2 #playingXIScreen,
+body.theme-theme2 #firstInningsBatting,
+body.theme-theme2 #secondInningsBatting,
+body.theme-theme2 #firstInningsBowling,
+body.theme-theme2 #secondInningsBowling {
+  width: 80% !important;
+  max-width: 80% !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  box-sizing: border-box !important;
+  overflow: visible !important;
+}
+
+/* Keep all data inside the compressed frame visible. */
+body.theme-theme2 .batting-screen *,
+body.theme-theme2 .bowling-screen *,
+body.theme-theme2 .match-summary-screen *,
+body.theme-theme2 .playing-xi-screen *,
+body.theme-theme2 #battingScreen *,
+body.theme-theme2 #bowlingScreen *,
+body.theme-theme2 #matchSummaryScreen *,
+body.theme-theme2 #playingXIScreen * {
+  box-sizing: border-box !important;
+}
+
+/* If these screens use generic cards/panels, preserve the color through them
+   without adding a full-screen background. */
+body.theme-theme2 .batting-screen .card,
+body.theme-theme2 .bowling-screen .card,
+body.theme-theme2 .match-summary-screen .card,
+body.theme-theme2 .playing-xi-screen .card,
+body.theme-theme2 .batting-screen .panel,
+body.theme-theme2 .bowling-screen .panel,
+body.theme-theme2 .match-summary-screen .panel,
+body.theme-theme2 .playing-xi-screen .panel {
+  background: linear-gradient(115deg,
+    #061B52 0%,
+    #5B21B6 60%,
+    #B91C3A 100%) !important;
+}
+
+/* NEVER paint the camera/full viewport for Theme 2. */
+body.theme-theme2,
+body.theme-theme2 #brkDataScreen,
+body.theme-theme2 #summaryOverlay,
+body.theme-theme2 .summary-overlay,
+body.theme-theme2 .scorecard-overlay,
+body.theme-theme2 #playerDetailScreen {
+  background: transparent !important;
+}
+
+/* Lower-third remains locked at the bottom. */
+body.theme-theme2 .frame,
+body.theme-theme2 .t2Ref {
+  top:auto !important;
+  bottom:0 !important;
+  margin-bottom:0 !important;
+  transform:none !important;
+}
+
+/* Responsive: retain roughly 20% horizontal compression without clipping. */
+@media(max-width:900px){
+  body.theme-theme2 .batting-screen,
+  body.theme-theme2 .bowling-screen,
+  body.theme-theme2 .match-summary-screen,
+  body.theme-theme2 .playing-xi-screen,
+  body.theme-theme2 #battingScreen,
+  body.theme-theme2 #bowlingScreen,
+  body.theme-theme2 #matchSummaryScreen,
+  body.theme-theme2 #playingXIScreen {
+    width:80% !important;
+    max-width:80% !important;
+  }
+}
+</style>
+
+
+
+<style id="theme2-exact-display-frame-fix">
+/* THEME 2 ONLY — do NOT color the viewport */
+body.theme-theme2,
+body.theme-theme2 .overlay-root,
+body.theme-theme2 .viewport,
+body.theme-theme2 .camera-view,
+body.theme-theme2 .display-root {
+  background: transparent !important;
+}
+
+/* THEME 2 display frame color: deep blue → purple → red */
+body.theme-theme2 .display-frame,
+body.theme-theme2 .displayFrame,
+body.theme-theme2 .screen-frame,
+body.theme-theme2 .screenFrame,
+body.theme-theme2 .display-card,
+body.theme-theme2 .displayCard,
+body.theme-theme2 .display-panel,
+body.theme-theme2 .displayPanel,
+body.theme-theme2 .banner-frame,
+body.theme-theme2 .bannerFrame,
+body.theme-theme2 .data-frame,
+body.theme-theme2 .dataFrame,
+body.theme-theme2 .match-frame,
+body.theme-theme2 .matchFrame,
+body.theme-theme2 .summary-frame,
+body.theme-theme2 .summaryFrame,
+body.theme-theme2 .xi-frame,
+body.theme-theme2 .xiFrame,
+body.theme-theme2 .batting-frame,
+body.theme-theme2 .battingFrame,
+body.theme-theme2 .bowling-frame,
+body.theme-theme2 .bowlingFrame {
+  background: linear-gradient(115deg,#061B52 0%,#12347D 35%,#5B21B6 65%,#B91C3A 100%) !important;
+  background-size:100% 100% !important;
+}
+
+/* Common actual screen IDs */
+body.theme-theme2 #firstInnBattingScreen,
+body.theme-theme2 #secondInnBattingScreen,
+body.theme-theme2 #firstInnBowlingScreen,
+body.theme-theme2 #secondInnBowlingScreen,
+body.theme-theme2 #matchSummaryScreen,
+body.theme-theme2 #playingXIScreen,
+body.theme-theme2 #firstInningsBatting,
+body.theme-theme2 #secondInningsBatting,
+body.theme-theme2 #firstInningsBowling,
+body.theme-theme2 #secondInningsBowling,
+body.theme-theme2 #matchSummary,
+body.theme-theme2 #playingXI {
+  background:linear-gradient(115deg,#061B52 0%,#12347D 35%,#5B21B6 65%,#B91C3A 100%) !important;
+  background-size:100% 100% !important;
+}
+
+/* Requested screens: compress the FRAME height by 20%, not the viewport.
+   Width stays unchanged so no information is squeezed horizontally. */
+body.theme-theme2 .first-inn-batting,
+body.theme-theme2 .second-inn-batting,
+body.theme-theme2 .first-inn-bowling,
+body.theme-theme2 .second-inn-bowling,
+body.theme-theme2 .match-summary,
+body.theme-theme2 .playing-xi,
+body.theme-theme2 #firstInnBattingScreen,
+body.theme-theme2 #secondInnBattingScreen,
+body.theme-theme2 #firstInnBowlingScreen,
+body.theme-theme2 #secondInnBowlingScreen,
+body.theme-theme2 #matchSummaryScreen,
+body.theme-theme2 #playingXIScreen {
+  transform:scaleY(.8) !important;
+  transform-origin:bottom center !important;
+  overflow:visible !important;
+}
+
+/* Keep contents from being clipped by parent overflow. */
+body.theme-theme2 .first-inn-batting *,
+body.theme-theme2 .second-inn-batting *,
+body.theme-theme2 .first-inn-bowling *,
+body.theme-theme2 .second-inn-bowling *,
+body.theme-theme2 .match-summary *,
+body.theme-theme2 .playing-xi *,
+body.theme-theme2 #firstInnBattingScreen *,
+body.theme-theme2 #secondInnBattingScreen *,
+body.theme-theme2 #firstInnBowlingScreen *,
+body.theme-theme2 #secondInnBowlingScreen *,
+body.theme-theme2 #matchSummaryScreen *,
+body.theme-theme2 #playingXIScreen {
+  box-sizing:border-box !important;
+}
+
+/* Existing Theme 2 lower-third remains locked at bottom. */
+body.theme-theme2 .frame,
+body.theme-theme2 .t2Ref {
+  top:auto !important;
+  bottom:0 !important;
+  margin-bottom:0 !important;
+  transform:none !important;
+}
+</style>
+
+
+
+<style id="theme2-small-display-final">
+/* THEME 2 ONLY — display screens slightly smaller than full screen.
+   Purple + Deep Blue + Red frame background. */
+body.theme-theme2 .display-frame,
+body.theme-theme2 .displayFrame,
+body.theme-theme2 .screen-frame,
+body.theme-theme2 .screenFrame,
+body.theme-theme2 .display-card,
+body.theme-theme2 .displayCard,
+body.theme-theme2 .display-panel,
+body.theme-theme2 .displayPanel,
+body.theme-theme2 .summary-frame,
+body.theme-theme2 .summaryFrame,
+body.theme-theme2 .batting-frame,
+body.theme-theme2 .battingFrame,
+body.theme-theme2 .bowling-frame,
+body.theme-theme2 .bowlingFrame,
+body.theme-theme2 .xi-frame,
+body.theme-theme2 .xiFrame,
+body.theme-theme2 #firstInnBattingScreen,
+body.theme-theme2 #secondInnBattingScreen,
+body.theme-theme2 #firstInnBowlingScreen,
+body.theme-theme2 #secondInnBowlingScreen,
+body.theme-theme2 #matchSummaryScreen,
+body.theme-theme2 #playingXIScreen {
+  width:92% !important;
+  max-width:92% !important;
+  margin-left:auto !important;
+  margin-right:auto !important;
+  background:linear-gradient(120deg,
+    #5B21B6 0%,
+    #32147A 30%,
+    #061B52 62%,
+    #B91C3A 100%) !important;
+  background-size:100% 100% !important;
+  background-position:center !important;
+  box-sizing:border-box !important;
+  overflow:visible !important;
+}
+
+/* Remove the previous vertical scale so the slightly smaller frame
+   is controlled cleanly by its actual size. */
+body.theme-theme2 .first-inn-batting,
+body.theme-theme2 .second-inn-batting,
+body.theme-theme2 .first-inn-bowling,
+body.theme-theme2 .second-inn-bowling,
+body.theme-theme2 .match-summary,
+body.theme-theme2 .playing-xi,
+body.theme-theme2 #firstInnBattingScreen,
+body.theme-theme2 #secondInnBattingScreen,
+body.theme-theme2 #firstInnBowlingScreen,
+body.theme-theme2 #secondInnBowlingScreen,
+body.theme-theme2 #matchSummaryScreen,
+body.theme-theme2 #playingXIScreen {
+  transform:none !important;
+  overflow:visible !important;
+}
+
+/* Keep viewport/camera background unchanged. */
+body.theme-theme2 {
+  background:transparent !important;
+}
+
+/* Theme 2 lower-third remains locked to the bottom. */
+body.theme-theme2 .frame,
+body.theme-theme2 .t2Ref {
+  top:auto !important;
+  bottom:0 !important;
+  margin-bottom:0 !important;
+  transform:none !important;
+}
+</style>
+
+
+
+<style id="theme2-all-display-purple-deepblue-final">
+/* THEME 2 ONLY — purple + deep blue background on every display screen */
+body.theme-theme2 .display-screen,
+body.theme-theme2 .displayScreen,
+body.theme-theme2 .display-frame,
+body.theme-theme2 .displayFrame,
+body.theme-theme2 .screen-frame,
+body.theme-theme2 .screenFrame,
+body.theme-theme2 .display-card,
+body.theme-theme2 .displayCard,
+body.theme-theme2 .display-panel,
+body.theme-theme2 .displayPanel,
+body.theme-theme2 .summary-frame,
+body.theme-theme2 .summaryFrame,
+body.theme-theme2 .batting-frame,
+body.theme-theme2 .battingFrame,
+body.theme-theme2 .bowling-frame,
+body.theme-theme2 .bowlingFrame,
+body.theme-theme2 .xi-frame,
+body.theme-theme2 .xiFrame,
+body.theme-theme2 .banner-frame,
+body.theme-theme2 .bannerFrame,
+body.theme-theme2 .screen {
+  background: linear-gradient(125deg,#6D28D9 0%,#3B167F 38%,#061B52 72%,#020B25 100%) !important;
+  background-size:100% 100% !important;
+  background-position:center !important;
+}
+
+/* Specific Theme 2 display screens */
+body.theme-theme2 #firstInnBattingScreen,
+body.theme-theme2 #secondInnBattingScreen,
+body.theme-theme2 #firstInnBowlingScreen,
+body.theme-theme2 #secondInnBowlingScreen,
+body.theme-theme2 #matchSummaryScreen,
+body.theme-theme2 #playingXIScreen,
+body.theme-theme2 #firstInningsBatting,
+body.theme-theme2 #secondInningsBatting,
+body.theme-theme2 #firstInningsBowling,
+body.theme-theme2 #secondInningsBowling,
+body.theme-theme2 #matchSummary,
+body.theme-theme2 #playingXI,
+body.theme-theme2 #b1Screen,
+body.theme-theme2 #b2Screen,
+body.theme-theme2 #bowlerScreen,
+body.theme-theme2 #bowerScreen,
+body.theme-theme2 #fowScreen {
+  background:linear-gradient(125deg,#6D28D9 0%,#3B167F 38%,#061B52 72%,#020B25 100%) !important;
+  background-size:100% 100% !important;
+}
+
+/* Do not paint the camera/full viewport. */
+body.theme-theme2 {
+  background:transparent !important;
+}
+</style>
+
+
+
+<style id="theme2-all-display-frames-final">
+/* THEME 2 ONLY — no full-screen fill. Every display is a smaller frame. */
+body.theme-theme2 {
+  background:transparent !important;
+}
+
+/* Match Summary / scorecard: the viewport stays transparent; only the
+   actual centered frame receives the Theme 2 background. */
+body.theme-theme2 .summary-overlay,
+body.theme-theme2 #summaryOverlay,
+body.theme-theme2 .scorecard-overlay {
+  background:transparent !important;
+  inset:0 !important;
+  display:none;
+  align-items:center !important;
+  justify-content:center !important;
+  padding:0 !important;
+}
+body.theme-theme2 .summary-overlay.show,
+body.theme-theme2 #summaryOverlay.show,
+body.theme-theme2 .scorecard-overlay.show {
+  display:flex !important;
+}
+body.theme-theme2 .summary-shell,
+body.theme-theme2 .scorecard-overlay .card,
+body.theme-theme2 .scorecard-overlay #scContent {
+  width:92% !important;
+  max-width:1700px !important;
+  height:82% !important;
+  max-height:900px !important;
+  margin:auto !important;
+  box-sizing:border-box !important;
+  overflow:visible !important;
+  border-radius:14px !important;
+  background:linear-gradient(125deg,#6D28D9 0%,#35157C 40%,#061B52 72%,#A9163A 100%) !important;
+  box-shadow:0 12px 40px rgba(0,0,0,.55) !important;
+}
+
+/* Keep internal cards readable while the outer display frame carries the
+   purple/deep-blue theme. */
+body.theme-theme2 .summary-shell > *,
+body.theme-theme2 .scorecard-overlay .card > *,
+body.theme-theme2 .scorecard-overlay #scContent > * {
+  box-sizing:border-box !important;
+}
+
+/* B1/B2/Bowler/FOW player display is already a lower-third frame. */
+body.theme-theme2 #playerDetailScreen {
+  background:transparent !important;
+}
+body.theme-theme2 #playerDetailScreen .pds-row {
+  background:linear-gradient(125deg,#6D28D9 0%,#35157C 42%,#061B52 100%) !important;
+}
+
+/* Tournament, Match, Venue, Toss, Result, Target, Custom and animation:
+   color the visible frame only, not the whole screen. */
+body.theme-theme2 .banner,
+body.theme-theme2 .target,
+body.theme-theme2 .custom,
+body.theme-theme2 .animation {
+  width:92% !important;
+  max-width:1700px !important;
+  box-sizing:border-box !important;
+  background:linear-gradient(125deg,#6D28D9 0%,#35157C 42%,#061B52 76%,#A9163A 100%) !important;
+}
+
+/* Keep the main Theme 2 lower-third locked to bottom. */
+body.theme-theme2 .frame,
+body.theme-theme2 .t2Ref {
+  top:auto !important;
+  bottom:0 !important;
+  margin-bottom:0 !important;
+  transform:none !important;
+}
+</style>
+
+
+
+<style id="theme2-requested-display-background">
+/* THEME 2 ONLY: colored display frame for the requested screens */
+body.theme-theme2 #firstInnBattingScreen,
+body.theme-theme2 #secondInnBattingScreen,
+body.theme-theme2 #firstInningsBatting,
+body.theme-theme2 #secondInningsBatting,
+body.theme-theme2 #firstInnBowlingScreen,
+body.theme-theme2 #secondInnBowlingScreen,
+body.theme-theme2 #firstInningsBowling,
+body.theme-theme2 #secondInningsBowling,
+body.theme-theme2 #playingXIScreen,
+body.theme-theme2 #playingXI,
+body.theme-theme2 .first-inn-batting,
+body.theme-theme2 .second-inn-batting,
+body.theme-theme2 .first-inn-bowling,
+body.theme-theme2 .second-inn-bowling,
+body.theme-theme2 .playing-xi,
+body.theme-theme2 .playingXI,
+body.theme-theme2 .batting-screen,
+body.theme-theme2 .bowling-screen,
+body.theme-theme2 .playing-xi-screen {
+  background: linear-gradient(125deg,
+    #6D28D9 0%,
+    #3A187F 38%,
+    #061B52 72%,
+    #B91C3A 100%) !important;
+  background-size:100% 100% !important;
+  background-position:center !important;
+  box-sizing:border-box !important;
+  overflow:visible !important;
+}
+
+/* If the named screen is a wrapper, carry the color into its visible frame. */
+body.theme-theme2 #firstInnBattingScreen .display-frame,
+body.theme-theme2 #secondInnBattingScreen .display-frame,
+body.theme-theme2 #firstInnBowlingScreen .display-frame,
+body.theme-theme2 #secondInnBowlingScreen .display-frame,
+body.theme-theme2 #playingXIScreen .display-frame,
+body.theme-theme2 #firstInningsBatting .display-frame,
+body.theme-theme2 #secondInningsBatting .display-frame,
+body.theme-theme2 #firstInningsBowling .display-frame,
+body.theme-theme2 #secondInningsBowling .display-frame,
+body.theme-theme2 #playingXI .display-frame,
+body.theme-theme2 #firstInnBattingScreen .displayFrame,
+body.theme-theme2 #secondInnBattingScreen .displayFrame,
+body.theme-theme2 #firstInnBowlingScreen .displayFrame,
+body.theme-theme2 #secondInnBowlingScreen .displayFrame,
+body.theme-theme2 #playingXIScreen .displayFrame {
+  background:linear-gradient(125deg,#6D28D9 0%,#3A187F 38%,#061B52 72%,#B91C3A 100%) !important;
+  background-size:100% 100% !important;
+}
+
+/* Keep full camera/viewport unchanged. */
+body.theme-theme2 {
+  background:transparent !important;
+}
+</style>
+
+
+
+<style id="theme2-actual-brkds-frame-final">
+/* THEME 2 ONLY — color the ACTUAL display frame used by
+   batting1/batting2/bowling1/bowling2/playingxi.
+   The full viewport remains transparent. */
+body.theme-theme2 #brkDataScreen{
+  background:transparent !important;
+  padding:0 !important;
+  display:none;
+  align-items:center !important;
+  justify-content:center !important;
+}
+body.theme-theme2 #brkDataScreen.show{
+  display:flex !important;
+}
+
+/* This is the real generated display element (<div class="brkds">).
+   Give it a slightly smaller-than-screen frame with the requested colors. */
+body.theme-theme2 #brkDataScreen .brkds{
+  width:92% !important;
+  height:82% !important;
+  max-width:1750px !important;
+  max-height:900px !important;
+  margin:auto !important;
+  padding:14px !important;
+  box-sizing:border-box !important;
+  border:3px solid rgba(255,255,255,.30) !important;
+  border-radius:16px !important;
+  background:linear-gradient(125deg,
+    #6D28D9 0%,
+    #3B167F 38%,
+    #061B52 72%,
+    #A9163A 100%) !important;
+  background-size:100% 100% !important;
+  background-position:center !important;
+  box-shadow:0 16px 50px rgba(0,0,0,.55) !important;
+  overflow:hidden !important;
+}
+
+/* Keep all six requested display modes inside the same colored frame. */
+body.theme-theme2 #brkDataScreen .brkds-head,
+body.theme-theme2 #brkDataScreen .brkds-card,
+body.theme-theme2 #brkDataScreen .brkds-summary .box,
+body.theme-theme2 #brkDataScreen .brkds-xi .xi-col,
+body.theme-theme2 #brkDataScreen .brkds-player .player-card{
+  border-color:rgba(255,255,255,.28) !important;
+}
+
+/* Make the frame color clearly visible instead of the old plain screen color. */
+body.theme-theme2 #brkDataScreen .brkds-head{
+  background:linear-gradient(90deg,#4C1D95,#102B55,#5B21B6) !important;
+}
+body.theme-theme2 #brkDataScreen .brkds-foot{
+  background:rgba(4,10,35,.58) !important;
+}
+
+/* Responsive — retain the smaller frame while keeping data visible. */
+@media(max-width:900px){
+  body.theme-theme2 #brkDataScreen .brkds{
+    width:94% !important;
+    height:86% !important;
+    padding:8px !important;
+  }
+}
+@media(max-width:600px){
+  body.theme-theme2 #brkDataScreen .brkds{
+    width:96% !important;
+    height:90% !important;
+    padding:6px !important;
+  }
+}
+</style>
+
+
+<style id="brklive19-theme1-final-rearrange">
+/* THEME 1 ONLY — restore the complete cricket lower-third information layout.
+   Left: two batters + runs/balls | Center white: batting team + score/wickets + over + innings
+   Right: bowler figures + current over ball-by-ball. */
+body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) #overlay .frame{
+  height:12.5vh!important; min-height:108px!important; max-height:150px!important; overflow:hidden!important;
+}
+body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) #overlay .teamPanel{
+  width:15.5%!important; padding:0 12px!important; overflow:hidden!important;
+}
+body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) #overlay .content{
+  left:15%!important; right:15%!important; grid-template-columns:32% 31% 37%!important; height:100%!important;
+}
+body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) #overlay .batters{
+  padding:8px 12px!important; justify-content:center!important; gap:2px!important;
+}
+body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) #overlay .batter{
+  height:50%!important; min-height:0!important; grid-template-columns:20px minmax(0,1fr) auto!important; gap:6px!important;
+}
+body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) #overlay .batterName{
+  font-size:clamp(11px,1.2vw,21px)!important; line-height:1.05!important;
+}
+body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) #overlay .batterScore b{
+  font-size:clamp(17px,1.65vw,29px)!important;
+}
+body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) #overlay .batterScore span{
+  font-size:clamp(9px,.85vw,15px)!important;
+}
+body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) #overlay .scorePanel{
+  padding:5px 8px!important; overflow:hidden!important; justify-content:center!important;
+}
+body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) #overlay #theme1ScoreBatTeam{
+  display:block!important; width:100%!important; text-align:center!important; font-size:clamp(11px,1.15vw,20px)!important; font-weight:1000!important; white-space:nowrap!important; overflow:hidden!important; text-overflow:ellipsis!important; line-height:1.05!important;
+}
+body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) #overlay .matchTitle{
+  font-size:clamp(8px,.8vw,14px)!important; margin:1px 0!important; max-width:95%!important;
+}
+body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) #overlay .scorePill{
+  min-width:65%!important; padding:3px 12px!important; font-size:clamp(24px,2.8vw,48px)!important; line-height:.95!important; margin:1px 0!important;
+}
+body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) #overlay .scoreMeta{
+  gap:20px!important; margin-top:2px!important; font-size:clamp(10px,.9vw,16px)!important; line-height:1!important; white-space:nowrap!important;
+}
+body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) #overlay .scoreRates{
+  margin-top:2px!important; font-size:clamp(8px,.72vw,13px)!important; line-height:1!important;
+}
+body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) #overlay .rotatingInfo{
+  position:absolute!important; left:0!important; right:0!important; bottom:0!important; height:20px!important; line-height:20px!important; font-size:clamp(8px,.75vw,13px)!important; padding:0 8px!important; text-align:center!important; overflow:hidden!important; white-space:nowrap!important;
+}
+body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) #overlay .bowlerPanel{
+  padding:7px 12px!important; justify-content:center!important; overflow:hidden!important;
+}
+body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) #overlay .bowlerTop{
+  min-width:0!important; grid-template-columns:minmax(0,1fr) auto!important;
+}
+body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) #overlay .bowlerName{
+  font-size:clamp(11px,1.25vw,21px)!important; line-height:1.05!important;
+}
+body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) #overlay .bowlerStats{
+  font-size:clamp(9px,.85vw,15px)!important; letter-spacing:.03em!important;
+}
+body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) #overlay .currentOver{
+  margin-top:7px!important; gap:6px!important; overflow:hidden!important; min-width:0!important;
+}
+body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) #overlay .currentOverLabel{
+  font-size:clamp(7px,.65vw,11px)!important; flex:0 0 auto!important;
+}
+body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) #overlay .ball{
+  width:24px!important;height:24px!important; flex:0 0 24px!important; font-size:10px!important;
+}
+@media(max-width:900px){
+ body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) #overlay .frame{height:14vh!important;min-height:90px!important}
+ body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) #overlay .content{left:12%!important;right:12%!important;grid-template-columns:34% 30% 36%!important}
+ body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) #overlay .teamPanel{width:13%!important;padding:0 7px!important}
+ body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) #overlay .ball{width:18px!important;height:18px!important;flex-basis:18px!important;font-size:8px!important}
+}
+</style>
+<style id="BRKLIVE19_THEME1_REPAIR_FINAL">
+/* FINAL Theme 1 repair: preserve the complete live scoring lower-third. */
+body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) #overlay .frame{
+  height:clamp(118px,12.8vh,150px)!important; overflow:hidden!important;
+}
+body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) #overlay .content{
+ left:17%!important; right:17%!important; grid-template-columns:minmax(0,34%) minmax(0,28%) minmax(0,38%)!important; height:100%!important;
+}
+body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) #overlay .batters{
+ display:flex!important; visibility:visible!important; padding:8px 12px!important; overflow:hidden!important;
+}
+body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) #overlay .batter{
+ display:grid!important; visibility:visible!important; height:50%!important; min-height:0!important; grid-template-columns:18px minmax(0,1fr) auto!important; gap:5px!important; overflow:hidden!important;
+}
+body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) #overlay .batterName{font-size:clamp(12px,1.25vw,22px)!important;line-height:1!important;overflow:hidden!important;text-overflow:ellipsis!important}
+body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) #overlay .batterScore{gap:3px!important}
+body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) #overlay .batterScore b{font-size:clamp(18px,1.7vw,30px)!important}
+body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) #overlay .batterScore span{font-size:clamp(9px,.8vw,14px)!important}
+body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) #overlay .scorePanel{
+ display:flex!important; visibility:visible!important; padding:6px 8px!important; overflow:hidden!important;
+}
+body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) #overlay .theme1ScoreBatTeam{display:block!important;font-size:clamp(10px,1vw,17px)!important;font-weight:900!important;line-height:1!important;margin-bottom:2px!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}
+body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) #overlay .matchTitle{font-size:clamp(8px,.8vw,14px)!important;margin:0 0 2px!important}
+body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) #overlay .scorePill{min-width:82%!important;padding:5px 10px!important;font-size:clamp(25px,2.8vw,46px)!important;line-height:.95!important}
+body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) #overlay .scoreMeta{gap:10px!important;margin-top:3px!important;font-size:clamp(9px,.85vw,15px)!important;white-space:nowrap!important}
+body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) #overlay .rotatingInfo{position:absolute!important;left:3px!important;right:3px!important;bottom:2px!important;height:16px!important;min-height:16px!important;line-height:16px!important;font-size:clamp(7px,.7vw,12px)!important;overflow:hidden!important;white-space:nowrap!important;text-overflow:ellipsis!important}
+body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) #overlay .bowlerPanel{display:flex!important;visibility:visible!important;padding:7px 10px!important;overflow:hidden!important}
+body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) #overlay .bowlerTop{grid-template-columns:minmax(0,1fr) auto!important;gap:6px!important}
+body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) #overlay .bowlerName{font-size:clamp(12px,1.2vw,21px)!important;overflow:hidden!important;text-overflow:ellipsis!important}
+body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) #overlay .bowlerStats{font-size:clamp(8px,.75vw,13px)!important;overflow:visible!important;white-space:nowrap!important}
+body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) #overlay .currentOver{margin-top:5px!important;gap:4px!important;overflow:hidden!important}
+body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) #overlay .ball{width:22px!important;height:22px!important;flex:0 0 22px!important;font-size:9px!important}
+@media(max-width:900px){
+ body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) #overlay .frame{height:clamp(108px,14vh,135px)!important}
+ body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) #overlay .content{left:14%!important;right:14%!important;grid-template-columns:35% 29% 36%!important}
+ body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) #overlay .batterName{font-size:clamp(9px,1.8vw,15px)!important}
+ body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) #overlay .scorePill{font-size:clamp(21px,4vw,34px)!important}
+ body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) #overlay .ball{width:18px!important;height:18px!important;flex-basis:18px!important;font-size:7px!important}
+}
+</style>
+<script>
+(function(){
+  function forceTheme1Visible(){
+    var b=document.body, o=document.getElementById('overlay'); if(!o)return;
+    var excluded=['theme-neon','theme-green','theme-gold','theme-red','theme-rainbow','theme-theme2','theme-theme3','theme-theme4','theme-theme5','theme-theme6','theme-glass','theme-carbon','theme-stadium','theme-aurora','theme-metallic','theme-redblack'];
+    if(excluded.some(function(c){return b.classList.contains(c)}))return;
+    ['batters','scorePanel','bowlerPanel','batter1','batter2'].forEach(function(c){var e=o.querySelector('.'+c)||document.getElementById(c);if(e){e.style.display='';e.style.visibility='visible';}});
+  }
+  addEventListener('load',forceTheme1Visible); setInterval(forceTheme1Visible,500);
+})();
+</script>
+
+<style id="BRKLIVE19_THEME1_SLIGHT_HEIGHT_REDUCTION">
+/* Theme 1 ONLY — slightly reduce the lower-third height while preserving all data. */
+body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) #overlay .frame{
+  height:120px !important;
+  min-height:120px !important;
+  max-height:120px !important;
+}
+body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) #overlay .scorePanel{
+  padding:5px 18px 5px !important;
+  grid-template-rows:27px 45px 20px 20px !important;
+}
+body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) #overlay #scorePill{
+  height:43px !important;
+  min-width:145px !important;
+  padding:3px 22px !important;
+}
+</style>
+<style>
+/* THEME 1 FINAL COMPACT / WIDE SCORE SECTION */
+.frame{height:132px}
+.content{left:15.5%;right:15.5%;grid-template-columns:29% 38% 33%}
+.teamPanel{width:16%}
+.batters{padding:9px 14px 6px}
+.batterName{font-size:clamp(14px,1.35vw,24px)}
+.batterScore b{font-size:clamp(19px,1.8vw,31px)}
+.batterScore span{font-size:clamp(11px,.9vw,16px)}
+.scorePanel{padding:5px 8px}
+.matchTitle{font-size:clamp(11px,1.05vw,20px);margin-bottom:4px}
+.scorePill{padding:5px 14px;font-size:clamp(27px,3vw,52px)}
+.scoreMeta{gap:22px;margin-top:5px;font-size:clamp(11px,1vw,19px)}
+.crrRrr{gap:22px;margin-top:4px;font-size:clamp(9px,.85vw,15px)}
+.bowlerPanel{padding:8px 14px 5px}
+.bowlerName{font-size:clamp(14px,1.4vw,26px)}
+.bowlerStats{font-size:clamp(11px,1vw,17px)}
+.currentOver{margin-top:7px;gap:5px}
+.currentOverLabel{font-size:9px}
+.ballList{gap:4px}
+.ball{width:26px;height:26px;flex-basis:26px;font-size:11px}
+</style>
+<style id="theme1-final-compact-wide-white-fix">
+/* THEME 1 FINAL: compact height + wider white center + preserve batter/bowler + no-cut blinking line */
+body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) #overlay .frame{
+  height:116px!important; min-height:116px!important; max-height:116px!important; overflow:hidden!important;
+}
+body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) #overlay .teamPanel{
+  width:17%!important; padding:0 12px!important;
+}
+body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) #overlay .content{
+  left:17%!important; right:17%!important; width:66%!important;
+  grid-template-columns:35% 40% 25%!important;
+  top:0!important; bottom:0!important; display:grid!important;
+}
+body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) #overlay .batters{
+  display:flex!important; padding:6px 10px 4px!important; overflow:hidden!important;
+}
+body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) #overlay .bowlerPanel{
+  display:flex!important; padding:6px 9px 4px!important; overflow:hidden!important;
+}
+body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) #overlay .scorePanel{
+  grid-column:2!important; padding:4px 10px!important; grid-template-columns:1fr!important;
+  grid-template-rows:22px 42px 20px 22px!important; overflow:hidden!important;
+}
+body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) #overlay #theme1ScoreBatTeam{font-size:clamp(11px,1.1vw,19px)!important;padding:0 4px!important;}
+body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) #overlay #scorePill{grid-column:1!important;grid-row:2!important;height:40px!important;min-width:120px!important;padding:3px 14px!important;font-size:clamp(28px,3vw,48px)!important;}
+body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) #overlay .scoreMeta{grid-column:1!important;grid-row:3!important;height:20px!important;gap:18px!important;font-size:clamp(10px,1vw,16px)!important;}
+body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) #overlay #rotatingInfo{
+  grid-column:1!important;grid-row:4!important;height:22px!important;min-height:22px!important;
+  padding:0 5px!important;font-size:clamp(8px,.82vw,14px)!important;white-space:nowrap!important;
+  overflow:hidden!important;text-overflow:clip!important;
+}
+body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) #overlay .batterName{font-size:clamp(11px,1.05vw,18px)!important;}
+body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) #overlay .batterScore b{font-size:clamp(16px,1.45vw,25px)!important;}
+body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) #overlay .batterScore span{font-size:clamp(9px,.75vw,14px)!important;}
+body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) #overlay .bowlerName{font-size:clamp(11px,1.1vw,19px)!important;}
+body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) #overlay .bowlerStats{font-size:clamp(9px,.8vw,14px)!important;letter-spacing:.04em!important;}
+body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) #overlay .currentOver{margin-top:4px!important;gap:4px!important;}
+body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) #overlay .ball{width:20px!important;height:20px!important;flex-basis:20px!important;font-size:9px!important;}
+@media(max-width:900px){
+ body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) #overlay .frame{height:96px!important;min-height:96px!important;max-height:96px!important;}
+ body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) #overlay .content{left:16%!important;right:16%!important;width:68%!important;grid-template-columns:34% 42% 24%!important;}
+}
+</style>
+
+<style id="BRKLIVE19_THEME1_THIS_OVER_ALL_DELIVERIES">
+/* Theme 1 ONLY: show every delivery in the current over, including legal + illegal balls. */
+body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) #overlay .currentOver{
+  min-width:0!important; overflow:hidden!important; display:flex!important; align-items:center!important; gap:4px!important;
+}
+body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) #overlay .ballList{
+  flex:1 1 auto!important; min-width:0!important; width:100%!important; overflow:hidden!important; display:flex!important; flex-wrap:nowrap!important; align-items:center!important; gap:3px!important;
+}
+body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) #overlay .ball{
+  width:auto!important; min-width:0!important; height:22px!important; flex:1 1 0!important; max-width:26px!important; padding:0 2px!important; box-sizing:border-box!important; font-size:clamp(5px,0.7vw,11px)!important;
+}
+@media(max-width:900px){
+ body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) #overlay .ball{height:18px!important;max-width:22px!important;padding:0 1px!important;}
+}
+@media(max-width:520px){
+ body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) #overlay .ball{height:15px!important;max-width:18px!important;font-size:5px!important;}
+}
+</style>
+
+<style id="BRKLIVE19_ALL_THEMES_THIS_OVER_ALL_DELIVERIES">
+/* All themes: THIS OVER shows every delivery in the current over, legal and illegal. */
+.currentOver,.t3ThisOver,.t4ThisOver{min-width:0!important;overflow:visible!important;}
+.ballList,#t2Balls,#t3Balls,#t4ThisOver,#t5Balls{min-width:0!important;display:flex!important;flex-wrap:nowrap!important;align-items:center!important;gap:2px!important;overflow:visible!important;}
+.ballList .ball,#t3Balls .t3Ball,#t4ThisOver span,#t5Balls .t5Ball{min-width:0!important;flex:1 1 0!important;max-width:none!important;box-sizing:border-box!important;text-align:center!important;overflow:hidden!important;text-overflow:clip!important;white-space:nowrap!important;}
+@media(max-width:900px){.ballList,#t2Balls,#t3Balls,#t4ThisOver,#t5Balls{gap:1px!important}.ballList .ball,#t3Balls .t3Ball,#t4ThisOver span,#t5Balls .t5Ball{font-size:clamp(4px,0.65vw,10px)!important;padding-left:1px!important;padding-right:1px!important}}
+</style>
+<style id="brklive19-match-summary-no-cut-final">
+/* FINAL MATCH SUMMARY VISIBILITY FIX — Theme 1 + Theme 2 */
+#brkDataScreen .brkds:has(.brkds-summary){
+  width:96% !important;
+  height:94% !important;
+  max-width:1800px !important;
+  max-height:none !important;
+  padding:9px !important;
+  gap:6px !important;
+}
+#brkDataScreen .brkds:has(.brkds-summary) .brkds-head{
+  min-height:48px !important;
+  padding:6px 10px !important;
+  gap:8px !important;
+}
+#brkDataScreen .brkds:has(.brkds-summary) .brkds-head .team{font-size:clamp(13px,1.55vw,27px)!important}
+#brkDataScreen .brkds:has(.brkds-summary) .brkds-head .title{font-size:clamp(13px,1.5vw,25px)!important}
+#brkDataScreen .brkds:has(.brkds-summary) .brkds-meta{font-size:clamp(8px,.72vw,13px)!important;gap:8px!important}
+#brkDataScreen .brkds-summary{
+  gap:6px !important;
+  grid-template-rows:minmax(0,1fr) minmax(0,1fr) !important;
+}
+#brkDataScreen .brkds-summary .box{border-width:1px!important;border-radius:7px!important}
+#brkDataScreen .brkds-summary .box h3{
+  font-size:clamp(8px,.68vw,12px)!important;
+  padding:4px 7px!important;
+  line-height:1.05!important;
+}
+#brkDataScreen .brkds-summary .box-body{padding:3px!important;gap:3px!important}
+#brkDataScreen .brkds-summary .mini-table{font-size:clamp(6px,.52vw,10px)!important}
+#brkDataScreen .brkds-summary .mini-table th,
+#brkDataScreen .brkds-summary .mini-table td{padding:1px 3px!important;line-height:1.05!important}
+#brkDataScreen .brkds-summary .summary-result-row{
+  min-height:34px!important;
+  padding:3px 6px!important;
+  gap:5px!important;
+}
+#brkDataScreen .brkds-summary .summary-result-status{font-size:clamp(7px,.6vw,11px)!important;line-height:1.05!important}
+#brkDataScreen .brkds-summary .summary-result-score{font-size:clamp(12px,1.05vw,19px)!important;line-height:1!important}
+#brkDataScreen .brkds-summary .summary-result-need{font-size:clamp(7px,.56vw,11px)!important;line-height:1.05!important}
+#brkDataScreen .brkds-summary .summary-team-head .name{font-size:clamp(9px,.85vw,15px)!important}
+#brkDataScreen .brkds-summary .summary-team-head .score{font-size:clamp(12px,1.05vw,19px)!important;padding:0 5px!important}
+#brkDataScreen .brkds:has(.brkds-summary) .box-body[style]{font-size:clamp(7px,.58vw,11px)!important;line-height:1.12!important}
+#brkDataScreen .brkds:has(.brkds-summary) .brkds-foot{min-height:25px!important;padding:3px 7px!important;font-size:clamp(7px,.58vw,11px)!important;gap:6px!important}
+@media(max-width:800px){
+ #brkDataScreen .brkds:has(.brkds-summary){width:98%!important;height:96%!important;padding:5px!important;gap:4px!important}
+ #brkDataScreen .brkds:has(.brkds-summary) .brkds-summary{gap:4px!important}
+ #brkDataScreen .brkds-summary .box h3{font-size:7px!important;padding:3px 5px!important}
+ #brkDataScreen .brkds-summary .mini-table{font-size:6px!important}
+ #brkDataScreen .brkds-summary .mini-table th,#brkDataScreen .brkds-summary .mini-table td{padding:1px 2px!important}
+ #brkDataScreen .brkds-summary .summary-result-row{grid-template-columns:minmax(0,1fr) auto minmax(0,1fr)!important;min-height:28px!important}
+ #brkDataScreen .brkds-summary .summary-result-status,#brkDataScreen .brkds-summary .summary-result-need{font-size:6px!important}
+ #brkDataScreen .brkds-summary .summary-result-score{font-size:11px!important}
+}
+</style>
