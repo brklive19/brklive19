@@ -1664,31 +1664,32 @@
 
                 if (tourOverTrackerMini) {
                     tourOverTrackerMini.innerHTML = '';
-                    if (inn.overBallData.length === 0) {
+                    // Theme 1 THIS OVER: show the 10 most recent delivery results.
+                    // Both legal and illegal deliveries are displayed (WD/NB do not consume
+                    // a legal ball, but they still occupy their own visible result slot).
+                    const allDeliveries = Array.isArray(inn.ballHistory) ? inn.ballHistory : [];
+                    const displayBalls = allDeliveries.slice(-10);
+                    if (displayBalls.length === 0) {
                         tourOverTrackerMini.innerHTML =
                             '<span class="text-muted" style="font-size:12px;width:100%;text-align:center;">No balls</span>';
                     } else {
-                        inn.overBallData.forEach((ball) => {
+                        displayBalls.forEach((ball, idx) => {
                             const div = document.createElement('div');
                             div.className = 'ball';
                             if (ball.type === 'run') {
-                                const r = parseInt(ball.label);
+                                const r = parseInt(ball.label, 10);
                                 if (r === 4) div.classList.add('four');
                                 else if (r === 6) div.classList.add('six');
                                 else div.classList.add('run');
-                            } else if (ball.type === 'wicket') { div.classList.add('wicket'); } else if (ball
-                                .type === 'extra') { div.classList.add('extra'); }
-                            div.textContent = ball.label;
+                            } else if (ball.type === 'wicket') {
+                                div.classList.add('wicket');
+                            } else {
+                                div.classList.add('extra');
+                            }
+                            div.textContent = ball.label || '0';
+                            if (idx === displayBalls.length - 1) div.classList.add('latest');
                             tourOverTrackerMini.appendChild(div);
                         });
-                        const legalBalls = inn.overBallData.filter(b => b.type !== 'extra' || (b.sub !== 'wide' && b
-                            .sub !== 'noball'));
-                        for (let i = legalBalls.length; i < 6; i++) {
-                            const div = document.createElement('div');
-                            div.className = 'ball empty';
-                            div.textContent = '•';
-                            tourOverTrackerMini.appendChild(div);
-                        }
                     }
                 }
             }
@@ -1842,6 +1843,7 @@
                         match.matchWinner = winner;
                         match.winMargin = margin;
                         match.winMarginType = marginType;
+                        match.resultText = winner === 'Match Tied' ? 'MATCH TIED' : `${winner} won by ${margin} ${marginType}`;
                         match.status = 'completed';
 
                         // Mark current batsmen as not out
@@ -2406,6 +2408,7 @@
                         match.matchWinner = winner;
                         match.winMargin = margin;
                         match.winMarginType = marginType;
+                        match.resultText = winner === 'Match Tied' ? 'MATCH TIED' : `${winner} won by ${margin} ${marginType}`;
                         match.status = 'completed';
                         saveState();
                         updateTournamentLiveUI(match);
