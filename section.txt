@@ -1,0 +1,255 @@
+<style id="BRKLIVE19_THEME1_REBUILT_MIDDLE_SCORE">
+/* =========================================================
+   BRKLIVE19 THEME 1 — REBUILT LOWER THIRD
+   Only the default/Theme 1 lower-third is changed here.
+   Theme 2/3/4/etc. are intentionally untouched.
+   Layout:
+     LEFT  = team panel
+     MIDDLE WHITE = batting team / score / over / innings / rotating info
+     RIGHT = existing opponent/bowler-side panel
+   ========================================================= */
+
+body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) #overlay .frame{
+  height:132px !important;
+  min-height:132px !important;
+  max-height:132px !important;
+  overflow:visible !important;
+  width:100vw !important;
+  position:relative !important;
+  bottom:0 !important;
+}
+
+/* Keep the colored side panels, but give the white middle enough room. */
+body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) #overlay .teamPanel{
+  width:20% !important;
+  padding:0 18px !important;
+  overflow:hidden !important;
+}
+body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) #overlay .content{
+  left:20% !important;
+  right:20% !important;
+  width:60% !important;
+  top:0 !important;
+  bottom:0 !important;
+  display:grid !important;
+  grid-template-columns:0fr minmax(0,1fr) 0fr !important;
+  z-index:3 !important;
+}
+
+/* The old batter and bowler blocks are not part of the rebuilt Theme 1
+   middle section. Their data is still maintained by the existing JS. */
+body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) #overlay .batters,
+body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) #overlay .bowlerPanel{
+  display:none !important;
+}
+
+/* WHITE CENTER — rebuilt from the existing scorePanel/data elements. */
+body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) #overlay .scorePanel{
+  grid-column:2 !important;
+  width:100% !important;
+  height:100% !important;
+  min-width:0 !important;
+  min-height:0 !important;
+  padding:8px 18px 7px !important;
+  display:grid !important;
+  grid-template-columns:minmax(0,1fr) auto minmax(0,1fr) !important;
+  grid-template-rows:30px 50px 22px 22px !important;
+  column-gap:16px !important;
+  row-gap:0 !important;
+  align-items:center !important;
+  justify-content:stretch !important;
+  overflow:visible !important;
+  background:#fff !important;
+  color:#142052 !important;
+}
+
+/* Batting team: top-left of the white score section. */
+body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) #overlay #theme1ScoreBatTeam{
+  grid-column:1 / 4 !important;
+  grid-row:1 !important;
+  width:100% !important;
+  height:auto !important;
+  margin:0 !important;
+  padding:0 8px !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  text-align:center !important;
+  font-size:clamp(13px,1.35vw,23px) !important;
+  line-height:1 !important;
+  font-weight:1000 !important;
+  letter-spacing:.035em !important;
+  color:#142052 !important;
+  white-space:nowrap !important;
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
+}
+
+/* Score = runs-wickets in the middle. */
+body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) #overlay #scorePill{
+  grid-column:2 !important;
+  grid-row:2 !important;
+  justify-self:center !important;
+  align-self:center !important;
+  width:auto !important;
+  min-width:150px !important;
+  max-width:100% !important;
+  height:48px !important;
+  margin:0 !important;
+  padding:4px 24px !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  border-radius:12px !important;
+  font-size:clamp(34px,3.8vw,60px) !important;
+  line-height:1 !important;
+  letter-spacing:-.03em !important;
+  white-space:nowrap !important;
+  overflow:visible !important;
+}
+
+/* Existing match title is unnecessary in the rebuilt middle score. */
+body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) #overlay #matchTitle{
+  display:none !important;
+}
+
+/* Under the score: overs and innings number. */
+body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) #overlay .scoreMeta{
+  grid-column:1 / 4 !important;
+  grid-row:3 !important;
+  width:100% !important;
+  height:22px !important;
+  margin:0 !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  gap:28px !important;
+  font-size:clamp(12px,1.15vw,19px) !important;
+  line-height:1 !important;
+  font-weight:1000 !important;
+  white-space:nowrap !important;
+  overflow:visible !important;
+}
+body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) #overlay .scoreMeta span{
+  display:inline-flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+}
+
+/* Keep the existing CRR/RRR data available, but place it into the
+   rotating line rather than consuming vertical space in the white section. */
+body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) #overlay #scoreRates{
+  display:none !important;
+}
+
+/* Existing blinking/rotating information stays at the bottom of the white section. */
+body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) #overlay #rotatingInfo{
+  grid-column:1 / 4 !important;
+  grid-row:4 !important;
+  width:100% !important;
+  min-width:0 !important;
+  height:22px !important;
+  min-height:22px !important;
+  margin:0 !important;
+  padding:0 10px !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  color:#142052 !important;
+  text-shadow:none !important;
+  font-size:clamp(9px,.95vw,16px) !important;
+  line-height:1 !important;
+  font-weight:1000 !important;
+  letter-spacing:.04em !important;
+  white-space:nowrap !important;
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
+  border-top:1px solid rgba(20,32,82,.15) !important;
+  animation:theme1RotatingBlink 1.8s ease-in-out infinite !important;
+}
+body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) #overlay #rotatingInfo.swap{
+  animation:rotatingInfoSwap .45s ease both, theme1RotatingBlink 1.8s ease-in-out infinite !important;
+}
+@keyframes theme1RotatingBlink{
+  0%,100%{opacity:1}
+  50%{opacity:.35}
+}
+
+/* Ensure nothing in the rebuilt center gets clipped by an old rule. */
+body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) #overlay .scorePanel *,
+body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) #overlay .scorePanel{
+  box-sizing:border-box !important;
+}
+body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) #overlay .scorePanel *{
+  max-width:100% !important;
+}
+
+@media(max-width:900px){
+  body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) #overlay .frame{
+    height:112px !important; min-height:112px !important; max-height:112px !important;
+  }
+  body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) #overlay .scorePanel{
+    grid-template-rows:25px 42px 20px 20px !important;
+    padding:5px 12px !important;
+    column-gap:10px !important;
+  }
+  body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) #overlay .scorePill{height:40px !important;min-width:130px !important;font-size:clamp(28px,4.2vw,48px) !important}
+}
+@media(max-width:600px){
+  body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) #overlay .frame{
+    height:94px !important; min-height:94px !important; max-height:94px !important;
+  }
+  body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) #overlay .teamPanel{padding:0 9px !important}
+  body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) #overlay .scorePanel{
+    grid-template-rows:22px 34px 18px 17px !important;
+    padding:3px 7px !important;
+    column-gap:5px !important;
+  }
+  body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) #overlay #theme1ScoreBatTeam{font-size:clamp(10px,2.6vw,15px) !important}
+  body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) #overlay #scorePill{height:33px !important;min-width:105px !important;padding:3px 10px !important;font-size:clamp(23px,5.8vw,34px) !important}
+  body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) #overlay .scoreMeta{font-size:clamp(9px,2.7vw,13px) !important;gap:12px !important}
+  body:not(.theme-neon):not(.theme-green):not(.theme-gold):not(.theme-red):not(.theme-rainbow):not(.theme-theme2):not(.theme-theme3):not(.theme-theme4):not(.theme-theme5):not(.theme-theme6):not(.theme-glass):not(.theme-carbon):not(.theme-stadium):not(.theme-aurora):not(.theme-metallic):not(.theme-redblack) #overlay #rotatingInfo{font-size:clamp(7px,2.3vw,11px) !important;padding:0 4px !important}
+}
+</style>
+
+</head>
+<body>
+<!-- ===== TOP RIGHT LIVE INDICATOR ===== -->
+<!-- ===== MAIN OVERLAY ===== -->
+<div id="overlay" class="overlay">
+  <div id="targetTop" class="target"><span id="targetValue">—</span></div>
+
+  <div id="bannerTournament" class="banner tournament"></div>
+  <div id="bannerMatch" class="banner matchFooter"></div>
+  <div id="bannerVenue" class="banner"></div>
+  <div id="bannerToss" class="banner toss"></div>
+  <div id="bannerResult" class="banner result"></div>
+  <div id="bannerPlayer" class="banner player"></div>
+  <div id="bannerBowler" class="banner bowler"></div>
+  <div id="bannerPartnership" class="banner partnership"></div>
+  <div id="custom" class="custom"></div>
+<div class="frame">
+    <div class="teamPanel left">
+      <div class="teamStack">
+        <div id="batTeam" class="teamName">TEAM A</div>
+        <div class="teamVs">VS</div>
+        <div id="bowlTeam" class="teamName">TEAM B</div>
+      </div>
+    </div>
+    <div class="teamPanel right"><div id="theme1BowlTeam" class="theme1BowlTeam"></div><div class="panelLogo">BRKLIVE19</div></div>
+
+    <div class="content">
+      <div class="batters">
+        <div id="batter1" class="batter striker"><div class="strike">⚡</div><div id="b1name" class="batterName">STRIKER</div><div class="batterScore"><b id="b1runs">0</b><span>(<span id="b1balls">0</span>)</span></div></div>
+        <div id="batter2" class="batter"><div class="strike">⚡</div><div id="b2name" class="batterName">NON-STRIKER</div><div class="batterScore"><b id="b2runs">0</b><span>(<span id="b2balls">0</span>)</span></div></div>
+      </div>
+
+      <div class="scorePanel">
+        <div id="theme1ScoreBatTeam" class="theme1ScoreBatTeam"></div>
+        <div id="matchTitle" class="matchTitle">League Match</div>
+        <div id="scorePill" class="scorePill">0-0</div>
+        <div class="scoreMeta"><span id="overs">0.0 (0)</span><span id="inningsLabel">1ST INNINGS</span></div>
+        <div id="scoreRates" class="scoreRates" aria-label="Run rates"><span id="scoreCrrWrap" style="display:none!important">CRR <b id="scoreCrr">0.00</b></span><span id="scoreRrrWrap">RRR <b id="scoreRrr">0.00</b></span></div>
+        <div id="rotatingInfo" class="rotatingInfo" aria-live="polite">TOURNAMENT - BRKLIVE19 CRICKET TOURNAMENT</div>
+      </div>
+
