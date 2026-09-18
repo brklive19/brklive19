@@ -3669,3 +3669,641 @@ body.theme-theme2 {
 }
 </style>
 
+
+
+<style id="theme2-banner-frame-only-final">
+/* THEME 2 ONLY:
+   Remove the full-screen background treatment.
+   Apply Blue/Purple/Red only to the actual lower-third/banner frame. */
+body.theme-theme2 {
+  background: transparent !important;
+}
+
+/* Reset display-screen backgrounds so the camera/full screen stays unchanged. */
+body.theme-theme2 #brkDataScreen,
+body.theme-theme2 #summaryOverlay,
+body.theme-theme2 .summary-overlay,
+body.theme-theme2 .scorecard-overlay,
+body.theme-theme2 #playerDetailScreen,
+body.theme-theme2 .banner,
+body.theme-theme2 .target,
+body.theme-theme2 .custom,
+body.theme-theme2 .animation {
+  background: transparent !important;
+}
+
+/* Only the Theme 2 lower-third/banner frame gets the color background. */
+body.theme-theme2 .frame,
+body.theme-theme2 .t2Ref {
+  background:
+    linear-gradient(110deg,
+      #155EEF 0%,
+      #155EEF 28%,
+      #6D28D9 55%,
+      #E11D3F 100%) !important;
+  background-size:100% 100% !important;
+  background-position:center !important;
+  top:auto !important;
+  bottom:0 !important;
+  margin-bottom:0 !important;
+  transform:none !important;
+}
+
+/* Keep child panels transparent so the banner frame itself carries the color. */
+body.theme-theme2 .frame > *,
+body.theme-theme2 .t2Ref > * {
+  background-color: transparent !important;
+}
+</style>
+
+
+
+<style id="theme2-final-display-frame-color-compress20">
+/* =========================================================
+   THEME 2 ONLY
+   Deep Blue + Purple + Red on every display frame.
+   Display screens requested: 1st/2nd Inn Batting,
+   1st/2nd Inn Bowling, Match Summary, Playing XI.
+   Compress these display screens by ~20% while keeping
+   their data visible and preventing clipping.
+   ========================================================= */
+
+/* Color ONLY the actual display/frame surfaces — never the full screen. */
+body.theme-theme2 .display-frame,
+body.theme-theme2 .displayFrame,
+body.theme-theme2 .display-card,
+body.theme-theme2 .displayCard,
+body.theme-theme2 .score-display-frame,
+body.theme-theme2 .scoreDisplayFrame,
+body.theme-theme2 .summary-frame,
+body.theme-theme2 .summaryFrame,
+body.theme-theme2 .playing-xi-frame,
+body.theme-theme2 .playingXIFrame,
+body.theme-theme2 .screen-frame,
+body.theme-theme2 .screenFrame,
+body.theme-theme2 .banner-frame,
+body.theme-theme2 .bannerFrame {
+  background: linear-gradient(115deg,
+    #061B52 0%,
+    #102A78 32%,
+    #5B21B6 62%,
+    #B91C3A 100%) !important;
+  background-size: 100% 100% !important;
+}
+
+/* Common display containers: use the same Theme 2 frame colors. */
+body.theme-theme2 #battingScreen,
+body.theme-theme2 #bowlingScreen,
+body.theme-theme2 #matchSummaryScreen,
+body.theme-theme2 #playingXIScreen,
+body.theme-theme2 #firstInningsBatting,
+body.theme-theme2 #secondInningsBatting,
+body.theme-theme2 #firstInningsBowling,
+body.theme-theme2 #secondInningsBowling,
+body.theme-theme2 .batting-screen,
+body.theme-theme2 .bowling-screen,
+body.theme-theme2 .match-summary-screen,
+body.theme-theme2 .playing-xi-screen,
+body.theme-theme2 .battingDisplay,
+body.theme-theme2 .bowlingDisplay,
+body.theme-theme2 .matchSummaryDisplay,
+body.theme-theme2 .playingXIDisplay {
+  background: linear-gradient(115deg,
+    #061B52 0%,
+    #102A78 32%,
+    #5B21B6 62%,
+    #B91C3A 100%) !important;
+}
+
+/* Compress the requested display screen itself by 20%, but do not
+   scale text/data separately. Use max-height + tighter internal spacing
+   so information remains readable and visible. */
+body.theme-theme2 .batting-screen,
+body.theme-theme2 .bowling-screen,
+body.theme-theme2 .match-summary-screen,
+body.theme-theme2 .playing-xi-screen,
+body.theme-theme2 #battingScreen,
+body.theme-theme2 #bowlingScreen,
+body.theme-theme2 #matchSummaryScreen,
+body.theme-theme2 #playingXIScreen,
+body.theme-theme2 #firstInningsBatting,
+body.theme-theme2 #secondInningsBatting,
+body.theme-theme2 #firstInningsBowling,
+body.theme-theme2 #secondInningsBowling {
+  width: 80% !important;
+  max-width: 80% !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  box-sizing: border-box !important;
+  overflow: visible !important;
+}
+
+/* Keep all data inside the compressed frame visible. */
+body.theme-theme2 .batting-screen *,
+body.theme-theme2 .bowling-screen *,
+body.theme-theme2 .match-summary-screen *,
+body.theme-theme2 .playing-xi-screen *,
+body.theme-theme2 #battingScreen *,
+body.theme-theme2 #bowlingScreen *,
+body.theme-theme2 #matchSummaryScreen *,
+body.theme-theme2 #playingXIScreen * {
+  box-sizing: border-box !important;
+}
+
+/* If these screens use generic cards/panels, preserve the color through them
+   without adding a full-screen background. */
+body.theme-theme2 .batting-screen .card,
+body.theme-theme2 .bowling-screen .card,
+body.theme-theme2 .match-summary-screen .card,
+body.theme-theme2 .playing-xi-screen .card,
+body.theme-theme2 .batting-screen .panel,
+body.theme-theme2 .bowling-screen .panel,
+body.theme-theme2 .match-summary-screen .panel,
+body.theme-theme2 .playing-xi-screen .panel {
+  background: linear-gradient(115deg,
+    #061B52 0%,
+    #5B21B6 60%,
+    #B91C3A 100%) !important;
+}
+
+/* NEVER paint the camera/full viewport for Theme 2. */
+body.theme-theme2,
+body.theme-theme2 #brkDataScreen,
+body.theme-theme2 #summaryOverlay,
+body.theme-theme2 .summary-overlay,
+body.theme-theme2 .scorecard-overlay,
+body.theme-theme2 #playerDetailScreen {
+  background: transparent !important;
+}
+
+/* Lower-third remains locked at the bottom. */
+body.theme-theme2 .frame,
+body.theme-theme2 .t2Ref {
+  top:auto !important;
+  bottom:0 !important;
+  margin-bottom:0 !important;
+  transform:none !important;
+}
+
+/* Responsive: retain roughly 20% horizontal compression without clipping. */
+@media(max-width:900px){
+  body.theme-theme2 .batting-screen,
+  body.theme-theme2 .bowling-screen,
+  body.theme-theme2 .match-summary-screen,
+  body.theme-theme2 .playing-xi-screen,
+  body.theme-theme2 #battingScreen,
+  body.theme-theme2 #bowlingScreen,
+  body.theme-theme2 #matchSummaryScreen,
+  body.theme-theme2 #playingXIScreen {
+    width:80% !important;
+    max-width:80% !important;
+  }
+}
+</style>
+
+
+
+<style id="theme2-exact-display-frame-fix">
+/* THEME 2 ONLY — do NOT color the viewport */
+body.theme-theme2,
+body.theme-theme2 .overlay-root,
+body.theme-theme2 .viewport,
+body.theme-theme2 .camera-view,
+body.theme-theme2 .display-root {
+  background: transparent !important;
+}
+
+/* THEME 2 display frame color: deep blue → purple → red */
+body.theme-theme2 .display-frame,
+body.theme-theme2 .displayFrame,
+body.theme-theme2 .screen-frame,
+body.theme-theme2 .screenFrame,
+body.theme-theme2 .display-card,
+body.theme-theme2 .displayCard,
+body.theme-theme2 .display-panel,
+body.theme-theme2 .displayPanel,
+body.theme-theme2 .banner-frame,
+body.theme-theme2 .bannerFrame,
+body.theme-theme2 .data-frame,
+body.theme-theme2 .dataFrame,
+body.theme-theme2 .match-frame,
+body.theme-theme2 .matchFrame,
+body.theme-theme2 .summary-frame,
+body.theme-theme2 .summaryFrame,
+body.theme-theme2 .xi-frame,
+body.theme-theme2 .xiFrame,
+body.theme-theme2 .batting-frame,
+body.theme-theme2 .battingFrame,
+body.theme-theme2 .bowling-frame,
+body.theme-theme2 .bowlingFrame {
+  background: linear-gradient(115deg,#061B52 0%,#12347D 35%,#5B21B6 65%,#B91C3A 100%) !important;
+  background-size:100% 100% !important;
+}
+
+/* Common actual screen IDs */
+body.theme-theme2 #firstInnBattingScreen,
+body.theme-theme2 #secondInnBattingScreen,
+body.theme-theme2 #firstInnBowlingScreen,
+body.theme-theme2 #secondInnBowlingScreen,
+body.theme-theme2 #matchSummaryScreen,
+body.theme-theme2 #playingXIScreen,
+body.theme-theme2 #firstInningsBatting,
+body.theme-theme2 #secondInningsBatting,
+body.theme-theme2 #firstInningsBowling,
+body.theme-theme2 #secondInningsBowling,
+body.theme-theme2 #matchSummary,
+body.theme-theme2 #playingXI {
+  background:linear-gradient(115deg,#061B52 0%,#12347D 35%,#5B21B6 65%,#B91C3A 100%) !important;
+  background-size:100% 100% !important;
+}
+
+/* Requested screens: compress the FRAME height by 20%, not the viewport.
+   Width stays unchanged so no information is squeezed horizontally. */
+body.theme-theme2 .first-inn-batting,
+body.theme-theme2 .second-inn-batting,
+body.theme-theme2 .first-inn-bowling,
+body.theme-theme2 .second-inn-bowling,
+body.theme-theme2 .match-summary,
+body.theme-theme2 .playing-xi,
+body.theme-theme2 #firstInnBattingScreen,
+body.theme-theme2 #secondInnBattingScreen,
+body.theme-theme2 #firstInnBowlingScreen,
+body.theme-theme2 #secondInnBowlingScreen,
+body.theme-theme2 #matchSummaryScreen,
+body.theme-theme2 #playingXIScreen {
+  transform:scaleY(.8) !important;
+  transform-origin:bottom center !important;
+  overflow:visible !important;
+}
+
+/* Keep contents from being clipped by parent overflow. */
+body.theme-theme2 .first-inn-batting *,
+body.theme-theme2 .second-inn-batting *,
+body.theme-theme2 .first-inn-bowling *,
+body.theme-theme2 .second-inn-bowling *,
+body.theme-theme2 .match-summary *,
+body.theme-theme2 .playing-xi *,
+body.theme-theme2 #firstInnBattingScreen *,
+body.theme-theme2 #secondInnBattingScreen *,
+body.theme-theme2 #firstInnBowlingScreen *,
+body.theme-theme2 #secondInnBowlingScreen *,
+body.theme-theme2 #matchSummaryScreen *,
+body.theme-theme2 #playingXIScreen {
+  box-sizing:border-box !important;
+}
+
+/* Existing Theme 2 lower-third remains locked at bottom. */
+body.theme-theme2 .frame,
+body.theme-theme2 .t2Ref {
+  top:auto !important;
+  bottom:0 !important;
+  margin-bottom:0 !important;
+  transform:none !important;
+}
+</style>
+
+
+
+<style id="theme2-small-display-final">
+/* THEME 2 ONLY — display screens slightly smaller than full screen.
+   Purple + Deep Blue + Red frame background. */
+body.theme-theme2 .display-frame,
+body.theme-theme2 .displayFrame,
+body.theme-theme2 .screen-frame,
+body.theme-theme2 .screenFrame,
+body.theme-theme2 .display-card,
+body.theme-theme2 .displayCard,
+body.theme-theme2 .display-panel,
+body.theme-theme2 .displayPanel,
+body.theme-theme2 .summary-frame,
+body.theme-theme2 .summaryFrame,
+body.theme-theme2 .batting-frame,
+body.theme-theme2 .battingFrame,
+body.theme-theme2 .bowling-frame,
+body.theme-theme2 .bowlingFrame,
+body.theme-theme2 .xi-frame,
+body.theme-theme2 .xiFrame,
+body.theme-theme2 #firstInnBattingScreen,
+body.theme-theme2 #secondInnBattingScreen,
+body.theme-theme2 #firstInnBowlingScreen,
+body.theme-theme2 #secondInnBowlingScreen,
+body.theme-theme2 #matchSummaryScreen,
+body.theme-theme2 #playingXIScreen {
+  width:92% !important;
+  max-width:92% !important;
+  margin-left:auto !important;
+  margin-right:auto !important;
+  background:linear-gradient(120deg,
+    #5B21B6 0%,
+    #32147A 30%,
+    #061B52 62%,
+    #B91C3A 100%) !important;
+  background-size:100% 100% !important;
+  background-position:center !important;
+  box-sizing:border-box !important;
+  overflow:visible !important;
+}
+
+/* Remove the previous vertical scale so the slightly smaller frame
+   is controlled cleanly by its actual size. */
+body.theme-theme2 .first-inn-batting,
+body.theme-theme2 .second-inn-batting,
+body.theme-theme2 .first-inn-bowling,
+body.theme-theme2 .second-inn-bowling,
+body.theme-theme2 .match-summary,
+body.theme-theme2 .playing-xi,
+body.theme-theme2 #firstInnBattingScreen,
+body.theme-theme2 #secondInnBattingScreen,
+body.theme-theme2 #firstInnBowlingScreen,
+body.theme-theme2 #secondInnBowlingScreen,
+body.theme-theme2 #matchSummaryScreen,
+body.theme-theme2 #playingXIScreen {
+  transform:none !important;
+  overflow:visible !important;
+}
+
+/* Keep viewport/camera background unchanged. */
+body.theme-theme2 {
+  background:transparent !important;
+}
+
+/* Theme 2 lower-third remains locked to the bottom. */
+body.theme-theme2 .frame,
+body.theme-theme2 .t2Ref {
+  top:auto !important;
+  bottom:0 !important;
+  margin-bottom:0 !important;
+  transform:none !important;
+}
+</style>
+
+
+
+<style id="theme2-all-display-purple-deepblue-final">
+/* THEME 2 ONLY — purple + deep blue background on every display screen */
+body.theme-theme2 .display-screen,
+body.theme-theme2 .displayScreen,
+body.theme-theme2 .display-frame,
+body.theme-theme2 .displayFrame,
+body.theme-theme2 .screen-frame,
+body.theme-theme2 .screenFrame,
+body.theme-theme2 .display-card,
+body.theme-theme2 .displayCard,
+body.theme-theme2 .display-panel,
+body.theme-theme2 .displayPanel,
+body.theme-theme2 .summary-frame,
+body.theme-theme2 .summaryFrame,
+body.theme-theme2 .batting-frame,
+body.theme-theme2 .battingFrame,
+body.theme-theme2 .bowling-frame,
+body.theme-theme2 .bowlingFrame,
+body.theme-theme2 .xi-frame,
+body.theme-theme2 .xiFrame,
+body.theme-theme2 .banner-frame,
+body.theme-theme2 .bannerFrame,
+body.theme-theme2 .screen {
+  background: linear-gradient(125deg,#6D28D9 0%,#3B167F 38%,#061B52 72%,#020B25 100%) !important;
+  background-size:100% 100% !important;
+  background-position:center !important;
+}
+
+/* Specific Theme 2 display screens */
+body.theme-theme2 #firstInnBattingScreen,
+body.theme-theme2 #secondInnBattingScreen,
+body.theme-theme2 #firstInnBowlingScreen,
+body.theme-theme2 #secondInnBowlingScreen,
+body.theme-theme2 #matchSummaryScreen,
+body.theme-theme2 #playingXIScreen,
+body.theme-theme2 #firstInningsBatting,
+body.theme-theme2 #secondInningsBatting,
+body.theme-theme2 #firstInningsBowling,
+body.theme-theme2 #secondInningsBowling,
+body.theme-theme2 #matchSummary,
+body.theme-theme2 #playingXI,
+body.theme-theme2 #b1Screen,
+body.theme-theme2 #b2Screen,
+body.theme-theme2 #bowlerScreen,
+body.theme-theme2 #bowerScreen,
+body.theme-theme2 #fowScreen {
+  background:linear-gradient(125deg,#6D28D9 0%,#3B167F 38%,#061B52 72%,#020B25 100%) !important;
+  background-size:100% 100% !important;
+}
+
+/* Do not paint the camera/full viewport. */
+body.theme-theme2 {
+  background:transparent !important;
+}
+</style>
+
+
+
+<style id="theme2-all-display-frames-final">
+/* THEME 2 ONLY — no full-screen fill. Every display is a smaller frame. */
+body.theme-theme2 {
+  background:transparent !important;
+}
+
+/* Match Summary / scorecard: the viewport stays transparent; only the
+   actual centered frame receives the Theme 2 background. */
+body.theme-theme2 .summary-overlay,
+body.theme-theme2 #summaryOverlay,
+body.theme-theme2 .scorecard-overlay {
+  background:transparent !important;
+  inset:0 !important;
+  display:none;
+  align-items:center !important;
+  justify-content:center !important;
+  padding:0 !important;
+}
+body.theme-theme2 .summary-overlay.show,
+body.theme-theme2 #summaryOverlay.show,
+body.theme-theme2 .scorecard-overlay.show {
+  display:flex !important;
+}
+body.theme-theme2 .summary-shell,
+body.theme-theme2 .scorecard-overlay .card,
+body.theme-theme2 .scorecard-overlay #scContent {
+  width:92% !important;
+  max-width:1700px !important;
+  height:82% !important;
+  max-height:900px !important;
+  margin:auto !important;
+  box-sizing:border-box !important;
+  overflow:visible !important;
+  border-radius:14px !important;
+  background:linear-gradient(125deg,#6D28D9 0%,#35157C 40%,#061B52 72%,#A9163A 100%) !important;
+  box-shadow:0 12px 40px rgba(0,0,0,.55) !important;
+}
+
+/* Keep internal cards readable while the outer display frame carries the
+   purple/deep-blue theme. */
+body.theme-theme2 .summary-shell > *,
+body.theme-theme2 .scorecard-overlay .card > *,
+body.theme-theme2 .scorecard-overlay #scContent > * {
+  box-sizing:border-box !important;
+}
+
+/* B1/B2/Bowler/FOW player display is already a lower-third frame. */
+body.theme-theme2 #playerDetailScreen {
+  background:transparent !important;
+}
+body.theme-theme2 #playerDetailScreen .pds-row {
+  background:linear-gradient(125deg,#6D28D9 0%,#35157C 42%,#061B52 100%) !important;
+}
+
+/* Tournament, Match, Venue, Toss, Result, Target, Custom and animation:
+   color the visible frame only, not the whole screen. */
+body.theme-theme2 .banner,
+body.theme-theme2 .target,
+body.theme-theme2 .custom,
+body.theme-theme2 .animation {
+  width:92% !important;
+  max-width:1700px !important;
+  box-sizing:border-box !important;
+  background:linear-gradient(125deg,#6D28D9 0%,#35157C 42%,#061B52 76%,#A9163A 100%) !important;
+}
+
+/* Keep the main Theme 2 lower-third locked to bottom. */
+body.theme-theme2 .frame,
+body.theme-theme2 .t2Ref {
+  top:auto !important;
+  bottom:0 !important;
+  margin-bottom:0 !important;
+  transform:none !important;
+}
+</style>
+
+
+
+<style id="theme2-requested-display-background">
+/* THEME 2 ONLY: colored display frame for the requested screens */
+body.theme-theme2 #firstInnBattingScreen,
+body.theme-theme2 #secondInnBattingScreen,
+body.theme-theme2 #firstInningsBatting,
+body.theme-theme2 #secondInningsBatting,
+body.theme-theme2 #firstInnBowlingScreen,
+body.theme-theme2 #secondInnBowlingScreen,
+body.theme-theme2 #firstInningsBowling,
+body.theme-theme2 #secondInningsBowling,
+body.theme-theme2 #playingXIScreen,
+body.theme-theme2 #playingXI,
+body.theme-theme2 .first-inn-batting,
+body.theme-theme2 .second-inn-batting,
+body.theme-theme2 .first-inn-bowling,
+body.theme-theme2 .second-inn-bowling,
+body.theme-theme2 .playing-xi,
+body.theme-theme2 .playingXI,
+body.theme-theme2 .batting-screen,
+body.theme-theme2 .bowling-screen,
+body.theme-theme2 .playing-xi-screen {
+  background: linear-gradient(125deg,
+    #6D28D9 0%,
+    #3A187F 38%,
+    #061B52 72%,
+    #B91C3A 100%) !important;
+  background-size:100% 100% !important;
+  background-position:center !important;
+  box-sizing:border-box !important;
+  overflow:visible !important;
+}
+
+/* If the named screen is a wrapper, carry the color into its visible frame. */
+body.theme-theme2 #firstInnBattingScreen .display-frame,
+body.theme-theme2 #secondInnBattingScreen .display-frame,
+body.theme-theme2 #firstInnBowlingScreen .display-frame,
+body.theme-theme2 #secondInnBowlingScreen .display-frame,
+body.theme-theme2 #playingXIScreen .display-frame,
+body.theme-theme2 #firstInningsBatting .display-frame,
+body.theme-theme2 #secondInningsBatting .display-frame,
+body.theme-theme2 #firstInningsBowling .display-frame,
+body.theme-theme2 #secondInningsBowling .display-frame,
+body.theme-theme2 #playingXI .display-frame,
+body.theme-theme2 #firstInnBattingScreen .displayFrame,
+body.theme-theme2 #secondInnBattingScreen .displayFrame,
+body.theme-theme2 #firstInnBowlingScreen .displayFrame,
+body.theme-theme2 #secondInnBowlingScreen .displayFrame,
+body.theme-theme2 #playingXIScreen .displayFrame {
+  background:linear-gradient(125deg,#6D28D9 0%,#3A187F 38%,#061B52 72%,#B91C3A 100%) !important;
+  background-size:100% 100% !important;
+}
+
+/* Keep full camera/viewport unchanged. */
+body.theme-theme2 {
+  background:transparent !important;
+}
+</style>
+
+
+
+<style id="theme2-actual-brkds-frame-final">
+/* THEME 2 ONLY — color the ACTUAL display frame used by
+   batting1/batting2/bowling1/bowling2/playingxi.
+   The full viewport remains transparent. */
+body.theme-theme2 #brkDataScreen{
+  background:transparent !important;
+  padding:0 !important;
+  display:none;
+  align-items:center !important;
+  justify-content:center !important;
+}
+body.theme-theme2 #brkDataScreen.show{
+  display:flex !important;
+}
+
+/* This is the real generated display element (<div class="brkds">).
+   Give it a slightly smaller-than-screen frame with the requested colors. */
+body.theme-theme2 #brkDataScreen .brkds{
+  width:92% !important;
+  height:82% !important;
+  max-width:1750px !important;
+  max-height:900px !important;
+  margin:auto !important;
+  padding:14px !important;
+  box-sizing:border-box !important;
+  border:3px solid rgba(255,255,255,.30) !important;
+  border-radius:16px !important;
+  background:linear-gradient(125deg,
+    #6D28D9 0%,
+    #3B167F 38%,
+    #061B52 72%,
+    #A9163A 100%) !important;
+  background-size:100% 100% !important;
+  background-position:center !important;
+  box-shadow:0 16px 50px rgba(0,0,0,.55) !important;
+  overflow:hidden !important;
+}
+
+/* Keep all six requested display modes inside the same colored frame. */
+body.theme-theme2 #brkDataScreen .brkds-head,
+body.theme-theme2 #brkDataScreen .brkds-card,
+body.theme-theme2 #brkDataScreen .brkds-summary .box,
+body.theme-theme2 #brkDataScreen .brkds-xi .xi-col,
+body.theme-theme2 #brkDataScreen .brkds-player .player-card{
+  border-color:rgba(255,255,255,.28) !important;
+}
+
+/* Make the frame color clearly visible instead of the old plain screen color. */
+body.theme-theme2 #brkDataScreen .brkds-head{
+  background:linear-gradient(90deg,#4C1D95,#102B55,#5B21B6) !important;
+}
+body.theme-theme2 #brkDataScreen .brkds-foot{
+  background:rgba(4,10,35,.58) !important;
+}
+
+/* Responsive — retain the smaller frame while keeping data visible. */
+@media(max-width:900px){
+  body.theme-theme2 #brkDataScreen .brkds{
+    width:94% !important;
+    height:86% !important;
+    padding:8px !important;
+  }
+}
+@media(max-width:600px){
+  body.theme-theme2 #brkDataScreen .brkds{
+    width:96% !important;
+    height:90% !important;
+    padding:6px !important;
+  }
+}
+</style>
+
