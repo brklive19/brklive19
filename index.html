@@ -3054,7 +3054,17 @@ body.theme-theme2 .fow-screen * {
             function updateOverlayUrl(matchId) {
                 const input = document.getElementById('overlayUrlInput');
                 if (!input) return;
-                const base = window.location.href.split('?')[0].replace(/(?:index(?:\.html)?|BRKLIVE19_index_updated)\.html$/i, 'overlay.html');
+                const overlayFiles = {
+                    blue: 'overlay_theme1.html',
+                    theme2: 'overlay_theme2.html',
+                    theme3: 'overlay_theme3.html',
+                    theme4: 'overlay_theme4.html',
+                    theme5: 'overlay_theme5.html',
+                    theme6: 'overlay_theme6.html'
+                };
+                const selectedTheme = localStorage.getItem('brklive19_pending_theme') || 'blue';
+                const overlayFile = overlayFiles[selectedTheme] || overlayFiles.blue;
+                const base = window.location.href.split('?')[0].replace(/(?:index(?:\.html)?|BRKLIVE19_index_updated)\.html$/i, overlayFile);
                 let tournamentName = '';
                 if (matchId) {
                     const match = getMatches().find(m => m.id === matchId);
@@ -3577,6 +3587,44 @@ body.theme-theme2 .fow-screen * {
 
         })();
     </script>
+
+<style id="brklive19-innings-theme-background-final">
+/* FINAL: Four innings display screens use the selected overlay theme background. */
+body.theme-theme1 #firstInnBattingScreen, body.theme-theme1 #secondInnBattingScreen, body.theme-theme1 #firstInnBowlingScreen, body.theme-theme1 #secondInnBowlingScreen,
+body.theme-theme1 #firstInningsBatting, body.theme-theme1 #secondInningsBatting, body.theme-theme1 #firstInningsBowling, body.theme-theme1 #secondInningsBowling {
+  background:linear-gradient(120deg,#071A58 0%,#00B8E8 48%,#FFD83D 100%) !important; background-size:100% 100% !important;
+}
+body.theme-theme2 #firstInnBattingScreen, body.theme-theme2 #secondInnBattingScreen, body.theme-theme2 #firstInnBowlingScreen, body.theme-theme2 #secondInnBowlingScreen,
+body.theme-theme2 #firstInningsBatting, body.theme-theme2 #secondInningsBatting, body.theme-theme2 #firstInningsBowling, body.theme-theme2 #secondInningsBowling {
+  background:linear-gradient(120deg,#155EEF 0%,#6D28D9 48%,#E11D48 100%) !important; background-size:100% 100% !important;
+}
+body.theme-theme3 #firstInnBattingScreen, body.theme-theme3 #secondInnBattingScreen, body.theme-theme3 #firstInnBowlingScreen, body.theme-theme3 #secondInnBowlingScreen,
+body.theme-theme3 #firstInningsBatting, body.theme-theme3 #secondInningsBatting, body.theme-theme3 #firstInningsBowling, body.theme-theme3 #secondInningsBowling {
+  background:linear-gradient(120deg,#050607 0%,#101416 52%,#18E6F2 100%) !important; background-size:100% 100% !important;
+}
+body.theme-theme4 #firstInnBattingScreen, body.theme-theme4 #secondInnBattingScreen, body.theme-theme4 #firstInnBowlingScreen, body.theme-theme4 #secondInnBowlingScreen,
+body.theme-theme4 #firstInningsBatting, body.theme-theme4 #secondInningsBatting, body.theme-theme4 #firstInningsBowling, body.theme-theme4 #secondInningsBowling {
+  background:linear-gradient(120deg,#CC1118 0%,#FFFFFF 52%,#0A2B59 100%) !important; background-size:100% 100% !important;
+}
+body.theme-theme5 #firstInnBattingScreen, body.theme-theme5 #secondInnBattingScreen, body.theme-theme5 #firstInnBowlingScreen, body.theme-theme5 #secondInnBowlingScreen,
+body.theme-theme5 #firstInningsBatting, body.theme-theme5 #secondInningsBatting, body.theme-theme5 #firstInningsBowling, body.theme-theme5 #secondInningsBowling {
+  background:linear-gradient(120deg,#EC4899 0%,#17133F 52%,#D9A441 100%) !important; background-size:100% 100% !important;
+}
+body.theme-theme6 #firstInnBattingScreen, body.theme-theme6 #secondInnBattingScreen, body.theme-theme6 #firstInnBowlingScreen, body.theme-theme6 #secondInnBowlingScreen,
+body.theme-theme6 #firstInningsBatting, body.theme-theme6 #secondInningsBatting, body.theme-theme6 #firstInningsBowling, body.theme-theme6 #secondInningsBowling {
+  background:linear-gradient(120deg,#FFFFFF 0%,#F4F4F6 30%,#EC4899 58%,#17133F 100%) !important; background-size:100% 100% !important;
+}
+/* If the screen is a wrapper, paint its visible frame too. */
+body.theme-theme1 #firstInnBattingScreen .display-frame, body.theme-theme1 #secondInnBattingScreen .display-frame, body.theme-theme1 #firstInnBowlingScreen .display-frame, body.theme-theme1 #secondInnBowlingScreen .display-frame, body.theme-theme1 #firstInningsBatting .display-frame, body.theme-theme1 #secondInningsBatting .display-frame, body.theme-theme1 #firstInningsBowling .display-frame, body.theme-theme1 #secondInningsBowling .display-frame,
+body.theme-theme2 #firstInnBattingScreen .display-frame, body.theme-theme2 #secondInnBattingScreen .display-frame, body.theme-theme2 #firstInnBowlingScreen .display-frame, body.theme-theme2 #secondInnBowlingScreen .display-frame, body.theme-theme2 #firstInningsBatting .display-frame, body.theme-theme2 #secondInningsBatting .display-frame, body.theme-theme2 #firstInningsBowling .display-frame, body.theme-theme2 #secondInningsBowling .display-frame,
+body.theme-theme3 #firstInnBattingScreen .display-frame, body.theme-theme3 #secondInnBattingScreen .display-frame, body.theme-theme3 #firstInnBowlingScreen .display-frame, body.theme-theme3 #secondInnBowlingScreen .display-frame, body.theme-theme3 #firstInningsBatting .display-frame, body.theme-theme3 #secondInningsBatting .display-frame, body.theme-theme3 #firstInningsBowling .display-frame, body.theme-theme3 #secondInningsBowling .display-frame,
+body.theme-theme4 #firstInnBattingScreen .display-frame, body.theme-theme4 #secondInnBattingScreen .display-frame, body.theme-theme4 #firstInnBowlingScreen .display-frame, body.theme-theme4 #secondInnBowlingScreen .display-frame, body.theme-theme4 #firstInningsBatting .display-frame, body.theme-theme4 #secondInningsBatting .display-frame, body.theme-theme4 #firstInningsBowling .display-frame, body.theme-theme4 #secondInningsBowling .display-frame,
+body.theme-theme5 #firstInnBattingScreen .display-frame, body.theme-theme5 #secondInnBattingScreen .display-frame, body.theme-theme5 #firstInnBowlingScreen .display-frame, body.theme-theme5 #secondInnBowlingScreen .display-frame, body.theme-theme5 #firstInningsBatting .display-frame, body.theme-theme5 #secondInningsBatting .display-frame, body.theme-theme5 #firstInningsBowling .display-frame, body.theme-theme5 #secondInningsBowling .display-frame,
+body.theme-theme6 #firstInnBattingScreen .display-frame, body.theme-theme6 #secondInnBattingScreen .display-frame, body.theme-theme6 #firstInnBowlingScreen .display-frame, body.theme-theme6 #secondInnBowlingScreen .display-frame, body.theme-theme6 #firstInningsBatting .display-frame, body.theme-theme6 #secondInningsBatting .display-frame, body.theme-theme6 #firstInningsBowling .display-frame, body.theme-theme6 #secondInningsBowling .display-frame {
+  background:inherit !important; background-size:100% 100% !important;
+}
+</style>
+
 </body>
 
 <style id="BRKLIVE19-GLOBAL-SCROLL-FIX">
@@ -4307,3 +4355,121 @@ body.theme-theme2 #brkDataScreen .brkds-foot{
 }
 </style>
 
+
+<style id="display-screens-match-summary-background">
+/* Keep the 1st/2nd innings batting and bowling display screens
+   using the same outer background treatment as Match Summary. */
+body.theme-theme1 #brkDataScreen .brkds,
+body.theme-theme4 #brkDataScreen .brkds,
+body.theme-theme5 #brkDataScreen .brkds,
+body.theme-theme6 #brkDataScreen .brkds {
+  background:#07101f !important;
+}
+
+body.theme-theme2 #brkDataScreen .brkds {
+  background:linear-gradient(125deg,#6D28D9 0%,#35157C 40%,#061B52 72%,#A9163A 100%) !important;
+}
+
+body.theme-theme3 #brkDataScreen .brkds {
+  background:linear-gradient(180deg,#050607,#151719 50%,#050607) !important;
+}
+
+/* The visible display modes inside brkDataScreen all use the same frame. */
+body.theme-theme1 #brkDataScreen,
+body.theme-theme2 #brkDataScreen,
+body.theme-theme3 #brkDataScreen,
+body.theme-theme4 #brkDataScreen,
+body.theme-theme5 #brkDataScreen,
+body.theme-theme6 #brkDataScreen {
+  background:transparent !important;
+}
+</style>
+
+<style id="all-innings-display-use-overlay-theme-colours">
+/* BRKLIVE19: Make the four innings display screens use the SAME colour language
+   as their selected lower-third overlay theme. The camera/full viewport stays unchanged. */
+
+/* Theme 1 — Blue / Cyan / Gold overlay */
+body.theme-theme1 #brkDataScreen .brkds {
+  background: linear-gradient(120deg,#0876d1 0%,#081f58 42%,#102875 72%,#ffd83d 100%) !important;
+  background-size:100% 100% !important;
+}
+/* Theme 2 — Blue / Purple / Red overlay */
+body.theme-theme2 #brkDataScreen .brkds {
+  background: linear-gradient(120deg,#155EEF 0%,#6D28D9 46%,#5B21B6 68%,#E11D48 100%) !important;
+  background-size:100% 100% !important;
+}
+/* Theme 3 — Metallic Black / Cyan overlay */
+body.theme-theme3 #brkDataScreen .brkds {
+  background: linear-gradient(120deg,#050607 0%,#111719 45%,#172126 72%,#18e6f2 100%) !important;
+  background-size:100% 100% !important;
+}
+/* Theme 4 — Red / White / Blue overlay */
+body.theme-theme4 #brkDataScreen .brkds {
+  background: linear-gradient(120deg,#cc1118 0%,#8f1118 28%,#ffffff 58%,#0a2b59 100%) !important;
+  background-size:100% 100% !important;
+}
+/* Theme 5 — Pink / Navy / Gold overlay */
+body.theme-theme5 #brkDataScreen .brkds {
+  background: linear-gradient(120deg,#ec4899 0%,#17133f 45%,#17133f 68%,#d9a441 100%) !important;
+  background-size:100% 100% !important;
+}
+/* Theme 6 — White / Pink / Deep Navy overlay */
+body.theme-theme6 #brkDataScreen .brkds {
+  background: linear-gradient(120deg,#ffffff 0%,#f4f4f6 30%,#ec4899 58%,#17133f 100%) !important;
+  background-size:100% 100% !important;
+}
+
+/* Apply the selected theme colour to the four requested display modes.
+   These selectors intentionally target only the generated display frame. */
+body.theme-theme1 #firstInnBattingScreen,
+body.theme-theme1 #secondInnBattingScreen,
+body.theme-theme1 #firstInnBowlingScreen,
+body.theme-theme1 #secondInnBowlingScreen,
+body.theme-theme1 #firstInningsBatting,
+body.theme-theme1 #secondInningsBatting,
+body.theme-theme1 #firstInningsBowling,
+body.theme-theme1 #secondInningsBowling,
+body.theme-theme2 #firstInnBattingScreen,
+body.theme-theme2 #secondInnBattingScreen,
+body.theme-theme2 #firstInnBowlingScreen,
+body.theme-theme2 #secondInnBowlingScreen,
+body.theme-theme2 #firstInningsBatting,
+body.theme-theme2 #secondInningsBatting,
+body.theme-theme2 #firstInningsBowling,
+body.theme-theme2 #secondInningsBowling,
+body.theme-theme3 #firstInnBattingScreen,
+body.theme-theme3 #secondInnBattingScreen,
+body.theme-theme3 #firstInnBowlingScreen,
+body.theme-theme3 #secondInnBowlingScreen,
+body.theme-theme3 #firstInningsBatting,
+body.theme-theme3 #secondInningsBatting,
+body.theme-theme3 #firstInningsBowling,
+body.theme-theme3 #secondInningsBowling,
+body.theme-theme4 #firstInnBattingScreen,
+body.theme-theme4 #secondInnBattingScreen,
+body.theme-theme4 #firstInnBowlingScreen,
+body.theme-theme4 #secondInnBowlingScreen,
+body.theme-theme4 #firstInningsBatting,
+body.theme-theme4 #secondInningsBatting,
+body.theme-theme4 #firstInningsBowling,
+body.theme-theme4 #secondInningsBowling,
+body.theme-theme5 #firstInnBattingScreen,
+body.theme-theme5 #secondInnBattingScreen,
+body.theme-theme5 #firstInnBowlingScreen,
+body.theme-theme5 #secondInnBowlingScreen,
+body.theme-theme5 #firstInningsBatting,
+body.theme-theme5 #secondInningsBatting,
+body.theme-theme5 #firstInningsBowling,
+body.theme-theme5 #secondInningsBowling,
+body.theme-theme6 #firstInnBattingScreen,
+body.theme-theme6 #secondInnBattingScreen,
+body.theme-theme6 #firstInnBowlingScreen,
+body.theme-theme6 #secondInnBowlingScreen,
+body.theme-theme6 #firstInningsBatting,
+body.theme-theme6 #secondInningsBatting,
+body.theme-theme6 #firstInningsBowling,
+body.theme-theme6 #secondInningsBowling {
+  background: transparent !important;
+}
+</style>
