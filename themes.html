@@ -242,7 +242,7 @@ body.theme-theme2 .fow-screen * {
   <div class="top"><div><div class="brand">🏏 BRKLIVE19</div><div class="sub">Professional Overlay Theme Selection</div></div><button class="btn" onclick="goBack()">← BACK TO SCORER</button></div>
   <div class="panel">
     <h2 style="margin:0">🎨 Overlay Themes</h2>
-    <div class="note">Choose a theme to apply to the live overlay. <b>THEME 1</b> contains the standard broadcast collection. <b>THEME 2, THEME 3 and THEME 4</b> are copied from Project 2 with their original overlay designs. <b>THEME 5</b> is the supplied pink/navy cricket design. <b>THEME 6</b> is the white-pill design based on the supplied reference.</div>
+    <div class="note">Each theme now uses its own independent overlay file. Every overlay reads live data only from the scorer/index bridge and does not communicate with another overlay. Choose a theme to apply to the live overlay. <b>THEME 1</b> contains the standard broadcast collection. <b>THEME 2, THEME 3 and THEME 4</b> are copied from Project 2 with their original overlay designs. <b>THEME 5</b> is the supplied pink/navy cricket design. <b>THEME 6</b> is the white-pill design based on the supplied reference.</div>
     <div class="theme-section open" id="themeSection1">
       <button class="theme-section-head" type="button" onclick="toggleThemeSection(1)">
         <span><b>THEME 1</b><small> • Broadcast Style Collection</small></span><span class="chevron">▾</span>
@@ -347,7 +347,7 @@ const themes=[
 const p=new URLSearchParams(location.search); let selected=p.get('selected')||localStorage.getItem('brklive19_pending_theme')||'blue'; let match=p.get('match')||localStorage.getItem('brklive19_theme_match')||''; let tournament=p.get('tournament')||'';
 try{const b=JSON.parse(localStorage.getItem('brklive19_score_bridge')||'null');if(b){if(!match)match=b.matchId||'';if(!tournament)tournament=b.tournamentName||b.tournament||'';}}catch(e){}
 const esc=s=>String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
-function overlayLink(theme){const u=new URL('./overlay.html',location.href);u.searchParams.set('theme',theme);if(match)u.searchParams.set('match',match);if(tournament)u.searchParams.set('tournament',tournament);return u.href;}
+function overlayLink(theme){const files={blue:'overlay_theme1.html',theme2:'overlay_theme2.html',theme3:'overlay_theme3.html',theme4:'overlay_theme4.html',theme5:'overlay_theme5.html',theme6:'overlay_theme6.html'};const u=new URL('./'+(files[theme]||files.blue),location.href);u.searchParams.set('theme',theme);if(match)u.searchParams.set('match',match);if(tournament)u.searchParams.set('tournament',tournament);return u.href;}
 window.toggleThemeSection=function(n){
   const el=document.getElementById('themeSection'+n);
   if(el) el.classList.toggle('open');
