@@ -371,6 +371,16 @@ body.theme-theme2 .fow-screen * {
   text-shadow: 0 2px 5px rgba(0,0,0,.45);
 }
 </style>
+
+<style id="brklive19-theme-color-controls">
+.themeColorCard{margin-top:10px;padding:12px;border:1px solid #34415f;border-radius:12px;background:#0b1020}
+.themeColorCard h4{margin:0 0 8px;color:var(--cyan);font-size:14px}
+.themeColorGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.themeColorItem{display:flex;flex-direction:column;gap:4px;color:var(--muted);font-size:11px}
+.themeColorItem input[type=color]{width:100%;height:38px;padding:2px;border-radius:8px;border:1px solid #34415f;background:#0b1020;cursor:pointer}
+@media(max-width:650px){.themeColorGrid{grid-template-columns:repeat(2,1fr)}}
+:root{--theme-primary:#087cff;--theme-secondary:#00d9ff;--theme-accent:#ffd12f;--theme-bg:#07101f}
+</style>
 </head>
 <body>
 
@@ -471,6 +481,11 @@ body.theme-theme2 .fow-screen * {
   <div style="display:flex;gap:10px;align-items:center;justify-content:flex-end;margin-top:10px;flex-wrap:wrap;">
     <button class="btn custom" style="width:auto;padding:10px 18px;" onclick="openThemePage()">🎨 OPEN THEME SECTION</button>
   </div>
+  <div class="themeColorCard">
+    <h4>🎨 THEME COLOUR</h4>
+    <div class="mini">Choose any theme and change its colours. The colour setting is saved separately for every theme.</div>
+    <button class="btn custom" style="margin-top:8px" onclick="openThemeColorModal()">🎨 CHANGE COLOUR FOR ALL THEMES</button>
+  </div>
 
   <h3 style="color:var(--cyan);margin-top:14px">🖥 Overlay Mode</h3>
   <div class="g4">
@@ -511,6 +526,35 @@ body.theme-theme2 .fow-screen * {
 </div>
 
 <!-- ===== MODALS ===== -->
+
+<div id="themeColorModal" class="modal">
+  <div class="modalBox">
+    <button class="close" onclick="closeModal('themeColorModal')">✕</button>
+    <h2>🎨 Theme Colour Changer</h2>
+    <label>Select Theme</label>
+    <select id="themeColorTheme">
+      <option value="blue">Theme 1 — BLUE</option><option value="neon">Theme 2 — NEON</option>
+      <option value="green">Theme 3 — GREEN</option><option value="gold">Theme 4 — GOLD</option>
+      <option value="theme2">Theme 5 — THEME 2</option><option value="theme3">Theme 6 — THEME 3</option>
+      <option value="theme4">Theme 7 — THEME 4</option><option value="theme5">Theme 8 — THEME 5</option>
+      <option value="theme6">Theme 9 — THEME 6</option><option value="glass">Theme 10 — GLASS</option>
+      <option value="carbon">Theme 11 — CARBON</option><option value="stadium">Theme 12 — STADIUM</option>
+      <option value="aurora">Theme 13 — AURORA</option><option value="metallic">Theme 14 — METALLIC</option>
+      <option value="redblack">Theme 15 — RED BLACK</option><option value="rainbow">Theme 16 — RAINBOW</option>
+    </select>
+    <div class="themeColorGrid" style="margin-top:8px">
+      <label class="themeColorItem">PRIMARY<input id="themePrimaryColor" type="color" value="#00b8e8"></label>
+      <label class="themeColorItem">SECONDARY<input id="themeSecondaryColor" type="color" value="#ffd900"></label>
+      <label class="themeColorItem">ACCENT<input id="themeAccentColor" type="color" value="#102875"></label>
+      <label class="themeColorItem">BACKGROUND<input id="themeBgColor" type="color" value="#07101f"></label>
+    </div>
+    <div class="g2" style="margin-top:10px">
+      <button class="btn good" onclick="applyThemeColours()">✅ APPLY COLOUR</button>
+      <button class="btn dark" onclick="resetThemeColours()">↩ RESET THEME</button>
+    </div>
+  </div>
+</div>
+
 <div id="startModal" class="modal">
   <div class="modalBox">
     <button class="close" onclick="closeModal('startModal')">✕</button>
@@ -692,6 +736,7 @@ body.theme-theme2 .fow-screen * {
       broadcast:{ type:"", text:"", active:false },
       customLower:{ text:"", active:false },
       customColors:{ primary:"#00b8e8", secondary:"#ffd900", accent:"#102875", summaryBg:"#07101f" },
+      themeColors:{},
       matchWinner:"", matchResult:"", resultText:"", status:"live",
       overlay:{
         showTournament:false, showVenue:false, showMatch:false, showToss:false, showResult:false, showBowler:false, showFOW:false, showTarget:false,
@@ -1650,6 +1695,41 @@ body.theme-theme2 .fow-screen * {
     render();
   };
 
+
+  function themeColourDefaults(theme){
+    const d={blue:['#087cff','#00d9ff','#ffd12f','#07101f'],neon:['#ff00e5','#00f5ff','#9b2cff','#080014'],green:['#079447','#20e070','#e3c400','#06140b'],gold:['#b36a00','#ffd12f','#fff1a8','#171006'],theme2:['#155EEF','#6D28D9','#E11D48','#061B52'],theme3:['#00eaff','#111827','#06b6d4','#020617'],theme4:['#e11d48','#2563eb','#ffffff','#0f172a'],theme5:['#ec4899','#0f172a','#f5c542','#111827'],theme6:['#ffffff','#ec4899','#0f172a','#fdf2f8'],glass:['#67e8f9','#a78bfa','#ffffff','#0f172a'],carbon:['#94a3b8','#475569','#e2e8f0','#09090b'],stadium:['#16a34a','#22c55e','#facc15','#052e16'],aurora:['#22d3ee','#a855f7','#34d399','#07111f'],metallic:['#d1d5db','#64748b','#f8fafc','#111827'],redblack:['#ef4444','#991b1b','#ffffff','#050505'],rainbow:['#ff0055','#7c3aed','#00d9ff','#111827']};
+    return d[theme] || d.blue;
+  }
+  function loadThemeColourInputs(){
+    const theme=document.getElementById('themeColorTheme')?.value || S.theme || 'blue';
+    const saved=S.themeColors?.[theme]; const c=saved || themeColourDefaults(theme);
+    ['themePrimaryColor','themeSecondaryColor','themeAccentColor','themeBgColor'].forEach((id,i)=>{const e=document.getElementById(id);if(e)e.value=c[i]||themeColourDefaults(theme)[i];});
+  }
+  window.openThemeColorModal=function(){
+    const sel=document.getElementById('themeColorTheme'); if(sel) sel.value=S.theme||'blue';
+    loadThemeColourInputs(); openModal('themeColorModal');
+  };
+  window.applyThemeColours=async function(){
+    const theme=document.getElementById('themeColorTheme').value;
+    S.themeColors=S.themeColors||{};
+    S.themeColors[theme]=[document.getElementById('themePrimaryColor').value,document.getElementById('themeSecondaryColor').value,document.getElementById('themeAccentColor').value,document.getElementById('themeBgColor').value];
+    S.theme=theme;
+    try{localStorage.setItem('brklive19_theme_colors',JSON.stringify(S.themeColors));}catch(e){}
+    await save(); render(); closeModal('themeColorModal'); alert('✅ COLOUR APPLIED TO '+theme.toUpperCase());
+  };
+  window.resetThemeColours=async function(){
+    const theme=document.getElementById('themeColorTheme').value; S.themeColors=S.themeColors||{}; delete S.themeColors[theme];
+    try{localStorage.setItem('brklive19_theme_colors',JSON.stringify(S.themeColors));}catch(e){}
+    loadThemeColourInputs(); await save(); render();
+  };
+  document.addEventListener('change',e=>{if(e.target?.id==='themeColorTheme')loadThemeColourInputs();});
+  function applySelectedThemeColours(){
+    try{const stored=JSON.parse(localStorage.getItem('brklive19_theme_colors')||'{}'); S.themeColors={...(S.themeColors||{}),...stored};}catch(e){}
+    const c=S.themeColors?.[S.theme] || themeColourDefaults(S.theme||'blue');
+    document.documentElement.style.setProperty('--theme-primary',c[0]);document.documentElement.style.setProperty('--theme-secondary',c[1]);document.documentElement.style.setProperty('--theme-accent',c[2]);document.documentElement.style.setProperty('--theme-bg',c[3]);
+    document.body.style.setProperty('--theme-primary',c[0]);document.body.style.setProperty('--theme-secondary',c[1]);document.body.style.setProperty('--theme-accent',c[2]);document.body.style.setProperty('--theme-bg',c[3]);
+  }
+
   window.openThemePage = function(){
     const params = new URLSearchParams();
     if (S.matchId) params.set('match', S.matchId);
@@ -1752,6 +1832,7 @@ body.theme-theme2 .fow-screen * {
 
   // ---- render ----
   function render() {
+    applySelectedThemeColours();
     const customPreview = $("lowerPreview"); if (customPreview) customPreview.textContent = (S.customLower&&S.customLower.active) ? S.customLower.text : "Preview";
     const statusEl = $("status");
     if (statusEl) {
