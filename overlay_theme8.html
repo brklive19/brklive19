@@ -1,0 +1,1618 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>BRKLIVE19 Overlay</title>
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:transparent;font-family:Arial,Helvetica,sans-serif}
+body{color:#fff}
+#overlay{position:relative;width:100vw;height:100vh;background:transparent;overflow:hidden}
+
+/* LIVE BUG */
+.live{position:absolute;right:2%;top:2%;display:flex;align-items:center;gap:8px;padding:6px 11px 6px 7px;border:2px solid #ff334d;border-radius:22px;background:rgba(0,0,0,.86);font-size:clamp(12px,1.25vw,22px);font-weight:900;z-index:30;box-shadow:0 0 20px #ff183d66}
+.dot{width:16px;height:16px;border-radius:50%;background:#ff173b;box-shadow:0 0 13px #ff173b}
+.live span:last-child{background:#ef1838;border-radius:7px;padding:3px 9px}
+
+/* EVENT ANIMATIONS */
+#event{position:absolute;inset:0;display:none;z-index:25;pointer-events:none;overflow:hidden}
+#event.show{display:block}
+#event.shake{animation:screenShake .55s cubic-bezier(.36,.07,.19,.97) both}
+@keyframes screenShake{10%,90%{transform:translate(-4px,2px)}20%,80%{transform:translate(6px,-3px)}30%,50%,70%{transform:translate(-9px,3px)}40%,60%{transform:translate(9px,-2px)}}
+.ev-burst{position:absolute;left:50%;top:50%;width:200vmax;height:200vmax;transform:translate(-50%,-50%) scale(.05);border-radius:50%;opacity:0;background:radial-gradient(circle,var(--c1) 0%,transparent 42%),radial-gradient(circle,var(--c2) 0%,transparent 70%);animation:burstIn .95s ease-out forwards}
+@keyframes burstIn{0%{transform:translate(-50%,-50%) scale(.05);opacity:0}22%{transform:translate(-50%,-50%) scale(.45);opacity:.95}100%{transform:translate(-50%,-50%) scale(1.08);opacity:0}}
+.ev-rays{position:absolute;left:50%;top:50%;width:175vmax;height:175vmax;transform:translate(-50%,-50%);opacity:0;mix-blend-mode:screen;background:conic-gradient(from 0deg,transparent 0 5deg,var(--c1) 5deg 8deg,transparent 8deg 22deg,var(--c2) 22deg 24deg,transparent 24deg 44deg,var(--c1) 44deg 46deg,transparent 46deg 60deg);-webkit-mask-image:radial-gradient(circle,transparent 10%,#000 28%,transparent 66%);mask-image:radial-gradient(circle,transparent 10%,#000 28%,transparent 66%);animation:raysSpin 1.15s ease-out forwards}
+@keyframes raysSpin{0%{opacity:0;transform:translate(-50%,-50%) rotate(0deg) scale(.3)}30%{opacity:.9}100%{opacity:0;transform:translate(-50%,-50%) rotate(150deg) scale(1)}}
+.ev-particles{position:absolute;left:50%;top:50%;width:0;height:0;z-index:2}
+.ev-particles i{position:absolute;left:0;top:0;width:14px;height:14px;margin:-7px 0 0 -7px;border-radius:50%;background:var(--c1);box-shadow:0 0 16px var(--c1),0 0 30px var(--c2);opacity:0;animation:particleFly 1.2s cubic-bezier(.15,.7,.3,1) forwards;animation-delay:var(--pd,0s)}
+@keyframes particleFly{0%{opacity:0;transform:translate(0,0) scale(.2)}22%{opacity:1;transform:translate(calc(var(--tx)*.35),calc(var(--ty)*.35)) scale(1.1)}100%{opacity:0;transform:translate(var(--tx),var(--ty)) scale(.15)}}
+.ev-deco{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.ev-content{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;perspective:900px}
+.ev-text{font-size:clamp(50px,11.5vw,200px);font-weight:1000;font-style:italic;letter-spacing:-.02em;line-height:.92;text-transform:uppercase;color:#fff;white-space:nowrap;opacity:0;text-shadow:4px 6px 0 rgba(0,0,0,.85),0 0 26px var(--c1),0 0 72px var(--c2)}
+.ev-text.long{font-size:clamp(34px,7.5vw,124px)}
+.ev-text.xlong{font-size:clamp(24px,5.2vw,88px)}
+.ev-four .ev-text{animation:fourIn .8s cubic-bezier(.15,1.6,.4,1) forwards}
+.ev-six .ev-text{animation:sixIn .9s cubic-bezier(.2,1.5,.35,1) forwards}
+.ev-wicket .ev-text{animation:wicketIn .95s linear forwards}
+.ev-runout .ev-text{animation:runOutIn .82s cubic-bezier(.15,1.5,.4,1) forwards}
+.ev-freehit .ev-text{animation:freeHitIn .8s ease-out forwards,freeHitPulse 1s ease-in-out .8s infinite alternate}
+.ev-hattrick .ev-text{animation:hatIn .95s ease-out forwards,hatFlicker .55s steps(2,end) .95s infinite}
+@keyframes fourIn{0%{opacity:0;transform:translateX(-70vw) skewX(-28deg) scale(.6)}55%{opacity:1;transform:translateX(2vw) skewX(7deg) scale(1.08)}75%{transform:translateX(-1vw) skewX(-4deg) scale(.98)}100%{opacity:1;transform:translateX(0) skewX(0) scale(1)}}
+@keyframes sixIn{0%{opacity:0;transform:translateY(-80vh) rotate(-14deg) scale(.35)}50%{opacity:1;transform:translateY(4vh) rotate(5deg) scale(1.2)}68%{transform:translateY(-2vh) rotate(-3deg) scale(.94)}84%{transform:translateY(1vh) rotate(1deg) scale(1.05)}100%{opacity:1;transform:translateY(0) rotate(0) scale(1)}}
+@keyframes wicketIn{0%{opacity:0;transform:scale(2.4);filter:blur(16px)}35%{opacity:1;transform:scale(.92);filter:blur(0)}45%{transform:translateX(-14px) scale(1.04)}55%{transform:translateX(14px) scale(.98)}65%{transform:translateX(-9px)}75%{transform:translateX(9px)}85%{transform:translateX(-4px)}100%{opacity:1;transform:translateX(0) scale(1)}}
+@keyframes runOutIn{0%{opacity:0;transform:translateX(72vw) skewX(22deg) scale(.8)}55%{opacity:1;transform:translateX(-3vw) skewX(-6deg) scale(1.06)}78%{transform:translateX(1vw) skewX(2deg) scale(.99)}100%{opacity:1;transform:translateX(0) skewX(0) scale(1)}}
+@keyframes freeHitIn{0%{opacity:0;transform:scale(.15)}40%{opacity:1;transform:scale(1.22)}55%{transform:scale(.94)}70%{transform:scale(1.1)}85%{transform:scale(.98)}100%{opacity:1;transform:scale(1)}}
+@keyframes freeHitPulse{0%{filter:drop-shadow(0 0 18px var(--c1)) brightness(1)}100%{filter:drop-shadow(0 0 55px var(--c1)) brightness(1.5)}}
+@keyframes hatIn{0%{opacity:0;transform:scale(.25) rotate(-10deg);filter:brightness(4) blur(6px)}25%{opacity:1;transform:scale(1.18) rotate(4deg);filter:brightness(2) blur(0)}38%{opacity:.35}48%{opacity:1}58%{opacity:.45}70%{opacity:1;transform:scale(.96)}100%{opacity:1;transform:scale(1) rotate(0);filter:brightness(1)}}
+@keyframes hatFlicker{0%,100%{text-shadow:4px 6px 0 rgba(0,0,0,.85),0 0 26px var(--c1),0 0 72px var(--c2)}50%{text-shadow:4px 6px 0 rgba(0,0,0,.85),0 0 55px #fff,0 0 120px var(--c1)}}
+.deco-streak{position:absolute;top:50%;left:50%;width:70vw;height:clamp(6px,.9vw,15px);border-radius:999px;transform:translate(-50%,-50%) scaleX(0);opacity:0;background:linear-gradient(90deg,transparent,var(--c1),#fff,var(--c1),transparent);filter:blur(1px) drop-shadow(0 0 16px var(--c1))}
+.deco-streak.s1{animation:streakGo .72s ease-out forwards}
+.deco-streak.s2{top:37%;animation:streakGo .72s ease-out .08s forwards;width:58vw}
+.deco-streak.s3{top:63%;animation:streakGo .72s ease-out .16s forwards;width:64vw}
+@keyframes streakGo{0%{transform:translate(-50%,-50%) scaleX(0);opacity:0}30%{opacity:1}100%{transform:translate(-50%,-50%) scaleX(1);opacity:0}}
+.deco-sixball{position:absolute;left:-12vw;bottom:6vh;width:clamp(34px,4.4vw,78px);aspect-ratio:1;border-radius:50%;background:radial-gradient(circle at 32% 27%,#fff 0 10%,#ffd15c 12% 45%,#b25b00 46% 60%,#ff9a1f 62% 100%);box-shadow:0 0 45px #ff9a1f,0 0 95px #ff5a00,0 0 140px #ff2d00;opacity:0;animation:sixBall 1.25s cubic-bezier(.3,.08,.5,1) forwards}
+@keyframes sixBall{0%{opacity:0;transform:translate(0,0) rotate(0)}8%{opacity:1}50%{transform:translate(52vw,-34vh) rotate(420deg)}100%{opacity:0;transform:translate(122vw,-6vh) rotate(960deg)}}
+.deco-stump{position:absolute;left:50%;top:50%;width:clamp(9px,1.15vw,19px);height:clamp(60px,9vw,150px);border-radius:6px;background:linear-gradient(#fff,#a9b6cc);box-shadow:0 0 22px var(--c1);opacity:0}
+.deco-stump.k1{margin-left:calc(-50% - clamp(20px,2.2vw,40px));animation:stumpFlyL 1s ease-out forwards}
+.deco-stump.k2{animation:stumpFlyC 1s ease-out forwards}
+.deco-stump.k3{margin-left:calc(-50% + clamp(20px,2.2vw,40px));animation:stumpFlyR 1s ease-out forwards}
+@keyframes stumpFlyL{0%{opacity:0;transform:translate(-50%,-50%) rotate(0)}15%{opacity:1}100%{opacity:0;transform:translate(calc(-50% - 28vw),calc(-50% - 34vh)) rotate(-340deg)}}
+@keyframes stumpFlyC{0%{opacity:0;transform:translate(-50%,-50%) rotate(0)}15%{opacity:1}100%{opacity:0;transform:translate(-50%,calc(-50% - 42vh)) rotate(240deg)}}
+@keyframes stumpFlyR{0%{opacity:0;transform:translate(-50%,-50%) rotate(0)}15%{opacity:1}100%{opacity:0;transform:translate(calc(-50% + 28vw),calc(-50% - 34vh)) rotate(360deg)}}
+.deco-runball{position:absolute;left:-8vw;top:50%;margin-top:clamp(-16px,-2.2vw,-38px);width:clamp(32px,4.2vw,74px);aspect-ratio:1;border-radius:50%;background:radial-gradient(circle at 32% 27%,#fff 0 10%,#ffd15c 12% 45%,#b25b00 46% 60%,#ff9a1f 62% 100%);box-shadow:0 0 40px var(--c1),0 0 90px var(--c2);opacity:0;animation:runBall .85s cubic-bezier(.25,.6,.4,1) forwards}
+@keyframes runBall{0%{opacity:0;transform:translateX(0) rotate(0)}15%{opacity:1}100%{opacity:0;transform:translateX(118vw) rotate(760deg)}}
+.deco-bolt{position:absolute;top:-4%;height:108%;width:clamp(50px,7vw,130px);transform:translateX(-50%) scaleY(.3);opacity:0;background:linear-gradient(180deg,#fff,var(--c1) 45%,transparent);clip-path:polygon(46% 0,64% 40%,52% 40%,74% 100%,38% 56%,48% 56%,30% 0);filter:drop-shadow(0 0 28px var(--c1));animation:boltFlash .95s ease-out forwards}
+.deco-bolt.b1{left:32%}
+.deco-bolt.b2{left:68%;animation-delay:.12s;transform:translateX(-50%) scaleY(.3) scaleX(-1)}
+@keyframes boltFlash{0%{opacity:0;transform:translateX(-50%) scaleY(.3)}22%{opacity:1}45%{opacity:.25}60%{opacity:1}100%{opacity:0;transform:translateX(-50%) scaleY(1.15)}}
+.deco-ring{position:absolute;left:50%;top:50%;width:12vmax;height:12vmax;border-radius:50%;border:4px solid var(--c1);box-shadow:0 0 45px var(--c1),inset 0 0 45px var(--c2);transform:translate(-50%,-50%) scale(.15);opacity:0;animation:ringOut 1.05s ease-out forwards}
+.deco-ring.r2{animation-delay:.14s}
+.deco-ring.r3{animation-delay:.28s}
+@keyframes ringOut{0%{transform:translate(-50%,-50%) scale(.15);opacity:0}25%{opacity:1}100%{transform:translate(-50%,-50%) scale(3.2);opacity:0}}
+
+/* CORNER TEAM DESIGN */
+.broadcast-row{position:relative;display:flex;align-items:stretch;width:100%;min-height:82px}
+.corner-team{position:absolute;top:0;width:18%;height:100%;display:flex;align-items:center;justify-content:center;gap:10px;padding:5px 10px;z-index:5;color:#fff;font-size:clamp(12px,1.45vw,25px);font-weight:1000;text-transform:uppercase;white-space:nowrap;overflow:hidden;border:3px solid #dce7ff;text-shadow:0 2px 4px #000}
+.corner-team span{overflow:hidden;text-overflow:ellipsis}
+.left-team{left:0;border-radius:20px 8px 8px 20px;background:linear-gradient(135deg,#0878ff,#032d9d 70%,#061c5d);clip-path:polygon(0 0,90% 0,100% 50%,90% 100%,0 100%);padding-right:35px}
+.right-team{right:0;border-radius:8px 20px 20px 8px;background:linear-gradient(135deg,#730008,#d71932 70%,#ff314a);clip-path:polygon(10% 0,100% 0,100% 100%,10% 100%,0 50%);padding-left:35px}
+.center-score{width:68%;margin:0 auto;min-height:82px;display:grid;grid-template-columns:36% 29% 35%;border:3px solid #dce7ff;border-radius:18px;overflow:hidden;background:linear-gradient(#f8fbff,#c2cad7);color:#111827}
+
+/* LOWER THIRD (score bar) */
+.lower{position:absolute;left:50%;bottom:3%;transform:translateX(-50%);width:min(88vw,1550px);z-index:10;padding:0}
+.lower.hidden{display:none}
+
+/* ROTATING INFO BAR */
+.tournament{width:52%;margin:auto;display:flex;align-items:center;justify-content:center;gap:10px;height:clamp(36px,3.1vw,54px);padding:3px 16px;border:2px solid #e8c94a;border-bottom:0;border-radius:17px 17px 0 0;background:linear-gradient(90deg,#10194b,#1743bc,#10194b);font-size:clamp(12px,1.25vw,24px);font-weight:1000;text-transform:uppercase;white-space:nowrap;overflow:hidden}
+.tournament .info-label{flex:0 0 auto;display:inline-block;background:linear-gradient(#ffe98f,#e8c94a);color:#0b1240;border-radius:7px;padding:2px 9px;font-size:.8em;letter-spacing:.5px;box-shadow:0 0 12px #e8c94a66}
+.tournament .info-value{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-shadow:0 2px 4px #000}
+.tournament.infoFlash{animation:infoIn .45s ease-out}
+@keyframes infoIn{0%{opacity:.55;transform:translateY(5px)}100%{opacity:1;transform:none}}
+
+.players,.bowler{padding:5px 13px;display:flex;flex-direction:column;justify-content:center;font-size:clamp(10px,1.05vw,18px);font-weight:800}
+.row{display:grid;grid-template-columns:minmax(0,1fr) 42px 38px;padding:2px 0 2px 9px;border-bottom:1px solid #7b8490}
+.row:last-child{border:0}
+.center{display:grid !important;grid-template-columns:minmax(0,1fr) 82px !important;align-items:stretch;background:linear-gradient(135deg,#ffd32b,#fff0a0);text-align:center}
+.runs{font-size:clamp(27px,3.1vw,55px);font-weight:1000;line-height:1;margin-top:8px}
+.crr{font-size:clamp(10px,1vw,17px);font-weight:1000;margin-top:5px;white-space:nowrap}
+.overs{display:flex;align-items:center;justify-content:center;background:linear-gradient(#1663ef,#082c8e);color:white;font-size:clamp(14px,1.5vw,26px);font-weight:1000;min-width:0}
+.bowtop{display:grid;grid-template-columns:1fr 60px 40px;padding-bottom:5px;border-bottom:1px solid #7b8490}
+.balls{display:flex;gap:5px;margin-top:7px}
+.ball{width:clamp(20px,1.7vw,31px);height:clamp(20px,1.7vw,31px);border-radius:50%;display:grid;place-items:center;background:#172034;color:#fff;border:2px solid #fff;font-size:clamp(10px,1vw,17px);font-weight:1000}
+.ball.four{background:#0878ff}.ball.six{background:#ffd21f;color:#111}.ball.wicket{background:#ed1739}.ball.wide{background:#19c85b}.ball.noball{background:#9233ed}
+
+@media(max-width:800px){
+.broadcast-row{min-height:82px}
+.corner-team{width:21%;font-size:clamp(9px,2.1vw,15px);padding:4px 5px}
+.left-team{padding-right:18px}
+.right-team{padding-left:18px}
+.center-score{width:66%;min-height:82px;grid-template-columns:36% 29% 35%}
+.players,.bowler{padding:4px 6px}
+.row{grid-template-columns:1fr 35px 30px}
+.tournament{width:70%}
+}
+
+html,body,body *{text-transform:uppercase !important}
+
+/* =========================================================
+   LOWER BANNER (broadcast-style card at the bottom)
+   ========================================================= */
+#bannerLower{
+  position:absolute;
+  left:50%;
+  bottom:3%;
+  transform:translateX(-50%);
+  width:min(88vw,1550px);
+  z-index:12;
+  display:none;
+  pointer-events:none;
+}
+#bannerLower.show{display:block}
+
+.bannerCard{
+  border-radius:18px;
+  border:3px solid #dce7ff;
+  background:
+    radial-gradient(ellipse at 0% 0%, rgba(8,120,255,.55), transparent 55%),
+    radial-gradient(ellipse at 100% 100%, rgba(215,25,50,.45), transparent 55%),
+    linear-gradient(95deg,#0a1230 0%,#10194b 40%,#1743bc 70%,#0a1230 100%);
+  box-shadow:0 0 45px rgba(8,120,255,.5), 0 20px 60px rgba(0,0,0,.8), inset 0 1px 0 rgba(255,255,255,.18);
+  padding:clamp(14px,1.8vh,24px) clamp(20px,2.2vw,40px);
+  min-height:88px;
+  position:relative;
+  overflow:hidden;
+  transform-origin:bottom center;
+  will-change:transform,opacity;
+  animation:bannerSlideUp .55s cubic-bezier(.2,1.15,.35,1);
+}
+@keyframes bannerSlideUp{
+  0%   {opacity:0; transform:translateY(80px) scale(.92); filter:blur(6px)}
+  55%  {opacity:1; transform:translateY(-6px) scale(1.015); filter:blur(0)}
+  80%  {opacity:1; transform:translateY(2px) scale(.998)}
+  100% {opacity:1; transform:translateY(0) scale(1)}
+}
+.bannerCard.no-anim{animation:none}
+
+.bannerCard.gold{
+  background:
+    radial-gradient(ellipse at 0% 0%, rgba(255,200,50,.45), transparent 55%),
+    radial-gradient(ellipse at 100% 100%, rgba(215,25,50,.40), transparent 55%),
+    linear-gradient(95deg,#1a1408 0%,#3a2a06 40%,#8a5a00 70%,#1a1408 100%);
+  border-color:#e8c94a;
+}
+.bannerCard.red{
+  background:
+    radial-gradient(ellipse at 0% 0%, rgba(255,60,90,.55), transparent 55%),
+    radial-gradient(ellipse at 100% 100%, rgba(120,0,20,.55), transparent 55%),
+    linear-gradient(95deg,#2a0209 0%,#730008 40%,#d71932 70%,#2a0209 100%);
+  border-color:#ffb0b8;
+}
+
+/* Light-sweep shine overlay */
+.bannerCard::after{
+  content:"";
+  position:absolute;
+  top:-10%;
+  bottom:-10%;
+  left:0;
+  width:55%;
+  background:linear-gradient(100deg,
+    transparent 0%,
+    rgba(255,255,255,.12) 30%,
+    rgba(255,255,255,.55) 48%,
+    rgba(255,255,255,.85) 50%,
+    rgba(255,255,255,.55) 52%,
+    rgba(255,255,255,.12) 70%,
+    transparent 100%);
+  pointer-events:none;
+  transform:translateX(-120%) skewX(-18deg);
+  opacity:0;
+  mix-blend-mode:screen;
+  z-index:5;
+}
+.bannerCard.playing::after{
+  animation:bannerSweep .95s cubic-bezier(.25,.85,.4,1) .08s forwards;
+}
+@keyframes bannerSweep{
+  0%   {transform:translateX(-120%) skewX(-18deg); opacity:0}
+  15%  {opacity:1}
+  100% {transform:translateX(280%) skewX(-18deg); opacity:0}
+}
+
+.bannerInner{
+  display:flex;
+  align-items:center;
+  gap:clamp(14px,1.6vw,28px);
+  position:relative;
+  z-index:2;
+}
+
+.bannerTag{
+  flex:0 0 auto;
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding:clamp(6px,1vh,11px) clamp(14px,1.6vw,22px);
+  border-radius:999px;
+  background:linear-gradient(#ffe98f,#e8c94a);
+  color:#0b1240;
+  font-size:clamp(11px,1.2vw,18px);
+  font-weight:1000;
+  letter-spacing:2px;
+  border:2px solid #b8941f;
+  box-shadow:0 0 22px rgba(232,201,74,.7);
+  text-shadow:0 1px 2px rgba(255,255,255,.4);
+  white-space:nowrap;
+}
+.bannerTag.blue{
+  background:linear-gradient(135deg,#0878ff,#032d9d);
+  color:#fff;
+  border-color:#dce7ff;
+  box-shadow:0 0 22px rgba(8,120,255,.7);
+  text-shadow:0 2px 5px rgba(0,0,0,.7);
+}
+.bannerTag.red{
+  background:linear-gradient(135deg,#d71932,#730008);
+  color:#fff;
+  border-color:#ffb0b8;
+  box-shadow:0 0 22px rgba(215,25,50,.7);
+  text-shadow:0 2px 5px rgba(0,0,0,.7);
+}
+@keyframes tagPop{
+  0%   {transform:scale(.35) rotate(-10deg); opacity:0; filter:brightness(2)}
+  55%  {transform:scale(1.14) rotate(3deg); opacity:1; filter:brightness(1.15)}
+  100% {transform:scale(1) rotate(0); opacity:1; filter:brightness(1)}
+}
+.bannerCard.playing .bannerTag{
+  animation:tagPop .55s cubic-bezier(.2,1.5,.4,1) .12s both;
+}
+
+.bannerMainWrap{
+  flex:1 1 auto;
+  min-width:0;
+  display:flex;
+  flex-direction:column;
+  gap:2px;
+  overflow:hidden;
+}
+.bannerMainTitle{
+  font-size:clamp(20px,3.4vw,56px);
+  font-weight:1000;
+  line-height:1;
+  letter-spacing:-.01em;
+  color:#fff;
+  text-shadow:3px 4px 0 rgba(0,0,0,.75), 0 0 22px rgba(8,120,255,.7);
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.bannerMainTitle.gold{color:#ffe98f;text-shadow:3px 4px 0 rgba(0,0,0,.75), 0 0 22px rgba(255,180,0,.75)}
+.bannerMainTitle.red{color:#ffd0d5;text-shadow:3px 4px 0 rgba(0,0,0,.75), 0 0 22px rgba(255,50,80,.75)}
+.bannerMainSub{
+  font-size:clamp(11px,1.3vw,20px);
+  font-weight:900;
+  letter-spacing:2px;
+  color:#ffe98f;
+  text-shadow:0 2px 6px rgba(0,0,0,.75);
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.bannerMainSub.blue{color:#a8d3ff}
+.bannerMainSub.red{color:#ffb8c0}
+@keyframes titleWipe{
+  0%   {clip-path:inset(0 100% 0 0); opacity:0; transform:translateX(-14px)}
+  60%  {clip-path:inset(0 0 0 0); opacity:1; transform:translateX(0)}
+  100% {clip-path:inset(0 0 0 0); opacity:1; transform:translateX(0)}
+}
+.bannerCard.playing .bannerMainTitle{
+  animation:titleWipe .6s cubic-bezier(.3,.9,.3,1) .16s both;
+}
+.bannerCard.playing .bannerMainSub{
+  animation:titleWipe .55s cubic-bezier(.3,.9,.3,1) .28s both;
+}
+
+.bannerStats{
+  flex:0 0 auto;
+  display:flex;
+  gap:clamp(10px,1.4vw,22px);
+  align-items:center;
+  padding-left:clamp(10px,1.4vw,22px);
+  border-left:2px dashed rgba(255,255,255,.35);
+}
+.bannerStat{
+  text-align:center;
+  min-width:clamp(40px,4vw,72px);
+}
+.bannerStat .lbl{
+  font-size:clamp(8px,.9vw,12px);
+  font-weight:1000;
+  letter-spacing:1.6px;
+  color:#8fb8ff;
+  text-shadow:0 2px 4px rgba(0,0,0,.75);
+}
+.bannerStat .val{
+  font-size:clamp(15px,1.9vw,32px);
+  font-weight:1000;
+  line-height:1.05;
+  margin-top:2px;
+  color:#fff;
+  text-shadow:0 2px 5px rgba(0,0,0,.8), 0 0 14px rgba(8,120,255,.55);
+}
+.bannerStat.gold .val{color:#ffe98f;text-shadow:0 2px 5px rgba(0,0,0,.8), 0 0 14px rgba(232,201,74,.7)}
+.bannerStat.red .val{color:#ffd0d5;text-shadow:0 2px 5px rgba(0,0,0,.8), 0 0 14px rgba(215,25,50,.7)}
+@keyframes statSlideIn{
+  0%   {opacity:0; transform:translateY(18px) scale(.85)}
+  65%  {opacity:1; transform:translateY(-3px) scale(1.04)}
+  100% {opacity:1; transform:translateY(0) scale(1)}
+}
+.bannerCard.playing .bannerStat{
+  animation:statSlideIn .42s cubic-bezier(.2,1.2,.35,1) both;
+}
+.bannerCard.playing .bannerStat:nth-child(1){animation-delay:.30s}
+.bannerCard.playing .bannerStat:nth-child(2){animation-delay:.37s}
+.bannerCard.playing .bannerStat:nth-child(3){animation-delay:.44s}
+.bannerCard.playing .bannerStat:nth-child(4){animation-delay:.51s}
+.bannerCard.playing .bannerStat:nth-child(5){animation-delay:.58s}
+
+.bannerVS{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:clamp(12px,2vw,32px);
+  flex:1 1 auto;
+  min-width:0;
+}
+.bannerVS .team{
+  font-size:clamp(18px,2.8vw,48px);
+  font-weight:1000;
+  color:#fff;
+  text-shadow:3px 4px 0 rgba(0,0,0,.75), 0 0 22px rgba(8,120,255,.75);
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.bannerVS .team.b{
+  color:#ffd0d5;
+  text-shadow:3px 4px 0 rgba(0,0,0,.75), 0 0 22px rgba(215,25,50,.75);
+}
+.bannerVS .vs{
+  font-size:clamp(16px,2.4vw,40px);
+  font-weight:1000;
+  font-style:italic;
+  color:#ffe98f;
+  text-shadow:3px 4px 0 rgba(0,0,0,.8), 0 0 24px rgba(255,180,0,.85);
+}
+@keyframes vsLeft{
+  0%   {opacity:0; transform:translateX(-70px) scale(.7)}
+  70%  {opacity:1; transform:translateX(4px) scale(1.04)}
+  100% {opacity:1; transform:translateX(0) scale(1)}
+}
+@keyframes vsRight{
+  0%   {opacity:0; transform:translateX(70px) scale(.7)}
+  70%  {opacity:1; transform:translateX(-4px) scale(1.04)}
+  100% {opacity:1; transform:translateX(0) scale(1)}
+}
+@keyframes vsCenter{
+  0%   {opacity:0; transform:scale(.2) rotate(-25deg); filter:brightness(3)}
+  55%  {opacity:1; transform:scale(1.25) rotate(6deg); filter:brightness(1.4)}
+  100% {opacity:1; transform:scale(1) rotate(0); filter:brightness(1)}
+}
+.bannerCard.playing .bannerVS .team:first-child{animation:vsLeft .55s cubic-bezier(.2,1.2,.35,1) .12s both}
+.bannerCard.playing .bannerVS .vs{animation:vsCenter .6s cubic-bezier(.2,1.4,.4,1) .28s both}
+.bannerCard.playing .bannerVS .team:last-child{animation:vsRight .55s cubic-bezier(.2,1.2,.35,1) .12s both}
+
+@media(max-width:800px){
+  .bannerInner{flex-wrap:wrap;gap:10px}
+  .bannerStats{border-left:0;padding-left:0;width:100%;justify-content:space-around}
+  .bannerStat{min-width:52px}
+}
+
+/* ================= DATA SCREEN (fullscreen: summary, scorecard, XI, innings) ================= */
+#dataScreen{
+  position:fixed;inset:0;display:none;
+  align-items:center;justify-content:center;
+  padding:clamp(6px,1.2vh,18px);
+  z-index:60;
+  background:transparent;
+  overflow:hidden;
+}
+#dataScreen.show{display:flex}
+
+.dataCard{
+  position:relative;z-index:2;
+  width:min(1500px,98vw);
+  height:min(96vh,100%);
+  display:flex;flex-direction:column;
+  overflow:hidden;
+  border-radius:clamp(14px,1.6vw,26px);
+  background:linear-gradient(#f8fbff,#c2cad7);
+  border:3px solid #dce7ff;
+  box-shadow:0 0 60px rgba(8,120,255,.4),0 30px 90px rgba(0,0,0,.85),inset 0 1px 0 rgba(255,255,255,.95);
+  padding:clamp(10px,1.4vh,20px) clamp(12px,1.6vw,28px);
+  color:#111827;
+  animation:dsCardIn .62s cubic-bezier(.2,1.15,.35,1);
+  transform-origin:center center;
+  perspective:1200px;
+  will-change:transform,opacity;
+}
+.dataCard.no-anim{animation:none}
+@keyframes dsCardIn{
+  0%   {opacity:0; transform:scale(.82) rotateX(8deg); filter:blur(14px)}
+  45%  {opacity:1; transform:scale(1.03) rotateX(-1deg); filter:blur(0)}
+  72%  {transform:scale(.995) rotateX(0)}
+  100% {opacity:1; transform:scale(1) rotateX(0); filter:blur(0)}
+}
+
+/* Sweep overlay for full screen */
+.dataCard::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(120deg,
+    transparent 0%,
+    rgba(255,255,255,.18) 32%,
+    rgba(255,255,255,.75) 48%,
+    rgba(255,255,255,.95) 50%,
+    rgba(255,255,255,.75) 52%,
+    rgba(255,255,255,.18) 68%,
+    transparent 100%);
+  pointer-events:none;
+  transform:translateX(-110%);
+  opacity:0;
+  mix-blend-mode:screen;
+  z-index:5;
+  border-radius:inherit;
+}
+.dataCard.playing::before{
+  animation:dsSweep 1.05s cubic-bezier(.25,.85,.4,1) .1s forwards;
+}
+@keyframes dsSweep{
+  0%   {transform:translateX(-110%); opacity:0}
+  15%  {opacity:1}
+  100% {transform:translateX(110%); opacity:0}
+}
+
+@keyframes dsRowIn{
+  0%   {opacity:0; transform:translateY(14px)}
+  100% {opacity:1; transform:translateY(0)}
+}
+.dataCard.playing .dsTournament{animation:dsRowIn .45s cubic-bezier(.2,1,.35,1) .05s both}
+.dataCard.playing .dsTopbar    {animation:dsRowIn .5s  cubic-bezier(.2,1,.35,1) .14s both}
+.dataCard.playing .dsTeamHeader{animation:dsRowIn .5s  cubic-bezier(.2,1,.35,1) .22s both}
+.dataCard.playing .dataBox     {animation:dsRowIn .55s cubic-bezier(.2,1,.35,1) .30s both}
+.dataCard.playing .dataBox:nth-of-type(2){animation-delay:.38s}
+.dataCard.playing .dataBox:nth-of-type(3){animation-delay:.46s}
+.dataCard.playing .msResult    {animation:dsRowIn .5s  cubic-bezier(.2,1,.35,1) .10s both}
+.dataCard.playing .msInnCard   {animation:dsRowIn .55s cubic-bezier(.2,1,.35,1) .20s both}
+.dataCard.playing .msInnCard:nth-child(2){animation-delay:.30s}
+.dataCard.playing .msInfoBox   {animation:dsRowIn .5s  cubic-bezier(.2,1,.35,1) .42s both}
+.dataCard.playing .xiTeam      {animation:dsRowIn .55s cubic-bezier(.2,1,.35,1) .18s both}
+.dataCard.playing .xiTeam:nth-child(2){animation-delay:.28s}
+
+.dsTournament{
+  flex:0 0 auto;display:flex;align-items:center;justify-content:center;gap:12px;
+  padding:clamp(6px,1vh,14px) clamp(12px,1.6vw,22px);
+  margin-bottom:clamp(5px,.8vh,10px);
+  border-radius:clamp(9px,1vw,15px);
+  background:linear-gradient(90deg,#10194b,#1743bc,#10194b);
+  border:2px solid #e8c94a;
+  box-shadow:0 0 26px rgba(232,201,74,.4),inset 0 1px 0 rgba(255,255,255,.15);
+  font-size:clamp(14px,2vh,26px);font-weight:1000;letter-spacing:2px;color:#ffe98f;
+  text-shadow:0 2px 6px rgba(0,0,0,.75),0 0 18px rgba(232,201,74,.55);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-align:center;
+}
+.dsTournament::before,.dsTournament::after{content:'★';color:#e8c94a;font-size:.85em;flex:0 0 auto}
+
+.dataScroll{
+  flex:1 1 auto;min-height:0;overflow-y:auto;overflow-x:hidden;padding-right:6px;
+  display:flex;flex-direction:column;gap:clamp(6px,.9vh,14px);
+}
+.dataScroll::-webkit-scrollbar{width:7px}
+.dataScroll::-webkit-scrollbar-track{background:rgba(0,0,0,.06);border-radius:7px}
+.dataScroll::-webkit-scrollbar-thumb{background:linear-gradient(#0878ff,#032d9d);border-radius:7px}
+
+.dsTopbar{
+  flex:0 0 auto;display:flex;align-items:center;justify-content:space-between;
+  gap:14px;flex-wrap:wrap;margin-bottom:clamp(6px,.9vh,14px);
+  padding:clamp(8px,1.2vh,16px) clamp(12px,1.6vw,22px);
+  border-radius:clamp(10px,1.1vw,16px);
+  background:linear-gradient(90deg,#10194b,#1743bc,#10194b);
+  border:2px solid #e8c94a;
+  box-shadow:0 0 30px rgba(232,201,74,.35),inset 0 1px 0 rgba(255,255,255,.15);
+}
+.dsTitle{font-size:clamp(15px,2.4vh,32px);font-weight:1000;letter-spacing:.5px;line-height:1.05;color:#fff;text-shadow:0 2px 6px rgba(0,0,0,.7),0 0 18px rgba(232,201,74,.55)}
+.dsSub{font-size:clamp(9px,1.1vh,14px);color:#ffe98f;margin-top:4px;font-weight:800;letter-spacing:1.5px}
+.dsBadges{display:flex;gap:6px;flex-wrap:wrap}
+.dsBadge{
+  display:inline-block;padding:clamp(3px,.6vh,7px) clamp(8px,1vw,14px);border-radius:999px;
+  background:linear-gradient(#ffe98f,#e8c94a);color:#0b1240;
+  font-size:clamp(8px,.95vh,12px);font-weight:1000;letter-spacing:1.2px;
+  border:1px solid #b8941f;box-shadow:0 0 14px rgba(232,201,74,.6);white-space:nowrap;
+}
+.dsBadge.gold{background:linear-gradient(#ffe98f,#e8c94a);color:#0b1240}
+.dsBadge.blue{background:linear-gradient(135deg,#0878ff,#032d9d);color:#fff;border-color:#dce7ff}
+.dsBadge.red{background:linear-gradient(135deg,#d71932,#730008);color:#fff;border-color:#ffb0b8}
+
+.dsTeamHeader{
+  display:flex;align-items:center;justify-content:space-between;gap:14px;
+  padding:clamp(9px,1.4vh,18px) clamp(12px,1.6vw,22px);
+  border-radius:clamp(10px,1.1vw,18px);
+  background:linear-gradient(135deg,#0878ff,#032d9d 70%,#061c5d);
+  border:3px solid #dce7ff;color:#fff;
+  box-shadow:0 0 30px rgba(8,120,255,.5),inset 0 1px 0 rgba(255,255,255,.25);
+}
+.dsTeamHeader.teamB{background:linear-gradient(135deg,#730008,#d71932 70%,#ff314a);border-color:#ffb0b8}
+.dsTeamName{font-size:clamp(15px,2.3vh,32px);font-weight:1000;letter-spacing:1px;text-shadow:0 2px 6px rgba(0,0,0,.7)}
+.dsTeamScore{font-size:clamp(24px,3.6vh,52px);font-weight:1000;line-height:1;text-shadow:0 0 18px rgba(255,255,255,.5),0 2px 4px #000}
+.dsTeamOvers{font-size:clamp(10px,1.3vh,16px);opacity:.95;font-weight:800;letter-spacing:1px}
+
+.dataTable{width:100%;border-collapse:separate;border-spacing:0 3px;font-size:clamp(10px,1.15vh,15px);table-layout:fixed}
+.dataTable thead th{
+  background:linear-gradient(#10194b,#1743bc);color:#ffe98f;
+  font-size:clamp(8px,.95vh,12px);letter-spacing:1.1px;text-transform:uppercase;
+  padding:clamp(5px,.8vh,11px) clamp(4px,.6vw,10px);text-align:left;font-weight:1000;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;border-top:1px solid #dce7ff;
+}
+.dataTable thead th:first-child{border-radius:9px 0 0 9px;border-left:1px solid #dce7ff}
+.dataTable thead th:last-child{border-radius:0 9px 9px 0;border-right:1px solid #dce7ff}
+.dataTable tbody td{
+  padding:clamp(5px,.85vh,12px) clamp(4px,.6vw,10px);
+  background:linear-gradient(#f8fbff,#e6ecf5);border-bottom:1px solid #a5b3c9;
+  color:#111827;font-weight:800;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
+.dataTable tbody tr:hover td{background:linear-gradient(#e6f0ff,#c9ddf7)}
+.dataTable.batTbl{font-size:clamp(12px,1.5vh,19px)}
+.dataTable.batTbl tbody td{font-weight:900}
+.dataTable.batTbl th:nth-child(1){width:30%}
+.dataTable.batTbl th:nth-child(2){width:12%}
+.dataTable.batTbl th:nth-child(3){width:10%}
+.dataTable.batTbl th:nth-child(4){width:10%}
+.dataTable.batTbl th:nth-child(5){width:8%}
+.dataTable.batTbl th:nth-child(6){width:8%}
+.dataTable.batTbl th:nth-child(7){width:22%}
+.dataTable.bowlTbl th:nth-child(1){width:32%}
+.dataTable.bowlTbl th:nth-child(2){width:14%}
+.dataTable.bowlTbl th:nth-child(3){width:11%}
+.dataTable.bowlTbl th:nth-child(4){width:14%}
+.dataTable.bowlTbl th:nth-child(5){width:14%}
+.dataTable.bowlTbl th:nth-child(6){width:15%}
+
+.dataBox{
+  background:linear-gradient(#f8fbff,#c2cad7);
+  border:2px solid #dce7ff;border-radius:clamp(9px,1vw,16px);
+  padding:clamp(8px,1.3vh,16px);min-width:0;color:#111827;
+  box-shadow:0 0 18px rgba(8,120,255,.2),inset 0 1px 0 rgba(255,255,255,.95);
+}
+.dataBox h3{margin:0 0 clamp(5px,.7vh,10px);font-size:clamp(10px,1.3vh,16px);color:#032d9d;letter-spacing:1.3px;font-weight:1000;text-transform:uppercase;padding-bottom:4px;border-bottom:2px solid #e8c94a}
+.dataBox h3.red{color:#a00020}
+.dataFull{grid-column:1/-1}
+
+.xiGrid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(8px,1.4vw,18px);flex:1 1 auto;min-height:0}
+.xiTeam{
+  border-radius:clamp(10px,1.1vw,18px);overflow:hidden;border:3px solid #dce7ff;
+  background:linear-gradient(#f8fbff,#c2cad7);box-shadow:0 0 24px rgba(8,120,255,.35);
+  display:flex;flex-direction:column;min-height:0;color:#111827;
+}
+.xiTeam.teamB{border-color:#ffb0b8;box-shadow:0 0 24px rgba(215,25,50,.35)}
+.xiTeam h3{margin:0;padding:clamp(7px,1.1vh,14px) clamp(12px,1.4vw,20px);font-size:clamp(12px,1.7vh,22px);font-weight:1000;letter-spacing:1.4px;background:linear-gradient(135deg,#0878ff,#032d9d);color:#fff;border-bottom:3px solid #e8c94a;display:flex;align-items:center;gap:10px;flex:0 0 auto}
+.xiTeam.teamB h3{background:linear-gradient(135deg,#730008,#d71932)}
+.xiList{flex:1 1 auto;min-height:0;overflow-y:auto}
+.xiPlayer{display:flex;align-items:center;gap:clamp(8px,1vw,14px);padding:clamp(5px,.9vh,11px) clamp(12px,1.4vw,20px);border-bottom:1px solid #a5b3c9}
+.xiPlayer:nth-child(odd){background:linear-gradient(#f8fbff,#e6ecf5)}
+.xiPlayer:nth-child(even){background:linear-gradient(#eef4fc,#d3ddeb)}
+.xiNum{width:clamp(20px,2.6vh,32px);height:clamp(20px,2.6vh,32px);flex:0 0 auto;border-radius:50%;background:linear-gradient(135deg,#ffd92c,#e8c94a);border:2px solid #592900;display:grid;place-items:center;font-size:clamp(9px,1.1vh,13px);font-weight:1000;color:#0b1240}
+.xiName{font-size:clamp(10px,1.3vh,17px);font-weight:900;letter-spacing:.4px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#0b1240}
+
+.msResult{
+  padding:clamp(10px,1.6vh,22px);border-radius:clamp(10px,1.1vw,18px);text-align:center;
+  background:linear-gradient(135deg,#10194b,#1743bc,#10194b);
+  border:3px solid #e8c94a;box-shadow:0 0 40px rgba(232,201,74,.5);
+}
+.msResultText{font-size:clamp(14px,2.4vh,38px);font-weight:1000;line-height:1.15;color:#ffe98f;text-shadow:0 2px 8px rgba(0,0,0,.8),0 0 24px rgba(232,201,74,.7)}
+.msInningsGrid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(8px,1.2vw,16px)}
+.msInnCard{padding:clamp(10px,1.5vh,18px);border-radius:clamp(10px,1vw,16px);background:linear-gradient(135deg,#0878ff,#032d9d 70%,#061c5d);border:3px solid #dce7ff;color:#fff;box-shadow:0 0 24px rgba(8,120,255,.5)}
+.msInnCard.inn2{background:linear-gradient(135deg,#730008,#d71932 70%,#ff314a);border-color:#ffb0b8}
+.msInnTeam{font-size:clamp(10px,1.5vh,20px);font-weight:1000;letter-spacing:1.3px;margin-bottom:6px;color:#ffe98f}
+.msInnCard.inn2 .msInnTeam{color:#ffd0d5}
+.msInnScore{font-size:clamp(18px,3vh,48px);font-weight:1000;line-height:1;margin-bottom:4px}
+.msInnOvers{font-size:clamp(8px,1.1vh,13px);opacity:.95;font-weight:800;letter-spacing:1.1px;margin-bottom:clamp(5px,.8vh,10px)}
+.msPerf{font-size:clamp(9px,1.1vh,14px);line-height:1.55;padding-top:clamp(5px,.8vh,10px);border-top:1px dashed rgba(255,255,255,.35);color:#e6efff;font-weight:700}
+.msPerf b{color:#ffe98f}
+.msInfoGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(6px,.9vw,10px)}
+.msInfoBox{padding:clamp(7px,1.1vh,12px);border-radius:clamp(8px,.9vw,12px);background:linear-gradient(#f8fbff,#c2cad7);border:2px solid #dce7ff;text-align:center;min-width:0;color:#111827}
+.msInfoBox .lbl{font-size:clamp(7px,.9vh,10px);letter-spacing:1.2px;color:#4a5a75;font-weight:1000}
+.msInfoBox .val{font-size:clamp(10px,1.3vh,18px);font-weight:1000;margin-top:4px;color:#0b1240;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+@media(max-width:900px){
+  .msInfoGrid{grid-template-columns:repeat(2,1fr)}
+  .msInningsGrid{grid-template-columns:1fr}
+  .xiGrid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<div id="overlay">
+  <div class="live"><i class="dot"></i><span>BRKLIVE19</span><span>LIVE</span></div>
+
+  <div id="event"></div>
+
+  <!-- NORMAL SCORE BAR -->
+  <div class="lower" id="lowerThird">
+    <div id="tournament" class="tournament">BRKLIVE19 LIVE</div>
+
+    <div class="broadcast-row">
+      <div class="corner-team left-team">
+        <div class="logo">🦁</div>
+        <span id="teamA">TEAM A</span>
+      </div>
+
+      <div class="center-score">
+        <div class="players">
+          <div class="row"><span id="batter1">—</span><strong id="runs1">0</strong><strong id="balls1">0</strong></div>
+          <div class="row"><span id="batter2">—</span><strong id="runs2">0</strong><strong id="balls2">0</strong></div>
+        </div>
+
+        <div class="center">
+          <div>
+            <div id="score" class="runs">0 - 0</div>
+            <div class="crr">CRR : <span id="crr">0.00</span></div>
+          </div>
+          <div id="overs" class="overs">0.0<br>(20)</div>
+        </div>
+
+        <div class="bowler">
+          <div class="bowtop"><span id="bowler">—</span><strong id="bowlerRuns">0 - 0</strong><strong id="bowlerOvers">0.0</strong></div>
+          <div id="balls" class="balls"></div>
+        </div>
+      </div>
+
+      <div class="corner-team right-team">
+        <span id="teamB">TEAM B</span>
+        <div class="logo">🐯</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LOWER BANNER -->
+  <div id="bannerLower">
+    <div class="bannerCard" id="bannerLowerCard"></div>
+  </div>
+</div>
+
+<!-- FULL SCREEN DATA SCREEN -->
+<div id="dataScreen"><div class="dataCard" id="dataCard"></div></div>
+
+<script>
+/* ============================================================
+   BRKLIVE19 OVERLAY
+   · Flicker-free dedup (packet hash + HTML diff)
+   · Entry animations play only on scene change
+   · Bottom banner for Tournament/Match/Toss/Venue/B1/B2/
+     Bowler/FOW/Partnership/Result
+   · Full-screen for Summary/PlayingXI/Innings/Scorecards
+   ============================================================ */
+
+const $id = id => document.getElementById(id);
+const esc = v => String(v ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const n = v => Number(v) || 0;
+function overs(v){
+  if (typeof v === 'string' && v.includes('.')) return v;
+  const b = n(v);
+  return Math.floor(b / 6) + '.' + (b % 6);
+}
+function setText(id, v){
+  const e = $id(id);
+  if (e && v !== undefined && v !== null && e.textContent !== String(v)){
+    e.textContent = v;
+  }
+}
+function ballsFromOvers(v){
+  if (typeof v === 'string' && v.includes('.')){
+    const p = v.split('.');
+    return (parseInt(p[0],10)||0)*6 + (parseInt(p[1],10)||0);
+  }
+  return n(v);
+}
+
+/* Channels */
+let overlayChannel = null, scorerChannel = null;
+try { overlayChannel = new BroadcastChannel('BRKLIVE19_LIVE_OVERLAY'); } catch(e) {}
+try { scorerChannel  = new BroadcastChannel('BRKLIVE19_SCORER_DATA'); } catch(e) {}
+
+/* ============================================================
+   ROTATING INFO BAR
+   ============================================================ */
+function buildInfoItems(d){
+  const items = [];
+  const inn = n(d.innings) === 2 ? 2 : 1;
+  items.push({label:'TOURNAMENT', value:d.tournament || d.tournamentName || 'BRKLIVE19 LIVE'});
+  const matchBits = [d.matchName || ((d.teamA || 'TEAM A') + ' VS ' + (d.teamB || 'TEAM B')), d.venue || d.tournamentVenue || ''].filter(Boolean);
+  items.push({label:'MATCH', value: matchBits.join(' • ')});
+  const toss = [d.tossWinner, d.tossDecision].filter(Boolean).join(' • ');
+  if (toss) items.push({label:'TOSS', value: toss});
+  items.push({label:'INNINGS', value: (inn === 2 ? '2ND INNINGS' : '1ST INNINGS') + (d.battingTeamName ? ' • ' + d.battingTeamName : '')});
+  items.push({label:'CRR', value: n(d.crr).toFixed(2)});
+  if (inn === 1){
+    const total = n(d.maxOvers) || n(d.totalOvers) || 20;
+    const bowled = ballsFromOvers(d.overs);
+    let crr = n(d.crr); if (!crr && bowled) crr = n(d.runs) / (bowled/6);
+    items.push({label:'PROJECTED', value: Math.round(crr * total) + ' RUNS'});
+  }
+  if (inn === 2){
+    if (d.target != null) items.push({label:'TARGET', value: n(d.target) + ' RUNS'});
+    items.push({label:'RRR', value: n(d.rrr).toFixed(2)});
+    if (d.runsToWin != null){
+      items.push({label:'NEED', value: n(d.runsToWin) + ' RUNS FROM ' + n(d.ballsRemaining) + ' BALLS'});
+    }
+  }
+  return items;
+}
+const infoState = {items:[], index:0, key:'', lastHtml:'', timer:null};
+function renderInfo(animate){
+  const el = $id('tournament');
+  if (!el) return;
+  const it = infoState.items[infoState.index];
+  if (!it) return;
+  const html = '<span class="info-label">' + esc(it.label) + '</span><span class="info-value">' + esc(it.value) + '</span>';
+  if (html !== infoState.lastHtml){
+    infoState.lastHtml = html;
+    el.innerHTML = html;
+  }
+  if (animate){
+    el.classList.remove('infoFlash');
+    void el.offsetWidth;
+    el.classList.add('infoFlash');
+  }
+}
+function updateTournamentInfo(d){
+  const items = buildInfoItems(d);
+  if (!items.length) return;
+  const key = items.map(i => i.label + ':' + i.value).join('|');
+  if (key !== infoState.key){
+    infoState.key = key;
+    infoState.items = items;
+    if (infoState.index >= items.length) infoState.index = 0;
+    renderInfo(false);
+  }
+  if (!infoState.timer){
+    infoState.timer = setInterval(function(){
+      if (infoState.items.length < 2) return;
+      infoState.index = (infoState.index + 1) % infoState.items.length;
+      renderInfo(true);
+    }, 5000);
+  }
+}
+
+/* ============================================================
+   EVENT ANIMATION ENGINE
+   ============================================================ */
+const EVENT_ALIASES = {
+  '4':'FOUR','BOUNDARY':'FOUR','FOUR RUNS':'FOUR','FOUR!':'FOUR',
+  '6':'SIX','SIXER':'SIX','SIX RUNS':'SIX','SIX!':'SIX',
+  'W':'WICKET','OUT':'WICKET','BOWLED':'WICKET','CAUGHT':'WICKET','LBW':'WICKET','STUMPED':'WICKET','CAUGHT BEHIND':'WICKET','HIT WICKET':'WICKET',
+  'RO':'RUN OUT','RUNOUT':'RUN OUT','RUN-OUT':'RUN OUT','RUN OUT!':'RUN OUT',
+  'FH':'FREE HIT','FREEHIT':'FREE HIT','FREE-HIT':'FREE HIT',
+  'HAT TRICK BALL':'HAT-TRICK BALL','HATTRICK BALL':'HAT-TRICK BALL',
+  'HATTRICK':'HAT-TRICK','HAT TRICK':'HAT-TRICK'
+};
+const EVENT_CFG = {
+  'FOUR':          {c1:'#00a8ff', c2:'#006eff', cls:'ev-four',     particles:14, dur:4000},
+  'SIX':           {c1:'#ffb400', c2:'#ff5a00', cls:'ev-six',      particles:30, dur:4200, shake:true},
+  'WICKET':        {c1:'#ff102d', c2:'#a00012', cls:'ev-wicket',   particles:22, dur:4200},
+  'RUN OUT':       {c1:'#b735ff', c2:'#4b0c99', cls:'ev-runout',   particles:18, dur:4000},
+  'FREE HIT':      {c1:'#7cff00', c2:'#19b500', cls:'ev-freehit',  particles:16, dur:4200},
+  'HAT-TRICK BALL':{c1:'#00e5ff', c2:'#0066ff', cls:'ev-hattrick', particles:26, dur:4400},
+  'HAT-TRICK':     {c1:'#00e5ff', c2:'#0066ff', cls:'ev-hattrick', particles:32, dur:4600}
+};
+let eventTimer = null, lastEventType = '', lastEventAt = 0, lastActiveEventKey = '';
+let lastBallKey = null, ballKeyInit = false;
+
+function normalizeEvent(name){
+  const k = String(name == null ? '' : name).toUpperCase().trim().replace(/\s+/g,' ');
+  if (!k) return null;
+  if (EVENT_CFG[k]) return k;
+  if (EVENT_ALIASES[k]) return EVENT_ALIASES[k];
+  return null;
+}
+function spawnParticles(box, count, color, color2){
+  if (!box) return;
+  box.innerHTML = '';
+  const frag = document.createDocumentFragment();
+  for (let i = 0; i < count; i++){
+    const p = document.createElement('i');
+    const ang = (i / count) * Math.PI * 2 + Math.random() * 0.7;
+    const dist = 16 + Math.random() * 40;
+    p.style.setProperty('--tx', (Math.cos(ang) * dist).toFixed(1) + 'vmax');
+    p.style.setProperty('--ty', (Math.sin(ang) * dist).toFixed(1) + 'vmax');
+    p.style.setProperty('--pd', (Math.random() * 0.28).toFixed(2) + 's');
+    if (i % 3 === 0 && color2){
+      p.style.background = color2;
+      p.style.boxShadow = '0 0 16px ' + color2 + ',0 0 30px ' + color2;
+    }
+    frag.appendChild(p);
+  }
+  box.appendChild(frag);
+}
+function decoFor(type){
+  switch(type){
+    case 'FOUR':     return '<span class="deco-streak s1"></span><span class="deco-streak s2"></span><span class="deco-streak s3"></span>';
+    case 'SIX':      return '<span class="deco-sixball"></span>';
+    case 'WICKET':   return '<span class="deco-stump k1"></span><span class="deco-stump k2"></span><span class="deco-stump k3"></span>';
+    case 'RUN OUT':  return '<span class="deco-stump k2"></span><span class="deco-runball"></span>';
+    case 'FREE HIT': return '<span class="deco-bolt b1"></span><span class="deco-bolt b2"></span>';
+    case 'HAT-TRICK BALL':
+    case 'HAT-TRICK':return '<span class="deco-ring r1"></span><span class="deco-ring r2"></span><span class="deco-ring r3"></span>';
+    default: return '';
+  }
+}
+function showEvent(name, opts){
+  const type = normalizeEvent(name);
+  if (!type) return;
+  const cfg = EVENT_CFG[type];
+  const el = $id('event');
+  if (!el) return;
+  const now = Date.now();
+  if (!(opts && opts.force) && type === lastEventType && now - lastEventAt < 1200) return;
+  lastEventType = type; lastEventAt = now;
+  el.className = 'show ' + cfg.cls + (cfg.shake ? ' shake' : '');
+  el.style.setProperty('--c1', cfg.c1);
+  el.style.setProperty('--c2', cfg.c2);
+  const sizeCls = type.length >= 13 ? ' xlong' : (type.length >= 9 ? ' long' : '');
+  el.innerHTML = '<div class="ev-burst"></div><div class="ev-rays"></div><div class="ev-deco">' + decoFor(type) + '</div><div class="ev-particles"></div><div class="ev-content"><div class="ev-text' + sizeCls + '">' + esc(type) + '</div></div>';
+  spawnParticles(el.querySelector('.ev-particles'), cfg.particles, cfg.c1, cfg.c2);
+  clearTimeout(eventTimer);
+  eventTimer = setTimeout(() => { el.className = ''; }, cfg.dur || 4000);
+}
+function detectBallEvent(d){
+  const arr = Array.isArray(d.ballResults) ? d.ballResults : (Array.isArray(d.recentBalls) ? d.recentBalls : []);
+  if (!arr.length) return null;
+  const last = arr[arr.length - 1];
+  const label = String(typeof last === 'object' ? (last.label ?? last.result ?? '') : last).toUpperCase().trim();
+  const key = String(d.totalBalls ?? d.legalBalls ?? arr.length) + '|' + label + '|' + String(d.overs || '');
+  if (!ballKeyInit){ ballKeyInit = true; lastBallKey = key; return null; }
+  if (key === lastBallKey) return null;
+  lastBallKey = key;
+  if (label === '4') return 'FOUR';
+  if (label === '6') return 'SIX';
+  if (['RO','RUN OUT','RUNOUT'].includes(label)) return 'RUN OUT';
+  if (['W','WICKET','OUT','BOWLED','CAUGHT','LBW','STUMPED'].includes(label)) return 'WICKET';
+  return null;
+}
+
+/* ============================================================
+   NORMALIZE INCOMING PACKET
+   ============================================================ */
+function normalizeScorerData(raw){
+  if (!raw || typeof raw !== 'object') return null;
+  const d = JSON.parse(JSON.stringify(raw));
+  d.overlay = d.overlay || {};
+  d.b1 = d.b1 ?? d.batsman1 ?? d.striker ?? '';
+  d.b2 = d.b2 ?? d.batsman2 ?? d.nonStriker ?? '';
+  d.runs1 = d.runs1 ?? d.batsman1Runs ?? 0;
+  d.runs2 = d.runs2 ?? d.batsman2Runs ?? 0;
+  d.balls1 = d.balls1 ?? d.batsman1Balls ?? 0;
+  d.balls2 = d.balls2 ?? d.batsman2Balls ?? 0;
+  d.runs = d.runs ?? d.totalRuns ?? 0;
+  d.wickets = d.wickets ?? d.totalWickets ?? 0;
+  d.score = d.score ?? (d.runs + '/' + d.wickets);
+  d.overs = d.overs ?? d.overDisplay ?? overs(d.totalBalls ?? d.legalBalls ?? 0);
+  d.maxOvers = d.maxOvers ?? d.totalOvers;
+  d.crr = d.crr ?? d.currentRunRate ?? 0;
+  d.rrr = d.rrr ?? d.requiredRunRate ?? 0;
+  d.ballResults = d.currentOverBalls ?? d.recentBalls ?? [];
+  d.activeEvent = d.broadcast && d.broadcast.active ? d.broadcast.type : '';
+  d.battingTeamName = d.battingTeamName ?? (d.battingTeam === 'A' ? (d.teamA || 'TEAM A') : d.battingTeam === 'B' ? (d.teamB || 'TEAM B') : '');
+  d.bowlingTeamName = d.bowlingTeamName ?? (d.bowlingTeam === 'A' ? (d.teamA || 'TEAM A') : d.bowlingTeam === 'B' ? (d.teamB || 'TEAM B') : '');
+  return d;
+}
+
+/* ============================================================
+   PACKET HASH — dedup identical packets
+   ============================================================ */
+function packetHash(d){
+  const ov = d.overlay || {};
+  const pl = ov.playerLower || {};
+  const pa = ov.partnership || {};
+  const cl = d.customLower || {};
+  const bc = d.broadcast || {};
+  const o = {
+    r: d.runs, w: d.wickets, ov: d.overs, lb: d.legalBalls,
+    b1: d.b1, b2: d.b2, bw: d.bowler,
+    r1: d.runs1, r2: d.runs2, bl1: d.balls1, bl2: d.balls2,
+    tgt: d.target, rtw: d.runsToWin, br: d.ballsRemaining,
+    crr: d.crr, rrr: d.rrr, inn: d.innings,
+    bt: d.battingTeam, bwT: d.bowlingTeam,
+    ta: d.teamA, tb: d.teamB, tid: d.matchId,
+    t: d.tournament, tn: d.tournamentName,
+    v: d.venue, tv: d.tournamentVenue,
+    mn: d.matchName, mo: d.matchNo, mx: d.maxOvers,
+    tw: d.tossWinner, td: d.tossDecision,
+    m: d.mode,
+    ov_: {
+      st: !!ov.showTournament, sv: !!ov.showVenue, sm: !!ov.showMatch,
+      sts: !!ov.showToss, sr: !!ov.showResult, sb: !!ov.showBowler,
+      sf: !!ov.showFOW, stg: !!ov.showTarget,
+      pla: !!pl.active, pls: pl.slot || '', plp: pl.player || '',
+      paa: !!pa.active, vw: ov.view || ''
+    },
+    cl_: {a: !!cl.active, t: cl.text || ''},
+    bc_: {a: !!bc.active, id: bc.id || '', t: bc.type || ''},
+    fow: d.fow || null,
+    bat: d.batters || {},
+    bowl: d.bowlers || {},
+    fwi: d.fallWickets || [],
+    xi: d.xiA || [], xi2: d.xiB || [],
+    fi: d.firstInnings || null,
+    si: d.secondInnings || null,
+    rt: d.resultText || d.matchResult || ''
+  };
+  try { return JSON.stringify(o); } catch(e){ return ''; }
+}
+
+/* ============================================================
+   SCORE BAR
+   ============================================================ */
+function renderBalls(arr){
+  const box = $id('balls'); if (!box) return;
+  const list = (Array.isArray(arr) ? arr : []).slice(-6);
+  const key = JSON.stringify(list);
+  if (box.dataset.k === key) return;
+  box.dataset.k = key;
+  box.innerHTML = '';
+  list.forEach(v => {
+    const s = document.createElement('span');
+    s.className = 'ball';
+    const label = typeof v === 'object' ? (v.label ?? v.result ?? '') : v;
+    const x = String(label).toUpperCase();
+    if (x === '4' || x === '4 RUNS') s.classList.add('four');
+    if (x === '6' || x === '6 RUNS') s.classList.add('six');
+    if (['W','WICKET','OUT','RO'].includes(x)) s.classList.add('wicket');
+    if (['WD','WIDE'].includes(x)) s.classList.add('wide');
+    if (['NB','NO BALL'].includes(x)) s.classList.add('noball');
+    s.textContent = label;
+    box.appendChild(s);
+  });
+}
+function updateScoreBar(d){
+  setText('teamA', d.teamA || 'TEAM A');
+  setText('teamB', d.teamB || 'TEAM B');
+  setText('batter1', (d.b1 ? '▶ ' : '') + (d.b1 || '—'));
+  setText('batter2', d.b2 || '—');
+  setText('runs1', n(d.runs1));
+  setText('runs2', n(d.runs2));
+  setText('balls1', n(d.balls1));
+  setText('balls2', n(d.balls2));
+  setText('bowler', d.bowler || '—');
+  setText('bowlerRuns', (n(d.bowlerWickets) || 0) + ' - ' + (n(d.bowlerRuns) || 0));
+  setText('bowlerOvers', d.bowlerOvers || '0.0');
+  setText('crr', n(d.crr).toFixed(2));
+  const sc = $id('score');
+  const scText = n(d.runs) + ' - ' + n(d.wickets);
+  if (sc && sc.textContent !== scText) sc.textContent = scText;
+  const ov = $id('overs');
+  if (ov){
+    const html = esc(d.overs || '0.0') + '<br>(' + esc(d.maxOvers ?? '20') + ')';
+    if (ov.dataset.k !== html){ ov.dataset.k = html; ov.innerHTML = html; }
+  }
+  renderBalls(d.ballResults);
+}
+
+/* ============================================================
+   STAT HELPERS
+   ============================================================ */
+function playerStats(d, name){
+  const empty = {runs:0, balls:0, fours:0, sixes:0, out:false, dismissal:''};
+  if (!name) return empty;
+  const pools = [d.batters, d.secondInnings && d.secondInnings.batters, d.firstInnings && d.firstInnings.batters];
+  for (const p of pools){
+    if (!p) continue;
+    if (p[name]) return p[name];
+    const k = Object.keys(p).find(x => String(x).toLowerCase() === String(name).toLowerCase());
+    if (k) return p[k];
+  }
+  if (name === d.b1 || name === d.b2){
+    const i = name === d.b1 ? 1 : 2;
+    return {runs:n(d['runs'+i]), balls:n(d['balls'+i]), fours:n(d['fours'+i]), sixes:n(d['sixes'+i]), out:false, dismissal:''};
+  }
+  return empty;
+}
+function bowlerStats(d, name){
+  const empty = {balls:0, maidens:0, runs:0, wickets:0};
+  if (!name) return empty;
+  const pools = [d.bowlers, d.secondInnings && d.secondInnings.bowlers, d.firstInnings && d.firstInnings.bowlers];
+  for (const p of pools){
+    if (!p) continue;
+    if (p[name]) return p[name];
+    const k = Object.keys(p).find(x => String(x).toLowerCase() === String(name).toLowerCase());
+    if (k) return p[k];
+  }
+  if (name === d.bowler){
+    return {balls:ballsFromOvers(d.bowlerOvers), maidens:0, runs:n(d.bowlerRuns), wickets:n(d.bowlerWickets)};
+  }
+  return empty;
+}
+function inningData(d, no){ return no === 2 ? d.secondInnings : d.firstInnings; }
+function innTeamName(d, inn){
+  if (!inn) return '';
+  if (inn.team === 'A') return d.teamA || 'TEAM A';
+  if (inn.team === 'B') return d.teamB || 'TEAM B';
+  return inn.team || '';
+}
+
+/* ============================================================
+   LOWER BANNER RENDERERS
+   ============================================================ */
+function statBlock(lbl, val, tone){
+  return '<div class="bannerStat' + (tone ? ' ' + tone : '') + '"><div class="lbl">' + esc(lbl) + '</div><div class="val">' + esc(val) + '</div></div>';
+}
+function renderLowerBannerContent(d, mode){
+  const tour = d.tournament || d.tournamentName || 'BRKLIVE19 LIVE';
+  const tA = d.teamA || 'TEAM A';
+  const tB = d.teamB || 'TEAM B';
+
+  switch (mode){
+    case 'tournament':
+      return {
+        cls:'gold',
+        html:'<div class="bannerInner">' +
+          '<div class="bannerTag">🏆 TOURNAMENT</div>' +
+          '<div class="bannerMainWrap">' +
+            '<div class="bannerMainTitle gold">' + esc(tour) + '</div>' +
+            (d.matchName ? '<div class="bannerMainSub">' + esc(d.matchName) + '</div>' : '') +
+          '</div>' +
+          (d.venue || d.tournamentVenue ? '<div class="bannerStats">' + statBlock('VENUE', d.venue || d.tournamentVenue) + '</div>' : '') +
+        '</div>'
+      };
+
+    case 'venue': {
+      const v = d.venue || d.tournamentVenue || '—';
+      return {
+        cls:'',
+        html:'<div class="bannerInner">' +
+          '<div class="bannerTag blue">📍 VENUE</div>' +
+          '<div class="bannerMainWrap">' +
+            '<div class="bannerMainTitle">' + esc(v) + '</div>' +
+            (d.matchName ? '<div class="bannerMainSub blue">' + esc(d.matchName) + '</div>' : '') +
+          '</div>' +
+          '<div class="bannerStats">' + statBlock('TOURNAMENT', tour.length > 22 ? tour.slice(0,22) + '…' : tour) + '</div>' +
+        '</div>'
+      };
+    }
+
+    case 'match':
+      return {
+        cls:'',
+        html:'<div class="bannerInner">' +
+          '<div class="bannerTag blue">⚔ MATCH</div>' +
+          '<div class="bannerVS">' +
+            '<div class="team">🦁 ' + esc(tA) + '</div>' +
+            '<div class="vs">VS</div>' +
+            '<div class="team b">' + esc(tB) + ' 🐯</div>' +
+          '</div>' +
+          '<div class="bannerStats">' +
+            statBlock('OVERS', n(d.maxOvers) || 20) +
+            (d.matchNo ? statBlock('MATCH #', d.matchNo) : '') +
+          '</div>' +
+        '</div>'
+      };
+
+    case 'toss': {
+      const winnerName = d.tossWinner === 'A' ? tA : d.tossWinner === 'B' ? tB : (d.tossWinner || '—');
+      const dec = d.tossDecision || '—';
+      return {
+        cls:'gold',
+        html:'<div class="bannerInner">' +
+          '<div class="bannerTag">🪙 TOSS</div>' +
+          '<div class="bannerMainWrap">' +
+            '<div class="bannerMainTitle gold">' + esc(winnerName) + '</div>' +
+            '<div class="bannerMainSub">WON THE TOSS</div>' +
+          '</div>' +
+          '<div class="bannerStats">' +
+            statBlock('DECISION', dec, 'gold') +
+            statBlock('BATTING', (d.battingTeam === 'A' ? tA : tB)) +
+          '</div>' +
+        '</div>'
+      };
+    }
+
+    case 'b1':
+    case 'b2': {
+      const name = mode === 'b1' ? d.b1 : d.b2;
+      const s = playerStats(d, name);
+      const sr = s.balls ? ((n(s.runs)/n(s.balls))*100).toFixed(2) : '0.00';
+      const label = mode === 'b1' ? '🏏 STRIKER' : '🏏 NON-STRIKER';
+      const statusTone = s.out ? 'red' : 'gold';
+      const statusText = s.out ? 'OUT' : 'BATTING';
+      return {
+        cls:'',
+        html:'<div class="bannerInner">' +
+          '<div class="bannerTag blue">' + label + '</div>' +
+          '<div class="bannerMainWrap">' +
+            '<div class="bannerMainTitle">' + esc(name || '—') + '</div>' +
+            '<div class="bannerMainSub blue">' + statusText + (d.battingTeamName ? ' • ' + esc(d.battingTeamName) : '') + '</div>' +
+          '</div>' +
+          '<div class="bannerStats">' +
+            statBlock('RUNS', n(s.runs), 'gold') +
+            statBlock('BALLS', n(s.balls)) +
+            statBlock('4S', n(s.fours)) +
+            statBlock('6S', n(s.sixes)) +
+            statBlock('SR', sr) +
+          '</div>' +
+        '</div>'
+      };
+    }
+
+    case 'bowler': {
+      const s = bowlerStats(d, d.bowler);
+      const ov = overs(s.balls || 0);
+      const econ = s.balls ? ((n(s.runs)/(n(s.balls)/6))).toFixed(2) : '0.00';
+      return {
+        cls:'',
+        html:'<div class="bannerInner">' +
+          '<div class="bannerTag blue">🎯 BOWLER</div>' +
+          '<div class="bannerMainWrap">' +
+            '<div class="bannerMainTitle">' + esc(d.bowler || '—') + '</div>' +
+            '<div class="bannerMainSub blue">BOWLING' + (d.bowlingTeamName ? ' • ' + esc(d.bowlingTeamName) : '') + '</div>' +
+          '</div>' +
+          '<div class="bannerStats">' +
+            statBlock('OVERS', ov) +
+            statBlock('RUNS', n(s.runs)) +
+            statBlock('WICKETS', n(s.wickets), 'gold') +
+            statBlock('ECON', econ) +
+          '</div>' +
+        '</div>'
+      };
+    }
+
+    case 'fow': {
+      const f = d.fow || {};
+      const wicketNo = f.wicket ?? d.wickets ?? '';
+      const scoreAtFall = (f.score ?? d.runs ?? 0) + '-' + wicketNo;
+      return {
+        cls:'red',
+        html:'<div class="bannerInner">' +
+          '<div class="bannerTag red">💥 WICKET ' + esc(wicketNo) + '</div>' +
+          '<div class="bannerMainWrap">' +
+            '<div class="bannerMainTitle red">' + esc(f.player || '—') + '</div>' +
+            '<div class="bannerMainSub red">' + esc(f.type || f.dismissal || 'OUT') + (f.bowler ? ' • B ' + esc(f.bowler) : '') + '</div>' +
+          '</div>' +
+          '<div class="bannerStats">' +
+            statBlock('SCORE', scoreAtFall, 'red') +
+            statBlock('OVER', f.overs || d.overs || '—') +
+            statBlock('BATTER', n(f.runs||0) + ' (' + n(f.balls||0) + ')') +
+            statBlock('SR', f.balls ? ((Number(f.runs||0)/Number(f.balls))*100).toFixed(2) : '0.00') +
+          '</div>' +
+        '</div>'
+      };
+    }
+
+    case 'partnership': {
+      const runs = n(d.partnershipRuns);
+      const balls = n(d.partnershipBalls);
+      const rr = balls ? ((runs/balls)*6).toFixed(2) : '0.00';
+      return {
+        cls:'gold',
+        html:'<div class="bannerInner">' +
+          '<div class="bannerTag">🤝 PARTNERSHIP</div>' +
+          '<div class="bannerMainWrap">' +
+            '<div class="bannerMainTitle gold">' + esc(d.b1 || '—') + ' + ' + esc(d.b2 || '—') + '</div>' +
+            '<div class="bannerMainSub">' + (d.battingTeamName ? esc(d.battingTeamName) + ' • ' : '') + 'CURRENT STAND</div>' +
+          '</div>' +
+          '<div class="bannerStats">' +
+            statBlock('RUNS', runs, 'gold') +
+            statBlock('BALLS', balls) +
+            statBlock('RUN RATE', rr) +
+            statBlock('SCORE', n(d.runs) + '/' + n(d.wickets)) +
+          '</div>' +
+        '</div>'
+      };
+    }
+
+    case 'result': {
+      const txt = d.resultText || d.matchResult || '—';
+      return {
+        cls:'red',
+        html:'<div class="bannerInner">' +
+          '<div class="bannerTag red">🏆 RESULT</div>' +
+          '<div class="bannerMainWrap">' +
+            '<div class="bannerMainTitle red">' + esc(txt) + '</div>' +
+            (d.matchName ? '<div class="bannerMainSub red">' + esc(d.matchName) + '</div>' : '') +
+          '</div>' +
+        '</div>'
+      };
+    }
+
+    case 'custom': {
+      const txt = (d.customLower && d.customLower.text) || '';
+      return {
+        cls:'gold',
+        html:'<div class="bannerInner">' +
+          '<div class="bannerTag">✨ LOWER THIRD</div>' +
+          '<div class="bannerMainWrap"><div class="bannerMainTitle gold">' + esc(txt) + '</div></div>' +
+        '</div>'
+      };
+    }
+  }
+  return { cls:'', html:'' };
+}
+
+/* ============================================================
+   FULL SCREEN DATA SCREEN RENDERERS
+   ============================================================ */
+function dsWrap(topbar, body, tournamentName){
+  const tour = (tournamentName && String(tournamentName).trim())
+    ? '<div class="dsTournament">' + esc(tournamentName) + '</div>' : '';
+  return tour + topbar + '<div class="dataScroll">' + body + '</div>';
+}
+function scoreRows(inn, d){
+  const bats = inn && inn.batters ? inn.batters : {};
+  const entries = Object.entries(bats);
+  if (!entries.length) return '<tr><td colspan="7" style="text-align:center;padding:14px;color:#4a5a75">NO BATTING DATA</td></tr>';
+  return entries.map(([name, s]) => {
+    const out = !!s.out;
+    const isAtCrease = !!(d && (name === d.b1 || name === d.b2));
+    const hasBatted = n(s.balls) > 0 || n(s.runs) > 0 || isAtCrease;
+    let statusHtml = '';
+    if (out) statusHtml = '<span class="dsBadge red">OUT</span>';
+    else if (!hasBatted) statusHtml = '';
+    else statusHtml = '<span class="dsBadge gold">NOT OUT</span>';
+    const sr = s.balls ? ((n(s.runs) / n(s.balls)) * 100).toFixed(2) : '0.00';
+    return '<tr><td>' + esc(name) + '</td><td>' + statusHtml + '</td><td>' + n(s.runs) + '</td><td>' + n(s.balls) + '</td><td>' + n(s.fours) + '</td><td>' + n(s.sixes) + '</td><td>' + sr + '</td></tr>';
+  }).join('');
+}
+function bowlRows(inn){
+  const bs = inn && inn.bowlers ? inn.bowlers : {};
+  const entries = Object.entries(bs);
+  if (!entries.length) return '<tr><td colspan="6" style="text-align:center;padding:14px;color:#4a5a75">NO BOWLING DATA</td></tr>';
+  return entries.map(([name, s]) => {
+    const econ = s.balls ? ((n(s.runs) / (n(s.balls) / 6))).toFixed(2) : '0.00';
+    return '<tr><td>' + esc(name) + '</td><td>' + overs(s.balls || 0) + '</td><td>' + n(s.maidens || 0) + '</td><td>' + n(s.runs) + '</td><td>' + n(s.wickets) + '</td><td>' + econ + '</td></tr>';
+  }).join('');
+}
+function renderInningsDetail(d, mode){
+  const no = /2$/.test(mode) ? 2 : 1;
+  const inn = inningData(d, no) || {};
+  const isBat = mode.indexOf('batting') === 0;
+  const team = innTeamName(d, inn) || (no === 1 ? (d.teamA || '') : (d.teamB || ''));
+  const title = (no === 1 ? '1ST' : '2ND') + ' INNINGS ' + (isBat ? 'BATTING' : 'BOWLING');
+  const r = inn.runs ?? 0, w = inn.wickets ?? 0;
+  const o = inn.balls != null ? overs(inn.balls) : (d.overs || '0.0');
+  const tour = d.tournament || d.tournamentName || 'BRKLIVE19 LIVE';
+  const topbar = '<div class="dsTopbar"><div><div class="dsTitle">' + title + '</div><div class="dsSub">' + esc(team) + '</div></div><div class="dsBadges"><span class="dsBadge ' + (no === 2 ? 'red' : 'blue') + '">' + (no === 1 ? '1ST' : '2ND') + ' INN</span><span class="dsBadge gold">' + r + '/' + w + ' • ' + o + ' OV</span></div></div>';
+  const body = '<div class="dataBox dataFull"><table class="dataTable ' + (isBat ? 'batTbl' : 'bowlTbl') + '"><thead>' +
+    (isBat
+      ? '<tr><th>PLAYER</th><th>STATUS</th><th>RUN</th><th>BALL</th><th>4S</th><th>6S</th><th>SR</th></tr>'
+      : '<tr><th>BOWLER</th><th>OV</th><th>M</th><th>RUN</th><th>WKT</th><th>ECON</th></tr>') +
+    '</thead><tbody>' + (isBat ? scoreRows(inn, d) : bowlRows(inn)) + '</tbody></table></div>';
+  return dsWrap(topbar, body, tour);
+}
+function renderScorecard(d, no){
+  const inn = inningData(d, no) || {};
+  const team = innTeamName(d, inn) || (no === 1 ? (d.teamA || 'TEAM A') : (d.teamB || 'TEAM B'));
+  const teamCls = (inn && inn.team === 'B') ? 'teamB' : '';
+  const r = inn.runs ?? 0, w = inn.wickets ?? 0;
+  const o = inn.balls != null ? overs(inn.balls) : (d.overs || '0.0');
+  const crr = (inn.balls && inn.balls > 0) ? ((r / (inn.balls / 6)).toFixed(2)) : n(d.crr).toFixed(2);
+  const extras = inn.extras ?? d.extras ?? 0;
+  const tour = d.tournament || d.tournamentName || 'BRKLIVE19 LIVE';
+  const topbar = '<div class="dsTopbar"><div><div class="dsTitle">' + (no === 1 ? '1ST' : '2ND') + ' INNINGS SCORECARD</div><div class="dsSub">BRKLIVE19 • FULL MATCH DETAILS</div></div><div class="dsBadges"><span class="dsBadge ' + (no === 2 ? 'red' : 'blue') + '">' + (no === 1 ? '1ST' : '2ND') + ' INN</span></div></div>';
+  const body =
+    '<div class="dsTeamHeader ' + teamCls + '">' +
+      '<div><div class="dsTeamName">' + esc(team) + '</div><div class="dsTeamOvers">CRR ' + crr + ' • EXTRAS ' + extras + '</div></div>' +
+      '<div style="text-align:right"><div class="dsTeamScore">' + r + '/' + w + '</div><div class="dsTeamOvers">' + o + ' OVERS</div></div>' +
+    '</div>' +
+    '<div class="dataBox dataFull"><h3>BATTING</h3>' +
+      '<table class="dataTable batTbl"><thead><tr><th>PLAYER</th><th>STATUS</th><th>RUN</th><th>BALL</th><th>4S</th><th>6S</th><th>SR</th></tr></thead><tbody>' + scoreRows(inn, d) + '</tbody></table>' +
+    '</div>' +
+    '<div class="dataBox dataFull"><h3 class="red">BOWLING</h3>' +
+      '<table class="dataTable bowlTbl"><thead><tr><th>BOWLER</th><th>OV</th><th>M</th><th>RUN</th><th>WKT</th><th>ECON</th></tr></thead><tbody>' + bowlRows(inn) + '</tbody></table>' +
+    '</div>';
+  return dsWrap(topbar, body, tour);
+}
+function renderPlayingXI(d){
+  const a = Array.isArray(d.xiA) ? d.xiA : [];
+  const b = Array.isArray(d.xiB) ? d.xiB : [];
+  const tA = d.teamA || 'TEAM A', tB = d.teamB || 'TEAM B';
+  const tour = d.tournament || d.tournamentName || 'BRKLIVE19 LIVE';
+  const build = (list) => list.length
+    ? list.map((x, i) => '<div class="xiPlayer"><div class="xiNum">' + (i+1) + '</div><div class="xiName">' + esc(x) + '</div></div>').join('')
+    : '<div class="xiPlayer"><div class="xiName" style="opacity:.55">NO PLAYERS LISTED</div></div>';
+  const topbar = '<div class="dsTopbar"><div><div class="dsTitle">PLAYING XI</div><div class="dsSub">' + esc(tA) + ' VS ' + esc(tB) + '</div></div><div class="dsBadges"><span class="dsBadge">LINEUPS</span></div></div>';
+  const body = '<div class="xiGrid"><div class="xiTeam"><h3>🦁 ' + esc(tA) + '</h3><div class="xiList">' + build(a) + '</div></div><div class="xiTeam teamB"><h3>🐯 ' + esc(tB) + '</h3><div class="xiList">' + build(b) + '</div></div></div>';
+  return dsWrap(topbar, body, tour);
+}
+function topBatter(inn){
+  const bats = inn && inn.batters ? inn.batters : {};
+  let best = null;
+  Object.entries(bats).forEach(([name, s]) => {
+    const r = n(s.runs);
+    if (!best || r > best.runs || (r === best.runs && n(s.balls) < best.balls)){
+      best = {name, runs:r, balls:n(s.balls), fours:n(s.fours), sixes:n(s.sixes)};
+    }
+  });
+  return best;
+}
+function topBowler(inn){
+  const bs = inn && inn.bowlers ? inn.bowlers : {};
+  let best = null;
+  Object.entries(bs).forEach(([name, s]) => {
+    const w = n(s.wickets), r = n(s.runs);
+    if (!best || w > best.wickets || (w === best.wickets && r < best.runs)){
+      best = {name, wickets:w, runs:r, balls:n(s.balls)};
+    }
+  });
+  return best;
+}
+function renderMatchSummary(d){
+  const i1 = d.firstInnings || {};
+  const i2 = d.secondInnings || {};
+  const tA = d.teamA || 'TEAM A', tB = d.teamB || 'TEAM B';
+  const t1 = innTeamName(d, i1) || tA, t2 = innTeamName(d, i2) || tB;
+  const result = d.resultText || d.matchResult || '';
+  const tour = d.tournament || d.tournamentName || 'BRKLIVE19 LIVE';
+  const perf = (tb, bw) => {
+    const parts = [];
+    if (tb) parts.push('<b>' + esc(tb.name) + '</b> ' + tb.runs + ' (' + tb.balls + ') • ' + tb.fours + '×4 ' + tb.sixes + '×6');
+    if (bw) parts.push('<b>' + esc(bw.name) + '</b> ' + bw.wickets + '/' + bw.runs + ' (' + overs(bw.balls) + ')');
+    return parts.length ? parts.join('<br>') : '<span style="opacity:.55">NO DATA</span>';
+  };
+  const innCard = (inn, team, no) => {
+    const cls = no === 2 ? 'inn2' : '';
+    const r = inn.runs ?? 0, w = inn.wickets ?? 0;
+    const o = inn.balls != null ? overs(inn.balls) : (inn.overs || '');
+    return '<div class="msInnCard ' + cls + '"><div class="msInnTeam">' + esc(team) + (no === 1 ? ' (1ST)' : ' (2ND)') + '</div><div class="msInnScore">' + r + '/' + w + '</div><div class="msInnOvers">' + (o ? o + ' OVERS' : '') + '</div><div class="msPerf">' + perf(topBatter(inn), topBowler(inn)) + '</div></div>';
+  };
+  const topbar = '<div class="dsTopbar"><div><div class="dsTitle">MATCH SUMMARY</div><div class="dsSub">' + esc(d.matchName || (tA + ' VS ' + tB)) + '</div></div><div class="dsBadges"><span class="dsBadge gold">SUMMARY</span></div></div>';
+  const body =
+    (result ? '<div class="msResult"><div class="msResultText">' + esc(result) + '</div></div>' : '') +
+    '<div class="msInningsGrid">' + innCard(i1, t1, 1) + innCard(i2, t2, 2) + '</div>' +
+    '<div class="msInfoGrid">' +
+      '<div class="msInfoBox"><div class="lbl">VENUE</div><div class="val">' + esc(d.venue || d.tournamentVenue || '—') + '</div></div>' +
+      '<div class="msInfoBox"><div class="lbl">TOSS</div><div class="val">' + esc([d.tossWinner, d.tossDecision].filter(Boolean).join(' • ') || '—') + '</div></div>' +
+      '<div class="msInfoBox"><div class="lbl">MATCH</div><div class="val">' + esc(d.matchName || (tA + ' VS ' + tB)) + '</div></div>' +
+      '<div class="msInfoBox"><div class="lbl">FORMAT</div><div class="val">' + (n(d.maxOvers) || 20) + ' OVERS</div></div>' +
+    '</div>';
+  return dsWrap(topbar, body, tour);
+}
+function renderDataScreenHtml(d, mode){
+  switch (mode){
+    case 'scorecard1': return renderScorecard(d, 1);
+    case 'scorecard2': return renderScorecard(d, 2);
+    case 'batting1':
+    case 'bowling1':
+    case 'batting2':
+    case 'bowling2': return renderInningsDetail(d, mode);
+    case 'playingxi': return renderPlayingXI(d);
+    case 'summary':   return renderMatchSummary(d);
+    default:          return renderMatchSummary(d);
+  }
+}
+
+/* ============================================================
+   MODE RESOLUTION
+   ============================================================ */
+const LOWER_BANNER_MODES = ['tournament','venue','match','toss','b1','b2','bowler','fow','partnership','result','custom'];
+const FULL_SCREEN_MODES  = ['summary','playingxi','batting1','batting2','bowling1','bowling2','scorecard1','scorecard2'];
+
+function decideDisplayMode(d){
+  const o = d.overlay || {};
+  const custom = d.customLower || {};
+
+  if (custom.active && custom.text) return 'custom';
+  if (o.playerLower && o.playerLower.active){
+    return String(o.playerLower.slot).toLowerCase() === 'b2' ? 'b2' : 'b1';
+  }
+  if (o.showFOW) return 'fow';
+  if (o.showBowler) return 'bowler';
+  if (o.showTarget) return 'target';
+  if (o.partnership && o.partnership.active) return 'partnership';
+  if (o.showTournament) return 'tournament';
+  if (o.showVenue) return 'venue';
+  if (o.showMatch) return 'match';
+  if (o.showToss) return 'toss';
+  if (o.showResult) return 'result';
+
+  const mode = String(d.mode || '').toLowerCase();
+  if (mode === 'playingxi') return 'playingxi';
+  if (mode === 'summary') return 'summary';
+  if (mode === 'batting1') return 'batting1';
+  if (mode === 'batting2') return 'batting2';
+  if (mode === 'bowling1') return 'bowling1';
+  if (mode === 'bowling2') return 'bowling2';
+  if (mode === 'scorecard1') return 'scorecard1';
+  if (mode === 'scorecard2') return 'scorecard2';
+
+  const view = String(o.view || '').toLowerCase();
+  if (view && view !== 'default'){
+    if (LOWER_BANNER_MODES.includes(view)) return view;
+    if (FULL_SCREEN_MODES.includes(view)) return view;
+    if (view === 'target') return 'target';
+  }
+  return 'default';
+}
+function sceneKeyOf(mode){
+  if (LOWER_BANNER_MODES.includes(mode)) return 'banner:' + mode;
+  if (FULL_SCREEN_MODES.includes(mode))  return 'full:' + mode;
+  if (mode === 'target') return 'banner:target';
+  return 'default';
+}
+
+/* ============================================================
+   UPDATE — with flicker-free dedup + entry animations
+   ============================================================ */
+let LAST = null;
+let lastPacketHash = '';
+let lastSceneKey = '';
+let lastBannerInnerKey = '';
+let lastBannerCls = '';
+let lastDataScreenKey = '';
+
+function applySceneClass(el, cls){
+  if (!el) return;
+  const want = 'bannerCard ' + cls;
+  if (el.className !== want) el.className = want;
+}
+
+/* Entry animation replay — resets base keyframe + toggles `playing`
+   so the sweep overlay and staggered children replay. */
+function playEntryAnim(el){
+  if (!el) return;
+  el.style.animation = 'none';
+  void el.offsetWidth;
+  el.style.animation = '';
+
+  el.classList.remove('playing');
+  void el.offsetWidth;
+  el.classList.add('playing');
+
+  clearTimeout(el.__animTimer);
+  el.__animTimer = setTimeout(() => {
+    el.classList.remove('playing');
+  }, 1500);
+}
+
+function updateOverlay(raw){
+  const d = normalizeScorerData(raw);
+  if (!d) return;
+
+  /* Dedup identical packets */
+  const hash = packetHash(d);
+  if (hash === lastPacketHash) return;
+  lastPacketHash = hash;
+
+  LAST = d;
+  window.__lastOverlayData = d;
+
+  updateTournamentInfo(d);
+  updateScoreBar(d);
+
+  const o = d.overlay || {};
+  const mode = decideDisplayMode(d);
+  const scene = sceneKeyOf(mode);
+
+  const lower      = $id('lowerThird');
+  const banner     = $id('bannerLower');
+  const bannerCard = $id('bannerLowerCard');
+  const ds         = $id('dataScreen');
+  const dsCard     = $id('dataCard');
+
+  const sceneChanged = (scene !== lastSceneKey);
+
+  /* ---------- Banner scene ---------- */
+  if (scene.startsWith('banner:')){
+    const content = renderLowerBannerContent(d, mode);
+    const innerKey = content.cls + '|' + content.html;
+
+    if (innerKey !== lastBannerInnerKey || sceneChanged){
+      lastBannerInnerKey = innerKey;
+      lastBannerCls = content.cls;
+      applySceneClass(bannerCard, content.cls);
+      if (bannerCard.innerHTML !== content.html){
+        bannerCard.innerHTML = content.html;
+      }
+      if (sceneChanged) playEntryAnim(bannerCard);
+    }
+    if (!banner.classList.contains('show')) banner.classList.add('show');
+    if (!lower.classList.contains('hidden')) lower.classList.add('hidden');
+    if (ds.classList.contains('show')) ds.classList.remove('show');
+  }
+  /* ---------- Full-screen scene ---------- */
+  else if (scene.startsWith('full:')){
+    const html = renderDataScreenHtml(d, mode);
+    if (html !== lastDataScreenKey || sceneChanged){
+      lastDataScreenKey = html;
+      if (dsCard.innerHTML !== html) dsCard.innerHTML = html;
+      if (sceneChanged) playEntryAnim(dsCard);
+    }
+    if (!ds.classList.contains('show')) ds.classList.add('show');
+    if (banner.classList.contains('show')) banner.classList.remove('show');
+    if (!lower.classList.contains('hidden')) lower.classList.add('hidden');
+  }
+  /* ---------- Default scene: score bar only ---------- */
+  else {
+    if (banner.classList.contains('show')){
+      banner.classList.remove('show');
+      bannerCard.innerHTML = '';
+      lastBannerInnerKey = '';
+      lastBannerCls = '';
+    }
+    if (ds.classList.contains('show')){
+      ds.classList.remove('show');
+      lastDataScreenKey = '';
+    }
+    if (lower.classList.contains('hidden')) lower.classList.remove('hidden');
+  }
+
+  lastSceneKey = scene;
+
+  /* ---------- Event animations ---------- */
+  const bcast = d.broadcast || {};
+  if (bcast.active){
+    const evKey = bcast.id ?? bcast.eventId ?? bcast.ts ?? d.activeEvent ?? '';
+    if (evKey !== lastActiveEventKey){
+      lastActiveEventKey = evKey;
+      showEvent(d.activeEvent || bcast.type, {force:true});
+    }
+  } else {
+    if (lastActiveEventKey){
+      lastActiveEventKey = '';
+    } else {
+      const auto = detectBallEvent(d);
+      if (auto) showEvent(auto);
+    }
+  }
+}
+
+/* ============================================================
+   MESSAGE WIRING
+   ============================================================ */
+function receiveScorerData(d){
+  if (d && d.type === 'LIVE_SCORE') d = d.data || d;
+  updateOverlay(d);
+}
+if (overlayChannel) overlayChannel.onmessage = e => {
+  const d = e.data || {};
+  receiveScorerData(d.type === 'LIVE_SCORE' ? (d.data || d) : d);
+};
+if (scorerChannel) scorerChannel.onmessage = e => {
+  const d = e.data || {};
+  receiveScorerData(d.type === 'LIVE_SCORE' ? (d.data || d) : d);
+};
+window.addEventListener('message', e => {
+  const d = e.data || {};
+  if (d.type === 'BRKLIVE19_UPDATE' || d.type === 'LIVE_SCORE') receiveScorerData(d.data || d);
+  if (d.type === 'BRKLIVE19_EVENT') showEvent(d.event, {force:true});
+});
+window.addEventListener('storage', e => {
+  if (['brklive19_liveScore','brklive19_last_liveScore'].includes(e.key)){
+    try { receiveScorerData(JSON.parse(e.newValue || '{}')); } catch(x) {}
+  }
+});
+window.addEventListener('BRKLIVE19_UPDATE', e => receiveScorerData(e.detail || {}));
+window.addEventListener('BRKLIVE19_BUTTON', e => {
+  const p = e.detail || {};
+  if (p.type === 'BRKLIVE19_HIDE' || p.action === 'hide' || p.mode === 'hide'){
+    const ds = $id('dataScreen'); if (ds) ds.classList.remove('show');
+    const banner = $id('bannerLower'); if (banner){ banner.classList.remove('show'); const c = $id('bannerLowerCard'); if (c) c.innerHTML=''; }
+    const lower = $id('lowerThird'); if (lower) lower.classList.remove('hidden');
+    lastSceneKey = 'default';
+    lastBannerInnerKey = '';
+    lastDataScreenKey = '';
+  }
+});
+
+/* ---------- localStorage polling (skips identical raw strings) ---------- */
+let lastStorageRaw = '';
+function readStorage(){
+  try {
+    const keys = ['brklive19_liveScore','brklive19_last_liveScore'];
+    for (const k of keys){
+      const r = localStorage.getItem(k);
+      if (r && r !== lastStorageRaw){
+        lastStorageRaw = r;
+        receiveScorerData(JSON.parse(r));
+        return;
+      }
+    }
+  } catch(e) {}
+}
+readStorage();
+setInterval(readStorage, 500);
+
+/* ---------- URL params ---------- */
+const q = new URLSearchParams(location.search);
+if (q.get('event')) showEvent(q.get('event'), {force:true});
+
+/* ---------- Public API ---------- */
+window.BRKLIVE19 = {
+  update: receiveScorerData,
+  event: name => showEvent(name, {force:true}),
+  show: mode => { if (LAST) { LAST.mode = mode; lastPacketHash = ''; updateOverlay(LAST); } }
+};
+
+console.log('BRKLIVE19 Overlay ready — animated + flicker-free.');
+</script>
+</body>
+</html>
