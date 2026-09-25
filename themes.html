@@ -289,7 +289,7 @@ body.theme-theme2 .fow-screen * {
   <div class="top"><div><div class="brand">🏏 BRKLIVE19</div><div class="sub">Professional Overlay Theme Selection</div></div><button class="btn" onclick="goBack()">← BACK TO SCORER</button></div>
   <div class="panel">
     <h2 style="margin:0">🎨 Overlay Themes</h2>
-    <div class="note">Each theme now uses its own independent overlay file. Every overlay reads live data only from the scorer/index bridge and does not communicate with another overlay. Choose a theme to apply to the live overlay. <b>THEME 1</b> contains the standard broadcast collection. <b>THEME 2, THEME 3 and THEME 4</b> are copied from Project 2 with their original overlay designs. <b>THEME 5</b> is the supplied pink/navy cricket design. <b>THEME 6</b> is the white-pill design based on the supplied reference. <b>THEME 7</b> uses the shared overlayer.html engine with a crimson/gold broadcast palette.</div>
+    <div class="note">Each theme now uses its own independent overlay file. Every overlay reads live data only from the scorer/index bridge and does not communicate with another overlay. Choose a theme to apply to the live overlay. <b>THEME 1</b> contains the standard broadcast collection. <b>THEME 2, THEME 3 and THEME 4</b> are copied from Project 2 with their original overlay designs. <b>THEME 5</b> is the supplied pink/navy cricket design. <b>THEME 6</b> is the white-pill design based on the supplied reference. <b>THEME 7</b> uses the dedicated Theme 7 overlay engine with a crimson/gold broadcast palette. <b>THEME 8</b> uses the dedicated Theme 8 overlay file and live scorer bridge.</div>
     <div class="theme-section open" id="themeSection1">
       <button class="theme-section-head" type="button" onclick="toggleThemeSection(1)">
         <span><b>THEME 1</b><small> • Broadcast Style Collection</small></span><span class="chevron">▾</span>
@@ -388,6 +388,33 @@ body.theme-theme2 .fow-screen * {
       </div>
     </div>
 
+    <div class="theme-section open" id="themeSection8">
+      <button class="theme-section-head" type="button" onclick="toggleThemeSection(8)">
+        <span><b>THEME 8</b><small> • PREMIUM BROADCAST</small></span>
+        <span class="chevron">▾</span>
+      </button>
+      <div class="theme-list">
+        <div class="theme-row" style="--sw1:#7c3aed;--sw2:#06b6d4">
+          <div class="preview" style="--p:#7c3aed;--s:#06b6d4">
+            <span>08</span><i></i><b></b><em></em>
+          </div>
+          <div class="info">
+            <div class="name">THEME 8 — PURPLE / CYAN</div>
+            <div class="desc">Premium Theme 8 cricket broadcast overlay with its dedicated overlay file, live scorer data connection, SELECT control and direct WEB LINK.</div>
+            <div class="swatches">
+              <span style="background:#7c3aed"></span>
+              <span style="background:#06b6d4"></span>
+              <span style="background:#facc15"></span>
+            </div>
+          </div>
+          <div class="actions">
+            <button class="btn select" onclick="chooseTheme('theme8')">✓ SELECT</button>
+            <button class="btn link" onclick="copyThemeLink('theme8',this)">🔗 WEB LINK</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
 </div>
 </div>
 <script type="module">
@@ -423,7 +450,7 @@ let match=p.get('match')||localStorage.getItem('brklive19_theme_match')||'';
 let tournament=p.get('tournament')||'';
 try{const b=JSON.parse(localStorage.getItem('brklive19_score_bridge')||'null');if(b){if(!match)match=b.matchId||'';if(!tournament)tournament=b.tournamentName||b.tournament||'';}}catch(e){}
 const esc=s=>String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
-function overlayLink(theme){const files={blue:'overlay_theme1.html',theme2:'overlay_theme2.html',theme3:'overlay_theme3.html',theme4:'overlay_theme4.html',theme5:'overlay_theme5.html',theme6:'overlay_theme6.html',theme7:'overlayer.html'};const u=new URL('./'+(files[theme]||files.blue),location.href);u.searchParams.set('theme',theme);if(match)u.searchParams.set('match',match);if(tournament)u.searchParams.set('tournament',tournament);return u.href;}
+function overlayLink(theme){const files={blue:'overlay_theme1.html',theme2:'overlay_theme2.html',theme3:'overlay_theme3.html',theme4:'overlay_theme4.html',theme5:'overlay_theme5.html',theme6:'overlay_theme6.html',theme7:'overlay_theme7.html'};const u=new URL('./'+(files[theme]||files.blue),location.href);u.searchParams.set('theme',theme);if(match)u.searchParams.set('match',match);if(tournament)u.searchParams.set('tournament',tournament);return u.href;}
 window.toggleThemeSection=function(n){const el=document.getElementById('themeSection'+n);if(el)el.classList.toggle('open');};
 function render(){const list=document.getElementById('themeList');if(!list)return;list.innerHTML=themes.map(t=>`<div class="theme-row" style="--sw1:${t[4]};--sw2:${t[5]}"><div class="preview" style="--p:${t[4]};--s:${t[5]}"><span>${t[1]}</span><i></i><b></b><em></em></div><div class="info"><div class="name">${esc(t[2])}${selected===t[0]?'<span class="current">SELECTED</span>':''}</div><div class="desc">${esc(t[3])}</div><div class="swatches"><span style="background:${t[4]}"></span><span style="background:${t[5]}"></span></div></div><div class="actions"><button type="button" class="btn select" onclick="chooseTheme('${t[0]}')">✓ SELECT</button><button type="button" class="btn link" onclick="copyThemeLink('${t[0]}',this)">🔗 WEB LINK</button></div></div>`).join('');}
 window.chooseTheme=async function(theme){selected=theme;localStorage.setItem('brklive19_pending_theme',theme);if(match)localStorage.setItem('brklive19_theme_match',match);try{const raw=localStorage.getItem('brklive19_liveScore')||localStorage.getItem('brklive19_last_liveScore')||'{}';const live=JSON.parse(raw)||{};live.theme=theme;live.themeUpdatedAt=Date.now();if(match)live.matchId=match;if(tournament)live.tournament=tournament;live.__brklive19Bridge=true;live.__bridgeVersion=5;live.__bridgeUpdatedAt=Date.now();localStorage.setItem('brklive19_liveScore',JSON.stringify(live));localStorage.setItem('brklive19_last_liveScore',JSON.stringify(live));localStorage.setItem('brklive19_liveScore_tick',String(Date.now()));}catch(e){}try{if(window.publishThemeToLiveScore)await window.publishThemeToLiveScore(theme,match);}catch(e){}try{const ch=new BroadcastChannel('BRKLIVE19_LIVE_OVERLAY');const packet=JSON.parse(localStorage.getItem('brklive19_liveScore')||'{}');packet.theme=theme;packet.themeUpdatedAt=Date.now();ch.postMessage({type:'LIVE_SCORE',data:packet});setTimeout(()=>ch.close(),250);}catch(e){}const u=new URL('./scorer.html',location.href);u.searchParams.set('theme',theme);if(match)u.searchParams.set('match',match);if(tournament)u.searchParams.set('tournament',tournament);location.href=u.href;};
