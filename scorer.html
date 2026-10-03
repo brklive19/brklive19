@@ -381,6 +381,15 @@ body.theme-theme2 .fow-screen * {
 @media(max-width:650px){.themeColorGrid{grid-template-columns:repeat(2,1fr)}}
 :root{--theme-primary:#087cff;--theme-secondary:#00d9ff;--theme-accent:#ffd12f;--theme-bg:#07101f}
 </style>
+
+<style id="brklive19-player-adjust-controls">
+  .controlNote{padding:9px 11px;border:1px solid #34415f;border-radius:9px;background:#0b1020;color:var(--muted);font-size:11px;margin-top:8px}
+  .adjustGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+  .adjustField{background:#0b1020;border:1px solid #34415f;border-radius:10px;padding:8px}
+  .adjustField label{margin:0 0 3px}
+  .adjustField input{margin:0}
+  @media(max-width:650px){.adjustGrid{grid-template-columns:1fr}}
+</style>
 </head>
 <body>
 
@@ -413,8 +422,22 @@ body.theme-theme2 .fow-screen * {
     <button class="btn special" onclick="openBowler(true)">🔄 CHANGE BOWLER</button>
     <button class="btn wick" onclick="endInnings()">⏹ END INNINGS</button>
     <button class="btn wick" onclick="newBatter()">🔄 NEW BATTER</button>
+    <button class="btn custom" onclick="openPlayerControl()">👤 PLAYER</button>
+    <button class="btn gold" onclick="openScoreAdjust()">🛠 ADJUST SCORE</button>
     <button class="btn dark" onclick="resetMatch()">♻️ RESET MATCH</button>
   </div>
+</div>
+
+<!-- ===== SCORER CONTROL: PLAYER + INNINGS ADJUSTMENT ===== -->
+<div class="card">
+  <h2>🎮 Scorer Control</h2>
+  <div class="g4">
+    <button class="btn custom" onclick="openPlayerControl()">👤 PLAYER</button>
+    <button class="btn good" onclick="newBatter()">🏏 NEW BATTER</button>
+    <button class="btn special" onclick="openBowler(false)">🎯 CHANGE BOWLER</button>
+    <button class="btn gold" onclick="openScoreAdjust()">🛠 SCORE / OVER ADJUST</button>
+  </div>
+  <div class="controlNote">PLAYER opens the complete playing XI for quick selection. SCORE / OVER ADJUST lets you correct the current innings total runs, wickets and legal overs/balls, then syncs the correction to the overlay.</div>
 </div>
 
 <!-- ===== LIVE SCORE ===== -->
@@ -615,6 +638,59 @@ body.theme-theme2 .fow-screen * {
     <h2>🏏 New Batsman</h2>
     <select id="newBatter"></select>
     <button class="btn good" style="width:100%;margin-top:10px" onclick="confirmBatter()">SET BATTER</button>
+  </div>
+</div>
+
+
+<div id="playerControlModal" class="modal">
+  <div class="modalBox">
+    <button class="close" onclick="closeModal('playerControlModal')">✕</button>
+    <h2>👤 Player Control</h2>
+    <p class="mini">Select any player from the current batting or bowling team. You can make the selected player the striker, non-striker, or show the player graphic.</p>
+    <label>Team</label>
+    <select id="playerTeam" onchange="refreshPlayerControlList()">
+      <option value="batting">Batting Team</option>
+      <option value="bowling">Bowling Team</option>
+      <option value="A">Team A</option>
+      <option value="B">Team B</option>
+    </select>
+    <label>Player</label>
+    <select id="playerControlSelect" onchange="playerControlSelectionChanged()"></select>
+    <div class="g2" style="margin-top:8px">
+      <button class="btn blue" onclick="setSelectedPlayer('striker')">🏏 SET STRIKER</button>
+      <button class="btn blue" onclick="setSelectedPlayer('non')">🏏 SET NON-STRIKER</button>
+      <button class="btn good" onclick="showSelectedPlayer()">📺 SHOW PLAYER</button>
+      <button class="btn dark" onclick="hidePlayerLower()">✕ HIDE PLAYER</button>
+    </div>
+    <div style="margin-top:14px;padding-top:12px;border-top:1px solid var(--line)">
+      <h3 style="color:var(--cyan);margin:0 0 8px">➕ ADD / EDIT PLAYER</h3>
+      <label>Player Name</label>
+      <input id="playerNameInput" type="text" maxlength="60" placeholder="Enter player name">
+      <div class="g2">
+        <button class="btn good" onclick="addPlayerToXI()">➕ ADD PLAYER</button>
+        <button class="btn gold" onclick="editSelectedPlayerName()">✏️ EDIT NAME</button>
+      </div>
+      <button class="btn wick" style="margin-top:8px" onclick="removeSelectedPlayer()">🗑 REMOVE SELECTED PLAYER</button>
+      <div class="mini" style="margin-top:7px">Adding, editing or removing a player updates the selected team XI and saves it to the current match.</div>
+    </div>
+  </div>
+</div>
+
+<div id="scoreAdjustModal" class="modal">
+  <div class="modalBox">
+    <button class="close" onclick="closeModal('scoreAdjustModal')">✕</button>
+    <h2>🛠 Adjust Current Innings</h2>
+    <p class="mini">Use this for correcting the scoreboard after a scoring mistake. Overs are entered as completed overs + legal balls, for example 7.3 = 7 overs and 3 legal balls. This changes the innings totals and live overlay; player/bowler individual statistics are not automatically rewritten.</p>
+    <div class="adjustGrid">
+      <div class="adjustField"><label>INNINGS</label><select id="adjustInnings" onchange="loadScoreAdjustInnings()"><option value="1">1ST INNINGS</option><option value="2">2ND INNINGS</option></select></div>
+      <div class="adjustField"><label>RUNS</label><input id="adjustRuns" type="number" min="0" step="1"></div>
+      <div class="adjustField"><label>WICKETS</label><input id="adjustWickets" type="number" min="0" max="10" step="1"></div>
+      <div class="adjustField"><label>OVERS</label><input id="adjustOvers" type="text" inputmode="decimal" placeholder="0.0"></div>
+    </div>
+    <div class="g2" style="margin-top:10px">
+      <button class="btn good" onclick="applyScoreAdjust()">✅ APPLY ADJUSTMENT</button>
+      <button class="btn dark" onclick="closeModal('scoreAdjustModal')">CANCEL</button>
+    </div>
   </div>
 </div>
 
@@ -1574,6 +1650,324 @@ body.theme-theme2 .fow-screen * {
     S.overlay.view = S.overlay.partnership.active ? "partnership" : "default";
     await save();
     render();
+  };
+
+
+  // ---- PLAYER CONTROL ----
+  function refreshPlayerControlList() {
+    const sel = $("playerControlSelect");
+    if (!sel) return;
+    const mode = $("playerTeam")?.value || "batting";
+    let side = mode;
+    if (mode === "batting") side = S.battingTeam;
+    if (mode === "bowling") side = S.bowlingTeam;
+    const list = players(side);
+    options("playerControlSelect", list);
+  }
+
+  window.openPlayerControl = function() {
+    if (!S.teamA || !S.teamB) {
+      alert("Load a match first.");
+      return;
+    }
+    const teamSel = $("playerTeam");
+    if (teamSel) teamSel.value = "batting";
+    refreshPlayerControlList();
+    const list = players(S.battingTeam);
+    if (list.length && S.striker) $("playerControlSelect").value = S.striker;
+    openModal("playerControlModal");
+  };
+
+  window.setSelectedPlayer = async function(role) {
+    const player = $("playerControlSelect")?.value || "";
+    if (!player) { alert("Select a player first."); return; }
+    if (role === "striker") {
+      if (player === S.nonStriker) [S.striker, S.nonStriker] = [S.nonStriker, S.striker];
+      else S.striker = player;
+    } else {
+      if (player === S.striker) [S.striker, S.nonStriker] = [S.nonStriker, S.striker];
+      else S.nonStriker = player;
+    }
+    battingStats(S.striker); battingStats(S.nonStriker);
+    S.events.push(`PLAYER CONTROL — ${role === "striker" ? "STRIKER" : "NON-STRIKER"}: ${player}`);
+    closeModal("playerControlModal");
+    await save();
+    render();
+  };
+
+  window.showSelectedPlayer = async function() {
+    const player = $("playerControlSelect")?.value || "";
+    if (!player) { alert("Select a player first."); return; }
+    ensureOverlayState();
+    ["showTournament","showVenue","showMatch","showToss","showResult","showBowler","showFOW","showTarget"].forEach(k=>S.overlay[k]=false);
+    S.overlay.partnership = {active:false};
+    S.customLower = {...(S.customLower||{}), active:false};
+    S.overlay.playerLower = {active:true, slot:"player", player};
+    S.overlay.view = "PLAYER";
+    S.overlay.scoreVisible = false;
+    S.overlay.intro = false;
+    closeModal("playerControlModal");
+    await save();
+    render();
+  };
+
+  // ---- MANUAL INNINGS SCORE / OVER ADJUSTMENT ----
+  function getInningsAdjustData(innings) {
+    innings = Number(innings);
+    if (innings === 1) {
+      const d = (S.innings === 1) ? S : (S.firstInnings || {});
+      return { runs:Number(d.runs||0), wickets:Number(d.wickets||0), balls:Number(d.balls ?? d.legalBalls ?? 0) };
+    }
+    const d = (S.innings === 2) ? S : (S.secondInnings || {});
+    return { runs:Number(d.runs||0), wickets:Number(d.wickets||0), balls:Number(d.balls ?? d.legalBalls ?? 0) };
+  }
+
+  window.loadScoreAdjustInnings = function() {
+    const sel = $("adjustInnings");
+    if (!sel) return;
+    const innings = Number(sel.value || 1);
+    if (innings === 2 && S.innings !== 2 && !(S.secondInnings && (S.secondInnings.team || S.secondInningsStarted))) {
+      alert("2nd innings is not started yet. Start the 2nd innings first.");
+      sel.value = String(S.innings === 2 ? 2 : 1);
+      return loadScoreAdjustInnings();
+    }
+    const d = getInningsAdjustData(innings);
+    $("adjustRuns").value = d.runs;
+    $("adjustWickets").value = d.wickets;
+    $("adjustOvers").value = oversText(d.balls);
+  };
+
+  window.openScoreAdjust = function() {
+    const sel = $("adjustInnings");
+    if (sel) {
+      sel.value = String(S.innings === 2 ? 2 : 1);
+      if (S.innings !== 2) {
+        const opt2 = [...sel.options].find(o => o.value === "2");
+        if (opt2) opt2.disabled = !(S.secondInnings && (S.secondInnings.team || S.secondInningsStarted));
+      }
+    }
+    loadScoreAdjustInnings();
+    openModal("scoreAdjustModal");
+  };
+
+  function parseOversInput(value) {
+    const raw = String(value ?? "").trim();
+    if (!raw) return null;
+    if (!/^\\d+(?:\\.\\d+)?$/.test(raw)) return null;
+    const parts = raw.split(".");
+    const overs = Number(parts[0]);
+    const balls = parts.length > 1 ? Number(parts[1]) : 0;
+    if (!Number.isInteger(overs) || !Number.isInteger(balls) || balls < 0 || balls > 5) return null;
+    return overs * 6 + balls;
+  }
+
+  function selectedPlayerTeam(){
+    const choice = $("playerTeam")?.value || "batting";
+    if (choice === "A" || choice === "B") return choice;
+    return choice === "bowling" ? S.bowlingTeam : S.battingTeam;
+  }
+
+  function syncPlayersToMatch(){
+    try {
+      if (!S.matchId) return;
+      const raw = localStorage.getItem("brklive_matches");
+      if (!raw) return;
+      const matches = JSON.parse(raw);
+      if (!Array.isArray(matches)) return;
+      const m = matches.find(x => x.id === S.matchId);
+      if (!m) return;
+      m.xiTeamA = [...(S.xiA || [])];
+      m.xiTeamB = [...(S.xiB || [])];
+      m.xiA = [...(S.xiA || [])];
+      m.xiB = [...(S.xiB || [])];
+      m.lastUpdated = new Date().toISOString();
+      localStorage.setItem("brklive_matches", JSON.stringify(matches));
+      localStorage.setItem("brklive19_score_bridge", JSON.stringify({
+        tournament:S.tournament, tournamentName:S.tournament, venue:S.venue,
+        tournamentVenue:S.venue, matchName:S.matchName, matchNo:S.matchNo,
+        matchType:S.matchType, teamA:S.teamA, teamB:S.teamB, maxOvers:S.maxOvers,
+        tossWinner:S.tossWinner, tossDecision:S.tossDecision, xiA:[...(S.xiA||[])],
+        xiB:[...(S.xiB||[])], matchId:S.matchId
+      }));
+    } catch(e){ console.warn("Player XI sync failed",e); }
+  }
+
+  // Keep the selected player and edit-name field synchronized at all times.
+  window.playerControlSelectionChanged = function(){
+    const select = $("playerControlSelect");
+    const input = $("playerNameInput");
+    if (!select || !input) return;
+    input.value = select.value || "";
+  };
+
+  window.refreshPlayerControlList = function(selected=""){
+    const select = $("playerControlSelect");
+    if (!select) return;
+    const team = selectedPlayerTeam();
+    const list = players(team);
+
+    // Prefer the requested player, otherwise preserve the current selection,
+    // otherwise select the active player for that team, otherwise first player.
+    const previous = select.value || "";
+    let preferred = selected || previous;
+    if (!preferred) {
+      if (team === S.battingTeam) preferred = S.striker || S.nonStriker || "";
+      else if (team === S.bowlingTeam) preferred = S.bowler || "";
+    }
+    if (!list.includes(preferred)) preferred = list[0] || "";
+
+    options("playerControlSelect", list, preferred);
+    select.value = preferred;
+    playerControlSelectionChanged();
+  };
+
+  window.openPlayerControl = function(){
+    const teamSel = $("playerTeam");
+    if (teamSel) teamSel.value = "batting";
+    refreshPlayerControlList(S.striker || S.nonStriker || "");
+    openModal("playerControlModal");
+  };
+
+  window.addPlayerToXI = async function(){
+    const team = selectedPlayerTeam();
+    const input = $("playerNameInput");
+    const name = String(input?.value || "").trim().replace(/\s+/g," ");
+    if (!name) { alert("Enter a player name."); return; }
+    const list = players(team);
+    if (list.some(p => String(p).trim().toLowerCase() === name.toLowerCase())) {
+      alert("This player already exists in the selected team."); return;
+    }
+    if (team === "A") S.xiA = [...(S.xiA||[]), name];
+    else S.xiB = [...(S.xiB||[]), name];
+    battingStats(name); bowlingStats(name);
+    syncPlayersToMatch();
+    await save();
+    refreshPlayerControlList(name);
+    input.value = name;
+    render();
+    toast(`Player added: ${name}`);
+  };
+
+  window.editSelectedPlayerName = async function(){
+    const team = selectedPlayerTeam();
+    const oldName = $("playerControlSelect")?.value || "";
+    const input = $("playerNameInput");
+    const newName = String(input?.value || "").trim().replace(/\s+/g," ");
+    if (!oldName) { alert("Select a player to edit."); return; }
+    if (!newName) { alert("Enter the new player name."); return; }
+    if (oldName === newName) { alert("Enter a different player name."); return; }
+    const list = players(team);
+    if (list.some(p => String(p).toLowerCase() === newName.toLowerCase())) {
+      alert("That player name already exists in the selected team."); return;
+    }
+    // Match the exact selected value first; names are stored as strings.
+    const updated = list.map(p => String(p) === String(oldName) ? newName : p);
+    if (!updated.includes(newName)) {
+      alert("Could not update the selected player. Please select the player again.");
+      return;
+    }
+    if (team === "A") S.xiA = updated; else S.xiB = updated;
+
+    // Preserve all live player statistics when a name is changed.
+    if (S.batters && S.batters[oldName]) { S.batters[newName] = S.batters[oldName]; delete S.batters[oldName]; }
+    if (S.bowlers && S.bowlers[oldName]) { S.bowlers[newName] = S.bowlers[oldName]; delete S.bowlers[oldName]; }
+    if (S.striker === oldName) S.striker = newName;
+    if (S.nonStriker === oldName) S.nonStriker = newName;
+    if (S.bowler === oldName) S.bowler = newName;
+    if (S._dismissed === oldName) S._dismissed = newName;
+    if (S.overlay?.playerLower?.player === oldName) S.overlay.playerLower.player = newName;
+    if (Array.isArray(S.fallWickets)) S.fallWickets.forEach(w => { if (w.player === oldName) w.player = newName; if (w.bowler === oldName) w.bowler = newName; });
+    if (S.firstInnings?.batters?.[oldName]) { S.firstInnings.batters[newName] = S.firstInnings.batters[oldName]; delete S.firstInnings.batters[oldName]; }
+    if (S.firstInnings?.bowlers?.[oldName]) { S.firstInnings.bowlers[newName] = S.firstInnings.bowlers[oldName]; delete S.firstInnings.bowlers[oldName]; }
+
+    syncPlayersToMatch();
+    await save();
+    refreshPlayerControlList(newName);
+    input.value = newName;
+    render();
+    toast(`Player name updated: ${newName}`);
+  };
+
+  window.removeSelectedPlayer = async function(){
+    const team = selectedPlayerTeam();
+    const name = $("playerControlSelect")?.value || "";
+    if (!name) { alert("Select a player to remove."); return; }
+    if ([S.striker,S.nonStriker,S.bowler].includes(name)) {
+      alert("You cannot remove the current striker, non-striker or bowler. Change the active player first."); return;
+    }
+    if (!confirm(`Remove ${name} from ${teamName(team)} playing XI?`)) return;
+    if (team === "A") S.xiA = (S.xiA||[]).filter(p => p !== name);
+    else S.xiB = (S.xiB||[]).filter(p => p !== name);
+    syncPlayersToMatch();
+    await save();
+    refreshPlayerControlList();
+    $("playerNameInput").value = "";
+    render();
+    toast(`Player removed: ${name}`);
+  };
+
+  window.applyScoreAdjust = async function() {
+    const innings = Number($("adjustInnings")?.value || S.innings || 1);
+    if (innings === 2 && S.innings !== 2) {
+      alert("2nd innings must be started before its score can be adjusted.");
+      return;
+    }
+    const runs = Math.max(0, Math.floor(num($("adjustRuns").value)));
+    const wickets = Math.max(0, Math.min(10, Math.floor(num($("adjustWickets").value))));
+    const balls = parseOversInput($("adjustOvers").value);
+    if (balls === null) {
+      alert("Enter overs like 0.0, 5.2 or 20.0. The digit after the decimal must be 0 to 5.");
+      return;
+    }
+    if (balls > Number(S.maxOvers || 0) * 6) {
+      alert(`Overs cannot exceed ${Number(S.maxOvers || 0)}.0.`);
+      return;
+    }
+
+    pushHistory();
+
+    if (innings === 1) {
+      // Editing 1st innings while 2nd innings is live must NOT overwrite the
+      // current 2nd-innings score. Update only the stored first-innings snapshot.
+      const oldFirst = S.firstInnings || {};
+      S.firstInnings = {
+        ...oldFirst,
+        team: oldFirst.team || S.battingTeam,
+        runs, wickets, balls,
+        extras:Number(oldFirst.extras || 0),
+        extraDetail:{...(oldFirst.extraDetail || {})},
+        batters:JSON.parse(JSON.stringify(oldFirst.batters || {})),
+        bowlers:JSON.parse(JSON.stringify(oldFirst.bowlers || {})),
+        fallWickets:JSON.parse(JSON.stringify(oldFirst.fallWickets || [])),
+        xi:Array.from(oldFirst.xi || players(oldFirst.team || S.battingTeam) || [])
+      };
+      // Target belongs to the 2nd innings and must follow the edited 1st innings.
+      S.target = runs + 1;
+      S.events.push(`MANUAL 1ST INNINGS ADJUSTMENT — ${runs}/${wickets} (${oversText(balls)})`);
+    } else {
+      // 2nd innings adjustment changes the live/current innings only.
+      S.runs = runs;
+      S.wickets = wickets;
+      S.legalBalls = balls;
+      S.secondInnings = {
+        ...(S.secondInnings || {}),
+        team:S.battingTeam, runs, wickets, balls,
+        extras:Number(S.extras||0),
+        extraDetail:{...(S.extraDetail || {})},
+        batters:JSON.parse(JSON.stringify(S.batters || {})),
+        bowlers:JSON.parse(JSON.stringify(S.bowlers || {})),
+        fallWickets:JSON.parse(JSON.stringify(S.fallWickets || [])),
+        xi:Array.from(players(S.battingTeam) || [])
+      };
+      S.currentOverBalls = getCurrentOverBalls();
+      S.events.push(`MANUAL 2ND INNINGS ADJUSTMENT — ${S.runs}/${S.wickets} (${oversText(S.legalBalls)})`);
+      checkMatchResult();
+    }
+
+    closeModal("scoreAdjustModal");
+    await save();
+    render();
+    toast(`${innings === 1 ? "1ST" : "2ND"} INNINGS adjusted to ${runs}/${wickets} (${oversText(balls)})`);
   };
 
   window.resetMatch = async function() {
