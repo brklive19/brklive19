@@ -702,6 +702,83 @@ try { overlayChannel = new BroadcastChannel('BRKLIVE19_LIVE_OVERLAY'); } catch(e
 try { scorerChannel  = new BroadcastChannel('BRKLIVE19_SCORER_DATA'); } catch(e) {}
 
 /* ============================================================
+   FIREBASE DATA BRIDGE
+   The scorer writes to:
+     liveScore
+     liveScoreByMatch/<matchId>
+   Theme 8 must listen to the same cloud data so a GitHub-hosted
+   overlay works independently from the scorer browser tab.
+   ============================================================ */
+(function startFirebaseOverlayBridge(){
+  const firebaseConfig = {
+    apiKey: "AIzaSyBLWq1bqJ32F2cg3mqYQ0uwXcS3zvTA3A4",
+    authDomain: "brklive19-2bab4.firebaseapp.com",
+    databaseURL: "https://brklive19-2bab4-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "brklive19-2bab4",
+    storageBucket: "brklive19-2bab4.firebasestorage.app",
+    messagingSenderId: "294058533898",
+    appId: "1:294058533898:web:4996705937e969939cabf3",
+    measurementId: "G-RW18E7LVEX"
+  };
+
+  const params = new URLSearchParams(location.search);
+  const requestedMatchId = params.get('match') || '';
+
+  async function connect(){
+    try {
+      const appMod = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js");
+      const dbMod  = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js");
+
+      const app = appMod.initializeApp(firebaseConfig, "BRKLIVE19_THEME8_" + Math.random().toString(36).slice(2));
+      const db = dbMod.getDatabase(app);
+
+      const primaryRef = dbMod.ref(db, "liveScore");
+
+      function acceptFirebasePacket(data, source){
+        if (!data || typeof data !== 'object') return;
+
+        // If this overlay was opened for a specific match, do not display
+        // another match's Firebase record.
+        if (requestedMatchId && data.matchId &&
+            String(data.matchId) !== String(requestedMatchId)) return;
+
+        try {
+          receiveScorerData(data);
+          window.__brklive19FirebaseConnected = true;
+          window.__brklive19FirebaseSource = source;
+        } catch(err) {
+          console.warn("BRKLIVE19 overlay render error:", err);
+        }
+      }
+
+      // Primary compatibility channel.
+      dbMod.onValue(primaryRef, snap => {
+        acceptFirebasePacket(snap.val(), "liveScore");
+      }, err => console.warn("BRKLIVE19 Firebase liveScore error:", err));
+
+      // Match-specific channel. This is preferred when the scorer is running
+      // more than one match and the overlay URL contains ?match=<id>.
+      if (requestedMatchId) {
+        const matchRef = dbMod.ref(
+          db,
+          "liveScoreByMatch/" + encodeURIComponent(String(requestedMatchId))
+        );
+        dbMod.onValue(matchRef, snap => {
+          acceptFirebasePacket(snap.val(), "liveScoreByMatch");
+        }, err => console.warn("BRKLIVE19 Firebase match channel error:", err));
+      }
+
+      console.log("BRKLIVE19 Theme 8 Firebase bridge connected",
+                  requestedMatchId ? ("for match " + requestedMatchId) : "to liveScore");
+    } catch(err) {
+      console.warn("BRKLIVE19 Firebase bridge unavailable; local bridge remains active.", err);
+    }
+  }
+
+  connect();
+})();
+
+/* ============================================================
    ROTATING INFO BAR
    ============================================================ */
 function buildInfoItems(d){
