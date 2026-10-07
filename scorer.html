@@ -389,6 +389,14 @@ body.theme-theme2 .fow-screen * {
   .adjustField label{margin:0 0 3px}
   .adjustField input{margin:0}
   @media(max-width:650px){.adjustGrid{grid-template-columns:1fr}}
+  /* PLAYER STATUS: dedicated name/team-only display contract */
+  .player-status-only{display:flex;align-items:center;justify-content:space-between;gap:24px;width:100%}
+  .player-status-only .player-name{flex:1;text-align:left;font-weight:900}
+  .player-status-only .player-team{flex:1;text-align:right;font-weight:900}
+  @media(max-width:650px){
+    .player-status-only{gap:12px}
+    .player-status-only .player-name,.player-status-only .player-team{font-size:18px}
+  }
 </style>
 </head>
 <body>
@@ -426,18 +434,6 @@ body.theme-theme2 .fow-screen * {
     <button class="btn gold" onclick="openScoreAdjust()">🛠 ADJUST SCORE</button>
     <button class="btn dark" onclick="resetMatch()">♻️ RESET MATCH</button>
   </div>
-</div>
-
-<!-- ===== SCORER CONTROL: PLAYER + INNINGS ADJUSTMENT ===== -->
-<div class="card">
-  <h2>🎮 Scorer Control</h2>
-  <div class="g4">
-    <button class="btn custom" onclick="openPlayerControl()">👤 PLAYER</button>
-    <button class="btn good" onclick="newBatter()">🏏 NEW BATTER</button>
-    <button class="btn special" onclick="openBowler(false)">🎯 CHANGE BOWLER</button>
-    <button class="btn gold" onclick="openScoreAdjust()">🛠 SCORE / OVER ADJUST</button>
-  </div>
-  <div class="controlNote">PLAYER opens the complete playing XI for quick selection. SCORE / OVER ADJUST lets you correct the current innings total runs, wickets and legal overs/balls, then syncs the correction to the overlay.</div>
 </div>
 
 <!-- ===== LIVE SCORE ===== -->
@@ -533,6 +529,8 @@ body.theme-theme2 .fow-screen * {
     <button class="btn wick" onclick="toggleFOW()">💥 FOW</button>
     <button class="btn blue" onclick="togglePlayerLower('b1')">🏏 B1 STATUS</button>
     <button class="btn blue" onclick="togglePlayerLower('b2')">🏏 B2 STATUS</button>
+<button class="btn special" onclick="togglePlayerStatus()">👤 PLAYER STATUS</button>
+     <button class="btn gold" onclick="openPointTable()">🏆 POINT TABLE</button>
     <button class="btn dark" onclick="toggleOverlayBanner('result')">🏆 RESULT</button>
   </div>
 
@@ -565,11 +563,37 @@ body.theme-theme2 .fow-screen * {
       <option value="aurora">Theme 13 — AURORA</option><option value="metallic">Theme 14 — METALLIC</option>
       <option value="redblack">Theme 15 — RED BLACK</option><option value="rainbow">Theme 16 — RAINBOW</option>
     </select>
-    <div class="themeColorGrid" style="margin-top:8px">
-      <label class="themeColorItem">PRIMARY<input id="themePrimaryColor" type="color" value="#00b8e8"></label>
-      <label class="themeColorItem">SECONDARY<input id="themeSecondaryColor" type="color" value="#ffd900"></label>
-      <label class="themeColorItem">ACCENT<input id="themeAccentColor" type="color" value="#102875"></label>
-      <label class="themeColorItem">BACKGROUND<input id="themeBgColor" type="color" value="#07101f"></label>
+    <div class="themeColorGrid brk-theme-color-grid" style="margin-top:8px">
+      <div class="themeColorItem brk-theme-color-field" data-target="themePrimaryColor">
+        <span>PRIMARY</span>
+        <button type="button" class="brk-color-chip" aria-label="Choose primary color" onclick="BRKColorPicker.open('themePrimaryColor',this)"><span class="brk-color-swatch"></span><b class="brk-color-hex">#087CFF</b></button>
+        <input id="themePrimaryColor" type="color" value="#087cff" tabindex="-1" aria-hidden="true">
+      </div>
+      <div class="themeColorItem brk-theme-color-field" data-target="themeSecondaryColor">
+        <span>SECONDARY</span>
+        <button type="button" class="brk-color-chip" aria-label="Choose secondary color" onclick="BRKColorPicker.open('themeSecondaryColor',this)"><span class="brk-color-swatch"></span><b class="brk-color-hex">#00D9FF</b></button>
+        <input id="themeSecondaryColor" type="color" value="#00d9ff" tabindex="-1" aria-hidden="true">
+      </div>
+      <div class="themeColorItem brk-theme-color-field" data-target="themeAccentColor">
+        <span>ACCENT</span>
+        <button type="button" class="brk-color-chip" aria-label="Choose accent color" onclick="BRKColorPicker.open('themeAccentColor',this)"><span class="brk-color-swatch"></span><b class="brk-color-hex">#FFD12F</b></button>
+        <input id="themeAccentColor" type="color" value="#ffd12f" tabindex="-1" aria-hidden="true">
+      </div>
+      <div class="themeColorItem brk-theme-color-field" data-target="themeBgColor">
+        <span>BACKGROUND</span>
+        <button type="button" class="brk-color-chip" aria-label="Choose background color" onclick="BRKColorPicker.open('themeBgColor',this)"><span class="brk-color-swatch"></span><b class="brk-color-hex">#07101F</b></button>
+        <input id="themeBgColor" type="color" value="#07101f" tabindex="-1" aria-hidden="true">
+      </div>
+    </div>
+    <div id="brkColorPicker" class="brk-color-picker" aria-hidden="true">
+      <div class="brk-picker-head"><b id="brkPickerTitle">PRIMARY</b><button type="button" class="brk-picker-x" onclick="BRKColorPicker.close()">✕</button></div>
+      <div id="brkSV" class="brk-sv"><span id="brkSVCursor"></span></div>
+      <div id="brkHue" class="brk-hue"><span id="brkHueCursor"></span></div>
+      <div class="brk-alpha"><span id="brkAlphaTrack"></span><span class="brk-alpha-cursor"></span></div>
+      <div class="brk-hex-row"><input id="brkHexInput" value="#087CFF" maxlength="7" inputmode="text"><span class="brk-hex-arrows">⌃<br>⌄</span></div>
+      <div class="brk-hex-label">HEX</div>
+      <div class="brk-swatches" id="brkSwatches"></div>
+      <button type="button" class="brk-picker-done" onclick="BRKColorPicker.close()">Done</button>
     </div>
     <div class="g2" style="margin-top:10px">
       <button class="btn good" onclick="applyThemeColours()">✅ APPLY COLOUR</button>
@@ -672,6 +696,46 @@ body.theme-theme2 .fow-screen * {
       </div>
       <button class="btn wick" style="margin-top:8px" onclick="removeSelectedPlayer()">🗑 REMOVE SELECTED PLAYER</button>
       <div class="mini" style="margin-top:7px">Adding, editing or removing a player updates the selected team XI and saves it to the current match.</div>
+    </div>
+  </div>
+</div>
+
+<div id="playerStatusModal" class="modal">
+  <div class="modalBox">
+    <button class="close" onclick="closeModal('playerStatusModal')">✕</button>
+    <h2>👤 PLAYER STATUS</h2>
+    <p class="mini">Choose the team first, then choose the player. The overlay will show only the player name on the LEFT and team name on the RIGHT.</p>
+    <label>TEAM</label>
+    <select id="playerStatusTeam" onchange="refreshPlayerStatusPlayers()">
+      <option value="A">TEAM A</option>
+      <option value="B">TEAM B</option>
+    </select>
+    <label>PLAYER NAME</label>
+    <select id="playerStatusPlayer"></select>
+    <div class="g2" style="margin-top:10px">
+      <button class="btn good" onclick="showPlayerStatusFromPopup()">📺 SHOW PLAYER STATUS</button>
+      <button class="btn dark" onclick="closeModal('playerStatusModal')">CANCEL</button>
+    </div>
+  </div>
+</div>
+
+<div id="pointTableModal" class="modal">
+  <div class="modalBox" style="width:min(1100px,100%);">
+    <button class="close" onclick="closeModal('pointTableModal')">✕</button>
+    <h2>🏆 LEAGUE POINT TABLE</h2>
+    <p class="mini">Automatically calculated from completed matches in the current tournament. Points: WIN = 2, TIE = 1, NO RESULT = 1, LOSS = 0. NRR is calculated from the saved innings data.</p>
+    <div id="pointTableTournament" class="event" style="margin-bottom:10px">TOURNAMENT: —</div>
+    <div style="overflow:auto;border:1px solid var(--line);border-radius:10px;">
+      <table id="pointTableGrid" style="width:100%;border-collapse:collapse;min-width:760px;background:#0b1020;">
+        <thead><tr style="background:#151f35;color:var(--cyan);">
+          <th style="padding:9px;text-align:left;">POS</th><th style="padding:9px;text-align:left;">TEAM</th><th style="padding:9px;">P</th><th style="padding:9px;">W</th><th style="padding:9px;">L</th><th style="padding:9px;">T</th><th style="padding:9px;">NR</th><th style="padding:9px;">PTS</th><th style="padding:9px;">NRR</th><th style="padding:9px;">RF</th><th style="padding:9px;">RA</th>
+        </tr></thead>
+        <tbody id="pointTableBody"></tbody>
+      </table>
+    </div>
+    <div class="g2" style="margin-top:10px">
+      <button class="btn good" onclick="refreshPointTable()">🔄 RECALCULATE</button>
+      <button class="btn dark" onclick="closeModal('pointTableModal')">CLOSE</button>
     </div>
   </div>
 </div>
@@ -784,6 +848,19 @@ body.theme-theme2 .fow-screen * {
     return full || side;
   }
   function players(side) { return side === "A" ? (S.xiA || []) : (S.xiB || []); }
+  function playerTeamSide(player) {
+    const name = String(player || "").trim();
+    if (!name) return "";
+    if ((S.xiA || []).some(p => String(p).trim() === name)) return "A";
+    if ((S.xiB || []).some(p => String(p).trim() === name)) return "B";
+    if (name === S.striker || name === S.nonStriker) return S.battingTeam || "";
+    if (name === S.bowler) return S.bowlingTeam || "";
+    return "";
+  }
+  function playerTeamName(player, fallbackSide="") {
+    const side = playerTeamSide(player) || fallbackSide;
+    return side === "A" ? (S.teamA || "TEAM A") : side === "B" ? (S.teamB || "TEAM B") : (teamName(side) || "");
+  }
   function oversText(balls) { balls = num(balls); return Math.floor(balls/6) + "." + (balls%6); }
   function legalBallsRemaining() { return Math.max((S.maxOvers*6) - S.legalBalls, 0); }
   function battingStats(name) {
@@ -814,6 +891,7 @@ body.theme-theme2 .fow-screen * {
       customColors:{ primary:"#00b8e8", secondary:"#ffd900", accent:"#102875", summaryBg:"#07101f" },
       themeColors:{},
       matchWinner:"", matchResult:"", resultText:"", status:"live",
+      leagueStage:"league", pointTableUpdatedAt:0,
       overlay:{
         showTournament:false, showVenue:false, showMatch:false, showToss:false, showResult:false, showBowler:false, showFOW:false, showTarget:false,
         positions:{ tournament:"upper", match:"middle", toss:"middle", custom:"upper" },
@@ -962,7 +1040,7 @@ body.theme-theme2 .fow-screen * {
     S.firstInnings = { team:'', runs:0, wickets:0, balls:0, extras:0 };
     S.secondInningsStarted = false;
     S.pendingSecondInnings = false;
-    S.overlay = { showTournament:true, showVenue:false, showMatch:false, showToss:false, showResult:false, showBowler:false, showFOW:false, positions:{}, scoreVisible:false, intro:true, playerLower:{active:false,slot:'',player:''}, partnership:{active:false}, view:"default" };
+    S.overlay = { showTournament:true, showVenue:false, showMatch:false, showToss:false, showResult:false, showBowler:false, showFOW:false, positions:{}, scoreVisible:false, intro:true, playerLower:{active:false,slot:'',player:''}, playerStatus:{active:false,player:'',team:'',side:''}, partnership:{active:false}, view:"default" };
     saveNow();
     render();
     toast('Match loaded: ' + match.teamAName + ' vs ' + match.teamBName);
@@ -980,6 +1058,119 @@ body.theme-theme2 .fow-screen * {
       }, 3000);
     }
   }
+
+  // ---- LEAGUE POINT TABLE ----
+  function currentTournamentId(){
+    try{
+      const matches = getAllMatches();
+      const m = matches.find(x => x.id === S.matchId);
+      return m?.tournamentId || m?.tournament || S.tournament || "default";
+    }catch(e){ return S.tournament || "default"; }
+  }
+
+  function isLeagueMatch(m){
+    const stage = String(m?.stage || m?.matchStage || m?.competitionStage || m?.leagueStage || "").toLowerCase();
+    if (!stage) return true; // Existing matches without a stage are treated as league matches.
+    return stage.includes("league") || stage.includes("group") || stage.includes("round robin") || stage.includes("round-robin");
+  }
+
+  function matchRunsForTeam(m, side){
+    const team = side === "A" ? (m.teamAName || m.teamA || "Team A") : (m.teamBName || m.teamB || "Team B");
+    const fi = m.firstInnings || {};
+    const si = m.secondInnings || {};
+    const fiTeam = String(fi.team || "");
+    const siTeam = String(si.team || "");
+    if (fiTeam === team || fiTeam === side) return {runs:Number(fi.runs)||0, balls:Number(fi.balls)||0, wickets:Number(fi.wickets)||0};
+    if (siTeam === team || siTeam === side) return {runs:Number(si.runs)||0, balls:Number(si.balls)||0, wickets:Number(si.wickets)||0};
+    // Fallback when older saved matches don't contain the team label in innings.
+    if (side === "A") return {runs: fiTeam ? 0 : Number(fi.runs)||0, balls: fiTeam ? 0 : Number(fi.balls)||0, wickets: fiTeam ? 0 : Number(fi.wickets)||0};
+    return {runs: siTeam ? Number(si.runs)||0 : 0, balls: siTeam ? Number(si.balls)||0 : 0, wickets: siTeam ? Number(si.wickets)||0 : 0};
+  }
+
+  function effectiveNRROvers(balls, wickets, maxOvers){
+    const quota = Math.max(1, Number(maxOvers)||20) * 6;
+    // Standard NRR convention: if a side is all out, use the full scheduled quota.
+    const effectiveBalls = Number(wickets) >= 10 ? quota : Math.max(1, Number(balls)||1);
+    return effectiveBalls / 6;
+  }
+
+  function calculateLeagueTable(){
+    const matches = getAllMatches();
+    const tournamentKey = currentTournamentId();
+    const relevant = matches.filter(m => {
+      const key = m?.tournamentId || m?.tournament || m?.tournamentName || "default";
+      const sameTournament = String(key) === String(tournamentKey) || (!m?.tournamentId && String(m?.tournamentName||m?.tournament||"") === String(S.tournament||""));
+      return sameTournament && m.completed === true && isLeagueMatch(m);
+    });
+
+    const teams = {};
+    function ensure(name){
+      const key = String(name||"").trim() || "UNKNOWN TEAM";
+      if (!teams[key]) teams[key] = {team:key,p:0,w:0,l:0,t:0,nr:0,pts:0,runsFor:0,runsAgainst:0,ballsFor:0,ballsAgainst:0,nrr:0};
+      return teams[key];
+    }
+
+    relevant.forEach(m=>{
+      const a = String(m.teamAName || m.teamA || "Team A").trim();
+      const b = String(m.teamBName || m.teamB || "Team B").trim();
+      const A=ensure(a), B=ensure(b);
+      const aBat=matchRunsForTeam(m,"A"), bBat=matchRunsForTeam(m,"B");
+      const maxOvers=Number(m.maxOvers)||20;
+      A.p++; B.p++;
+      A.runsFor += aBat.runs; A.runsAgainst += bBat.runs;
+      B.runsFor += bBat.runs; B.runsAgainst += aBat.runs;
+      A.ballsFor += Math.max(0,aBat.balls); A.ballsAgainst += Math.max(0,bBat.balls);
+      B.ballsFor += Math.max(0,bBat.balls); B.ballsAgainst += Math.max(0,aBat.balls);
+
+      const result = String(m.resultText || m.matchResult || "").toUpperCase();
+      const winner = String(m.winner || "").trim();
+      const noResult = result.includes("NO RESULT") || result.includes("ABANDONED") || result.includes("WASHED OUT");
+      const tied = !noResult && (result.includes("TIED") || result.includes("TIE"));
+      if (noResult){ A.nr++; B.nr++; A.pts++; B.pts++; }
+      else if (tied || !winner){ A.t++; B.t++; A.pts++; B.pts++; }
+      else if (winner === a){ A.w++; B.l++; A.pts+=2; }
+      else if (winner === b){ B.w++; A.l++; B.pts+=2; }
+      else {
+        // Fallback: infer winner from result text if older match records lack winner.
+        if (result.includes(a.toUpperCase()+" WON")){ A.w++; B.l++; A.pts+=2; }
+        else if (result.includes(b.toUpperCase()+" WON")){ B.w++; A.l++; B.pts+=2; }
+        else { A.t++; B.t++; A.pts++; B.pts++; }
+      }
+
+      A._maxOvers=maxOvers; B._maxOvers=maxOvers;
+    });
+
+    Object.values(teams).forEach(t=>{
+      const forOvers = effectiveNRROvers(t.ballsFor,0,t._maxOvers||20);
+      const againstOvers = effectiveNRROvers(t.ballsAgainst,0,t._maxOvers||20);
+      t.nrr = (t.runsFor/forOvers) - (t.runsAgainst/againstOvers);
+      delete t._maxOvers;
+    });
+
+    return Object.values(teams).sort((x,y)=> y.pts-x.pts || y.nrr-x.nrr || y.w-x.w || y.runsFor-x.runsFor || x.team.localeCompare(y.team));
+  }
+
+  function renderPointTable(){
+    const body=$("pointTableBody"); if(!body) return;
+    const rows=calculateLeagueTable();
+    const tournamentEl=$("pointTableTournament");
+    if(tournamentEl) tournamentEl.textContent = `TOURNAMENT: ${S.tournament || "CURRENT TOURNAMENT"} • COMPLETED LEAGUE MATCHES: ${rows.length ? rows.reduce((n,t)=>n+t.p,0)/2 : 0}`;
+    body.innerHTML="";
+    if(!rows.length){
+      body.innerHTML='<tr><td colspan="11" style="padding:16px;text-align:center;color:#aeb9d6;">NO COMPLETED LEAGUE MATCHES YET</td></tr>';
+      return;
+    }
+    rows.forEach((t,i)=>{
+      const tr=document.createElement("tr");
+      tr.style.borderTop="1px solid #293754";
+      const vals=[i+1,t.team,t.p,t.w,t.l,t.t,t.nr,t.pts,t.nrr.toFixed(3),t.runsFor,t.runsAgainst];
+      vals.forEach((v,j)=>{const td=document.createElement("td");td.textContent=v;td.style.padding="9px";td.style.textAlign=j===1?"left":"center";tr.appendChild(td);});
+      body.appendChild(tr);
+    });
+  }
+
+  window.openPointTable=function(){ renderPointTable(); openModal("pointTableModal"); };
+  window.refreshPointTable=function(){ renderPointTable(); toast("POINT TABLE RECALCULATED"); };
 
   // ---- Sync live score back to Index match record ----
   function syncScoreToIndex() {
@@ -1014,7 +1205,11 @@ body.theme-theme2 .fow-screen * {
       m.bowlerStats = S.bowlers || {};
       m.currentOverBalls = S.recentBalls || [];
       m.lastUpdated = new Date().toISOString();
+      m.leagueStage = m.leagueStage || S.leagueStage || "league";
+      m.pointTableUpdatedAt = Date.now();
       localStorage.setItem("brklive_matches", JSON.stringify(matches));
+      // Keep a tournament-level snapshot for other pages/overlays. The table itself is always recalculated from match records.
+      try { localStorage.setItem("brklive19_point_table_" + String(currentTournamentId()), JSON.stringify({updatedAt:Date.now(), rows:calculateLeagueTable()})); } catch(e) {}
     } catch (e) {
       console.warn("Index match sync failed:", e);
     }
@@ -1061,6 +1256,17 @@ body.theme-theme2 .fow-screen * {
     const bowlerStatsNow = bowlingStats(S.bowler);
     const data = {
       ...S,
+      // Dedicated PLAYER STATUS payload. Overlay readers can use this
+      // without inheriting batter/bowler statistics or other banner data.
+      playerStatusDisplay: (S.overlay?.playerStatus?.active ? {
+        active:true,
+        player:String(S.overlay.playerStatus.player || "").trim().toUpperCase(),
+        team:String(S.overlay.playerStatus.team || "").trim().toUpperCase(),
+        side:S.overlay.playerStatus.side || "",
+        leftText:String(S.overlay.playerStatus.leftText || S.overlay.playerStatus.player || "").trim().toUpperCase(),
+        rightText:String(S.overlay.playerStatus.rightText || S.overlay.playerStatus.team || "").trim().toUpperCase(),
+        displayOnly:true
+      } : {active:false,player:"",team:"",side:"",leftText:"",rightText:"",displayOnly:true}),
       history:[],
       updatedAt:Date.now(),
       b1:S.striker, b2:S.nonStriker,
@@ -1500,7 +1706,8 @@ body.theme-theme2 .fow-screen * {
       scoreVisible: S.overlay.scoreVisible !== false,
       intro: S.overlay.intro === true,
       introDismissedAt: Number(S.overlay.introDismissedAt)||0,
-      playerLower:S.overlay.playerLower||{active:false,slot:"",player:""},
+      playerLower:S.overlay.playerLower||{active:false,slot:"",player:"",team:"",side:""},
+      playerStatus:S.overlay.playerStatus||{active:false,player:"",team:"",side:"",displayOnly:true,leftText:"",rightText:""},
       partnership:S.overlay.partnership||{active:false},
       view:String(S.overlay.view||"default")
     };
@@ -1520,7 +1727,7 @@ body.theme-theme2 .fow-screen * {
     if (Number(S.target) <= 0 || S.status === "completed") { alert("Target is not available for this match."); return; }
     const wasOn=!!S.overlay.showTarget;
     ["showTournament","showVenue","showMatch","showToss","showResult","showBowler","showFOW","showTarget"].forEach(k=>S.overlay[k]=false);
-    S.overlay.playerLower={active:false,slot:"",player:""}; S.overlay.partnership={active:false}; S.customLower={...(S.customLower||{}),active:false};
+    S.overlay.playerLower={active:false,slot:"",player:"",team:"",side:""}; S.overlay.playerStatus={active:false,player:"",team:"",side:""}; S.overlay.partnership={active:false}; S.customLower={...(S.customLower||{}),active:false};
     S.overlay.showTarget = !wasOn;
     S.overlay.view = S.overlay.showTarget ? "target" : "default";
     // Publish immediately so the display reacts even when Firebase is slow.
@@ -1537,7 +1744,7 @@ body.theme-theme2 .fow-screen * {
     const key = type === "tournament" ? "showTournament" : type === "venue" ? "showVenue" : type === "match" ? "showMatch" : type === "result" ? "showResult" : "showToss";
     const wasOn=!!S.overlay[key];
     ["showTournament","showVenue","showMatch","showToss","showResult","showBowler","showFOW","showTarget"].forEach(k=>S.overlay[k]=false);
-    S.overlay.playerLower={active:false,slot:"",player:""};
+    S.overlay.playerLower={active:false,slot:"",player:"",team:"",side:""}; S.overlay.playerStatus={active:false,player:"",team:"",side:""};
     S.overlay.partnership={active:false};
     S.customLower={...(S.customLower||{}),active:false};
     S.overlay[key]=!wasOn;
@@ -1570,18 +1777,89 @@ body.theme-theme2 .fow-screen * {
       S.overlay.playerLower.active &&
       String(S.overlay.playerLower.slot).toLowerCase() === slot;
 
+    const playerSide = S.battingTeam || "";
     S.overlay.playerLower = alreadyOn
-      ? {active:false, slot:"", player:""}
-      : {active:true, slot, player:name};
+      ? {active:false, slot:"", player:"", team:"", side:""}
+      : {active:true, slot, player:name, team:playerTeamName(name, playerSide), side:playerSide};
+    S.overlay.playerStatus = alreadyOn
+      ? {active:false, player:"", team:"", side:""}
+      : {active:true, player:name, team:playerTeamName(name, playerSide), side:playerSide};
     S.overlay.view = alreadyOn ? "default" : (slot === "b1" ? "B1" : "B2");
 
     await save();
     render();
   };
 
+  window.togglePlayerStatus = function() {
+    ensureOverlayState();
+    const teamSel = $("playerStatusTeam");
+    const defaultTeam = S.battingTeam === "A" || S.battingTeam === "B" ? S.battingTeam : "A";
+    if (teamSel) teamSel.value = defaultTeam;
+    refreshPlayerStatusPlayers();
+    openModal("playerStatusModal");
+  };
+
+  window.refreshPlayerStatusPlayers = function() {
+    const team = $("playerStatusTeam")?.value || "A";
+    const sel = $("playerStatusPlayer");
+    if (!sel) return;
+    const list = players(team);
+    sel.innerHTML = "";
+    list.forEach(name => {
+      const o = document.createElement("option");
+      o.value = name; o.textContent = name; sel.appendChild(o);
+    });
+    if (!list.length) {
+      const o = document.createElement("option");
+      o.value = ""; o.textContent = "NO PLAYERS AVAILABLE"; sel.appendChild(o);
+    }
+  };
+
+  window.showPlayerStatusFromPopup = async function() {
+    const team = $("playerStatusTeam")?.value || "A";
+    const player = $("playerStatusPlayer")?.value || "";
+    if (!player) { alert("Select a player first."); return; }
+    ensureOverlayState();
+    ["showTournament","showVenue","showMatch","showToss","showResult","showBowler","showFOW","showTarget"]
+      .forEach(k => S.overlay[k] = false);
+    S.overlay.partnership = {active:false};
+    S.customLower = {...(S.customLower || {}), active:false};
+    const teamNameValue = team === "A" ? (S.teamA || "TEAM A") : (S.teamB || "TEAM B");
+
+    // PLAYER STATUS is a dedicated display: ONLY the selected player's name
+    // and that player's team name are sent to the overlay.
+    const displayName = String(player).trim().toUpperCase();
+    const displayTeam = String(teamNameValue).trim().toUpperCase();
+    S.overlay.playerStatus = {
+      active:true,
+      player:displayName,
+      team:displayTeam,
+      side:team,
+      displayOnly:true,
+      leftText:displayName,
+      rightText:displayTeam
+    };
+    S.overlay.playerLower = {
+      active:true,
+      slot:"playerStatus",
+      player:displayName,
+      team:displayTeam,
+      side:team,
+      displayOnly:true
+    };
+    S.overlay.view = "PLAYER_STATUS";
+    S.overlay.scoreVisible = false;
+    S.overlay.intro = false;
+    closeModal("playerStatusModal");
+    await save();
+    render();
+  };
+
   window.hidePlayerLower = async function() {
     ensureOverlayState();
-    S.overlay.playerLower = { active:false, slot:"", player:"" };
+    S.overlay.playerLower = { active:false, slot:"", player:"", team:"", side:"" };
+    S.overlay.playerStatus = { active:false, player:"", team:"", side:"", displayOnly:true, leftText:"", rightText:"" };
+    if (S.overlay.view === "PLAYER_STATUS") S.overlay.view = "default";
     await save();
     render();
   };
@@ -1628,7 +1906,7 @@ body.theme-theme2 .fow-screen * {
     S.overlay.scoreVisible = false;
     const wasOn = !!S.overlay.showFOW;
     ["showTournament","showVenue","showMatch","showToss","showResult","showBowler","showFOW","showTarget"].forEach(k=>S.overlay[k]=false);
-    S.overlay.playerLower={active:false,slot:"",player:""};
+    S.overlay.playerLower={active:false,slot:"",player:"",team:"",side:""}; S.overlay.playerStatus={active:false,player:"",team:"",side:""};
     S.overlay.partnership={active:false};
     S.customLower={...(S.customLower||{}),active:false};
     if (!wasOn) {
@@ -1702,8 +1980,11 @@ body.theme-theme2 .fow-screen * {
     ["showTournament","showVenue","showMatch","showToss","showResult","showBowler","showFOW","showTarget"].forEach(k=>S.overlay[k]=false);
     S.overlay.partnership = {active:false};
     S.customLower = {...(S.customLower||{}), active:false};
-    S.overlay.playerLower = {active:true, slot:"player", player};
-    S.overlay.view = "PLAYER";
+    const side = playerTeamSide(player) || ($( "playerTeam" )?.value === "A" ? "A" : $( "playerTeam" )?.value === "B" ? "B" : S.battingTeam || "");
+    const team = playerTeamName(player, side);
+    S.overlay.playerLower = {active:true, slot:"player", player, team, side};
+    S.overlay.playerStatus = {active:true, player, team, side};
+    S.overlay.view = "PLAYER_STATUS";
     S.overlay.scoreVisible = false;
     S.overlay.intro = false;
     closeModal("playerControlModal");
@@ -1988,7 +2269,7 @@ body.theme-theme2 .fow-screen * {
     if (!text) { alert("Enter a lower-third message first."); return; }
     ensureOverlayState();
     ["showTournament","showVenue","showMatch","showToss","showResult","showBowler","showFOW","showTarget"].forEach(k=>S.overlay[k]=false);
-    S.overlay.playerLower={active:false,slot:"",player:""};
+    S.overlay.playerLower={active:false,slot:"",player:"",team:"",side:""}; S.overlay.playerStatus={active:false,player:"",team:"",side:""};
     S.overlay.partnership={active:false};
     S.customLower = { text, active:true };
     S.overlay.view = "custom";
@@ -2016,7 +2297,7 @@ body.theme-theme2 .fow-screen * {
     S.overlay.introDismissedAt = Date.now();
     S.overlay.scoreVisible = false;
     ["showTournament","showVenue","showMatch","showToss","showResult","showBowler","showFOW","showTarget"].forEach(k=>S.overlay[k]=false);
-    S.overlay.playerLower={active:false,slot:"",player:""};
+    S.overlay.playerLower={active:false,slot:"",player:"",team:"",side:""}; S.overlay.playerStatus={active:false,player:"",team:"",side:""};
     S.overlay.partnership={active:false};
     S.customLower={...(S.customLower||{}),active:false};
     S.mode = m;
@@ -2061,7 +2342,7 @@ body.theme-theme2 .fow-screen * {
       S.mode = 'default';
       const wasOn=!!S.overlay.showBowler;
       ["showTournament","showVenue","showMatch","showToss","showResult","showBowler","showFOW","showTarget"].forEach(k=>S.overlay[k]=false);
-      S.overlay.playerLower={active:false,slot:"",player:""}; S.overlay.partnership={active:false}; S.customLower={...(S.customLower||{}),active:false};
+      S.overlay.playerLower={active:false,slot:"",player:"",team:"",side:""}; S.overlay.playerStatus={active:false,player:"",team:"",side:""}; S.overlay.partnership={active:false}; S.customLower={...(S.customLower||{}),active:false};
       S.overlay.showBowler = !wasOn;
       S.overlay.view = !wasOn ? "BOWLER" : "default";
       await save();
@@ -2074,7 +2355,7 @@ body.theme-theme2 .fow-screen * {
       S.overlay.introDismissedAt = Date.now();
       ["showTournament","showVenue","showMatch","showToss","showResult","showBowler","showFOW","showTarget"]
         .forEach(k => S.overlay[k] = false);
-      S.overlay.playerLower = {active:false,slot:"",player:""};
+      S.overlay.playerLower = {active:false,slot:"",player:"",team:"",side:""}; S.overlay.playerStatus={active:false,player:"",team:"",side:""};
       S.overlay.partnership = {active:false};
       S.customLower = {...(S.customLower || {}), active:false};
       S.overlay.view = "default";
@@ -2192,9 +2473,10 @@ body.theme-theme2 .fow-screen * {
     S.overlay.showToss = false;
     S.overlay.showBowler = false;
     S.overlay.showResult = true;
-    S.overlay.playerLower = {active:false,slot:"",player:""};
+    S.overlay.playerLower = {active:false,slot:"",player:"",team:"",side:""}; S.overlay.playerStatus={active:false,player:"",team:"",side:""};
     S.overlay.partnership = {active:false};
     S.events.push(`🏆 ${result}`);
+    S.pointTableUpdatedAt = Date.now();
   }
 
   function checkMatchResult() {
@@ -2469,6 +2751,42 @@ body.theme-theme6 #firstInnBattingScreen .display-frame, body.theme-theme6 #seco
 }
 </style>
 
+
+<script id="BRKLIVE19-THEME-COLOR-PICKER-JS">
+(function(){
+  const swatches=['#ff0000','#ff8c00','#ffd500','#008000','#16b8d0','#2167b8','#062b63','#7d25ad','#e91e63','#888888','#ffffff','#050505'];
+  let targetId=null, hue=210, sat=1, val=1;
+  const $=id=>document.getElementById(id);
+  function clamp(n,a=0,b=1){return Math.max(a,Math.min(b,n));}
+  function hexToRgb(hex){hex=String(hex||'').replace('#','');if(hex.length===3)hex=hex.split('').map(x=>x+x).join('');if(!/^[0-9a-fA-F]{6}$/.test(hex))return null;return {r:parseInt(hex.slice(0,2),16),g:parseInt(hex.slice(2,4),16),b:parseInt(hex.slice(4,6),16)};}
+  function rgbToHex(r,g,b){return '#'+[r,g,b].map(v=>Math.round(v).toString(16).padStart(2,'0')).join('').toUpperCase();}
+  function rgbToHsv(r,g,b){r/=255;g/=255;b/=255;const max=Math.max(r,g,b),min=Math.min(r,g,b),d=max-min;let h=0;if(d){switch(max){case r:h=((g-b)/d)%6;break;case g:h=(b-r)/d+2;break;default:h=(r-g)/d+4;}h*=60;if(h<0)h+=360;}return {h,s:max?d/max:0,v:max};}
+  function hsvToRgb(h,s,v){const c=v*s,x=c*(1-Math.abs((h/60)%2-1)),m=v-c;let r=0,g=0,b=0;if(h<60){r=c;g=x}else if(h<120){r=x;g=c}else if(h<180){g=c;b=x}else if(h<240){g=x;b=c}else if(h<300){r=x;b=c}else{r=c;b=x}return {r:(r+m)*255,g:(g+m)*255,b:(b+m)*255};}
+  function setInput(id,hex){const e=$(id);if(!e)return;e.value=hex.toLowerCase();e.dispatchEvent(new Event('input',{bubbles:true})); const f=e.closest('.brk-theme-color-field');if(f){const sw=f.querySelector('.brk-color-swatch'),tx=f.querySelector('.brk-color-hex');if(sw)sw.style.background=hex;if(tx)tx.textContent=hex.toUpperCase();}}
+  function paint(){const sv=$('brkSV'), h=$('brkHue'), c=$('brkSVCursor'), hc=$('brkHueCursor');if(!sv)return;sv.style.background=`linear-gradient(to right,#fff,hsla(${hue},100%,50%,0)),linear-gradient(to top,#000,transparent),hsl(${hue},100%,50%)`;c.style.left=(sat*100)+'%';c.style.top=((1-val)*100)+'%';hc.style.left=(hue/360*100)+'%';$('brkAlphaTrack').style.background=`linear-gradient(90deg,transparent,${rgbToHex(...Object.values(hsvToRgb(hue,sat,val)))})`;}
+  function setFromHex(hex){const rgb=hexToRgb(hex);if(!rgb)return false;const hsv=rgbToHsv(rgb.r,rgb.g,rgb.b);hue=hsv.h;sat=hsv.s;val=hsv.v;paint();$('brkHexInput').value=rgbToHex(rgb.r,rgb.g,rgb.b);return true;}
+  function currentHex(){return rgbToHex(...Object.values(hsvToRgb(hue,sat,val)));}
+  function positionPicker(btn){const p=$('brkColorPicker');if(!p)return;const r=btn.getBoundingClientRect();const pw=Math.min(338,window.innerWidth-28);let left=r.left;let top=r.bottom+8;if(left+pw>window.innerWidth-8)left=window.innerWidth-pw-8;if(top+520>window.innerHeight-8)top=Math.max(8,r.top-528);p.style.left=Math.max(8,left)+'px';p.style.top=Math.max(8,top)+'px';}
+  window.BRKColorPicker={
+    open:function(id,btn){targetId=id;const input=$(id);if(!input)return;const hex=input.value||'#087cff';const f=input.closest('.brk-theme-color-field');$('brkPickerTitle').textContent=(f?.querySelector('span')?.textContent||'COLOR').toUpperCase();setFromHex(hex);$('brkColorPicker').classList.add('show');$('brkColorPicker').setAttribute('aria-hidden','false');positionPicker(btn||f);},
+    close:function(){$('brkColorPicker')?.classList.remove('show');$('brkColorPicker')?.setAttribute('aria-hidden','true');targetId=null;},
+    choose:function(hex){if(!targetId)return;setFromHex(hex);setInput(targetId,currentHex());},
+    sync:function(){if(targetId)setInput(targetId,currentHex());}
+  };
+  function buildSwatches(){const box=$('brkSwatches');if(!box)return;box.innerHTML=swatches.map(c=>`<button type="button" class="brk-swatch-btn" style="background:${c}" title="${c}" aria-label="${c}" onclick="BRKColorPicker.choose('${c}')"></button>`).join('');}
+  document.addEventListener('DOMContentLoaded',function(){
+    buildSwatches();
+    ['themePrimaryColor','themeSecondaryColor','themeAccentColor','themeBgColor'].forEach(id=>{const e=$(id);if(e){e.addEventListener('input',()=>{const f=e.closest('.brk-theme-color-field');if(f){f.querySelector('.brk-color-swatch').style.background=e.value;f.querySelector('.brk-color-hex').textContent=e.value.toUpperCase();}});}});
+    document.addEventListener('click',e=>{const p=$('brkColorPicker');if(p&&p.classList.contains('show')&&!p.contains(e.target)&&!e.target.closest('.brk-color-chip'))BRKColorPicker.close();});
+    $('brkHexInput')?.addEventListener('input',e=>{let v=e.target.value.trim();if(!v.startsWith('#'))v='#'+v;if(/^#[0-9a-fA-F]{6}$/.test(v)){setFromHex(v);BRKColorPicker.sync();}});
+    $('brkSV')?.addEventListener('pointerdown',function(e){const r=this.getBoundingClientRect();function move(ev){sat=clamp((ev.clientX-r.left)/r.width);val=clamp(1-(ev.clientY-r.top)/r.height);paint();BRKColorPicker.sync();}move(e);this.setPointerCapture?.(e.pointerId);this.onpointermove=move;this.onpointerup=()=>{this.onpointermove=null;};});
+    $('brkHue')?.addEventListener('pointerdown',function(e){const r=this.getBoundingClientRect();function move(ev){hue=clamp((ev.clientX-r.left)/r.width)*360;paint();BRKColorPicker.sync();}move(e);this.setPointerCapture?.(e.pointerId);this.onpointermove=move;this.onpointerup=()=>{this.onpointermove=null;};});
+  });
+  // Keep the four fields visually synced whenever the existing scorer code loads defaults.
+  const oldLoad=window.loadThemeColourInputs;
+  window.loadThemeColourInputs=function(){if(typeof oldLoad==='function')oldLoad();['themePrimaryColor','themeSecondaryColor','themeAccentColor','themeBgColor'].forEach(id=>{const e=$(id),f=e?.closest('.brk-theme-color-field');if(e&&f){const sw=f.querySelector('.brk-color-swatch'),tx=f.querySelector('.brk-color-hex');if(sw)sw.style.background=e.value;if(tx)tx.textContent=e.value.toUpperCase();}});};
+})();
+</script>
 </body>
 
 <style id="BRKLIVE19-GLOBAL-SCROLL-FIX">
@@ -2565,6 +2883,38 @@ pre, textarea {
 </script>
 
 
+
+<style id="BRKLIVE19-THEME-COLOR-PICKER">
+/* Screenshot-style theme colour picker */
+.themeColorGrid.brk-theme-color-grid{grid-template-columns:repeat(4,1fr);gap:10px}
+.brk-theme-color-field{position:relative;min-width:0}
+.brk-theme-color-field>span{display:block;margin-bottom:4px;font-size:10px;font-weight:900;letter-spacing:.04em;color:#aeb9d6}
+.brk-color-chip{width:100%;height:48px;border:1px solid #3b4d75;border-radius:10px;background:#0b1020;color:#fff;display:flex;align-items:center;gap:7px;padding:5px 7px;cursor:pointer;box-shadow:inset 0 1px #ffffff18,0 4px 12px #0005}
+.brk-color-chip:hover{border-color:#00d9ff;filter:brightness(1.08)}
+.brk-color-swatch{width:31px;height:31px;flex:0 0 31px;border-radius:7px;border:2px solid #fff8;box-shadow:0 1px 5px #0008}
+.brk-color-hex{font-size:10px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#fff}
+.brk-theme-color-field input[type=color]{display:none!important}
+.brk-color-picker{display:none;position:fixed;z-index:10000;width:min(338px,calc(100vw - 28px));background:#fff;color:#222;border-radius:4px;padding:0 0 14px;box-shadow:0 18px 55px #0009;border:1px solid #d7d7d7}
+.brk-color-picker.show{display:block}
+.brk-picker-head{height:45px;background:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 12px;border-radius:4px 4px 0 0;font-size:14px;color:#202124}
+.brk-picker-x{border:0;background:transparent;color:#666;font-size:18px;cursor:pointer;padding:4px 7px}
+.brk-sv{position:relative;height:175px;margin:0;background:linear-gradient(to right,#fff,hsla(0,100%,50%,0)),linear-gradient(to top,#000,transparent);cursor:crosshair;overflow:hidden}
+.brk-sv span{position:absolute;width:18px;height:18px;border:2px solid #fff;border-radius:50%;box-shadow:0 0 0 1px #0008;transform:translate(-50%,-50%);left:100%;top:0;pointer-events:none}
+.brk-hue{position:relative;height:15px;margin:24px 18px 10px;background:linear-gradient(90deg,#f00 0%,#ff0 17%,#0f0 33%,#0ff 50%,#00f 67%,#f0f 83%,#f00 100%);cursor:pointer}
+.brk-hue span{position:absolute;top:50%;left:25%;width:18px;height:18px;background:#fff;border-radius:50%;border:1px solid #ddd;box-shadow:0 1px 3px #0004;transform:translate(-50%,-50%);pointer-events:none}
+.brk-alpha{position:relative;height:15px;margin:0 18px 20px;background:repeating-conic-gradient(#eee 0 25%,#fff 0 50%) 0/12px 12px;overflow:visible}
+.brk-alpha:after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent,#0008)}
+.brk-alpha-cursor{position:absolute;right:-2px;top:50%;width:18px;height:18px;border-radius:50%;background:#fff;border:1px solid #ddd;box-shadow:0 1px 3px #0005;transform:translateY(-50%);z-index:2}
+.brk-hex-row{display:flex;align-items:center;margin:0 24px 3px;border:1px solid #d6d6d6;border-radius:3px;height:31px;background:#fff}
+.brk-hex-row input{border:0!important;background:#fff!important;color:#333!important;text-align:center;margin:0!important;height:29px!important;padding:2px 7px!important;font-size:14px!important;box-shadow:none!important}
+.brk-hex-arrows{font-size:14px;line-height:10px;color:#444;width:30px;text-align:center}
+.brk-hex-label{text-align:center;color:#9b9b9b;font-family:Georgia,serif;font-size:15px;margin:12px 0 15px}
+.brk-swatches{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;padding:0 16px 14px}
+.brk-swatch-btn{height:42px;border-radius:6px;border:1px solid #aaa;cursor:pointer;box-shadow:inset 0 1px #fff5}
+.brk-swatch-btn:hover{outline:2px solid #999;outline-offset:1px}
+.brk-picker-done{display:block;margin:0 auto;border:0;background:#183b68;color:#fff;border-radius:7px;padding:9px 22px;font-size:15px;font-weight:700;cursor:pointer}
+@media(max-width:650px){.themeColorGrid.brk-theme-color-grid{grid-template-columns:repeat(2,1fr)}.brk-color-picker{width:min(338px,calc(100vw - 18px))}.brk-sv{height:160px}}
+</style>
 <style id="brklive19-scorer-compact">
 /* COMPACT SCORER UI
    Make the control page fit more information on one screen so scrolling is
