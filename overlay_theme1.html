@@ -16,17 +16,17 @@ html,body{width:100%;height:100%;overflow:hidden;background:transparent;color:#f
 
 /* =============== STAGE =============== */
 .stage{position:fixed;inset:0;display:flex;align-items:flex-end;justify-content:center;
-       padding:0 14px 2vh;perspective:900px;overflow:hidden;pointer-events:none}
-.mainWrap{position:relative;width:1360px;flex:0 0 auto;
+       padding:0 104px 2vh;perspective:900px;overflow:visible;pointer-events:none}
+.mainWrap{position:relative;width:1280px;flex:0 0 auto;
           transform-origin:bottom center;transform-style:preserve-3d;will-change:transform;
           transition:opacity .25s ease}
 .mainWrap.hidden{opacity:0;pointer-events:none}
 
-.topCorners{display:flex;justify-content:space-between;margin-bottom:8px;transform:translateZ(10px)}
+.topCorners{display:none!important} /* Removed duplicate batting/bowling labels above the overlay; team names remain in the circles */
 .corner{font-size:16px;font-weight:900;padding:5px 16px;border-radius:5px;
         letter-spacing:.08em;
         box-shadow:0 3px 8px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.35);
-        white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:48%}
+        white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:48%;text-align:center}
 .corner.bat{background:linear-gradient(180deg,#8B5CF6,#5B21B6);color:#fff;border:1px solid #A78BFA}
 .corner.bowl{background:linear-gradient(180deg,#EF4444,#B91C3A);color:#fff;border:1px solid #F87171}
 
@@ -41,33 +41,52 @@ html,body{width:100%;height:100%;overflow:hidden;background:transparent;color:#f
             pointer-events:none;z-index:10}
 
 .part{position:relative;display:flex;flex-direction:column;justify-content:center;
-      padding:6px 15px;color:#fff;min-width:0;overflow:hidden;
+      padding:5px 11px;color:#fff;min-width:0;overflow:hidden;
       box-shadow:inset 0 1px 0 rgba(255,255,255,.20),inset 0 -1px 0 rgba(0,0,0,.45)}
 .part +.part{border-left:3px solid rgba(255,255,255,.85);
              box-shadow:inset 1px 0 0 rgba(255,255,255,.40),inset 0 1px 0 rgba(255,255,255,.20)}
-.part1{width:29%;background:linear-gradient(180deg,#8B5CF6 0%,#6D28D9 45%,#3A187F 100%)}
+.part1{width:29%;padding-left:30px;background:linear-gradient(180deg,#8B5CF6 0%,#6D28D9 45%,#3A187F 100%)}
+/* New round team badges: layered metallic rings, luminous inner rim and dotted orbit */
+.bar{overflow:visible}
+.team-circle{
+  position:absolute;top:50%;z-index:30;width:108px;height:108px;border-radius:50%;
+  transform:translateY(-50%);display:flex;align-items:center;justify-content:center;
+  padding:13px;text-align:center;overflow:hidden;overflow-wrap:anywhere;word-break:break-word;
+  font-size:12px;line-height:1.08;font-weight:900;font-style:italic;letter-spacing:.2px;white-space:normal;
+  color:#fff;text-shadow:0 2px 4px rgba(0,0,0,.95),0 0 8px rgba(255,255,255,.25);
+  border:4px solid #c4a5fd;
+  box-shadow:0 0 0 3px #d5a73b,0 0 0 6px rgba(8,17,37,.95),0 0 15px rgba(139,92,246,.7),0 6px 15px rgba(0,0,0,.8),inset 0 0 0 3px rgba(255,255,255,.22),inset 0 0 18px rgba(0,0,0,.8);
+  background:radial-gradient(circle at 35% 25%,#8B5CF6 0%,#6D28D9 42%,#3A187F 76%,#17082f 100%);
+}
+.team-circle:before{content:'';position:absolute;inset:7px;border-radius:50%;border:2px solid #c4b5fd;box-shadow:inset 0 0 12px rgba(139,92,246,.35),0 0 9px rgba(139,92,246,.55);pointer-events:none}
+.team-circle:after{content:'✦  •  •  •  ✦';position:absolute;left:0;right:0;bottom:10px;text-align:center;font-size:8px;letter-spacing:2px;color:#f8d36b;text-shadow:0 0 6px #f5b82e;pointer-events:none}
+.team-circle.left{left:-98px}
+.team-circle.right{right:-98px;border-color:#ffe4c7;background:radial-gradient(circle at 35% 25%,#ff3535 0%,#a90d25 43%,#4a0716 76%,#10030a 100%);box-shadow:0 0 0 3px #d5a73b,0 0 0 6px rgba(8,17,37,.95),0 0 15px rgba(255,25,55,.7),0 6px 15px rgba(0,0,0,.8),inset 0 0 0 3px rgba(255,255,255,.22),inset 0 0 18px rgba(0,0,0,.8)}
+.team-circle.right:before{border-color:#ff4c64;box-shadow:inset 0 0 12px rgba(255,25,55,.35),0 0 9px rgba(255,25,55,.55)}
+@media(max-width:700px){.stage{padding-left:76px;padding-right:76px}.team-circle{width:78px;height:78px;font-size:10px;padding:8px;border-width:3px}.team-circle.left{left:-70px}.team-circle.right{right:-70px}.team-circle:after{font-size:6px;bottom:6px;letter-spacing:1px}}
+
 .part2{width:21%;background:linear-gradient(180deg,#7C3AED 0%,#5B21B6 45%,#2A1160 100%);gap:14px}
 .part3{width:22%;background:linear-gradient(180deg,#1E1B4B 0%,#061B52 40%,#020B25 100%);
        align-items:center;text-align:center;position:relative;overflow:hidden;isolation:isolate;
        box-shadow:inset 0 3px 4px rgba(139,92,246,.40),inset 0 -3px 5px rgba(0,0,0,.90),inset 0 0 24px rgba(0,0,0,.6)}
-.part4{width:28%;background:linear-gradient(180deg,#EF4444 0%,#B91C3A 50%,#7F1D1D 100%);
+.part4{width:28%;padding-right:30px;background:linear-gradient(180deg,#EF4444 0%,#B91C3A 50%,#7F1D1D 100%);
        gap:3px;box-shadow:inset 0 1px 0 rgba(255,255,255,.35)}
 
-.r1{font-size:27px;font-weight:900;display:flex;align-items:center;gap:8px;
+.r1{font-size:24px;font-weight:900;display:flex;align-items:center;gap:8px;
     text-shadow:0 2px 4px rgba(0,0,0,.75);min-width:0;letter-spacing:.02em}
 #tShort{flex:0 0 auto;font-style:italic;letter-spacing:.04em}
 .score-yellow{background:linear-gradient(180deg,#FFF9C2 0%,#FFEF5A 40%,#FFD21F 70%,#E6C200 100%);color:#000;
-  padding:4px 13px;border-radius:6px;font-size:27px;font-weight:900;font-style:italic;
+  padding:3px 9px;border-radius:6px;font-size:24px;font-weight:900;font-style:italic;
   box-shadow:0 3px 6px rgba(0,0,0,.5),inset 0 2px 0 rgba(255,255,255,.95),inset 0 -2px 0 rgba(0,0,0,.25);
   border:1.5px solid #FFEB00;text-shadow:0 1px 0 rgba(255,255,255,.85);
   white-space:nowrap;flex:0 0 auto}
-.overs-same-row{font-size:19px;font-weight:900;color:#fff;margin-left:6px;font-style:italic;
+.overs-same-row{font-size:17px;font-weight:900;color:#fff;margin-left:6px;font-style:italic;
                 text-shadow:0 2px 3px rgba(0,0,0,.9);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .r2{font-size:13px;font-weight:800;margin-top:5px;white-space:nowrap;overflow:hidden;
     text-overflow:ellipsis;text-shadow:0 2px 3px rgba(0,0,0,.85);transition:opacity .2s linear;
     color:var(--soft);letter-spacing:.06em}
 
-.line{font-size:17px;font-weight:800;display:flex;align-items:center;gap:8px;
+.line{font-size:15px;font-weight:800;display:flex;align-items:center;gap:8px;
       text-shadow:0 2px 3px rgba(0,0,0,.75);min-width:0;line-height:1.3;color:#fff}
 .line.active:before{content:'';flex:0 0 auto;width:5px;height:20px;border-radius:3px;
                     background:linear-gradient(180deg,#FFEF5A,#E6C200);
@@ -87,14 +106,14 @@ html,body{width:100%;height:100%;overflow:hidden;background:transparent;color:#f
 .l1{font-size:15px;font-weight:900;letter-spacing:1.2px;color:#C4B5FD;font-style:italic;
     text-shadow:0 2px 3px rgba(0,0,0,.9),0 0 10px rgba(139,92,246,.65);
     white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
-.l2{font-size:30px;font-weight:900;margin-top:2px;color:#fff;font-style:italic;
+.l2{font-size:27px;font-weight:900;margin-top:2px;color:#fff;font-style:italic;
     text-shadow:0 3px 6px rgba(0,0,0,.9),0 0 18px rgba(255,255,255,.15);
     white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;line-height:1.02}
 .l3{font-size:14px;font-weight:800;margin-top:2px;color:#E7ECFF;letter-spacing:.1em;
     text-shadow:0 2px 3px rgba(0,0,0,.9);
     white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
 
-.b1{font-size:16px;font-weight:900;display:flex;gap:9px;color:#fff;font-style:italic;
+.b1{font-size:14px;font-weight:900;display:flex;gap:9px;color:#fff;font-style:italic;
     text-shadow:0 2px 3px rgba(0,0,0,.75);min-width:0}
 #bN{flex:1 1 auto;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 #bF{flex:0 0 auto;white-space:nowrap;color:#FFE4E6}
@@ -120,7 +139,8 @@ html,body{width:100%;height:100%;overflow:hidden;background:transparent;color:#f
 /* =============== FULL-SCREEN LAYER =============== */
 .screen{position:fixed;inset:0;display:none;align-items:center;justify-content:center;
         padding:1.6vh 1.6vw;z-index:50;background:transparent;overflow:hidden}
-.screen.show{display:flex}
+.screen{display:none!important}
+.screen.show{display:flex!important}
 .screen.lower-third{align-items:flex-end;justify-content:center;padding:0 14px 2vh}
 
 .banner-card,.target-card,.player-status-card,.bowler-card,.fow-card,
@@ -382,7 +402,8 @@ html,body{width:100%;height:100%;overflow:hidden;background:transparent;color:#f
 
 .anim-screen{position:fixed;inset:0;display:none;align-items:center;justify-content:center;
              z-index:200;background:transparent;pointer-events:none}
-.anim-screen.show{display:flex}
+.anim-screen:not(.show){display:none!important}
+.anim-screen.show{display:flex!important}
 .anim-burst{font-size:clamp(80px,20vh,380px);font-weight:900;letter-spacing:.02em;font-style:italic;
             text-shadow:0 12px 50px rgba(0,0,0,.8),0 0 80px currentColor,0 0 120px currentColor;
             animation:burst 1.3s ease-out}
@@ -451,6 +472,8 @@ html,body{width:100%;height:100%;overflow:hidden;background:transparent;color:#f
     </div>
 
     <div class="bar">
+      <div class="team-circle left" id="teamCircleLeft">TEAM A</div>
+      <div class="team-circle right" id="teamCircleRight">TEAM B</div>
       <div class="part part1">
         <div class="r1">
           <span id="tShort">MI</span>
@@ -714,17 +737,27 @@ const N = v => Number(v) || 0;
 const SCREENS = ['scrTournament','scrVenue','scrMatch','scrToss','scrResult',
                  'scrTarget','scrBatter','scrBowler','scrFOW','scrPlayerStatus',
                  'scrPartner','scrCustom','scrXI','scrCard','scrSummary'];
-function hideAllScreens(){ SCREENS.forEach(id => $(id)?.classList.remove('show')); }
-function showScreen(id){ $(id)?.classList.add('show'); }
-function setMainBar(visible){ $('stageMain')?.classList.toggle('hidden', !visible); }
+// Exclusive display mode: every screen is hidden before exactly one is selected.
+function hideAllScreens(){
+  SCREENS.forEach(id => $(id)?.classList.remove('show'));
+  $('scrAnim')?.classList.remove('show');
+}
+function showScreen(id){
+  SCREENS.forEach(screenId => { if(screenId !== id) $(screenId)?.classList.remove('show'); });
+  $(id)?.classList.add('show');
+}
+// The hidden class belongs to mainWrap (the CSS selector), not stageMain.
+function setMainBar(visible){
+  $('mainWrap')?.classList.toggle('hidden', !visible);
+}
 
-const DESIGN_W = 1360, DESIGN_H = 150;
+const DESIGN_W = 1280, DESIGN_H = 150;
 function fitScreen(){
   const wrap = $('mainWrap'); if(!wrap) return;
   const vw = innerWidth, vh = innerHeight;
-  const availW = vw - 28;
+  const availW = vw - (vw <= 700 ? 152 : 208);
   const availH = vh - Math.max(18, vh*0.06);
-  const s = Math.min(availW / DESIGN_W, availH / DESIGN_H, 1.7);
+  const s = Math.min(availW / DESIGN_W, availH / DESIGN_H, 1.7) * 0.96;
   wrap.style.transform = `rotateX(5deg) scale(${s})`;
 }
 addEventListener('resize', fitScreen);
@@ -835,6 +868,31 @@ function renderMainBar(S){
   const bowlLabel = bowlingTeamName(S) || 'BOWLING';
   $('batCorner').textContent  = 'BATTING: ' + U(batLabel);
   $('bowlCorner').textContent = 'BOWLING: ' + U(bowlLabel);
+  // Keep team names readable inside the circular badges, shrinking long names safely.
+  function setCircleTeamName(id, value){
+    const el = $(id);
+    if(!el) return;
+    const name = U(value || 'TEAM');
+    el.textContent = name;
+    const cleanName = name.replace(/\s+/g, ' ').trim();
+    el.textContent = cleanName;
+    el.style.whiteSpace = 'normal';
+    el.style.overflowWrap = 'anywhere';
+    el.style.wordBreak = 'break-word';
+    el.style.lineHeight = '1.08';
+    // Fit the complete team name inside the circle, prioritizing readability.
+    const maxSize = window.innerWidth <= 700 ? 11 : 15;
+    const minSize = 8;
+    let size = maxSize;
+    el.style.fontSize = size + 'px';
+    while (size > minSize && (el.scrollHeight > el.clientHeight + 1 || el.scrollWidth > el.clientWidth + 1)) {
+      size -= 0.5;
+      el.style.fontSize = size + 'px';
+    }
+    el.title = cleanName;
+  }
+  setCircleTeamName('teamCircleLeft', batLabel || 'TEAM A');
+  setCircleTeamName('teamCircleRight', bowlLabel || 'TEAM B');
 
   $('tShort').textContent = (batLabel || '').substring(0,4).toUpperCase();
   $('runs').textContent = N(S.runs);
@@ -1387,42 +1445,107 @@ function render(S){
 
   const dbg = $('dbg');
   if(dbg) dbg.textContent = `LIVE ${N(S.runs)}/${N(S.wickets)} • ${oversText(S.legalBalls)} OV`;
-
   renderMainBar(S);
 
   const overlay = S.overlay || {};
-  const mode = String(S.mode || 'default');
-  const view = String(overlay.view || '').toUpperCase();
-  const plSlot = String(overlay.playerLower?.slot || '').toLowerCase();
-  const psActive = !!(overlay.playerStatus && overlay.playerStatus.active);
-
+  const mode = String(S.mode || 'default').trim().toLowerCase().replace(/[\s_-]+/g,'');
+  const view = String(overlay.view || overlay.displayScreen || overlay.activeScreen || '').trim().toUpperCase().replace(/[\s_-]+/g,'');
+  const pl = overlay.playerLower || {};
+  const plSlot = String(pl.slot || pl.player || pl.type || '').trim().toLowerCase();
+  const psActive = truthy(overlay.playerStatus?.active) || view === 'PLAYERSTATUS';
+  const flag = (...values) => values.some(truthy);
+  const viewMap = {
+    'B1':'scrBatter','BATTER1':'scrBatter','STRIKER':'scrBatter','BATTER':'scrBatter',
+    'B2':'scrBatter','BATTER2':'scrBatter','NONSTRIKER':'scrBatter',
+    'BOWLER':'scrBowler','BOWLINGPLAYER':'scrBowler',
+    'FOW':'scrFOW','FALLOFWICKETS':'scrFOW',
+    'PLAYERSTATUS':'scrPlayerStatus','PLAYERSTATS':'scrPlayerStatus',
+    'TARGET':'scrTarget','SHOWTARGET':'scrTarget','TOURNAMENT':'scrTournament','SHOWTOURNAMENT':'scrTournament','VENUE':'scrVenue','SHOWVENUE':'scrVenue',
+    'MATCH':'scrMatch','SHOWMATCH':'scrMatch','MATCHDETAILS':'scrMatch','TOSS':'scrToss','SHOWTOSS':'scrToss','RESULT':'scrResult','SHOWRESULT':'scrResult',
+    'PARTNERSHIP':'scrPartner','PLAYINGXI':'scrXI','XI':'scrXI',
+    'SCORECARD':'scrCard','SCORECARD1':'scrCard','BATTING1':'scrCard',
+    'SCORECARD2':'scrCard','BATTING2':'scrCard','BOWLING1':'scrCard','BOWLING2':'scrCard',
+    'SUMMARY':'scrSummary','MATCHSUMMARY':'scrSummary','CUSTOM':'scrCustom','CUSTOMLOWER':'scrCustom'
+  };
+  const selected = viewMap[view] || '';
   hideAllScreens();
-
   let screenShown = false;
+  const display = (id, renderFn) => {
+    if(typeof renderFn === 'function') renderFn();
+    setMainBar(false);
+    showScreen(id);
+    screenShown = true;
+  };
 
-  if(plSlot === 'b1'){ setMainBar(false); renderBatter(S,'b1'); showScreen('scrBatter'); screenShown = true; }
-  else if(plSlot === 'b2'){ setMainBar(false); renderBatter(S,'b2'); showScreen('scrBatter'); screenShown = true; }
-  else if(overlay.showBowler){ setMainBar(false); renderBowler(S); showScreen('scrBowler'); screenShown = true; }
-  else if(overlay.showFOW){ setMainBar(false); renderFOW(S); showScreen('scrFOW'); screenShown = true; }
-  else if(psActive || view === 'PLAYER_STATUS'){ setMainBar(false); renderPlayerStatus(S); showScreen('scrPlayerStatus'); screenShown = true; }
-  else if(overlay.showTarget){ setMainBar(false); renderTarget(S); showScreen('scrTarget'); screenShown = true; }
-  else if(overlay.showTournament){ setMainBar(false); renderTournament(S); showScreen('scrTournament'); screenShown = true; }
-  else if(overlay.showVenue){ setMainBar(false); renderVenue(S); showScreen('scrVenue'); screenShown = true; }
-  else if(overlay.showMatch){ setMainBar(false); renderMatch(S); showScreen('scrMatch'); screenShown = true; }
-  else if(overlay.showToss){ setMainBar(false); renderToss(S); showScreen('scrToss'); screenShown = true; }
-  else if(overlay.showResult){ setMainBar(false); renderResult(S); showScreen('scrResult'); screenShown = true; }
-  else if(mode === 'playingxi'){ setMainBar(false); renderXI(S); showScreen('scrXI'); screenShown = true; }
-  else if(mode === 'scorecard1' || mode === 'batting1'){ setMainBar(false); renderCard(S,1,'batting'); showScreen('scrCard'); screenShown = true; }
-  else if(mode === 'scorecard2' || mode === 'batting2'){ setMainBar(false); renderCard(S,2,'batting'); showScreen('scrCard'); screenShown = true; }
-  else if(mode === 'bowling1'){ setMainBar(false); renderCard(S,1,'bowling'); showScreen('scrCard'); screenShown = true; }
-  else if(mode === 'bowling2'){ setMainBar(false); renderCard(S,2,'bowling'); showScreen('scrCard'); screenShown = true; }
-  else if(mode === 'summary'){ setMainBar(false); renderSummary(S); showScreen('scrSummary'); screenShown = true; }
-  else if(overlay.partnership && overlay.partnership.active){ setMainBar(false); renderPartner(S); showScreen('scrPartner'); screenShown = true; }
-  else if(S.customLower && S.customLower.active){ setMainBar(false); renderCustom(S); showScreen('scrCustom'); screenShown = true; }
+  // Resolve the explicit controller selection FIRST. A stale boolean from an earlier
+  // click must never override the screen the operator just selected.
+  const renderSelected = () => {
+    if(selected === 'scrBatter') {
+      const which = (view === 'B2' || view === 'BATTER2' || view === 'NONSTRIKER' || plSlot === 'b2') ? 'b2' : 'b1';
+      display('scrBatter', () => renderBatter(S, which));
+    } else if(selected === 'scrBowler') display('scrBowler', () => renderBowler(S));
+    else if(selected === 'scrFOW') display('scrFOW', () => renderFOW(S));
+    else if(selected === 'scrPlayerStatus') display('scrPlayerStatus', () => renderPlayerStatus(S));
+    else if(selected === 'scrTarget') display('scrTarget', () => renderTarget(S));
+    else if(selected === 'scrTournament') display('scrTournament', () => renderTournament(S));
+    else if(selected === 'scrVenue') display('scrVenue', () => renderVenue(S));
+    else if(selected === 'scrMatch') display('scrMatch', () => renderMatch(S));
+    else if(selected === 'scrToss') display('scrToss', () => renderToss(S));
+    else if(selected === 'scrResult') display('scrResult', () => renderResult(S));
+    else if(selected === 'scrPartner') display('scrPartner', () => renderPartner(S));
+    else if(selected === 'scrXI') display('scrXI', () => renderXI(S));
+    else if(selected === 'scrCard') {
+      const inn = (view === 'SCORECARD2' || view === 'BATTING2' || view === 'BOWLING2') ? 2 : 1;
+      const type = view.startsWith('BOWLING') ? 'bowling' : 'batting';
+      display('scrCard', () => renderCard(S, inn, type));
+    } else if(selected === 'scrSummary') display('scrSummary', () => renderSummary(S));
+    else if(selected === 'scrCustom') display('scrCustom', () => renderCustom(S));
+  };
 
-  if(!screenShown){ setMainBar(true); }
+  if(selected) {
+    renderSelected();
+  } else if(flag(overlay.showBowler)) {
+    display('scrBowler', () => renderBowler(S));
+  } else if(flag(overlay.showFOW)) {
+    display('scrFOW', () => renderFOW(S));
+  } else if(psActive) {
+    display('scrPlayerStatus', () => renderPlayerStatus(S));
+  } else if(flag(overlay.showTarget)) {
+    display('scrTarget', () => renderTarget(S));
+  } else if(flag(overlay.showTournament)) {
+    display('scrTournament', () => renderTournament(S));
+  } else if(flag(overlay.showVenue)) {
+    display('scrVenue', () => renderVenue(S));
+  } else if(flag(overlay.showMatch)) {
+    display('scrMatch', () => renderMatch(S));
+  } else if(flag(overlay.showToss)) {
+    display('scrToss', () => renderToss(S));
+  } else if(flag(overlay.showResult)) {
+    display('scrResult', () => renderResult(S));
+  } else if(mode === 'playingxi') {
+    display('scrXI', () => renderXI(S));
+  } else if(['scorecard1','batting1','scorecard2','batting2','bowling1','bowling2'].includes(mode)) {
+    const inn = ['scorecard2','batting2','bowling2'].includes(mode) ? 2 : 1;
+    const type = mode.startsWith('bowling') ? 'bowling' : 'batting';
+    display('scrCard', () => renderCard(S, inn, type));
+  } else if(mode === 'summary') {
+    display('scrSummary', () => renderSummary(S));
+  } else if(flag(overlay.partnership?.active)) {
+    display('scrPartner', () => renderPartner(S));
+  } else if(flag(S.customLower?.active)) {
+    display('scrCustom', () => renderCustom(S));
+  } else if(plSlot === 'b1' || (flag(pl.active) && plSlot === 'striker')) {
+    display('scrBatter', () => renderBatter(S,'b1'));
+  } else if(plSlot === 'b2' || (flag(pl.active) && plSlot === 'nonstriker')) {
+    display('scrBatter', () => renderBatter(S,'b2'));
+  }
 
+  if(!screenShown) setMainBar(true);
   renderAnim(S);
+}
+
+function truthy(value){
+  return value === true || value === 1 || value === '1' || String(value).toLowerCase() === 'true' || String(value).toLowerCase() === 'on';
 }
 
 /* ---------------- DATA INTAKE ---------------- */
