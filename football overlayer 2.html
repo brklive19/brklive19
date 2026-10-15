@@ -1,0 +1,1029 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BRKLIVE19 Football Overlay</title>
+<style>
+  /* ============================================================
+     BRKLIVE19 FOOTBALL OVERLAY
+     - Transparent background (OBS / vMix / Streamlabs friendly)
+     - Syncs with football-control.html via BroadcastChannel,
+       localStorage AND Firebase Realtime Database.
+     - Includes penalty shootout score row.
+     ============================================================ */
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    overflow: hidden;
+    font-family: Arial, Helvetica, sans-serif;
+    color: #fff;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* BRKLIVE19 style: everything uppercase */
+  body, body * { text-transform: uppercase; }
+
+  :root {
+    --primary:    #087d4b;
+    --accent:     #53e89a;
+    --score-bg:   #061b35;
+    --goal:       #16c784;
+  }
+
+  /* ============ SCOREBOARD WRAPPER (TOP LEFT) ============ */
+  .scoreboard-wrap {
+    position: fixed;
+    top: 26px;
+    left: 26px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    z-index: 10;
+  }
+
+  /* ============ MAIN SCOREBOARD BAR ============ */
+  .scoreboard {
+    display: flex;
+    align-items: stretch;
+    height: 66px;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow:
+      0 12px 34px rgba(0,0,0,.50),
+      0 0 0 1px rgba(255,255,255,.10);
+  }
+
+  /* ---- full-colour team name blocks ---- */
+  .team-block {
+    display: flex;
+    align-items: center;
+    padding: 0 22px;
+    min-width: 130px;
+    font-size: 21px;
+    font-weight: 900;
+    letter-spacing: 1.3px;
+    white-space: nowrap;
+    transition: background .3s, color .3s;
+  }
+  .team-block.home {
+    justify-content: flex-start;
+    background:
+      linear-gradient(180deg, rgba(255,255,255,.20), rgba(0,0,0,.14)),
+      var(--primary);
+    border-radius: 12px 0 0 12px;
+    box-shadow:
+      inset 0 -3px 0 rgba(0,0,0,.22),
+      inset 0  3px 0 rgba(255,255,255,.14);
+  }
+  .team-block.away {
+    justify-content: flex-end;
+    background:
+      linear-gradient(180deg, rgba(255,255,255,.20), rgba(0,0,0,.14)),
+      var(--accent);
+    border-radius: 0 12px 12px 0;
+    box-shadow:
+      inset 0 -3px 0 rgba(0,0,0,.22),
+      inset 0  3px 0 rgba(255,255,255,.14);
+  }
+
+  /* cards inside team blocks */
+  .cards {
+    display: inline-flex;
+    gap: 5px;
+    margin-left: 12px;
+    font-size: 12px;
+    font-weight: 900;
+  }
+  .team-block.away .cards {
+    margin-left: 0;
+    margin-right: 12px;
+    order: -1;
+  }
+  .card-y {
+    background: #f1c40f;
+    color: #111;
+    padding: 2px 6px;
+    border-radius: 3px;
+  }
+  .card-r {
+    background: #e74c3c;
+    color: #fff;
+    padding: 2px 6px;
+    border-radius: 3px;
+  }
+
+  /* ---- score ---- */
+  .score-group {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 0 22px;
+    background: var(--score-bg);
+    font-size: 30px;
+    font-weight: 900;
+    font-variant-numeric: tabular-nums;
+    min-width: 120px;
+  }
+  .sep { opacity: .40; font-size: 25px; font-weight: 600; }
+  .score { transition: transform .18s ease; }
+  .score.bump { transform: scale(1.35); }
+
+  /* ---- clock ---- */
+  .clock-block {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0 20px;
+    background: rgba(0,0,0,.60);
+    border-left: 1px solid rgba(255,255,255,.12);
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    font-variant-numeric: tabular-nums;
+  }
+  .dot {
+    width: 10px; height: 10px; border-radius: 50%;
+    background: #f1c40f;
+    box-shadow: 0 0 10px #f1c40f;
+    transition: background .25s, box-shadow .25s;
+  }
+  .dot.live {
+    background: #2ecc71;
+    box-shadow: 0 0 10px #2ecc71;
+    animation: pulse 1.4s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%,100% { opacity: 1; transform: scale(1); }
+    50%     { opacity: .35; transform: scale(.8); }
+  }
+  .period-badge {
+    background: var(--primary);
+    padding: 3px 8px;
+    border-radius: 5px;
+    font-size: 12px;
+    letter-spacing: 1px;
+  }
+  .added-time {
+    color: var(--accent);
+    font-size: 14px;
+    font-weight: 900;
+    display: none;
+  }
+  .added-time.show { display: inline; }
+
+  /* ============ PENALTY SHOOTOUT ROW ============ */
+  .penalty-row {
+    display: flex;
+    align-items: stretch;
+    height: 44px;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow:
+      0 8px 22px rgba(0,0,0,.45),
+      0 0 0 1px rgba(255,255,255,.10);
+    opacity: 0;
+    transform: translateY(-8px);
+    transition: opacity .35s ease, transform .35s ease;
+    pointer-events: none;
+  }
+  .penalty-row.show {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .pen-team {
+    display: flex;
+    align-items: center;
+    padding: 0 18px;
+    font-size: 14px;
+    font-weight: 900;
+    letter-spacing: 1.2px;
+    min-width: 130px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .pen-team.home {
+    justify-content: flex-start;
+    background: rgba(0,0,0,.72);
+    color: #fff;
+    border-left: 5px solid var(--primary);
+    border-radius: 10px 0 0 10px;
+  }
+  .pen-team.away {
+    justify-content: flex-end;
+    background: rgba(0,0,0,.72);
+    color: #fff;
+    border-right: 5px solid var(--accent);
+    border-radius: 0 10px 10px 0;
+  }
+
+  .pen-score-group {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 0 18px;
+    background: rgba(0,0,0,.88);
+    font-size: 20px;
+    font-weight: 900;
+    font-variant-numeric: tabular-nums;
+    min-width: 110px;
+  }
+  .pen-score { transition: transform .18s ease; }
+  .pen-score.bump { transform: scale(1.35); }
+
+  .pen-label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 0 16px;
+    background: linear-gradient(135deg, #8e0922, #ff3158);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 900;
+    letter-spacing: 2px;
+  }
+  .pen-label::before {
+    content: '';
+    width: 8px; height: 8px; border-radius: 50%;
+    background: #ffd34d;
+    box-shadow: 0 0 8px #ffd34d;
+    animation: pulse 1.4s ease-in-out infinite;
+  }
+
+  /* ============ LOWER THIRD ============ */
+  .lower-third {
+    position: fixed;
+    left: 26px;
+    bottom: 60px;
+    display: flex;
+    align-items: stretch;
+    height: 64px;
+    border-radius: 10px;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity .4s ease, transform .4s ease;
+    box-shadow: 0 12px 34px rgba(0,0,0,.55);
+    pointer-events: none;
+    z-index: 9;
+  }
+  .lower-third.show {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .lt-accent { width: 8px; background: var(--accent); }
+  .lt-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 0 24px;
+    background: linear-gradient(90deg, rgba(6,17,29,.96), rgba(6,17,29,.85));
+    min-width: 280px;
+  }
+  .lt-label {
+    font-size: 10px;
+    letter-spacing: 3px;
+    color: var(--accent);
+    font-weight: 800;
+    margin-bottom: 3px;
+  }
+  .lt-text {
+    font-size: 22px;
+    font-weight: 900;
+    letter-spacing: 1px;
+    white-space: nowrap;
+    max-width: 70vw;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* ============ PLAY XI PANEL ============ */
+  .xi-panel {
+    position: fixed;
+    left: 50%;
+    bottom: 60px;
+    transform: translate(-50%, 30px);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border-radius: 14px;
+    overflow: hidden;
+    background: linear-gradient(145deg, rgba(6,17,29,.96), rgba(6,17,29,.85));
+    box-shadow: 0 15px 40px rgba(0,0,0,.6);
+    opacity: 0;
+    transition: opacity .4s ease, transform .4s ease;
+    pointer-events: none;
+    max-width: 92vw;
+    z-index: 9;
+  }
+  .xi-panel.show { opacity: 1; transform: translate(-50%, 0); }
+  .xi-col { padding: 16px 26px; }
+  .xi-col.home { border-right: 1px solid rgba(255,255,255,.1); }
+  .xi-title {
+    font-size: 15px;
+    font-weight: 900;
+    letter-spacing: 1px;
+    padding-bottom: 8px;
+    margin-bottom: 8px;
+    border-bottom: 2px solid var(--accent);
+    color: var(--accent);
+  }
+  .xi-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    font-size: 13px;
+    line-height: 1.75;
+    columns: 2;
+    column-gap: 18px;
+    max-height: 220px;
+    overflow: hidden;
+  }
+  .xi-list li {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* ============ PLAYER CHANGE ============ */
+  .change-panel {
+    position: fixed;
+    left: 50%;
+    bottom: 60px;
+    transform: translate(-50%, 30px);
+    display: flex;
+    align-items: stretch;
+    border-radius: 12px;
+    overflow: hidden;
+    background: linear-gradient(145deg, rgba(6,17,29,.96), rgba(6,17,29,.85));
+    box-shadow: 0 15px 40px rgba(0,0,0,.6);
+    opacity: 0;
+    transition: opacity .4s ease, transform .4s ease;
+    pointer-events: none;
+    z-index: 9;
+  }
+  .change-panel.show { opacity: 1; transform: translate(-50%, 0); }
+  .change-head {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 0 22px;
+    background: var(--primary);
+  }
+  .change-head .team-name {
+    font-size: 14px;
+    font-weight: 900;
+    letter-spacing: 1px;
+  }
+  .change-head .change-label {
+    font-size: 10px;
+    letter-spacing: 2px;
+    opacity: .85;
+    margin-top: 3px;
+  }
+  .change-body {
+    display: flex;
+    align-items: center;
+    gap: 22px;
+    padding: 14px 28px;
+  }
+  .change-player {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+  }
+  .change-player .tag {
+    font-size: 10px;
+    letter-spacing: 2px;
+    font-weight: 800;
+    padding: 2px 8px;
+    border-radius: 4px;
+  }
+  .change-player.out .tag { background: #e74c3c; }
+  .change-player.in  .tag { background: #2ecc71; color: #04170c; }
+  .change-player .pname {
+    font-size: 18px;
+    font-weight: 900;
+    letter-spacing: 1px;
+  }
+  .change-arrow {
+    font-size: 26px;
+    color: var(--accent);
+    font-weight: 900;
+  }
+
+  /* ============ GOAL FLASH ============ */
+  .goal-flash {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+    opacity: 0;
+    background: radial-gradient(circle at center, rgba(255,255,255,.14), transparent 65%);
+    z-index: 20;
+  }
+  .goal-flash span {
+    font-size: 12vw;
+    font-weight: 900;
+    letter-spacing: 14px;
+    text-shadow: 0 0 60px currentColor, 0 6px 30px rgba(0,0,0,.6);
+  }
+  .goal-flash.show {
+    animation: goalPop 2s cubic-bezier(.2,.8,.3,1) forwards;
+  }
+  @keyframes goalPop {
+    0%   { opacity: 0; transform: scale(.55); }
+    15%  { opacity: 1; transform: scale(1.08); }
+    30%  { transform: scale(1); }
+    75%  { opacity: 1; }
+    100% { opacity: 0; transform: scale(1.15); }
+  }
+
+  /* ============ RESPONSIVE ============ */
+  @media (max-width: 700px) {
+    .scoreboard-wrap { top: 12px; left: 12px; }
+    .scoreboard { height: 54px; }
+    .team-block { padding: 0 12px; font-size: 15px; min-width: 80px; }
+    .score-group { padding: 0 12px; font-size: 22px; min-width: 80px; }
+    .clock-block { padding: 0 12px; font-size: 16px; gap: 6px; }
+    .cards { display: none; }
+    .penalty-row { height: 36px; }
+    .pen-team { padding: 0 10px; font-size: 11px; min-width: 80px; }
+    .pen-score-group { padding: 0 10px; font-size: 15px; min-width: 70px; }
+    .pen-label { padding: 0 10px; font-size: 9px; letter-spacing: 1px; }
+    .lower-third { left: 12px; bottom: 20px; height: 54px; }
+    .lt-body { padding: 0 14px; min-width: 180px; }
+    .lt-text { font-size: 16px; }
+    .xi-panel { grid-template-columns: 1fr; bottom: 20px; }
+    .xi-list { columns: 1; max-height: 140px; }
+    .change-panel { flex-direction: column; bottom: 20px; }
+    .change-body { flex-direction: column; gap: 8px; padding: 10px 16px; }
+    .change-arrow { transform: rotate(90deg); }
+  }
+</style>
+</head>
+<body>
+
+  <!-- ================= SCOREBOARD WRAPPER ================= -->
+  <div class="scoreboard-wrap">
+
+    <!-- ===== MAIN SCOREBOARD ===== -->
+    <div class="scoreboard" id="scoreboard">
+      <div class="team-block home" id="homeBlock">
+        <span id="homeName">HOME</span>
+        <span class="cards" id="homeCards"></span>
+      </div>
+
+      <div class="score-group">
+        <span class="score" id="homeScore">0</span>
+        <span class="sep">:</span>
+        <span class="score" id="awayScore">0</span>
+      </div>
+
+      <div class="team-block away" id="awayBlock">
+        <span id="awayName">AWAY</span>
+        <span class="cards" id="awayCards"></span>
+      </div>
+
+      <div class="clock-block">
+        <span class="dot" id="dot"></span>
+        <span id="clock">00:00</span>
+        <span class="period-badge" id="period">1H</span>
+        <span class="added-time" id="addedTime"></span>
+      </div>
+    </div>
+
+    <!-- ===== PENALTY SHOOTOUT ROW ===== -->
+    <div class="penalty-row" id="penaltyRow">
+      <div class="pen-team home" id="penHomeName">HOME</div>
+
+      <div class="pen-score-group">
+        <span class="pen-score" id="penHomeScore">0</span>
+        <span class="sep">:</span>
+        <span class="pen-score" id="penAwayScore">0</span>
+      </div>
+
+      <div class="pen-team away" id="penAwayName">AWAY</div>
+
+      <div class="pen-label">PENS</div>
+    </div>
+
+  </div>
+
+  <!-- ================= LOWER THIRD ================= -->
+  <div class="lower-third" id="lowerThird">
+    <div class="lt-accent"></div>
+    <div class="lt-body">
+      <div class="lt-label" id="ltLabel">TOURNAMENT</div>
+      <div class="lt-text" id="ltText">—</div>
+    </div>
+  </div>
+
+  <!-- ================= PLAY XI PANEL ================= -->
+  <div class="xi-panel" id="xiPanel">
+    <div class="xi-col home">
+      <div class="xi-title" id="xiHomeTitle">HOME XI</div>
+      <ul class="xi-list" id="xiHomeList"></ul>
+    </div>
+    <div class="xi-col away">
+      <div class="xi-title" id="xiAwayTitle">AWAY XI</div>
+      <ul class="xi-list" id="xiAwayList"></ul>
+    </div>
+  </div>
+
+  <!-- ================= PLAYER CHANGE PANEL ================= -->
+  <div class="change-panel" id="changePanel">
+    <div class="change-head">
+      <div class="team-name" id="changeTeamName">TEAM</div>
+      <div class="change-label">PLAYER CHANGE</div>
+    </div>
+    <div class="change-body">
+      <div class="change-player out">
+        <span class="tag">OUT</span>
+        <span class="pname" id="changeOut">—</span>
+      </div>
+      <div class="change-arrow">➜</div>
+      <div class="change-player in">
+        <span class="tag">IN</span>
+        <span class="pname" id="changeIn">—</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= GOAL FLASH ================= -->
+  <div class="goal-flash" id="goalFlash"><span id="flashText">GOAL!</span></div>
+
+<script type="module">
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
+import { getDatabase, ref, onValue } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js';
+
+/* ---------- Firebase (same project as football-control.html) ---------- */
+const cfg = {
+  apiKey: 'AIzaSyBLWq1bqJ32F2cg3mqYQ0uwXcS3zvTA3A4',
+  authDomain: 'brklive19-2bab4.firebaseapp.com',
+  databaseURL: 'https://brklive19-2bab4-default-rtdb.asia-southeast1.firebasedatabase.app',
+  projectId: 'brklive19-2bab4',
+  storageBucket: 'brklive19-2bab4.firebasestorage.app',
+  messagingSenderId: '294058533898',
+  appId: '1:294058533898:web:4996705937e969939cabf3'
+};
+let db = null;
+try {
+  db = getDatabase(initializeApp(cfg));
+} catch (e) {
+  console.warn('Firebase init failed — running on BroadcastChannel + localStorage only.', e);
+}
+
+/* ---------- helpers ---------- */
+const $ = (id) => document.getElementById(id);
+const esc = (str) => String(str == null ? '' : str)
+  .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+  .replace(/"/g, '&quot;').replace(/'/g, '&#039;');
+
+function hexToRgb(hex) {
+  hex = String(hex || '').replace('#', '');
+  if (hex.length === 3) hex = hex.split('').map(c => c + c).join('');
+  const n = parseInt(hex, 16);
+  if (isNaN(n)) return { r: 0, g: 0, b: 0 };
+  return { r: (n >> 16) & 255, g: (n >> 8) & 255, b: n & 255 };
+}
+function readableText(hex) {
+  const { r, g, b } = hexToRgb(hex);
+  const lum = (0.2126 * r + 0.7152 * g + 0.0722 * b) / 255;
+  return lum > 0.60 ? '#111318' : '#ffffff';
+}
+function formatTime(total) {
+  total = Math.max(0, Math.floor(total || 0));
+  const m = Math.floor(total / 60);
+  const s = total % 60;
+  return String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0');
+}
+function bump(el) {
+  el.classList.remove('bump');
+  void el.offsetWidth;
+  el.classList.add('bump');
+  setTimeout(() => el.classList.remove('bump'), 220);
+}
+
+/* ---------- local state (mirror of controller) ---------- */
+const state = {
+  homeTeam: 'HOME',
+  awayTeam: 'AWAY',
+  homeScore: 0,
+  awayScore: 0,
+  homeYellow: 0,
+  awayYellow: 0,
+  homeRed: 0,
+  awayRed: 0,
+  seconds: 0,
+  running: false,
+  period: '1H',
+  addedTime: 0,
+  /* ---- penalty shootout ---- */
+  homePenalty: 0,
+  awayPenalty: 0,
+  penaltyActive: false,
+  colors: {
+    primary: '#087d4b',
+    accent:  '#53e89a',
+    score:   '#061b35',
+    goal:    '#16c784'
+  },
+  goal: null,
+  broadcast: {
+    tournamentName: '',
+    matchName: '',
+    customText: '',
+    graphic: 'none',
+    playXI: null,
+    playerChange: null,
+    matchXI: { home: [], away: [] }
+  }
+};
+
+/* smooth local clock interpolation */
+let baseSeconds = 0;
+let baseAt = 0;
+let isRunning = false;
+
+/* dedupe so a goal only flashes once */
+let lastGoalId = 0;
+let lastUpdated = 0;
+
+/* last-known scores so we can animate on change */
+let lastHomeScore = -1;
+let lastAwayScore = -1;
+let lastHomePen   = -1;
+let lastAwayPen   = -1;
+
+/* ---------- render helpers ---------- */
+function applyColors() {
+  const c = state.colors || {};
+  const root = document.documentElement.style;
+  root.setProperty('--primary',  c.primary  || '#087d4b');
+  root.setProperty('--accent',   c.accent   || '#53e89a');
+  root.setProperty('--score-bg', c.score    || '#061b35');
+  root.setProperty('--goal',     c.goal     || '#16c784');
+
+  // Auto-contrast text on the full-colour team blocks
+  $('homeBlock').style.color = readableText(c.primary || '#087d4b');
+  $('awayBlock').style.color = readableText(c.accent  || '#53e89a');
+}
+
+function renderCards() {
+  const mk = (y, r) => {
+    let h = '';
+    if (y > 0) h += `<span class="card-y">${y}</span>`;
+    if (r > 0) h += `<span class="card-r">${r}</span>`;
+    return h;
+  };
+  $('homeCards').innerHTML = mk(state.homeYellow, state.homeRed);
+  $('awayCards').innerHTML = mk(state.awayYellow, state.awayRed);
+}
+
+function renderScoreboard() {
+  $('homeName').textContent = (state.homeTeam || 'HOME');
+  $('awayName').textContent = (state.awayTeam || 'AWAY');
+  $('period').textContent   = state.period || '1H';
+
+  // added time badge
+  const at = Number(state.addedTime) || 0;
+  if (at > 0) {
+    $('addedTime').textContent = '+' + at;
+    $('addedTime').classList.add('show');
+  } else {
+    $('addedTime').classList.remove('show');
+  }
+
+  // score with bump animation
+  const hs = Number(state.homeScore) || 0;
+  const as = Number(state.awayScore) || 0;
+  if (hs !== lastHomeScore) {
+    $('homeScore').textContent = hs;
+    if (lastHomeScore >= 0) bump($('homeScore'));
+    lastHomeScore = hs;
+  }
+  if (as !== lastAwayScore) {
+    $('awayScore').textContent = as;
+    if (lastAwayScore >= 0) bump($('awayScore'));
+    lastAwayScore = as;
+  }
+
+  renderCards();
+}
+
+/* ---------- penalty shootout ---------- */
+function renderPenalty() {
+  const row = $('penaltyRow');
+  const active = !!state.penaltyActive;
+
+  // always keep names + values up to date (in case penalties start later)
+  $('penHomeName').textContent = state.homeTeam || 'HOME';
+  $('penAwayName').textContent = state.awayTeam || 'AWAY';
+
+  const hp = Number(state.homePenalty) || 0;
+  const ap = Number(state.awayPenalty) || 0;
+
+  if (hp !== lastHomePen) {
+    $('penHomeScore').textContent = hp;
+    if (lastHomePen >= 0 && active) bump($('penHomeScore'));
+    lastHomePen = hp;
+  }
+  if (ap !== lastAwayPen) {
+    $('penAwayScore').textContent = ap;
+    if (lastAwayPen >= 0 && active) bump($('penAwayScore'));
+    lastAwayPen = ap;
+  }
+
+  row.classList.toggle('show', active);
+}
+
+function renderClock() {
+  const secs = isRunning
+    ? baseSeconds + (Date.now() - baseAt) / 1000
+    : baseSeconds;
+  $('clock').textContent = formatTime(secs);
+  $('dot').classList.toggle('live', !!isRunning);
+}
+
+/* ---------- graphics ---------- */
+function updateGraphics() {
+  const b = state.broadcast || {};
+  const lt = $('lowerThird');
+  const xi = $('xiPanel');
+  const cp = $('changePanel');
+
+  lt.classList.remove('show');
+  xi.classList.remove('show');
+  cp.classList.remove('show');
+
+  switch (b.graphic) {
+    case 'tournament':
+      $('ltLabel').textContent = 'TOURNAMENT';
+      $('ltText').textContent  = b.tournamentName || '—';
+      lt.classList.add('show');
+      break;
+
+    case 'match':
+      $('ltLabel').textContent = 'MATCH';
+      $('ltText').textContent  = b.matchName || '—';
+      lt.classList.add('show');
+      break;
+
+    case 'custom':
+      $('ltLabel').textContent = 'INFO';
+      $('ltText').textContent  = b.customText || '—';
+      lt.classList.add('show');
+      break;
+
+    case 'playXI': {
+      const p = b.playXI;
+      if (!p) break;
+      $('xiHomeTitle').textContent = (p.homeTeam || 'HOME') + ' XI';
+      $('xiAwayTitle').textContent = (p.awayTeam || 'AWAY') + ' XI';
+      const home = Array.isArray(p.homePlayers) ? p.homePlayers : [];
+      const away = Array.isArray(p.awayPlayers) ? p.awayPlayers : [];
+      $('xiHomeList').innerHTML = home.length
+        ? home.map(n => `<li>${esc(n)}</li>`).join('')
+        : '<li>—</li>';
+      $('xiAwayList').innerHTML = away.length
+        ? away.map(n => `<li>${esc(n)}</li>`).join('')
+        : '<li>—</li>';
+      xi.classList.add('show');
+      break;
+    }
+
+    case 'playerChange': {
+      const pc = b.playerChange;
+      if (!pc) break;
+      $('changeTeamName').textContent = pc.teamName || 'TEAM';
+      $('changeOut').textContent      = pc.playerOut || '—';
+      $('changeIn').textContent       = pc.playerIn  || '—';
+      cp.classList.add('show');
+      break;
+    }
+
+    default:
+      /* 'none' → everything hidden */
+      break;
+  }
+}
+
+/* ---------- goal flash ---------- */
+function maybeFlashGoal() {
+  const g = state.goal;
+  if (!g || !g.id) return;
+  if (g.id === lastGoalId) return;
+  lastGoalId = g.id;
+
+  const color = (g.team === 'home')
+    ? (state.colors.primary || '#087d4b')
+    : (state.colors.accent  || '#53e89a');
+
+  $('flashText').textContent = 'GOAL!';
+  $('flashText').style.color = color;
+
+  const flash = $('goalFlash');
+  flash.classList.remove('show');
+  void flash.offsetWidth;
+  flash.classList.add('show');
+}
+$('goalFlash').addEventListener('animationend', () => {
+  $('goalFlash').classList.remove('show');
+});
+
+/* ============================================================
+   DATA INGESTION
+   Accepts either the full packet ({ sport, football, ... })
+   or the bare football object (as stored in localStorage).
+   ============================================================ */
+function ingestFootball(fb) {
+  if (!fb || typeof fb !== 'object') return;
+
+  // Ignore stale packets that arrive out of order
+  if (fb.updatedAt && fb.updatedAt < lastUpdated) return;
+  if (fb.updatedAt) lastUpdated = fb.updatedAt;
+
+  /* core match data */
+  if (fb.homeTeam  !== undefined) state.homeTeam  = fb.homeTeam  || 'HOME';
+  if (fb.awayTeam  !== undefined) state.awayTeam  = fb.awayTeam  || 'AWAY';
+  if (fb.homeScore !== undefined) state.homeScore = Number(fb.homeScore) || 0;
+  if (fb.awayScore !== undefined) state.awayScore = Number(fb.awayScore) || 0;
+  if (fb.homeYellow !== undefined) state.homeYellow = Number(fb.homeYellow) || 0;
+  if (fb.awayYellow !== undefined) state.awayYellow = Number(fb.awayYellow) || 0;
+  if (fb.homeRed    !== undefined) state.homeRed    = Number(fb.homeRed)    || 0;
+  if (fb.awayRed    !== undefined) state.awayRed    = Number(fb.awayRed)    || 0;
+  if (fb.period     !== undefined) state.period     = fb.period || '1H';
+  if (fb.addedTime  !== undefined) state.addedTime  = Number(fb.addedTime) || 0;
+
+  /* ---------- PENALTY SHOOTOUT ----------
+     Accepts several field-name shapes so the controller can
+     send whichever it prefers:
+       homePenalty / awayPenalty
+       homePen / awayPen
+       penaltyHome / penaltyAway
+       homePenalties / awayPenalties
+  --------------------------------------- */
+  const hp = fb.homePenalty ?? fb.homePen ?? fb.penaltyHome ?? fb.homePenalties;
+  const ap = fb.awayPenalty ?? fb.awayPen ?? fb.penaltyAway ?? fb.awayPenalties;
+  if (hp !== undefined) state.homePenalty = Number(hp) || 0;
+  if (ap !== undefined) state.awayPenalty = Number(ap) || 0;
+
+  // auto-activate the row when the period is PEN, or when the
+  // controller explicitly sends a `penaltyActive` flag.
+  if (fb.penaltyActive !== undefined) {
+    state.penaltyActive = !!fb.penaltyActive;
+  } else if (String(state.period).toUpperCase() === 'PEN') {
+    state.penaltyActive = true;
+  } else if (
+    (state.homePenalty > 0 || state.awayPenalty > 0) &&
+    state.penaltyActive !== false
+  ) {
+    // if penalties were never explicitly toggled off, show them
+    state.penaltyActive = true;
+  }
+
+  /* timer */
+  if (fb.seconds !== undefined) {
+    baseSeconds = Number(fb.seconds) || 0;
+    baseAt = Date.now();
+  }
+  if (fb.running !== undefined) isRunning = !!fb.running;
+
+  /* colours */
+  if (fb.colors && typeof fb.colors === 'object') {
+    state.colors = {
+      primary: fb.colors.primary || state.colors.primary,
+      accent:  fb.colors.accent  || state.colors.accent,
+      score:   fb.colors.score   || state.colors.score,
+      goal:    fb.colors.goal    || state.colors.goal
+    };
+    applyColors();
+  }
+
+  /* goal event */
+  if (fb.goal !== undefined) state.goal = fb.goal;
+
+  /* broadcast graphics */
+  if (fb.broadcast && typeof fb.broadcast === 'object') {
+    state.broadcast = {
+      tournamentName: fb.broadcast.tournamentName || '',
+      matchName:      fb.broadcast.matchName      || '',
+      customText:     fb.broadcast.customText     || '',
+      graphic:        fb.broadcast.graphic        || 'none',
+      playXI:         fb.broadcast.playXI         || null,
+      playerChange:   fb.broadcast.playerChange   || null,
+      matchXI:        fb.broadcast.matchXI        || { home: [], away: [] }
+    };
+  }
+
+  renderScoreboard();
+  renderPenalty();
+  updateGraphics();
+  maybeFlashGoal();
+}
+
+function ingestPacket(d) {
+  if (!d || typeof d !== 'object') return;
+  if (d.football) return ingestFootball(d.football);
+  // also accept the bare football object (matches localStorage shape)
+  if (d.homeTeam !== undefined || d.homeScore !== undefined) {
+    return ingestFootball(d);
+  }
+}
+
+/* ============================================================
+   LIVE SOURCES
+   ============================================================ */
+
+/* ---------- 1. instant bootstrap from localStorage ---------- */
+try {
+  const raw = localStorage.getItem('brklive19_football')
+           || localStorage.getItem('brklive19_liveSport');
+  if (raw) ingestPacket(JSON.parse(raw));
+} catch (e) { /* ignore */ }
+
+/* ---------- 2. BroadcastChannel (fastest, same-origin) ---------- */
+let bc = null;
+try {
+  bc = new BroadcastChannel('BRKLIVE19_LIVE');
+  bc.onmessage = (ev) => ingestPacket(ev.data);
+} catch (e) {
+  console.warn('BroadcastChannel unavailable.', e);
+}
+
+/* ---------- 3. localStorage `storage` event (other tabs) ---------- */
+window.addEventListener('storage', (ev) => {
+  if (!ev.key) return;
+  if (ev.key === 'brklive19_football' || ev.key === 'brklive19_liveSport') {
+    try { ingestPacket(JSON.parse(ev.newValue)); } catch (e) { /* ignore */ }
+  }
+  if (ev.key === 'brklive19_football_broadcast') {
+    try {
+      const b = JSON.parse(ev.newValue);
+      if (b) { state.broadcast = { ...state.broadcast, ...b }; updateGraphics(); }
+    } catch (e) { /* ignore */ }
+  }
+  if (ev.key === 'brklive19_football_colors') {
+    try {
+      const c = JSON.parse(ev.newValue);
+      if (c) { state.colors = { ...state.colors, ...c }; applyColors(); }
+    } catch (e) { /* ignore */ }
+  }
+});
+
+/* ---------- 4. Firebase (works across devices / networks) ---------- */
+if (db) {
+  try {
+    onValue(ref(db, 'footballLiveScore'), (snap) => {
+      const v = snap.val();
+      if (v) ingestPacket(v);
+    });
+  } catch (e) {
+    console.warn('Firebase listen failed.', e);
+  }
+}
+
+/* ============================================================
+   RENDER LOOPS
+   ============================================================ */
+
+/* smooth clock tick (100ms) */
+setInterval(renderClock, 100);
+
+/* safety net: if nothing arrives via BC/Firebase for a while,
+   re-read localStorage every 2s so the overlay never goes stale. */
+setInterval(() => {
+  try {
+    const raw = localStorage.getItem('brklive19_football')
+             || localStorage.getItem('brklive19_liveSport');
+    if (raw) {
+      const fb = JSON.parse(raw);
+      if (fb && fb.updatedAt && fb.updatedAt !== lastUpdated) {
+        ingestPacket(fb);
+      }
+    }
+  } catch (e) { /* ignore */ }
+}, 2000);
+
+/* ---------- initial paint ---------- */
+applyColors();
+renderScoreboard();
+renderPenalty();
+renderClock();
+updateGraphics();
+
+console.log('%cBRKLIVE19 Football Overlay ready', 'color:#53e89a;font-weight:900;');
+</script>
+</body>
+</html>
