@@ -66,9 +66,9 @@ function penaltyKick(result){
   $('penActive').value=t==='A'?'B':'A';$('penShooter').value='';publishPenalty();
 }
 $('shootoutToggle').addEventListener('click',()=>{const p=$('shootoutPanel');p.style.display=p.style.display==='none'?'block':'none';if(p.style.display==='block')p.scrollIntoView({behavior:'smooth',block:'nearest'});});
-function getShootoutOverlayUrl(){const configured=$('shootoutLink')?.dataset.hostedUrl?.trim();if(configured){try{return new URL(configured,location.href).href}catch(e){}}const u=new URL('/BRKLIVE19_penalty_shootout_overlay_neon_arena.html',location.origin);return u.href}
-function refreshShootoutLink(){const field=$('shootoutLink');if(!field.value.trim())field.value=getShootoutOverlayUrl()}
-$('shootoutLink').addEventListener('change',()=>{const field=$('shootoutLink');try{const parsed=new URL(field.value.trim(),location.href);field.dataset.hostedUrl=parsed.href;field.value=parsed.href;$('shootoutLinkStatus').textContent='Custom shootout overlay URL saved in this controller session.'}catch(e){$('shootoutLinkStatus').textContent='Enter a valid full overlay URL.'}})
+function getShootoutOverlayUrl(){const field=$('shootoutLink');const entered=field?.value?.trim();if(entered){try{return new URL(entered,location.href).href}catch(e){}}return 'https://www.brklive19.in/BRKLIVE19_penalty_shootout_overlay_neon_arena.html'}
+function refreshShootoutLink(){const field=$('shootoutLink');if(!field.value.trim())field.value='https://www.brklive19.in/BRKLIVE19_penalty_shootout_overlay_neon_arena.html'}
+$('shootoutLink').addEventListener('change',()=>{const field=$('shootoutLink');try{const parsed=new URL(field.value.trim(),location.href);field.value=parsed.href;$('shootoutLinkStatus').textContent='URL set. If opening it still shows 404, upload the overlay HTML to this exact hosting path.'}catch(e){$('shootoutLinkStatus').textContent='Enter a valid full overlay URL.'}})
 refreshShootoutLink();
 $('shootoutOpen').addEventListener('click',()=>{const field=$('shootoutLink');const url=field.value.trim()||getShootoutOverlayUrl();window.open(url,'_blank')});
 $('shootoutCopy').addEventListener('click',async()=>{const url=$('shootoutLink').value.trim()||getShootoutOverlayUrl();$('shootoutLink').value=url;try{await navigator.clipboard.writeText(url);$('shootoutLinkStatus').textContent='Shootout overlay link copied. Paste it into OBS Browser Source.'}catch(e){$('shootoutLink').focus();$('shootoutLink').select();$('shootoutLinkStatus').textContent='Link selected. Press Ctrl+C to copy it, then paste into OBS Browser Source.'}});
