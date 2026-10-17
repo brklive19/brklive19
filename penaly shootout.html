@@ -107,4 +107,31 @@ function syncFromController(){
 window.addEventListener('storage',e=>{if(e.key==='brklive19_penalty_shootout')syncFromController()});
 setInterval(syncFromController,500);
 syncFromController();
-</script></body></html>
+</script>
+<script type="module">
+// Separate Firebase channel for the penalty-shootout overlay. This does not
+// subscribe to footballLiveScore, so normal Football Overlay 2 cannot replace it.
+import { initializeApp, getApps } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
+import { getDatabase, ref, onValue } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js';
+const shootoutFirebaseConfig = {
+  apiKey: 'AIzaSyBLWq1bqJ32F2cg3mqYQ0uwXcS3zvTA3A4',
+  authDomain: 'brklive19-2bab4.firebaseapp.com',
+  databaseURL: 'https://brklive19-2bab4-default-rtdb.asia-southeast1.firebasedatabase.app',
+  projectId: 'brklive19-2bab4',
+  storageBucket: 'brklive19-2bab4.firebasestorage.app',
+  messagingSenderId: '294058533898',
+  appId: '1:294058533898:web:4996705937e969939cabf3'
+};
+try {
+  const app = getApps().find(a => a.name === 'brklive19PenaltyOverlay') || initializeApp(shootoutFirebaseConfig, 'brklive19PenaltyOverlay');
+  const db = getDatabase(app);
+  onValue(ref(db, 'footballPenaltyShootout'), snapshot => {
+    const value = snapshot.val();
+    if (!value) return;
+    try { localStorage.setItem('brklive19_penalty_shootout', JSON.stringify(value)); } catch (_) {}
+    if (typeof syncFromController === 'function') syncFromController();
+  }, error => console.warn('Penalty shootout Firebase listener error:', error));
+} catch (error) { console.warn('Penalty shootout Firebase setup failed:', error); }
+</script>
+
+</body></html>
