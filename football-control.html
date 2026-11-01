@@ -38,7 +38,8 @@ const db=getDatabase(initializeApp(cfg)),live=ref(db,'footballLiveScore');
 const $=id=>document.getElementById(id);
 
 // Penalty shootout controller: stores results in localStorage and publishes them for the overlay.
-const penaltyState={A:[],B:[]};let penaltyFinished=false;
+const penaltyState={A:[],B:[]};let penaltyFinished=false;let shootoutEnabled=false;let periodBeforeShootout='2H';
+try{const prior=JSON.parse(localStorage.getItem('brklive19_penalty_shootout')||'null');if(prior){penaltyState.A=Array.isArray(prior.kicks?.A)?prior.kicks.A:[];penaltyState.B=Array.isArray(prior.kicks?.B)?prior.kicks.B:[];penaltyFinished=!!prior.finished;shootoutEnabled=!!prior.enabled;if(prior.teamA)$('penTeamA').value=prior.teamA;if(prior.teamB)$('penTeamB').value=prior.teamB;}}catch(e){}
 const penGoals=t=>penaltyState[t].filter(x=>x.result==='goal').length;
 function publishPenalty(){
   const payload={sport:'football',penaltyShootout:{
@@ -65,9 +66,18 @@ function penaltyKick(result){
   penaltyState[t].push({result,shooter:$('penShooter').value.trim(),round:Number($('penRound').value)||1,at:Date.now()});
   $('penActive').value=t==='A'?'B':'A';$('penShooter').value='';publishPenalty();
 }
-$('shootoutToggle').addEventListener('click',()=>{const p=$('shootoutPanel');p.style.display=p.style.display==='none'?'block':'none';if(p.style.display==='block')p.scrollIntoView({behavior:'smooth',block:'nearest'});});
-function getShootoutOverlayUrl(){const field=$('shootoutLink');const entered=field?.value?.trim();if(entered){try{return new URL(entered,location.href).href}catch(e){}}return 'https://www.brklive19.in/BRKLIVE19_penalty_shootout_overlay_neon_arena.html'}
-function refreshShootoutLink(){const field=$('shootoutLink');if(!field.value.trim())field.value='https://www.brklive19.in/BRKLIVE19_penalty_shootout_overlay_neon_arena.html'}
+$('shootoutToggle').addEventListener('click',()=>{
+  const p=$('shootoutPanel');
+  const opening=p.style.display==='none';
+  p.style.display=opening?'block':'none';
+  shootoutEnabled=opening;
+  if(opening){periodBeforeShootout=$('period').value;$('period').value='PEN';$('shootoutToggle').textContent='⚽ SHOOTOUT ON';}
+  else {if($('period').value==='PEN')$('period').value=periodBeforeShootout||'2H';$('shootoutToggle').textContent='⚽ SHOOTOUT';}
+  syncNow();
+  publishPenalty();
+});
+function getShootoutOverlayUrl(){const field=$('shootoutLink');const entered=field?.value?.trim();if(entered){try{return new URL(entered,location.href).href}catch(e){}}const u=new URL(location.href);u.pathname=u.pathname.replace(/[^/]*$/,'football-overlay-fixed.html');u.search='';u.hash='';return u.href}
+function refreshShootoutLink(){const field=$('shootoutLink');if(!field.value.trim())field.value=getShootoutOverlayUrl()}
 $('shootoutLink').addEventListener('change',()=>{const field=$('shootoutLink');try{const parsed=new URL(field.value.trim(),location.href);field.value=parsed.href;$('shootoutLinkStatus').textContent='URL set. If opening it still shows 404, upload the overlay HTML to this exact hosting path.'}catch(e){$('shootoutLinkStatus').textContent='Enter a valid full overlay URL.'}})
 refreshShootoutLink();
 $('shootoutOpen').addEventListener('click',()=>{const field=$('shootoutLink');const url=field.value.trim()||getShootoutOverlayUrl();window.open(url,'_blank')});
@@ -144,7 +154,7 @@ async function send(){syncNow();$('status').textContent='LIVE SCORE UPDATED'}
 $('applyColors').onclick=()=>{colors={primary:$('primaryColor').value,accent:$('accentColor').value,score:$('scoreColor').value,goal:$('goalColor').value};localStorage.setItem('brklive19_football_colors',JSON.stringify(colors));syncNow()};
 $('save').onclick=send;
 ['home','away','period','added'].forEach(id=>{$(id).addEventListener('change',syncNow);$(id).addEventListener('input',()=>{render();publishLocal()})});
-const overlayUrl=()=>{const u=new URL(location.href);u.pathname=u.pathname.replace(/[^/]*$/,'football-overlay.html');u.search='';u.hash='';return u.href};
+const overlayUrl=()=>{const u=new URL(location.href);u.pathname=u.pathname.replace(/[^/]*$/,'football-overlay-fixed.html');u.search='';u.hash='';return u.href};
 const overlayUrl2=()=>{const u=new URL(location.href);u.pathname=u.pathname.replace(/[^/]*$/,'football%20overlayer%202%20(1).html');u.search='';u.hash='';return u.href};
 $('openOverlay').onclick=()=>window.open(overlayUrl(),'_blank');
 $('copyOverlay').onclick=()=>navigator.clipboard.writeText(overlayUrl()).then(()=>alert('Overlay link 1 copied'));
@@ -193,4 +203,45 @@ pre, textarea {
 }
 
 </style>
+
+<style id="BRKLIVE19-COMPACT-CONTROL">
+*{box-sizing:border-box}
+body{padding:7px!important;font-size:12px!important}
+.wrap{max-width:1600px!important;width:100%;margin:0 auto}
+h1{font-size:20px!important;margin:3px 0 7px!important}
+h2{font-size:14px!important;margin:2px 0 7px!important}
+h3{font-size:12px!important}
+.card{padding:8px!important;margin:0!important;border-radius:11px!important;box-shadow:0 5px 16px #0006!important}
+label{font-size:10px!important;margin-top:4px!important}
+input,select{padding:6px 8px!important;margin:2px 0!important;font-size:12px!important;min-height:29px}
+.btn{padding:7px 6px!important;margin-top:4px!important;font-size:11px!important;border-radius:7px!important;min-height:30px}
+.grid{gap:6px!important}
+.score{font-size:38px!important}
+.timer{font-size:30px!important}
+.status{padding:6px!important;margin-top:5px!important;font-size:10px}
+.links{gap:5px!important}
+.wrap{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;align-items:start}
+.wrap>h1{grid-column:1/-1}
+.wrap>.card:nth-of-type(1){grid-column:1}
+.wrap>.grid{grid-column:2}
+.wrap>.card:nth-of-type(3){grid-column:3}
+.wrap>.card:nth-of-type(4){grid-column:1}
+.wrap>.card:nth-of-type(5){grid-column:2}
+.wrap>.card:nth-of-type(6){grid-column:3}
+.wrap>.card:nth-of-type(7){grid-column:1/-1}
+#shootoutPanel{grid-column:1/-1}
+#shootoutPanel[style*="display: block"]{display:block!important;position:fixed;inset:10px;z-index:999;overflow:auto;max-height:calc(100vh - 20px);background:#07131f}
+#shootoutPanel .grid{gap:5px!important}
+#shootoutPanel input[type=color]{height:28px!important;padding:2px!important}
+@media(max-width:1000px){
+ body{overflow-y:auto!important}
+ .wrap{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}
+ .wrap>h1{grid-column:1/-1}
+ .wrap>.card,.wrap>.grid{grid-column:auto!important}
+ .wrap>.card:nth-of-type(6),#shootoutPanel{grid-column:1/-1!important}
+}
+@media(max-width:620px){.wrap{grid-template-columns:1fr}.wrap>h1,.wrap>.card,.wrap>.grid,#shootoutPanel{grid-column:1!important}}
+@media(min-width:1001px){html,body{height:100vh!important;overflow:hidden!important}.wrap{height:calc(100vh - 14px);grid-template-rows:auto auto auto auto;overflow:hidden}.wrap>.card{min-height:0;overflow:visible}.wrap>.grid{min-height:0}}
+</style>
+
 </html>
