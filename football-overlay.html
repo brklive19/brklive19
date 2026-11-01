@@ -239,6 +239,7 @@
   .pen-score { transition: transform .18s ease; }
   .pen-score.bump { transform: scale(1.35); }
 
+  .pen-kicks{display:flex;align-items:center;justify-content:center;padding:0 12px;background:rgba(4,12,22,.88);color:#d9e8f4;font-size:10px;font-weight:900;letter-spacing:1px;white-space:nowrap}
   .pen-label {
     display: flex;
     align-items: center;
@@ -451,6 +452,7 @@
 
   /* ============ RESPONSIVE ============ */
   @media (max-width: 700px) {
+    .penalty-row{max-width:calc(100vw - 24px)}
     .scoreboard-wrap { top: 12px; left: 12px; }
     .scoreboard { height: 54px; }
     .team-block { padding: 0 12px; font-size: 15px; min-width: 80px; }
@@ -461,6 +463,7 @@
     .pen-team { padding: 0 10px; font-size: 11px; min-width: 80px; }
     .pen-score-group { padding: 0 10px; font-size: 15px; min-width: 70px; }
     .pen-label { padding: 0 10px; font-size: 9px; letter-spacing: 1px; }
+    .pen-kicks{padding:0 7px;font-size:8px}
     .lower-third { left: 12px; bottom: 20px; height: 54px; }
     .lt-body { padding: 0 14px; min-width: 180px; }
     .lt-text { font-size: 16px; }
@@ -514,7 +517,7 @@
       </div>
 
       <div class="pen-team away" id="penAwayName">AWAY</div>
-
+      <div class="pen-kicks" id="penKickDetails">KICKS 0 / 0</div>
       <div class="pen-label">PENS</div>
     </div>
 
@@ -633,6 +636,7 @@ const state = {
   homePenalty: 0,
   awayPenalty: 0,
   penaltyActive: false,
+  penaltyShootout: null,
   colors: {
     primary: '#087d4b',
     accent:  '#53e89a',
@@ -725,26 +729,17 @@ function renderScoreboard() {
 /* ---------- penalty shootout ---------- */
 function renderPenalty() {
   const row = $('penaltyRow');
+  const p = state.penaltyShootout || {};
   const active = !!state.penaltyActive;
-
-  // always keep names + values up to date (in case penalties start later)
-  $('penHomeName').textContent = state.homeTeam || 'HOME';
-  $('penAwayName').textContent = state.awayTeam || 'AWAY';
-
-  const hp = Number(state.homePenalty) || 0;
-  const ap = Number(state.awayPenalty) || 0;
-
-  if (hp !== lastHomePen) {
-    $('penHomeScore').textContent = hp;
-    if (lastHomePen >= 0 && active) bump($('penHomeScore'));
-    lastHomePen = hp;
-  }
-  if (ap !== lastAwayPen) {
-    $('penAwayScore').textContent = ap;
-    if (lastAwayPen >= 0 && active) bump($('penAwayScore'));
-    lastAwayPen = ap;
-  }
-
+  $('penHomeName').textContent = p.teamA || state.homeTeam || 'HOME';
+  $('penAwayName').textContent = p.teamB || state.awayTeam || 'AWAY';
+  const hp = p.scoreA != null ? Number(p.scoreA)||0 : Number(state.homePenalty)||0;
+  const ap = p.scoreB != null ? Number(p.scoreB)||0 : Number(state.awayPenalty)||0;
+  if (hp !== lastHomePen) {$('penHomeScore').textContent=hp;if(lastHomePen>=0&&active)bump($('penHomeScore'));lastHomePen=hp;}
+  if (ap !== lastAwayPen) {$('penAwayScore').textContent=ap;if(lastAwayPen>=0&&active)bump($('penAwayScore'));lastAwayPen=ap;}
+  const ka=Array.isArray(p.kicks?.A)?p.kicks.A:[];
+  const kb=Array.isArray(p.kicks?.B)?p.kicks.B:[];
+  $('penKickDetails').textContent = p.finished ? (p.result || 'SHOOTOUT COMPLETE') : `KICKS ${ka.length} / ${kb.length}`;
   row.classList.toggle('show', active);
 }
 
@@ -933,8 +928,19 @@ function ingestFootball(fb) {
   maybeFlashGoal();
 }
 
+function ingestPenalty(p) {
+  if(!p || typeof p!=='object') return;
+  state.penaltyShootout=p;
+  state.penaltyActive = p.enabled !== undefined ? !!p.enabled : true;
+  state.homePenalty=Number(p.scoreA)||0;
+  state.awayPenalty=Number(p.scoreB)||0;
+  if(p.teamA) state.homeTeam=p.teamA;
+  if(p.teamB) state.awayTeam=p.teamB;
+  renderPenalty();
+}
 function ingestPacket(d) {
   if (!d || typeof d !== 'object') return;
+  if (d.penaltyShootout) ingestPenalty(d.penaltyShootout);
   if (d.football) return ingestFootball(d.football);
   // also accept the bare football object (matches localStorage shape)
   if (d.homeTeam !== undefined || d.homeScore !== undefined) {
@@ -951,6 +957,8 @@ try {
   const raw = localStorage.getItem('brklive19_football')
            || localStorage.getItem('brklive19_liveSport');
   if (raw) ingestPacket(JSON.parse(raw));
+  const penRaw=localStorage.getItem('brklive19_penalty_shootout');
+  if(penRaw) ingestPenalty(JSON.parse(penRaw));
 } catch (e) { /* ignore */ }
 
 /* ---------- 2. BroadcastChannel (fastest, same-origin) ---------- */
@@ -980,6 +988,9 @@ window.addEventListener('storage', (ev) => {
       if (c) { state.colors = { ...state.colors, ...c }; applyColors(); }
     } catch (e) { /* ignore */ }
   }
+  if (ev.key === 'brklive19_penalty_shootout') {
+    try { ingestPenalty(JSON.parse(ev.newValue)); } catch(e) {}
+  }
 });
 
 /* ---------- 4. Firebase (works across devices / networks) ---------- */
@@ -988,6 +999,10 @@ if (db) {
     onValue(ref(db, 'footballLiveScore'), (snap) => {
       const v = snap.val();
       if (v) ingestPacket(v);
+    });
+    onValue(ref(db, 'footballPenaltyShootout'), (snap) => {
+      const p=snap.val();
+      if(p) ingestPenalty(p);
     });
   } catch (e) {
     console.warn('Firebase listen failed.', e);
