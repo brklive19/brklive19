@@ -473,6 +473,245 @@
     .change-body { flex-direction: column; gap: 8px; padding: 10px 16px; }
     .change-arrow { transform: rotate(90deg); }
   }
+
+  /* ============ DEDICATED PENALTY SHOOTOUT GRAPHIC ============ */
+  .scoreboard-wrap { gap: 0; }
+  .penalty-row {
+    position: fixed;
+    left: 50%;
+    top: 18%;
+    width: min(1040px, calc(100vw - 48px));
+    height: auto;
+    min-height: 190px;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid rgba(95,210,255,.55);
+    border-radius: 18px;
+    overflow: hidden;
+    opacity: 0;
+    transform: translate(-50%, -12px) scale(.97);
+    background: linear-gradient(135deg, rgba(3,12,30,.97), rgba(7,35,65,.97) 55%, rgba(2,12,28,.98));
+    box-shadow: 0 20px 65px rgba(0,0,0,.62), 0 0 35px rgba(0,170,255,.20), inset 0 1px 0 rgba(255,255,255,.12);
+    pointer-events: none;
+    transition: opacity .35s ease, transform .35s ease;
+  }
+  .penalty-row.show {
+    opacity: 1;
+    transform: translate(-50%, 0) scale(1);
+  }
+  .penalty-heading {
+    min-height: 42px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:12px;
+    color:#f6fbff;
+    font-size:17px;
+    font-weight:1000;
+    letter-spacing:3px;
+    background:linear-gradient(90deg,#07152e,#0b4774,#07152e);
+    border-bottom:1px solid rgba(90,205,255,.35);
+  }
+  .penalty-live-dot { width:9px;height:9px;border-radius:50%;background:#ff3d55;box-shadow:0 0 12px #ff3d55;animation:pulse 1s infinite; }
+  .penalty-stage { color:#69ddff;font-size:10px;letter-spacing:1.5px;margin-left:10px; }
+  .penalty-main { display:grid;grid-template-columns:minmax(0,1fr) 230px minmax(0,1fr);align-items:stretch;min-height:145px; }
+  .pen-team {
+    min-width:0;
+    padding:18px 24px;
+    font-size:clamp(15px,2vw,24px);
+    letter-spacing:1.5px;
+    background:transparent!important;
+    color:#f5faff!important;
+    border:0!important;
+    border-radius:0!important;
+    white-space:normal;
+    overflow-wrap:anywhere;
+    text-shadow:0 2px 10px rgba(0,0,0,.6);
+  }
+  .pen-team.home { justify-content:flex-start;border-left:6px solid #19bfff!important; }
+  .pen-team.away { justify-content:flex-end;border-right:6px solid #ffbd4a!important; }
+  .pen-score-group {
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:18px;
+    padding:10px 14px;
+    background:rgba(0,0,0,.38);
+    color:#fff;
+    font-size:clamp(38px,5vw,62px);
+    font-weight:1000;
+    font-variant-numeric:tabular-nums;
+    text-shadow:0 0 20px rgba(52,202,255,.3);
+  }
+  .pen-score { min-width:40px;text-align:center; }
+  .pen-score-group .sep { color:#7cdfff;font-size:35px;opacity:.8; }
+  .pen-kicks {
+    grid-column:1 / 3;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    min-height:34px;
+    color:#bfeeff;
+    background:rgba(0,0,0,.35);
+    font-size:12px;
+    font-weight:900;
+    letter-spacing:2px;
+    border-top:1px solid rgba(255,255,255,.08);
+  }
+  .pen-label {
+    grid-column:3;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:#071629;
+    background:linear-gradient(90deg,#ffd36a,#ffab37);
+    font-size:11px;
+    font-weight:1000;
+    letter-spacing:2px;
+  }
+  @media(max-width:620px) {
+    .penalty-row { top:12%;width:calc(100vw - 20px);min-height:150px;border-radius:12px; }
+    .penalty-heading { min-height:34px;font-size:12px;letter-spacing:1.5px;gap:7px; }
+    .penalty-stage { font-size:8px;margin-left:2px; }
+    .penalty-main { grid-template-columns:minmax(0,1fr) 110px minmax(0,1fr);min-height:112px; }
+    .pen-team { padding:10px 8px;font-size:12px;letter-spacing:.5px; }
+    .pen-score-group { gap:7px;padding:6px;font-size:34px; }
+    .pen-score-group .sep { font-size:22px; }
+    .pen-kicks { font-size:9px;letter-spacing:1px; }
+    .pen-label { font-size:8px;letter-spacing:1px; }
+  }
+
+
+/* BRKLIVE19 cinematic penalty shootout design */
+html,body{width:100%;height:100%;margin:0;overflow:hidden;background:transparent!important}
+.scoreboard-wrap{position:fixed;inset:0;width:100vw;height:100vh;pointer-events:none}
+.penalty-row{position:absolute!important;left:0!important;top:0!important;width:100vw!important;height:100vh!important;min-height:0!important;max-width:none!important;padding:0!important;box-sizing:border-box;display:flex!important;flex-direction:column;justify-content:flex-start;align-items:center;overflow:hidden!important;border:0!important;border-radius:0!important;opacity:0;transform:scale(.985);background:radial-gradient(ellipse at 50% 72%,rgba(11,91,71,.96) 0%,rgba(3,33,46,.96) 33%,rgba(2,11,29,.98) 72%)!important;box-shadow:none!important;transition:opacity .45s ease,transform .45s ease;isolation:isolate}
+.penalty-row.show{opacity:1;transform:scale(1)}
+.penalty-row:before{content:"";position:absolute;inset:0;z-index:-2;background:linear-gradient(90deg,rgba(0,132,255,.34),transparent 42%,rgba(255,24,55,.32)),repeating-linear-gradient(0deg,transparent 0 7%,rgba(255,255,255,.025) 7.1% 7.3%),radial-gradient(ellipse at 50% 110%,rgba(44,255,150,.28),transparent 52%)}
+.penalty-row:after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(0,0,0,.05),transparent 55%,rgba(0,0,0,.25));pointer-events:none}
+.arena-lights{position:absolute;top:0;left:0;right:0;height:25%;background:radial-gradient(ellipse at 8% 0%,rgba(0,183,255,.65),transparent 28%),radial-gradient(ellipse at 92% 0%,rgba(255,35,60,.58),transparent 28%);filter:blur(10px);z-index:-1}
+.ps-brand{margin-top:2.2vh;display:flex;align-items:center;gap:12px;color:#fff;font-size:clamp(17px,2.5vw,34px);font-weight:1000;font-style:italic;text-shadow:0 3px 14px #000;letter-spacing:1px}
+.ps-brand small{font-size:clamp(8px,.9vw,13px);letter-spacing:3px;background:linear-gradient(90deg,#101c34,#283d5c,#101c34);padding:7px 18px;border-radius:4px;margin-left:10px}
+.ps-play{display:grid;place-items:center;width:clamp(28px,3.5vw,48px);height:clamp(22px,2.8vw,36px);border-radius:9px;background:#f21d32;color:white;font-size:18px;font-style:normal;box-shadow:0 0 20px #ff304a}
+.ps-title{margin-top:2.1vh;width:min(78vw,1250px);min-height:12vh;display:flex;align-items:center;justify-content:center;position:relative;color:#fff;font-size:clamp(25px,5.3vw,76px);font-weight:1000;font-style:italic;letter-spacing:1px;text-align:center;text-shadow:0 4px 2px #111,0 0 24px rgba(255,255,255,.28);background:linear-gradient(100deg,#052b72,#071a3c 48%,#7e0718);border:4px solid #c6a45b;clip-path:polygon(3% 0,97% 0,100% 50%,97% 100%,3% 100%,0 50%);box-shadow:0 12px 35px #000}
+.ps-title b{position:absolute;bottom:-2.3vh;left:50%;transform:translateX(-50%);padding:5px 30px;background:linear-gradient(#ff3b42,#a90019);border:2px solid #ffd46d;border-radius:8px;font-size:clamp(13px,1.8vw,24px);font-style:normal;letter-spacing:2px;box-shadow:0 5px 18px #000}
+.ps-title b i{display:inline-block;width:9px;height:9px;border-radius:50%;background:#fff;margin-right:7px;box-shadow:0 0 12px white;animation:pulse 1s infinite}
+.ps-scorebar{margin-top:5.2vh;width:100%;min-height:18vh;display:grid;grid-template-columns:minmax(0,1fr) minmax(190px,22vw) minmax(0,1fr);align-items:center;position:relative;background:linear-gradient(90deg,rgba(0,92,218,.95),rgba(2,20,50,.96) 48%,rgba(130,0,15,.96));border-top:4px solid #48cfff;border-bottom:4px solid #ff5366;box-shadow:0 8px 30px #000}
+.ps-team{display:flex;align-items:center;justify-content:center;gap:clamp(8px,2vw,28px);min-width:0;color:#fff;font-size:clamp(14px,3vw,43px);font-weight:1000;text-transform:uppercase;text-shadow:0 3px 8px #000;padding:8px 12px;overflow-wrap:anywhere;text-align:center}
+.ps-crest{flex:0 0 auto;width:clamp(42px,7vw,100px);height:clamp(48px,8vw,115px);display:grid;place-items:center;font-size:clamp(24px,4vw,54px);background:linear-gradient(145deg,#07172e,#122f56);border:4px solid #d5ad53;clip-path:polygon(50% 0,96% 18%,90% 75%,50% 100%,10% 75%,4% 18%);filter:drop-shadow(0 5px 9px #000)}
+.ps-away .ps-crest{background:linear-gradient(145deg,#420a19,#170b20);border-color:#e7a84e}
+.ps-score{height:13vh;min-height:80px;display:flex;align-items:center;justify-content:center;gap:clamp(8px,2vw,28px);background:linear-gradient(145deg,#fff,#aeb9c7);color:#08111e;border:4px solid #fff;border-radius:18px;box-shadow:0 7px 25px #000;font-size:clamp(42px,7vw,100px);font-weight:1000;font-variant-numeric:tabular-nums}
+.ps-score em{font-style:normal;font-size:.65em;color:#29384a}
+.ps-kickboard{width:min(86vw,1450px);margin-top:3.2vh;padding:1.2vh 1.8vw 1.5vh;background:linear-gradient(145deg,rgba(2,11,23,.97),rgba(9,21,34,.97));border:5px solid #c99b4c;border-radius:30px;box-shadow:0 14px 35px #000,inset 0 0 18px rgba(255,255,255,.08);box-sizing:border-box}
+.ps-rounds,.ps-kick-row{display:grid;grid-template-columns:minmax(130px,28%) 1fr;align-items:center;gap:10px;min-height:8vh;border-bottom:1px solid rgba(255,255,255,.24)}
+.ps-rounds{min-height:5vh}.ps-round-list{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:clamp(5px,1.5vw,22px);align-items:center;text-align:center;color:#fff;font-size:clamp(15px,2.5vw,34px);font-weight:1000}
+.ps-kick-team{padding:10px 12px;color:#fff;font-size:clamp(13px,2.5vw,34px);font-weight:1000;text-align:center;background:linear-gradient(90deg,#064cae,#09255b);border:2px solid #168bff;clip-path:polygon(5% 0,100% 0,95% 100%,0 100%)}
+.ps-kick-row.away .ps-kick-team{background:linear-gradient(90deg,#9b0a20,#4d0718);border-color:#ff334c}
+.ps-kick-row.away{border-bottom:0}
+.ps-kick{width:clamp(32px,5.5vw,76px);height:clamp(32px,5.5vw,76px);margin:auto;border-radius:50%;display:grid;place-items:center;font-size:clamp(20px,3.7vw,48px);font-weight:1000;background:#343a42;color:#e5e7eb;box-shadow:inset 0 2px 8px #000,0 2px 8px #000}
+.ps-kick.goal{background:radial-gradient(circle at 35% 25%,#6aff7b,#00a72b 65%,#005b17);color:white;border:2px solid #6aff7b;box-shadow:0 0 16px #00ef42,inset 0 2px 5px #fff8}
+.ps-kick.miss{background:radial-gradient(circle at 35% 25%,#ff6d75,#c90020 65%,#62000c);color:white;border:2px solid #ff5a64;box-shadow:0 0 16px #ff102d,inset 0 2px 5px #fff8}
+.ps-kick.pending{background:#343a42;color:#eee}
+.ps-status{margin-top:1.8vh;padding:1vh 2vw;color:#fff;font-size:clamp(15px,2.6vw,35px);font-weight:1000;letter-spacing:2px;text-align:center;text-shadow:0 2px 10px #000;background:linear-gradient(90deg,transparent,#071c48 20%,#071c48 80%,transparent)}
+.penalty-stage{position:absolute!important;top:auto!important;left:auto!important;bottom:1.5vh!important;color:#9ceaff!important;font-size:clamp(9px,1.2vw,16px)!important;letter-spacing:3px}
+.ps-pitch{position:absolute;bottom:-13vh;left:-5vw;right:-5vw;height:27vh;z-index:-1;opacity:.75;background:repeating-linear-gradient(90deg,rgba(30,200,110,.12) 0 8%,rgba(0,0,0,.08) 8% 16%),linear-gradient(0deg,#0c6339,#073b2b 70%,transparent);transform:perspective(300px) rotateX(12deg);border-top:2px solid rgba(210,255,220,.4)}
+@media(max-width:700px){.ps-brand{margin-top:2vh;gap:6px}.ps-brand small{display:none}.ps-title{width:94vw;min-height:9vh;margin-top:2vh}.ps-scorebar{margin-top:5vh;grid-template-columns:minmax(0,1fr) 25vw minmax(0,1fr);min-height:15vh}.ps-team{font-size:clamp(11px,3vw,19px);gap:4px;padding:4px}.ps-crest{width:30px;height:36px;border-width:2px}.ps-score{min-height:58px;height:8vh;font-size:clamp(32px,8vw,54px);gap:4px;border-radius:10px}.ps-kickboard{width:96vw;margin-top:3vh;padding:8px;border-width:3px;border-radius:16px}.ps-rounds,.ps-kick-row{grid-template-columns:minmax(80px,27%) 1fr;gap:4px;min-height:8vh}.ps-rounds{min-height:4vh}.ps-round-list{gap:3px;font-size:clamp(12px,3vw,19px)}.ps-kick-team{font-size:clamp(10px,2.8vw,17px);padding:7px 2px}.ps-kick{width:clamp(25px,7vw,42px);height:clamp(25px,7vw,42px);font-size:clamp(16px,4vw,25px)}.ps-status{font-size:clamp(11px,3vw,19px);letter-spacing:1px}.penalty-stage{bottom:1vh!important}}
+@media(min-aspect-ratio:19/9){.ps-kickboard{margin-top:2vh}.ps-scorebar{min-height:16vh}}
+
+
+
+/* LOWER-THIRD PENALTY SHOOTOUT: compact broadcast strip */
+html,body{width:100%;height:100%;margin:0;overflow:hidden;background:transparent!important}
+.scoreboard-wrap{position:fixed;inset:0;width:100vw;height:100vh;pointer-events:none}
+#penaltyRow{
+ position:absolute!important;left:50%!important;top:auto!important;bottom:3.2vh!important;
+ transform:translate(-50%,14px)!important;width:min(1120px,94vw)!important;height:auto!important;min-height:0!important;
+ max-width:94vw!important;padding:0!important;box-sizing:border-box;display:flex!important;flex-direction:column!important;
+ justify-content:flex-start!important;align-items:stretch!important;overflow:hidden!important;
+ border:1px solid rgba(117,207,255,.8)!important;border-radius:13px!important;opacity:0;
+ background:linear-gradient(110deg,rgba(3,22,53,.97),rgba(4,12,29,.98) 50%,rgba(62,5,22,.97))!important;
+ box-shadow:0 8px 30px rgba(0,0,0,.58),0 0 18px rgba(0,156,255,.2)!important;
+ transition:opacity .28s ease,transform .28s ease;isolation:isolate
+}
+#penaltyRow.show{opacity:1;transform:translate(-50%,0)!important}
+#penaltyRow:before{content:"";position:absolute;inset:0;z-index:-2;background:linear-gradient(90deg,rgba(0,125,255,.19),transparent 48%,rgba(255,25,55,.19))}
+#penaltyRow:after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(255,255,255,.06),transparent 45%,rgba(0,0,0,.2));pointer-events:none}
+.arena-lights,.ps-pitch{display:none!important}
+.ps-brand{display:none!important}
+.ps-title{order:0!important;width:100%!important;min-height:27px!important;height:27px!important;margin:0!important;clip-path:none!important;border:0!important;border-radius:0!important;
+ background:linear-gradient(90deg,#073d7b,#071a35 50%,#760d22)!important;font-size:clamp(11px,1.25vw,16px)!important;
+ letter-spacing:2px!important;text-shadow:0 1px 4px #000!important;box-shadow:none!important}
+.ps-title b{position:static!important;transform:none!important;margin-left:10px!important;padding:3px 9px!important;font-size:9px!important;border:1px solid #ffbd65!important;border-radius:4px!important}
+.ps-title b i{width:6px!important;height:6px!important;margin-right:4px!important}
+.ps-scorebar{order:1!important;margin:0!important;width:100%!important;min-height:48px!important;height:48px!important;grid-template-columns:minmax(0,1fr) 110px minmax(0,1fr)!important;
+ border-top:1px solid rgba(61,185,255,.7)!important;border-bottom:1px solid rgba(255,75,95,.7)!important;box-shadow:none!important}
+.ps-team{font-size:clamp(11px,1.5vw,18px)!important;gap:7px!important;padding:4px 10px!important;white-space:nowrap!important;overflow:hidden!important}
+.ps-crest{width:25px!important;height:28px!important;font-size:15px!important;border-width:2px!important}
+.ps-score{height:38px!important;min-height:38px!important;border:1px solid #fff!important;border-radius:7px!important;font-size:clamp(22px,3vw,34px)!important;gap:8px!important;box-shadow:0 2px 8px #000!important}
+.ps-score em{font-size:15px!important}
+.ps-kickboard{order:2!important;width:100%!important;margin:0!important;padding:4px 10px 5px!important;border:0!important;border-radius:0!important;box-sizing:border-box!important;background:rgba(0,0,0,.34)!important;box-shadow:none!important}
+.ps-rounds,.ps-kick-row{grid-template-columns:minmax(105px,23%) minmax(0,1fr)!important;gap:7px!important;min-height:27px!important;height:27px!important;border-bottom:1px solid rgba(255,255,255,.13)!important}
+.ps-rounds{min-height:18px!important;height:18px!important}
+.ps-round-list{grid-template-columns:repeat(5,minmax(0,1fr))!important;gap:5px!important;font-size:11px!important}
+.ps-kick-team{font-size:clamp(9px,1.1vw,13px)!important;padding:4px 5px!important;clip-path:none!important;border-width:1px!important;border-radius:3px!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}
+.ps-kick{width:20px!important;height:20px!important;font-size:14px!important;border-width:1px!important;box-shadow:0 1px 5px #000!important}
+.ps-status{order:3!important;margin:0!important;padding:4px 8px!important;font-size:clamp(9px,1vw,12px)!important;letter-spacing:1.5px!important;background:linear-gradient(90deg,transparent,rgba(3,34,73,.9),transparent)!important}
+.penalty-stage{display:none!important}
+@media(max-width:520px){
+ #penaltyRow{width:96vw!important;max-width:96vw!important;bottom:2vh!important;border-radius:8px!important}
+ .ps-title{height:23px!important;min-height:23px!important;font-size:10px!important}
+ .ps-scorebar{grid-template-columns:minmax(0,1fr) 76px minmax(0,1fr)!important;height:42px!important;min-height:42px!important}
+ .ps-team{font-size:10px!important;padding:3px 4px!important;gap:3px!important}
+ .ps-crest{width:18px!important;height:21px!important;font-size:11px!important}
+ .ps-score{height:31px!important;min-height:31px!important;font-size:22px!important;gap:4px!important}
+ .ps-score em{font-size:12px!important}
+ .ps-kickboard{padding:3px 5px!important}
+ .ps-rounds,.ps-kick-row{grid-template-columns:minmax(75px,25%) minmax(0,1fr)!important;gap:3px!important;min-height:24px!important;height:24px!important}
+ .ps-rounds{height:15px!important;min-height:15px!important}
+ .ps-round-list{gap:2px!important;font-size:9px!important}
+ .ps-kick-team{font-size:8px!important;padding:3px 2px!important}
+ .ps-kick{width:17px!important;height:17px!important;font-size:12px!important}
+ .ps-status{font-size:8px!important;padding:3px!important;letter-spacing:.7px!important}
+}
+
+
+/* Controller-selected display mode and five/ten kick layouts */
+#scoreboard{display:none}
+#penaltyRow{display:none}
+#penaltyRow.show{display:flex!important}
+#penaltyRow.ten-kicks .ps-round-list{display:grid!important;grid-template-columns:repeat(10,minmax(0,1fr))!important;gap:3px!important;width:100%!important;min-width:0!important}
+#penaltyRow.ten-kicks .ps-kick{width:clamp(12px,1.35vw,19px)!important;height:clamp(12px,1.35vw,19px)!important;min-width:0!important;font-size:clamp(9px,.95vw,13px)!important;justify-self:center!important}
+#penaltyRow.ten-kicks .ps-rounds,#penaltyRow.ten-kicks .ps-kick-row{grid-template-columns:minmax(85px,18%) minmax(0,1fr)!important}
+@media(max-width:520px){#penaltyRow.ten-kicks .ps-round-list{gap:1px!important;grid-template-columns:repeat(10,minmax(0,1fr))!important}#penaltyRow.ten-kicks .ps-kick{width:clamp(10px,2.5vw,14px)!important;height:clamp(10px,2.5vw,14px)!important;font-size:9px!important}#penaltyRow.ten-kicks .ps-rounds,#penaltyRow.ten-kicks .ps-kick-row{grid-template-columns:minmax(58px,20%) minmax(0,1fr)!important}}
+
+
+/* Compact penalty lower-third height refinement */
+#penaltyRow{bottom:2.2vh!important;border-radius:9px!important}
+#penaltyRow .ps-title{height:21px!important;min-height:21px!important;font-size:clamp(9px,1vw,13px)!important;letter-spacing:1.3px!important}
+#penaltyRow .ps-title b{padding:2px 6px!important;font-size:8px!important}
+#penaltyRow .ps-scorebar{height:36px!important;min-height:36px!important;grid-template-columns:minmax(0,1fr) 88px minmax(0,1fr)!important}
+#penaltyRow .ps-team{padding:2px 7px!important;font-size:clamp(10px,1.2vw,15px)!important;gap:5px!important}
+#penaltyRow .ps-crest{width:20px!important;height:22px!important;font-size:12px!important}
+#penaltyRow .ps-score{height:29px!important;min-height:29px!important;font-size:clamp(19px,2.4vw,28px)!important}
+#penaltyRow .ps-kickboard{padding:2px 8px 3px!important}
+#penaltyRow .ps-rounds,#penaltyRow .ps-kick-row{height:20px!important;min-height:20px!important;gap:4px!important}
+#penaltyRow .ps-rounds{height:14px!important;min-height:14px!important}
+#penaltyRow .ps-kick-team{padding:2px 4px!important;font-size:clamp(8px,.9vw,11px)!important}
+#penaltyRow .ps-kick{width:16px!important;height:16px!important;font-size:11px!important}
+#penaltyRow .ps-status{padding:2px 6px!important;font-size:clamp(8px,.85vw,10px)!important;letter-spacing:1px!important}
+#penaltyRow.ten-kicks .ps-kick{width:clamp(11px,1.1vw,15px)!important;height:clamp(11px,1.1vw,15px)!important;font-size:clamp(8px,.75vw,10px)!important}
+@media(max-width:520px){
+ #penaltyRow{bottom:1.5vh!important}
+ #penaltyRow .ps-title{height:19px!important;min-height:19px!important;font-size:9px!important}
+ #penaltyRow .ps-scorebar{height:32px!important;min-height:32px!important;grid-template-columns:minmax(0,1fr) 68px minmax(0,1fr)!important}
+ #penaltyRow .ps-score{height:26px!important;min-height:26px!important;font-size:19px!important}
+ #penaltyRow .ps-rounds,#penaltyRow .ps-kick-row{height:18px!important;min-height:18px!important}
+ #penaltyRow .ps-rounds{height:13px!important;min-height:13px!important}
+ #penaltyRow .ps-kick{width:14px!important;height:14px!important;font-size:10px!important}
+ #penaltyRow.ten-kicks .ps-kick{width:clamp(9px,2vw,12px)!important;height:clamp(9px,2vw,12px)!important;font-size:8px!important}
+}
+
 </style>
 </head>
 <body>
@@ -506,22 +745,25 @@
       </div>
     </div>
 
-    <!-- ===== PENALTY SHOOTOUT ROW ===== -->
+    <!-- ===== CINEMATIC PENALTY SHOOTOUT OVERLAY ===== -->
     <div class="penalty-row" id="penaltyRow">
-      <div class="pen-team home" id="penHomeName">HOME</div>
-
-      <div class="pen-score-group">
-        <span class="pen-score" id="penHomeScore">0</span>
-        <span class="sep">:</span>
-        <span class="pen-score" id="penAwayScore">0</span>
+      <div class="arena-lights"></div>
+      <div class="ps-brand"><span class="ps-play">▶</span><span>BRKLIVE19</span><small>FOOTBALL TOURNAMENT</small></div>
+      <div class="ps-title"><span>PENALTY SHOOTOUT</span><b><i></i> LIVE</b></div>
+      <div class="ps-scorebar">
+        <div class="ps-team ps-home"><div class="ps-crest">⚽</div><span id="penHomeName">HOME</span></div>
+        <div class="ps-score"><span id="penHomeScore">0</span><em>–</em><span id="penAwayScore">0</span></div>
+        <div class="ps-team ps-away"><span id="penAwayName">AWAY</span><div class="ps-crest">⚽</div></div>
       </div>
-
-      <div class="pen-team away" id="penAwayName">AWAY</div>
-      <div class="pen-kicks" id="penKickDetails">KICKS 0 / 0</div>
-      <div class="pen-label">PENS</div>
+      <div class="ps-kickboard">
+        <div class="ps-rounds"><div class="ps-team-spacer"></div><div class="ps-round-list" id="penRoundHeaders"></div></div>
+        <div class="ps-kick-row home"><div class="ps-kick-team" id="penHomeLabel">HOME</div><div class="ps-round-list" id="penHomeKicks"></div></div>
+        <div class="ps-kick-row away"><div class="ps-kick-team" id="penAwayLabel">AWAY</div><div class="ps-round-list" id="penAwayKicks"></div></div>
+      </div>
+      <div class="ps-status" id="penKickDetails">SHOOTOUT IN PROGRESS</div>
+      <div class="ps-pitch"></div>
+      <div class="penalty-stage" id="penaltyStage">PENALTY KICKS</div>
     </div>
-
-  </div>
 
   <!-- ================= LOWER THIRD ================= -->
   <div class="lower-third" id="lowerThird">
@@ -637,6 +879,7 @@ const state = {
   awayPenalty: 0,
   penaltyActive: false,
   penaltyShootout: null,
+  overlayDisplayMode: 'normal',
   colors: {
     primary: '#087d4b',
     accent:  '#53e89a',
@@ -695,7 +938,19 @@ function renderCards() {
   $('awayCards').innerHTML = mk(state.awayYellow, state.awayRed);
 }
 
+function applyOverlayDisplayMode(){
+  const mode = state.overlayDisplayMode || 'normal';
+  const showScore = mode === 'normal' || mode === 'both';
+  const showPenalty = mode === 'penalty' || mode === 'both';
+  const scoreboard = $('scoreboard');
+  scoreboard.style.setProperty('display', showScore ? 'flex' : 'none', 'important');
+  scoreboard.style.visibility = showScore ? 'visible' : 'hidden';
+  scoreboard.style.opacity = showScore ? '1' : '0';
+  $('penaltyRow').classList.toggle('show', showPenalty && !!state.penaltyActive);
+}
+
 function renderScoreboard() {
+  applyOverlayDisplayMode();
   $('homeName').textContent = (state.homeTeam || 'HOME');
   $('awayName').textContent = (state.awayTeam || 'AWAY');
   $('period').textContent   = state.period || '1H';
@@ -731,16 +986,31 @@ function renderPenalty() {
   const row = $('penaltyRow');
   const p = state.penaltyShootout || {};
   const active = !!state.penaltyActive;
-  $('penHomeName').textContent = p.teamA || state.homeTeam || 'HOME';
-  $('penAwayName').textContent = p.teamB || state.awayTeam || 'AWAY';
-  const hp = p.scoreA != null ? Number(p.scoreA)||0 : Number(state.homePenalty)||0;
-  const ap = p.scoreB != null ? Number(p.scoreB)||0 : Number(state.awayPenalty)||0;
-  if (hp !== lastHomePen) {$('penHomeScore').textContent=hp;if(lastHomePen>=0&&active)bump($('penHomeScore'));lastHomePen=hp;}
-  if (ap !== lastAwayPen) {$('penAwayScore').textContent=ap;if(lastAwayPen>=0&&active)bump($('penAwayScore'));lastAwayPen=ap;}
-  const ka=Array.isArray(p.kicks?.A)?p.kicks.A:[];
-  const kb=Array.isArray(p.kicks?.B)?p.kicks.B:[];
-  $('penKickDetails').textContent = p.finished ? (p.result || 'SHOOTOUT COMPLETE') : `KICKS ${ka.length} / ${kb.length}`;
-  row.classList.toggle('show', active);
+  const teamA = p.teamA || state.homeTeam || 'HOME';
+  const teamB = p.teamB || state.awayTeam || 'AWAY';
+  $('penHomeName').textContent = teamA;
+  $('penAwayName').textContent = teamB;
+  $('penHomeLabel').textContent = teamA;
+  $('penAwayLabel').textContent = teamB;
+  const ka = Array.isArray(p.kicks?.A) ? p.kicks.A : [];
+  const kb = Array.isArray(p.kicks?.B) ? p.kicks.B : [];
+  const hp = p.scoreA != null ? Number(p.scoreA)||0 : ka.filter(x=>x.result==='goal').length;
+  const ap = p.scoreB != null ? Number(p.scoreB)||0 : kb.filter(x=>x.result==='goal').length;
+  if (hp !== lastHomePen) { $('penHomeScore').textContent=hp; if(lastHomePen>=0&&active)bump($('penHomeScore')); lastHomePen=hp; }
+  if (ap !== lastAwayPen) { $('penAwayScore').textContent=ap; if(lastAwayPen>=0&&active)bump($('penAwayScore')); lastAwayPen=ap; }
+  const rounds = 10; // Always display all ten penalty positions
+  $('penaltyRow').classList.add('ten-kicks');
+  $('penRoundHeaders').innerHTML = Array.from({length:rounds},(_,i)=>`<span>${i+1}</span>`).join('');
+  const marker = (kick) => {
+    if (!kick) return '<span class="ps-kick pending">–</span>';
+    return kick.result === 'goal' ? '<span class="ps-kick goal">✓</span>' : '<span class="ps-kick miss">×</span>';
+  };
+  $('penHomeKicks').innerHTML = Array.from({length:rounds},(_,i)=>marker(ka[i])).join('');
+  $('penAwayKicks').innerHTML = Array.from({length:rounds},(_,i)=>marker(kb[i])).join('');
+  $('penKickDetails').textContent = p.finished ? (p.result || 'SHOOTOUT COMPLETE') : 'SHOOTOUT IN PROGRESS';
+  $('penaltyStage').textContent = p.finished ? 'FINAL RESULT' : (Math.max(ka.length,kb.length) >= 10 ? 'SUDDEN DEATH' : 'PENALTY KICKS');
+  row.classList.add('show');
+  applyOverlayDisplayMode();
 }
 
 function renderClock() {
@@ -940,6 +1210,7 @@ function ingestPenalty(p) {
 }
 function ingestPacket(d) {
   if (!d || typeof d !== 'object') return;
+  if (['normal','penalty','both'].includes(d.overlayDisplayMode)) state.overlayDisplayMode=d.overlayDisplayMode;
   if (d.penaltyShootout) ingestPenalty(d.penaltyShootout);
   if (d.football) return ingestFootball(d.football);
   // also accept the bare football object (matches localStorage shape)
@@ -959,13 +1230,15 @@ try {
   if (raw) ingestPacket(JSON.parse(raw));
   const penRaw=localStorage.getItem('brklive19_penalty_shootout');
   if(penRaw) ingestPenalty(JSON.parse(penRaw));
+  const savedMode=localStorage.getItem('brklive19_football_display_mode');
+  if(['normal','penalty','both'].includes(savedMode)) state.overlayDisplayMode=savedMode;
 } catch (e) { /* ignore */ }
 
 /* ---------- 2. BroadcastChannel (fastest, same-origin) ---------- */
 let bc = null;
 try {
   bc = new BroadcastChannel('BRKLIVE19_LIVE');
-  bc.onmessage = (ev) => ingestPacket(ev.data);
+  bc.onmessage = (ev) => { const d=ev.data; if(d && ['normal','penalty','both'].includes(d.overlayDisplayMode)){state.overlayDisplayMode=d.overlayDisplayMode;applyOverlayDisplayMode();renderPenalty();} ingestPacket(d); };
 } catch (e) {
   console.warn('BroadcastChannel unavailable.', e);
 }
@@ -991,6 +1264,7 @@ window.addEventListener('storage', (ev) => {
   if (ev.key === 'brklive19_penalty_shootout') {
     try { ingestPenalty(JSON.parse(ev.newValue)); } catch(e) {}
   }
+  if (ev.key === 'brklive19_football_display_mode' && ['normal','penalty','both'].includes(ev.newValue)) { state.overlayDisplayMode=ev.newValue; applyOverlayDisplayMode(); renderPenalty(); }
 });
 
 /* ---------- 4. Firebase (works across devices / networks) ---------- */
@@ -1003,6 +1277,10 @@ if (db) {
     onValue(ref(db, 'footballPenaltyShootout'), (snap) => {
       const p=snap.val();
       if(p) ingestPenalty(p);
+    });
+    onValue(ref(db, 'footballOverlayDisplayMode'), (snap) => {
+      const mode=snap.val();
+      if(['normal','penalty','both'].includes(mode)){ state.overlayDisplayMode=mode; applyOverlayDisplayMode(); renderPenalty(); }
     });
   } catch (e) {
     console.warn('Firebase listen failed.', e);
