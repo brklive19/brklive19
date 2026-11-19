@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BRKLIVE19 Football Controller</title>
+<style>
+:root{color-scheme:dark}*{box-sizing:border-box}body{margin:0;background:#0b1220;color:#edf4ff;font:15px Arial,sans-serif}
+header{padding:18px 22px;background:#111e31;border-bottom:1px solid #2b3c55;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.brand{font-weight:900;letter-spacing:1.5px;color:#5bdcff}.wrap{max-width:1200px;margin:auto;padding:20px;display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:16px}
+section{background:#142238;border:1px solid #2b405d;border-radius:15px;padding:18px}h2{font-size:17px;margin:0 0 15px;color:#72ddff}
+label{display:block;font-size:12px;color:#b9c8dc;margin:11px 0 5px}input,select,textarea{width:100%;background:#0b1728;color:#fff;border:1px solid #3a506e;border-radius:8px;padding:10px;font:inherit}
+input[type=color]{height:42px;padding:4px}textarea{min-height:70px;resize:vertical}.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+button{border:0;border-radius:8px;padding:11px 14px;font-weight:700;cursor:pointer;color:#07111e;background:#5bdcff;margin:5px 4px 0 0}
+button.secondary{background:#2d405b;color:#edf4ff}button.good{background:#35d49a}button.warn{background:#ffcf55}button.danger{background:#ff596b;color:#fff}
+.actions{display:flex;flex-wrap:wrap;gap:5px;margin-top:10px}.score{font-size:28px;font-weight:900;text-align:center;margin:8px 0}.muted{color:#9fb0c7;font-size:12px}.linkbox{word-break:break-all;background:#0a1525;padding:10px;border-radius:8px;margin-top:8px;color:#bcecff}
+.status{display:inline-block;padding:5px 9px;border-radius:20px;background:#263c57;font-size:12px}
+@media(max-width:520px){.wrap{padding:10px}header{padding:14px}}
+</style></head><body>
+<header><div><div class="brand">BRKLIVE19 • FOOTBALL CONTROL</div><div class="muted">Live match controller</div></div><span class="status" id="connection">Overlay sync ready</span></header>
+<div class="wrap">
+<section><h2>Match information</h2>
+<label>Tournament</label><input id="tournament" placeholder="Tournament name">
+<label>Match</label><input id="match" placeholder="e.g. Muding vs Takarla">
+<label>Venue</label><input id="venue" placeholder="Ground / stadium">
+<div class="row"><div><label>Match type</label><select id="matchType"><option>Final</option><option>League</option><option>Knockout</option><option>Quarter Final</option><option>Semi Final</option><option>Friendly</option><option>Custom</option></select></div><div><label>Period</label><select id="period"><option>1st Half</option><option>Half Time</option><option>2nd Half</option><option>Extra Time</option><option>Penalty Shootout</option><option>Full Time</option></select></div></div>
+<label>Custom top/bottom text</label><input id="customText" placeholder="BRKLIVE19 LIVE • Your custom message">
+</section>
+<section><h2>Teams & score</h2>
+<label>Home team</label><input id="home" value="HOME">
+<div class="row"><div><label>Home background</label><input type="color" id="homeColor" value="#0878c9"></div><div><label>Home text</label><input type="color" id="homeText" value="#ffffff"></div></div>
+<label>Away team</label><input id="away" value="AWAY">
+<div class="row"><div><label>Away background</label><input type="color" id="awayColor" value="#d83b42"></div><div><label>Away text</label><input type="color" id="awayText" value="#ffffff"></div></div>
+<div class="row"><div><div class="score" id="homeScore">0</div><div class="muted" style="text-align:center">HOME GOALS</div><div class="actions"><button onclick="score('home',1)">+ Goal</button><button class="secondary" onclick="score('home',-1)">−</button></div></div>
+<div><div class="score" id="awayScore">0</div><div class="muted" style="text-align:center">AWAY GOALS</div><div class="actions"><button onclick="score('away',1)">+ Goal</button><button class="secondary" onclick="score('away',-1)">−</button></div></div></div>
+<div class="actions"><button class="secondary" onclick="resetScore()">Reset score</button></div>
+</section>
+<section><h2>Match clock</h2>
+<div class="score" id="clock">00:00</div><div class="muted" style="text-align:center">Elapsed match time</div>
+<div class="actions"><button class="good" onclick="startClock()">▶ Start</button><button class="warn" onclick="pauseClock()">Ⅱ Pause</button><button class="secondary" onclick="resetClock()">↺ Reset</button></div>
+<div class="row"><div><label>Set minutes</label><input type="number" id="setMinutes" min="0" value="0"></div><div><label>Set seconds</label><input type="number" id="setSeconds" min="0" max="59" value="0"></div></div>
+<button class="secondary" onclick="setClock()">Set clock</button>
+</section>
+<section><h2>Cards & match events</h2>
+<label>Player name (optional)</label><input id="player" placeholder="Player name / number">
+<label>Team</label><select id="cardTeam"><option value="home">Home team</option><option value="away">Away team</option></select>
+<div class="actions"><button class="warn" onclick="card('yellow')">🟨 Yellow card</button><button class="danger" onclick="card('red')">🟥 Red card</button></div>
+<div class="actions"><button class="good" onclick="goal('home')">⚽ Home goal</button><button class="good" onclick="goal('away')">⚽ Away goal</button></div>
+<div class="actions"><button class="secondary" onclick="eventClear()">Clear event</button></div>
+<p class="muted">Goal and card animations appear temporarily on the overlay. The score buttons above change the score without triggering an animation.</p>
+</section>
+
+<section><h2>Match result</h2>
+<label>Result message</label>
+<input id="resultText" placeholder="Example: Muding won 2–1">
+<label>Show result on overlay</label>
+<select id="showResult"><option value="yes">Show result</option><option value="no">Hide result</option></select>
+<div class="actions">
+<button class="good" onclick="setResultFromScore()">Generate result from score</button>
+<button class="secondary" onclick="clearResult()">Clear result</button>
+</div>
+<p class="muted">You can type a custom result or generate one from the current score. For a penalty shootout, the result uses the penalty score when it decides the winner.</p>
+</section>
+<section><h2>Penalty Shootout Score</h2>
+<p class="muted">Select Penalty Shootout in the Period menu. Record every attempt here.</p>
+<div class="row">
+ <div><label>Home penalties (scored / attempts)</label><div class="score" id="homePensDisplay">0 / 0</div>
+ <button class="good" onclick="recordPenalty('home',true)">HOME SCORED</button>
+ <button class="danger" onclick="recordPenalty('home',false)">HOME MISSED</button></div>
+ <div><label>Away penalties (scored / attempts)</label><div class="score" id="awayPensDisplay">0 / 0</div>
+ <button class="good" onclick="recordPenalty('away',true)">AWAY SCORED</button>
+ <button class="danger" onclick="recordPenalty('away',false)">AWAY MISSED</button></div>
+</div>
+<label>Next kicker</label><select id="nextKicker"><option value="home">Home team</option><option value="away">Away team</option></select>
+<button class="secondary" onclick="resetPenalties()">Reset penalty shootout</button>
+</section>
+<section><h2>Overlay appearance</h2>
+<label>Overall accent colour</label><input type="color" id="accent" value="#59dcff">
+<label>Overlay background style</label><select id="style"><option value="glass">Dark glass</option><option value="solid">Solid dark</option><option value="light">Light</option></select>
+<label>Custom text colour</label><input type="color" id="customColor" value="#ffffff">
+<label>Show tournament / match details</label><select id="showDetails"><option value="yes">Show</option><option value="no">Hide</option></select>
+<label>Show venue / match type</label><select id="showVenue"><option value="yes">Show</option><option value="no">Hide</option></select>
+<label>Show penalty score on overlay</label><select id="showPenalty"><option value="yes" selected>Show</option><option value="no">Hide</option></select>
+<button onclick="publish()">Apply appearance & details</button>
+</section>
+<section><h2>Overlay link</h2>
+<p class="muted">Copy this URL and paste it into OBS → Sources → Browser.</p>
+<div class="linkbox" id="overlayLink"></div>
+<div class="actions"><button onclick="copyLink()">Copy overlay link</button><button class="secondary" onclick="openOverlay()">Preview overlay</button></div>
+<p class="muted">If using another device, host these files on the same website and open the hosted overlay URL. Browser local storage sync works when controller and overlay are opened in the same browser profile.</p>
+</section>
+</div>
+<script>
+const ids=['tournament','match','venue','matchType','period','customText','home','homeColor','homeText','away','awayColor','awayText','accent','style','customColor','showDetails','showVenue','showPenalty','resultText','showResult'];
+let data={homeScore:0,awayScore:0,elapsed:0,running:false,event:null,homePens:0,awayPens:0,homeAttempts:0,awayAttempts:0,nextKicker:'home',showPenalty:'yes',showResult:'yes',resultText:''};
+let timer=null;
+function readForm(){ids.forEach(id=>data[id]=document.getElementById(id).value);save()}
+function save(){localStorage.setItem('brklive19FootballOverlay',JSON.stringify(data));updateUI()}
+function updateUI(){
+ document.getElementById('homeScore').textContent=data.homeScore||0;
+ document.getElementById('awayScore').textContent=data.awayScore||0;
+ document.getElementById('clock').textContent=fmt(data.elapsed||0);
+ document.getElementById('overlayLink').textContent=new URL('overlay.html',location.href).href;
+ const hp=document.getElementById('homePensDisplay'), ap=document.getElementById('awayPensDisplay');
+ if(hp)hp.textContent=(data.homePens||0)+' / '+(data.homeAttempts||0);
+ if(ap)ap.textContent=(data.awayPens||0)+' / '+(data.awayAttempts||0);
+ const nk=document.getElementById('nextKicker'); if(nk)nk.value=data.nextKicker||'home';
+}
+
+function fmt(s){return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0')}
+function score(side,n){data[side+'Score']=Math.max(0,(data[side+'Score']||0)+n);readForm()}
+function resetScore(){data.homeScore=0;data.awayScore=0;readForm()}
+function tick(){data.elapsed++;save()}
+function startClock(){if(timer)return;data.running=true;timer=setInterval(tick,1000);save()}
+function pauseClock(){clearInterval(timer);timer=null;data.running=false;save()}
+function resetClock(){pauseClock();data.elapsed=0;save()}
+function setClock(){pauseClock();data.elapsed=Math.max(0,(+setMinutes.value||0)*60+(+setSeconds.value||0));save()}
+function fireEvent(type,team,player){data.event={type,team,player:player||'',stamp:Date.now()};save()}
+function goal(team){data[team+'Score']=(data[team+'Score']||0)+1;fireEvent('goal',team,player.value);readForm()}
+function card(type){fireEvent(type,cardTeam.value,player.value);readForm()}
+function eventClear(){data.event=null;save()}
+function recordPenalty(side,scored){
+ data[side+'Attempts']=(Number(data[side+'Attempts'])||0)+1;
+ if(scored)data[side+'Pens']=(Number(data[side+'Pens'])||0)+1;
+ if(!Array.isArray(data[side+'PenaltyResults']))data[side+'PenaltyResults']=[];
+ data[side+'PenaltyResults'].push(!!scored);
+ data.nextKicker=(side==='home'?'away':'home');
+ data.event={type:scored?'penalty-goal':'penalty-miss',team:side,player:'',stamp:Date.now()};
+ save();
+}
+function resetPenalties(){
+ data.homePens=0;data.awayPens=0;data.homeAttempts=0;data.awayAttempts=0;
+ data.homePenaltyResults=[];data.awayPenaltyResults=[];
+ data.nextKicker='home';data.event=null;save();
+}
+function setResultFromScore(){
+ const h=Number(data.homeScore)||0, a=Number(data.awayScore)||0;
+ const hp=Number(data.homePens)||0, ap=Number(data.awayPens)||0;
+ const isPens=String(data.period||'').toLowerCase().includes('penalty') || (Number(data.homeAttempts)||0)>0 || (Number(data.awayAttempts)||0)>0;
+ let result;
+ if(h===a && isPens && hp!==ap){
+   result=(data.home||'HOME')+' won on penalties '+hp+'–'+ap;
+ } else if(h>a){
+   result=(data.home||'HOME')+' won '+h+'–'+a;
+ } else if(a>h){
+   result=(data.away||'AWAY')+' won '+a+'–'+h;
+ } else if(isPens && hp===ap){
+   result='Match drawn '+h+'–'+a+' • Penalties level '+hp+'–'+ap;
+ } else {
+   result='Match drawn '+h+'–'+a;
+ }
+ data.resultText=result;
+ const field=document.getElementById('resultText');if(field)field.value=result;
+ const show=document.getElementById('showResult');if(show){show.value='yes';data.showResult='yes'}
+ save();
+}
+function clearResult(){data.resultText='';data.showResult='no';const f=document.getElementById('resultText');if(f)f.value='';const s=document.getElementById('showResult');if(s)s.value='no';save()}
+function publish(){readForm()}
+function copyLink(){navigator.clipboard.writeText(new URL('overlay.html',location.href).href).then(()=>alert('Overlay link copied')).catch(()=>alert('Copy failed. Select and copy the link manually.'))}
+function openOverlay(){window.open('overlay.html','_blank')}
+ids.forEach(id=>document.getElementById(id).addEventListener('input',readForm));
+document.getElementById('nextKicker').addEventListener('change',e=>{data.nextKicker=e.target.value;save()});
+try{const old=JSON.parse(localStorage.getItem('brklive19FootballOverlay')||'{}');data={...data,...old};ids.forEach(id=>{if(data[id]!==undefined)document.getElementById(id).value=data[id]});}catch(e){}
+updateUI();if(data.running)startClock();window.addEventListener('storage',e=>{if(e.key==='brklive19FootballOverlay'){data={...data,...JSON.parse(e.newValue||'{}')};updateUI()}});
+</script></body></html>
