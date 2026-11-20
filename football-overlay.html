@@ -47,10 +47,26 @@
 </div></div>
 <div class="event" id="event"><div class="big" id="eventBig">⚽ GOAL!</div><div class="sub" id="eventSub"></div></div>
 </div>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-database-compat.js"></script>
 <script>
-const KEY='brklive19FootballOverlay';let lastStamp=0;
+const firebaseConfig = {
+  apiKey: "AIzaSyBLWq1bqJ32F2cg3mqYQ0uwXcS32vTA3A4",
+  authDomain: "brklive19-2bab4.firebaseapp.com",
+  databaseURL: "https://brklive19-2bab4-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "brklive19-2bab4",
+  storageBucket: "brklive19-2bab4.firebasestorage.app",
+  messagingSenderId: "294058533898",
+  appId: "1:294058533898:web:4996705937e969939cabf3",
+  measurementId: "G-RW18E7LVEX"
+};
+const firebaseApp = firebase.initializeApp(firebaseConfig);
+const footballDb = firebaseApp.database();
+const FOOTBALL_REF = footballDb.ref('brklive19/football/live');
+
+const KEY='brklive19FootballOverlay';let lastStamp=0;let liveData={};
 function fmt(s){return String(Math.floor((s||0)/60)).padStart(2,'0')+':'+String((s||0)%60).padStart(2,'0')}
-function render(){let d={};try{d=JSON.parse(localStorage.getItem(KEY)||'{}')}catch(e){}
+function render(remoteData){let d=remoteData||liveData||{};if(!remoteData){try{d=JSON.parse(localStorage.getItem(KEY)||'{}')}catch(e){}} liveData=d;
 const $=id=>document.getElementById(id);
 $('home').textContent=d.home||'HOME';$('away').textContent=d.away||'AWAY';$('hs').textContent=d.homeScore||0;$('as').textContent=d.awayScore||0;
 $('homeBox').style.background=d.homeColor||'#0878c9';$('homeBox').style.color=d.homeText||'#fff';$('awayBox').style.background=d.awayColor||'#d83b42';$('awayBox').style.color=d.awayText||'#fff';
@@ -86,10 +102,13 @@ if(panel){
 $('stage').style.setProperty('--accent',d.accent||'#59dcff');$('lower').className='lower style-'+(d.style||'glass');
 if(d.event&&d.event.stamp&&d.event.stamp!==lastStamp){lastStamp=d.event.stamp;showEvent(d.event)}
 }
-function showEvent(e){let team=e.team==='home'?'home':'away';let name=e.team==='home'?(JSON.parse(localStorage.getItem(KEY)||'{}').home||'HOME'):(JSON.parse(localStorage.getItem(KEY)||'{}').away||'AWAY');
+function showEvent(e){let team=e.team==='home'?'home':'away';let name=e.team==='home'?(liveData.home||'HOME'):(liveData.away||'AWAY');
 let big=e.type==='goal'?'⚽ GOAL!':e.type==='yellow'?'🟨 YELLOW CARD':e.type==='red'?'🟥 RED CARD':e.type==='penalty-goal'?'⚽ PENALTY SCORED!':e.type==='penalty-miss'?'✕ PENALTY MISSED':'🟥 RED CARD';
 document.getElementById('eventBig').textContent=big;document.getElementById('eventSub').textContent=[name,e.player].filter(Boolean).join(' • ');
 let el=document.getElementById('event');el.classList.remove('show');void el.offsetWidth;el.classList.add('show');
 }
-render();setInterval(render,250);window.addEventListener('storage',render);window.addEventListener('focus',render);document.addEventListener('visibilitychange',()=>{if(!document.hidden)render()});
+render();
+const overlayDb=firebase.database();
+overlayDb.ref('brklive19/football/live').on('value',snapshot=>{const d=snapshot.val()||{};liveData=d;localStorage.setItem(KEY,JSON.stringify(d));render(d)},err=>console.error('Firebase overlay read failed',err));
+window.addEventListener('storage',()=>render());
 </script></body></html>
