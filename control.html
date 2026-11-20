@@ -84,15 +84,31 @@ button.secondary{background:#2d405b;color:#edf4ff}button.good{background:#35d49a
 <p class="muted">Copy this URL and paste it into OBS → Sources → Browser.</p>
 <div class="linkbox" id="overlayLink"></div>
 <div class="actions"><button onclick="copyLink()">Copy overlay link</button><button class="secondary" onclick="openOverlay()">Preview overlay</button></div>
-<p class="muted">If using another device, host these files on the same website and open the hosted overlay URL. Browser local storage sync works when controller and overlay are opened in the same browser profile.</p>
+<p class="muted">If using another device, host these files on the same website and open the hosted overlay URL. Firebase Realtime Database syncs this controller with OBS and other devices in real time.</p>
 </section>
 </div>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-database-compat.js"></script>
 <script>
+const firebaseConfig = {
+  apiKey: "AIzaSyBLWq1bqJ32F2cg3mqYQ0uwXcS32vTA3A4",
+  authDomain: "brklive19-2bab4.firebaseapp.com",
+  databaseURL: "https://brklive19-2bab4-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "brklive19-2bab4",
+  storageBucket: "brklive19-2bab4.firebasestorage.app",
+  messagingSenderId: "294058533898",
+  appId: "1:294058533898:web:4996705937e969939cabf3",
+  measurementId: "G-RW18E7LVEX"
+};
+const firebaseApp = firebase.initializeApp(firebaseConfig);
+const footballDb = firebaseApp.database();
+const FOOTBALL_REF = footballDb.ref('brklive19/football/live');
+
 const ids=['tournament','match','venue','matchType','period','customText','home','homeColor','homeText','away','awayColor','awayText','accent','style','customColor','showDetails','showVenue','showPenalty','resultText','showResult'];
 let data={homeScore:0,awayScore:0,elapsed:0,running:false,event:null,homePens:0,awayPens:0,homeAttempts:0,awayAttempts:0,nextKicker:'home',showPenalty:'yes',showResult:'yes',resultText:''};
 let timer=null;
 function readForm(){ids.forEach(id=>data[id]=document.getElementById(id).value);save()}
-function save(){localStorage.setItem('brklive19FootballOverlay',JSON.stringify(data));updateUI()}
+function save(){localStorage.setItem('brklive19FootballOverlay',JSON.stringify(data));updateUI();FOOTBALL_REF.set(data).then(()=>{const s=document.getElementById('connection');if(s){s.textContent='Firebase connected • Live sync';s.style.background='#14543f'}}).catch(err=>{const s=document.getElementById('connection');if(s){s.textContent='Firebase error: '+err.message;s.style.background='#702b36'}console.error('Firebase write failed',err)})}
 function updateUI(){
  document.getElementById('homeScore').textContent=data.homeScore||0;
  document.getElementById('awayScore').textContent=data.awayScore||0;
@@ -157,6 +173,47 @@ function copyLink(){navigator.clipboard.writeText(new URL('overlay.html',locatio
 function openOverlay(){window.open('overlay.html','_blank')}
 ids.forEach(id=>document.getElementById(id).addEventListener('input',readForm));
 document.getElementById('nextKicker').addEventListener('change',e=>{data.nextKicker=e.target.value;save()});
-try{const old=JSON.parse(localStorage.getItem('brklive19FootballOverlay')||'{}');data={...data,...old};ids.forEach(id=>{if(data[id]!==undefined)document.getElementById(id).value=data[id]});}catch(e){}
-updateUI();if(data.running)startClock();window.addEventListener('storage',e=>{if(e.key==='brklive19FootballOverlay'){data={...data,...JSON.parse(e.newValue||'{}')};updateUI()}});
+// Load the selected football match created in index.html, without overwriting an
+// already-saved live controller session for that same match.
+const params=new URLSearchParams(location.search);
+const requestedMatchId=params.get('matchId');
+let indexMatch=null, indexTournament=null;
+try{
+  const allMatches=JSON.parse(localStorage.getItem('brklive_matches')||'[]');
+  indexMatch=requestedMatchId?allMatches.find(m=>String(m.id)===String(requestedMatchId)):null;
+  if(indexMatch){
+    const allTours=JSON.parse(localStorage.getItem('brklive_tournaments')||'[]');
+    indexTournament=allTours.find(t=>String(t.id)===String(indexMatch.tournamentId))||{};
+  }
+}catch(e){}
+try{
+  const old=JSON.parse(localStorage.getItem('brklive19FootballOverlay')||'{}');
+  data={...data,...old};
+  if(requestedMatchId && String(old.matchId||'')!==String(requestedMatchId)){
+    data.matchId=requestedMatchId;
+    data.tournament=indexTournament?.name||indexMatch?.tournamentName||data.tournament||'';
+    data.match=indexMatch?.matchName||`${indexMatch?.teamAName||'HOME'} vs ${indexMatch?.teamBName||'AWAY'}`;
+    data.venue=indexMatch?.venue||indexTournament?.venue||data.venue||'';
+    data.matchType=indexMatch?.matchType||'Football';
+    data.home=indexMatch?.teamAName||data.home||'HOME';
+    data.away=indexMatch?.teamBName||data.away||'AWAY';
+    data.homeScore=0; data.awayScore=0; data.elapsed=0; data.event=null;
+  }
+  data.matchId=requestedMatchId||data.matchId||'';
+  ids.forEach(id=>{if(data[id]!==undefined)document.getElementById(id).value=data[id]});
+}catch(e){}
+save();
+if(data.running)startClock();
+FOOTBALL_REF.on('value', snapshot=>{
+  const remote=snapshot.val();
+  if(remote){
+    data={...data,...remote};
+    ids.forEach(id=>{const el=document.getElementById(id);if(el && data[id]!==undefined)el.value=data[id]});
+    updateUI();
+    if(data.running){if(!timer)startClockLocal()}else{clearInterval(timer);timer=null;}
+    localStorage.setItem('brklive19FootballOverlay',JSON.stringify(data));
+  }
+}, err=>{const s=document.getElementById('connection');if(s){s.textContent='Firebase connection error';s.style.background='#702b36'}console.error(err)});
+function startClockLocal(){if(timer)return;timer=setInterval(tick,1000)}
+window.addEventListener('storage',e=>{if(e.key==='brklive19FootballOverlay'){data={...data,...JSON.parse(e.newValue||'{}')};updateUI()}});
 </script></body></html>
