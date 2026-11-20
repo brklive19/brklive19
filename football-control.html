@@ -1,472 +1,162 @@
-<!DOCTYPE html>
-<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width,initial-scale=1" name="viewport"/><title>BRKLIVE19 Football Controller</title><style>body{margin:0;padding:16px;background:#06111d;color:#fff;font-family:Arial,sans-serif}*{box-sizing:border-box}.wrap{max-width:900px;margin:auto}.card{background:linear-gradient(145deg,#0c2338,#07131f);border:1px solid #1e5a4a;border-radius:18px;padding:16px;margin:12px 0;box-shadow:0 15px 40px #0008}h1{text-align:center;color:#53e89a}label{display:block;color:#a8c8c0;font-size:13px;margin-top:8px}input,select{width:100%;padding:12px;border-radius:10px;border:1px solid #31516b;background:#071421;color:#fff;margin:5px 0}.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.btn{border:0;border-radius:11px;padding:13px;color:#fff;font-weight:900;cursor:pointer;width:100%;margin-top:7px}.green{background:linear-gradient(135deg,#087d4b,#20d77c)}.yellow{background:linear-gradient(135deg,#9b6900,#ffd34d);color:#111}.red{background:linear-gradient(135deg,#8e0922,#ff3158)}.blue{background:linear-gradient(135deg,#075cc9,#36b8ff)}.dark{background:#24354b}.score{text-align:center;font-size:64px;font-weight:900}.timer{text-align:center;font-size:48px;font-weight:900;color:#ffe26d}.status{text-align:center;padding:10px;border-radius:10px;background:#092a20;margin-top:10px}.links{display:grid;grid-template-columns:1fr 1fr;gap:10px}@media(max-width:650px){.grid,.links{grid-template-columns:1fr}}
-/* BRKLIVE19: all overlay text uppercase */
-body, body * { text-transform: uppercase; }
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BRKLIVE19 Football Controller</title>
+<style>
+:root{color-scheme:dark}*{box-sizing:border-box}body{margin:0;background:#0b1220;color:#edf4ff;font:15px Arial,sans-serif}
+header{padding:18px 22px;background:#111e31;border-bottom:1px solid #2b3c55;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.brand{font-weight:900;letter-spacing:1.5px;color:#5bdcff}.wrap{max-width:1200px;margin:auto;padding:20px;display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:16px}
+section{background:#142238;border:1px solid #2b405d;border-radius:15px;padding:18px}h2{font-size:17px;margin:0 0 15px;color:#72ddff}
+label{display:block;font-size:12px;color:#b9c8dc;margin:11px 0 5px}input,select,textarea{width:100%;background:#0b1728;color:#fff;border:1px solid #3a506e;border-radius:8px;padding:10px;font:inherit}
+input[type=color]{height:42px;padding:4px}textarea{min-height:70px;resize:vertical}.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+button{border:0;border-radius:8px;padding:11px 14px;font-weight:700;cursor:pointer;color:#07111e;background:#5bdcff;margin:5px 4px 0 0}
+button.secondary{background:#2d405b;color:#edf4ff}button.good{background:#35d49a}button.warn{background:#ffcf55}button.danger{background:#ff596b;color:#fff}
+.actions{display:flex;flex-wrap:wrap;gap:5px;margin-top:10px}.score{font-size:28px;font-weight:900;text-align:center;margin:8px 0}.muted{color:#9fb0c7;font-size:12px}.linkbox{word-break:break-all;background:#0a1525;padding:10px;border-radius:8px;margin-top:8px;color:#bcecff}
+.status{display:inline-block;padding:5px 9px;border-radius:20px;background:#263c57;font-size:12px}
+@media(max-width:520px){.wrap{padding:10px}header{padding:14px}}
+</style></head><body>
+<header><div><div class="brand">BRKLIVE19 • FOOTBALL CONTROL</div><div class="muted">Live match controller</div></div><span class="status" id="connection">Overlay sync ready</span></header>
+<div class="wrap">
+<section><h2>Match information</h2>
+<label>Tournament</label><input id="tournament" placeholder="Tournament name">
+<label>Match</label><input id="match" placeholder="e.g. Muding vs Takarla">
+<label>Venue</label><input id="venue" placeholder="Ground / stadium">
+<div class="row"><div><label>Match type</label><select id="matchType"><option>Final</option><option>League</option><option>Knockout</option><option>Quarter Final</option><option>Semi Final</option><option>Friendly</option><option>Custom</option></select></div><div><label>Period</label><select id="period"><option>1st Half</option><option>Half Time</option><option>2nd Half</option><option>Extra Time</option><option>Penalty Shootout</option><option>Full Time</option></select></div></div>
+<label>Custom top/bottom text</label><input id="customText" placeholder="BRKLIVE19 LIVE • Your custom message">
+</section>
+<section><h2>Teams & score</h2>
+<label>Home team</label><input id="home" value="HOME">
+<div class="row"><div><label>Home background</label><input type="color" id="homeColor" value="#0878c9"></div><div><label>Home text</label><input type="color" id="homeText" value="#ffffff"></div></div>
+<label>Away team</label><input id="away" value="AWAY">
+<div class="row"><div><label>Away background</label><input type="color" id="awayColor" value="#d83b42"></div><div><label>Away text</label><input type="color" id="awayText" value="#ffffff"></div></div>
+<div class="row"><div><div class="score" id="homeScore">0</div><div class="muted" style="text-align:center">HOME GOALS</div><div class="actions"><button onclick="score('home',1)">+ Goal</button><button class="secondary" onclick="score('home',-1)">−</button></div></div>
+<div><div class="score" id="awayScore">0</div><div class="muted" style="text-align:center">AWAY GOALS</div><div class="actions"><button onclick="score('away',1)">+ Goal</button><button class="secondary" onclick="score('away',-1)">−</button></div></div></div>
+<div class="actions"><button class="secondary" onclick="resetScore()">Reset score</button></div>
+</section>
+<section><h2>Match clock</h2>
+<div class="score" id="clock">00:00</div><div class="muted" style="text-align:center">Elapsed match time</div>
+<div class="actions"><button class="good" onclick="startClock()">▶ Start</button><button class="warn" onclick="pauseClock()">Ⅱ Pause</button><button class="secondary" onclick="resetClock()">↺ Reset</button></div>
+<div class="row"><div><label>Set minutes</label><input type="number" id="setMinutes" min="0" value="0"></div><div><label>Set seconds</label><input type="number" id="setSeconds" min="0" max="59" value="0"></div></div>
+<button class="secondary" onclick="setClock()">Set clock</button>
+</section>
+<section><h2>Cards & match events</h2>
+<label>Player name (optional)</label><input id="player" placeholder="Player name / number">
+<label>Team</label><select id="cardTeam"><option value="home">Home team</option><option value="away">Away team</option></select>
+<div class="actions"><button class="warn" onclick="card('yellow')">🟨 Yellow card</button><button class="danger" onclick="card('red')">🟥 Red card</button></div>
+<div class="actions"><button class="good" onclick="goal('home')">⚽ Home goal</button><button class="good" onclick="goal('away')">⚽ Away goal</button></div>
+<div class="actions"><button class="secondary" onclick="eventClear()">Clear event</button></div>
+<p class="muted">Goal and card animations appear temporarily on the overlay. The score buttons above change the score without triggering an animation.</p>
+</section>
 
-/* BRKLIVE19: responsive overlay, never force a minimum viewport width */
-html, body { width:100%; min-width:0 !important; max-width:100%; }
-body { overflow:hidden; box-sizing:border-box; }
-*, *::before, *::after { box-sizing:border-box; }
-
-/* Keep the lower third inside the available viewport */
-.overlay, .scorebar, .main-overlay, .theme-overlay, .lower-third {
-  max-width:100vw !important;
-  min-width:0 !important;
-  width:100% !important;
-}
-
-/* Prevent text from being clipped */
-.overlay span, .overlay div, .scorebar span, .scorebar div {
-  overflow:visible;
-  min-width:0;
-}
-</style><style id="BRKLIVE19-UNIFIED-CONTROL-TABS">
-.control-tabs{grid-column:1/-1;display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 0 14px}
-.control-tab{border:1px solid #31516b;border-radius:12px;padding:14px 10px;font-weight:1000;font-size:14px;letter-spacing:.6px;background:linear-gradient(135deg,#122b42,#091827);color:#cfe8f6;cursor:pointer}
-.control-tab.active{background:linear-gradient(135deg,#087d4b,#20d77c);color:#04150e;border-color:#4dffad;box-shadow:0 0 18px #20d77c44}
-#normalControlPanel{display:contents}
-#penaltyControlPanel{display:none;grid-column:1/-1;width:100%}
-#penaltyControlPanel.active{display:block}
-#penaltyControlPanel #shootoutPanel{display:block!important;width:100%;margin:0!important}
-#normalControlPanel .card{min-width:0}
-@media(max-width:700px){.control-tabs{grid-template-columns:1fr 1fr}.control-tab{font-size:12px;padding:12px 6px}#normalControlPanel{display:block}#normalControlPanel>.grid{display:grid;grid-template-columns:1fr 1fr}}
-</style>
-<style id="BRKLIVE19-FULL-CONTROL-PANEL-VISIBILITY">
-/* Fix clipped controller: allow the entire page to grow and scroll vertically. */
-html, body {
-  width:100% !important;
-  min-width:0 !important;
-  height:auto !important;
-  min-height:100% !important;
-  max-height:none !important;
-  overflow-x:hidden !important;
-  overflow-y:auto !important;
-}
-body {
-  display:block !important;
-  padding:clamp(8px, 2vw, 18px) !important;
-  overscroll-behavior-y:contain;
-}
-.wrap {
-  width:100% !important;
-  max-width:1240px !important;
-  height:auto !important;
-  min-height:0 !important;
-  max-height:none !important;
-  margin:0 auto !important;
-  overflow:visible !important;
-  display:block !important;
-}
-#normalControlPanel,
-#penaltyControlPanel,
-.control-section {
-  width:100% !important;
-  min-width:0 !important;
-  max-width:100% !important;
-  height:auto !important;
-  max-height:none !important;
-  overflow:visible !important;
-}
-#normalControlPanel { display:block !important; }
-#penaltyControlPanel { display:none; }
-#penaltyControlPanel.active { display:block !important; }
-.card {
-  width:100% !important;
-  min-width:0 !important;
-  height:auto !important;
-  max-height:none !important;
-  overflow:visible !important;
-  margin:10px 0 !important;
-  padding:clamp(10px, 2vw, 18px) !important;
-}
-.grid, .links {
-  width:100% !important;
-  min-width:0 !important;
-  grid-template-columns:repeat(2,minmax(0,1fr)) !important;
-  align-items:stretch;
-}
-.grid > *, .links > * { min-width:0 !important; max-width:100% !important; }
-button, .btn, input, select {
-  max-width:100% !important;
-  min-width:0 !important;
-  white-space:normal !important;
-  overflow-wrap:anywhere !important;
-}
-.btn {
-  min-height:44px !important;
-  height:auto !important;
-  line-height:1.25 !important;
-  padding:12px 9px !important;
-}
-.control-tabs {
-  position:sticky;
-  top:0;
-  z-index:100;
-  width:100%;
-  padding:6px 0;
-  background:#06111d;
-}
-h1,h2,h3,label { overflow-wrap:anywhere; }
-.score { font-size:clamp(38px,7vw,64px) !important; }
-.timer { font-size:clamp(32px,6vw,48px) !important; }
-@media(max-width:720px) {
-  .wrap { max-width:100% !important; }
-  .grid, .links { grid-template-columns:repeat(2,minmax(0,1fr)) !important; gap:8px !important; }
-  .card { border-radius:13px !important; }
-  .control-tab { min-height:48px !important; }
-}
-@media(max-width:430px) {
-  body { padding:7px !important; }
-  .grid, .links { grid-template-columns:minmax(0,1fr) !important; }
-  .control-tabs { grid-template-columns:1fr 1fr !important; gap:6px !important; }
-  .control-tab { font-size:11px !important; padding:10px 5px !important; }
-  .score { font-size:42px !important; }
-}
-</style>
-
-</head><body><script>if(!localStorage.getItem("brklive_user")){location.href="./index.html?login=1"}</script><div class="wrap"><div class="control-tabs" id="controlTabs"><button class="control-tab" id="matchTab" type="button">⚽ MATCH CONTROL</button><button class="control-tab" id="penaltyTab" type="button">🥅 PENALTY SHOOTOUT</button></div><div class="control-section" id="penaltyControlPanel"><div class="card" id="shootoutPanel" style="display:block;border-color:#ff3158">
-<h2>⚽ PENALTY SHOOTOUT CONTROL</h2>
-<div class="grid"><div><label>Team A</label><input id="penTeamA" value="HOME"/></div><div><label>Team B</label><input id="penTeamB" value="AWAY"/></div></div>
-<div class="grid"><div><label>Number of kicks per team</label><select id="penKickCount"><option value="5">5 KICKS</option><option value="10" selected>10 KICKS</option></select></div><div><label>Active team</label><select id="penActive"><option value="A">Team A</option><option value="B">Team B</option></select></div><div><label>Round</label><select id="penRound"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select></div></div>
-<label>Shooter name</label><input id="penShooter" placeholder="Player taking the penalty"/>
-<div style="margin-top:12px;padding:10px;border:1px solid #53606e;border-radius:8px;background:#111827"><h3 style="margin:0 0 10px;font-size:14px">🎨 Shootout Overlay Custom Colours</h3><div class="grid"><div><label>Overlay Background</label><input id="penBgColor" style="width:100%;height:38px;padding:3px" type="color" value="#102c2a"/></div><div><label>Highlight / Accent</label><input id="penAccentColor" style="width:100%;height:38px;padding:3px" type="color" value="#ffb02e"/></div><div><label>Team A Colour</label><input id="penTeamAColor" style="width:100%;height:38px;padding:3px" type="color" value="#ffb02e"/></div><div><label>Team B Colour</label><input id="penTeamBColor" style="width:100%;height:38px;padding:3px" type="color" value="#f04c69"/></div><div><label>Match Result Background</label><input id="penResultColor" style="width:100%;height:38px;padding:3px" type="color" value="#c52b48"/></div><div><label>Result Text</label><input id="penResultTextColor" style="width:100%;height:38px;padding:3px" type="color" value="#ffffff"/></div></div><button class="btn blue" id="penApplyColors" style="margin-top:10px">APPLY SHOOTOUT COLOURS</button></div>
-<div class="grid"><button class="btn green" id="penGoal">✓ GOAL</button><button class="btn red" id="penMiss">✕ MISS</button></div>
-<div class="grid"><button class="btn yellow" id="penFinish">🏁 MATCH FINISH / RESULT</button><button class="btn dark" id="penUndo">↶ UNDO LAST</button></div>
-<button class="btn dark" id="penReset">RESET SHOOTOUT</button>
-<div class="status" id="penResult">Record penalties to calculate the result.</div>
-</div></div><div class="control-section" id="normalControlPanel"><h1>⚽ BRKLIVE19 FOOTBALL CONTROL</h1><div class="card"><div class="grid"><div><label>Home Team</label><input id="home" value="HOME"/></div><div><label>Away Team</label><input id="away" value="AWAY"/></div></div><div class="grid"><div><label>Period</label><select id="period"><option>1H</option><option>HT</option><option>2H</option><option>ET1</option><option>ET2</option><option>PEN</option><option>FT</option></select></div><div><label>Added / Extra Time (minutes)</label><input id="added" min="0" type="number" value="0"/></div></div></div><div class="grid"><div class="card"><h2 id="homeName">HOME</h2><div class="score" id="homeScore">0</div><button class="btn green" id="homeGoal">⚽ + GOAL</button><button class="btn yellow" id="homeYellow">🟨 YELLOW</button><button class="btn red" id="homeRed">🟥 RED</button></div><div class="card"><h2 id="awayName">AWAY</h2><div class="score" id="awayScore">0</div><button class="btn green" id="awayGoal">⚽ + GOAL</button><button class="btn yellow" id="awayYellow">🟨 YELLOW</button><button class="btn red" id="awayRed">🟥 RED</button></div></div><div class="card"><div class="timer" id="timer">00:00</div><div class="grid"><button class="btn green" id="start">▶ START</button><button class="btn yellow" id="pause">⏸ PAUSE</button></div><button class="btn dark" id="reset">↺ RESET</button><button class="btn blue" id="save">💾 SEND SCORE TO OVERLAY</button><div class="status" id="status">Ready</div></div><div class="card"><h2>📋 Football Broadcast Details</h2><div class="grid"><div><label>Tournament Name</label><input id="tournament" placeholder="Tournament name"/></div><div><label>Match Name</label><input id="match" placeholder="Match name"/></div></div><label>Custom Text / Lower Third</label><input id="customText" maxlength="120" placeholder="Enter custom text to show on Football Overlay"/><div class="grid"><button class="btn blue" id="showTournament">🏆 TOURNAMENT</button><button class="btn blue" id="showMatch">⚽ MATCH</button></div><button class="btn green" id="showCustom">✍️ SHOW CUSTOM TEXT ON OVERLAY</button><button class="btn dark" id="hideGraphic">✖ HIDE GRAPHIC</button><div class="status" id="graphicStatus">No graphic selected</div></div><div class="card"><h2>👥 Football Player Graphics</h2><div class="grid"><button class="btn blue" id="showPlayXI">👥 PLAY XI</button><button class="btn blue" id="showPlayerChange">🔄 PLAYER CHANGE</button></div><div id="playerChangeForm" style="display:none;margin-top:12px"><div class="grid"><div><label>Team</label><select id="changeTeam"><option value="home">Home Team</option><option value="away">Away Team</option></select></div><div><label>Player OUT</label><select id="playerOut"><option value="">— Select Player —</option></select></div><div><label>Player IN</label><select id="playerIn"><option value="">— Select Player —</option></select></div></div><button class="btn green" id="sendPlayerChange">SHOW PLAYER CHANGE</button></div><div class="status" id="playerGraphicStatus">No player graphic selected</div></div><div class="card"><h2>🎨 Football Overlay Colours</h2><div class="grid"><div><label>Primary Colour</label><input id="primaryColor" type="color" value="#087d4b"/></div><div><label>Accent Colour</label><input id="accentColor" type="color" value="#53e89a"/></div><div><label>Score Background</label><input id="scoreColor" type="color" value="#061b35"/></div><div><label>Goal Animation Colour</label><input id="goalColor" type="color" value="#16c784"/></div></div><button class="btn blue" id="applyColors">APPLY COLOURS</button></div><div class="card"><h2>📺 Football Broadcast</h2><label for="overlayDisplayMode">Scoreboard Display Mode</label><select id="overlayDisplayMode"><option value="normal">NORMAL SCORE ONLY</option><option value="penalty">PENALTY SHOOTOUT ONLY</option><option value="both">SHOW BOTH TOGETHER</option></select><div class="status" id="overlayModeStatus">NORMAL SCORE ONLY</div><div class="links"><button class="btn blue" id="openOverlay">OPEN FOOTBALL OVERLAY 1</button><button class="btn dark" id="copyOverlay">COPY OVERLAY LINK 1</button><button class="btn blue" id="openOverlay2">OPEN FOOTBALL OVERLAY 2</button><button class="btn dark" id="copyOverlay2">COPY OVERLAY LINK 2</button><button class="btn red" id="shootoutToggle">⚽ HIDE SHOOTOUT CONTROLS</button><button class="btn dark" id="shootoutOpen">OPEN SHOOTOUT OVERLAY</button><button class="btn dark" id="shootoutCopy">COPY SHOOTOUT OVERLAY LINK</button><div style="grid-column:1/-1;margin-top:8px"><label for="shootoutLink">Shootout Overlay Link (for OBS Browser Source)</label><input id="shootoutLink" onclick="this.select()" placeholder="https://your-site.web.app/BRKLIVE19_penalty_shootout_overlay_neon_arena.html" value=""/><div class="status" id="shootoutLinkStatus">Default link uses the Firebase Hosting root. If your overlay is hosted elsewhere, paste its full URL here before opening or copying.</div></div></div></div></div>
-<script type="module">
-import{initializeApp}from'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
-import{getDatabase,ref,set,get}from'https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js';
-const cfg={apiKey:'AIzaSyBLWq1bqJ32F2cg3mqYQ0uwXcS3zvTA3A4',authDomain:'brklive19-2bab4.firebaseapp.com',databaseURL:'https://brklive19-2bab4-default-rtdb.asia-southeast1.firebasedatabase.app',projectId:'brklive19-2bab4',storageBucket:'brklive19-2bab4.firebasestorage.app',messagingSenderId:'294058533898',appId:'1:294058533898:web:4996705937e969939cabf3'};
-const db=getDatabase(initializeApp(cfg)),live=ref(db,'footballLiveScore');
-const $=id=>document.getElementById(id);
-// Select exactly which scoreboard layout is visible in the shared overlay.
-let overlayDisplayMode='normal';
-try { const savedMode=localStorage.getItem('brklive19_football_display_mode'); if(['normal','penalty','both'].includes(savedMode)) overlayDisplayMode=savedMode; } catch(e) {}
-$('overlayDisplayMode').value=overlayDisplayMode;
-function publishOverlayDisplayMode(){
-  overlayDisplayMode=$('overlayDisplayMode').value;
-  $('overlayModeStatus').textContent=overlayDisplayMode==='normal'?'NORMAL SCORE ONLY':overlayDisplayMode==='penalty'?'PENALTY SHOOTOUT ONLY':'NORMAL SCORE + PENALTY SHOOTOUT';
-  try { localStorage.setItem('brklive19_football_display_mode',overlayDisplayMode); } catch(e) {}
-  try { if(bc) bc.postMessage({sport:'football',overlayDisplayMode}); } catch(e) {}
-  set(ref(db,'footballOverlayDisplayMode'),overlayDisplayMode).catch(e=>console.warn('Display mode sync failed',e));
-}
-$('overlayDisplayMode').addEventListener('change',()=>{publishOverlayDisplayMode();syncNow();});
-
-// Penalty shootout controller: stores results in localStorage and publishes them for the overlay.
-const penaltyState={A:[],B:[]};let penaltyFinished=false;let shootoutEnabled=false;let periodBeforeShootout='2H';
-try{const prior=JSON.parse(localStorage.getItem('brklive19_penalty_shootout')||'null');if(prior){penaltyState.A=Array.isArray(prior.kicks?.A)?prior.kicks.A:[];penaltyState.B=Array.isArray(prior.kicks?.B)?prior.kicks.B:[];penaltyFinished=!!prior.finished;shootoutEnabled=!!prior.enabled;if(prior.teamA)$('penTeamA').value=prior.teamA;if(prior.teamB)$('penTeamB').value=prior.teamB;if(prior.kicksPerTeam)$('penKickCount').value=String(prior.kicksPerTeam);}}catch(e){}
-const penGoals=t=>penaltyState[t].filter(x=>x.result==='goal').length;
-function publishPenalty(){
-  const payload={sport:'football',penaltyShootout:{
-    teamA:$('penTeamA').value||'HOME',teamB:$('penTeamB').value||'AWAY',
-    activeTeam:$('penActive').value,round:Number($('penRound').value)||1,kicksPerTeam:Number($('penKickCount')?.value)||10,
-    shooter:$('penShooter').value.trim(),colors:{bg:$('penBgColor').value,accent:$('penAccentColor').value,teamA:$('penTeamAColor').value,teamB:$('penTeamBColor').value,result:$('penResultColor').value,resultText:$('penResultTextColor').value},kicks:{A:penaltyState.A,B:penaltyState.B},
-    scoreA:penGoals('A'),scoreB:penGoals('B'),finished:penaltyFinished,
-    result:penaltyFinished?(penGoals('A')===penGoals('B')?'PENALTY SHOOTOUT TIED':(penGoals('A')>penGoals('B')?($('penTeamA').value||'HOME')+' WIN THE PENALTY SHOOTOUT':($('penTeamB').value||'AWAY')+' WIN THE PENALTY SHOOTOUT')):'',
-    updatedAt:Date.now()
-  }};
-  localStorage.setItem('brklive19_penalty_shootout',JSON.stringify(payload.penaltyShootout));
-  try{if(bc)bc.postMessage(payload)}catch(e){}
-  // Same Firebase database path, so the overlay can subscribe to this value.
-  set(ref(db,'footballPenaltyShootout'),payload.penaltyShootout).catch(e=>console.warn('Penalty sync failed',e));
-  renderPenalty();
-}
-function renderPenalty(){
-  const a=penGoals('A'),b=penGoals('B');
-  $('penResult').textContent=penaltyFinished?(a===b?'TIED '+a+' – '+b+' · RECORD SUDDEN-DEATH KICKS AND FINISH AGAIN':(a>b?($('penTeamA').value||'HOME'):($('penTeamB').value||'AWAY'))+' WIN · FINAL PENALTY SCORE '+a+' – '+b):'CURRENT PENALTY SCORE: '+a+' – '+b+' · KICKS '+penaltyState.A.length+' – '+penaltyState.B.length;
-}
-function penaltyKick(result){
-  if(penaltyFinished){$('penResult').textContent='MATCH FINISHED · RESET OR UNDO TO CONTINUE';return}
-  const t=$('penActive').value;
-  penaltyState[t].push({result,shooter:$('penShooter').value.trim(),round:Number($('penRound').value)||1,at:Date.now()});
-  $('penActive').value=t==='A'?'B':'A';$('penShooter').value='';publishPenalty();
-}
-$('shootoutToggle').addEventListener('click',()=>{
-  const p=$('shootoutPanel');
-  const opening=p.dataset.open!=='false';
-  p.dataset.open=opening?'false':'true';
-  p.style.display=opening?'none':'block';
-  shootoutEnabled=!opening;
-  if(!opening){periodBeforeShootout=$('period').value;$('period').value='PEN';$('shootoutToggle').textContent='⚽ HIDE SHOOTOUT CONTROLS';$('overlayDisplayMode').value='penalty';publishOverlayDisplayMode();}
-  else {if($('period').value==='PEN')$('period').value=periodBeforeShootout||'2H';$('shootoutToggle').textContent='⚽ SHOW SHOOTOUT CONTROLS';$('overlayDisplayMode').value='normal';publishOverlayDisplayMode();}
-  try{syncNow();}catch(e){console.warn('Score sync failed while toggling shootout controls',e)}
-  publishPenalty();
-});
-function getShootoutOverlayUrl(){const field=$('shootoutLink');const entered=field?.value?.trim();if(entered){try{return new URL(entered,location.href).href}catch(e){}}const u=new URL(location.href);u.pathname=u.pathname.replace(/[^/]*$/,'football-overlay.html');u.search='';u.hash='';return u.href}
-function refreshShootoutLink(){const field=$('shootoutLink');if(!field.value.trim())field.value=getShootoutOverlayUrl()}
-$('shootoutLink').addEventListener('change',()=>{const field=$('shootoutLink');try{const parsed=new URL(field.value.trim(),location.href);field.value=parsed.href;$('shootoutLinkStatus').textContent='URL set. If opening it still shows 404, upload the overlay HTML to this exact hosting path.'}catch(e){$('shootoutLinkStatus').textContent='Enter a valid full overlay URL.'}})
-refreshShootoutLink();
-$('shootoutOpen').addEventListener('click',()=>{const field=$('shootoutLink');const url=field.value.trim()||getShootoutOverlayUrl();window.open(url,'_blank')});
-$('shootoutCopy').addEventListener('click',async()=>{const url=$('shootoutLink').value.trim()||getShootoutOverlayUrl();$('shootoutLink').value=url;try{await navigator.clipboard.writeText(url);$('shootoutLinkStatus').textContent='Shootout overlay link copied. Paste it into OBS Browser Source.'}catch(e){$('shootoutLink').focus();$('shootoutLink').select();$('shootoutLinkStatus').textContent='Link selected. Press Ctrl+C to copy it, then paste into OBS Browser Source.'}});
-$('penApplyColors').addEventListener('click',()=>{publishPenalty();$('penResult').textContent='SHOOTOUT OVERLAY COLOURS APPLIED';});
-['penBgColor','penAccentColor','penTeamAColor','penTeamBColor','penResultColor','penResultTextColor'].forEach(id=>$(id).addEventListener('input',publishPenalty));
-$('penGoal').addEventListener('click',()=>penaltyKick('goal'));
-$('penMiss').addEventListener('click',()=>penaltyKick('miss'));
-$('penFinish').addEventListener('click',()=>{penaltyFinished=true;publishPenalty()});
-$('penUndo').addEventListener('click',()=>{penaltyFinished=false;const t=penaltyState.A.length>=penaltyState.B.length?'A':'B';penaltyState[t].pop();$('penActive').value=t;publishPenalty()});
-$('penReset').addEventListener('click',()=>{penaltyState.A.length=0;penaltyState.B.length=0;penaltyFinished=false;$('penActive').value='A';$('penRound').value='1';$('penShooter').value='';publishPenalty()});
-['penTeamA','penTeamB','penRound','penShooter','penActive','penKickCount'].forEach(id=>$(id).addEventListener('change',publishPenalty));
-
-const params=new URLSearchParams(location.search);
-const active=JSON.parse(localStorage.getItem('brklive19_activeFootballMatch')||'null');
-const selectedMatchId=params.get('matchId')||active?.matchId||'';
-let broadcast={tournamentName:'',matchName:'',customText:'',graphic:'none',playXI:null,playerChange:null};
-let matchXI={home:[],away:[]};
-function loadIndexFootballDetails(){
-  try{
-    const matches=JSON.parse(localStorage.getItem('brklive_matches')||'[]');
-    const m=matches.find(x=>x.id===selectedMatchId && x.sport==='football') || matches.find(x=>x.sport==='football');
-    if(m){
-      const ts=JSON.parse(localStorage.getItem('brklive_tournaments')||'[]');
-      const t=ts.find(x=>x.id===m.tournamentId && x.sport==='football');
-      broadcast.tournamentName=t?.name||m.tournamentName||'';
-      broadcast.matchName=m.matchName||`${m.teamAName||'HOME'} vs ${m.teamBName||'AWAY'}`;
-      matchXI.home=Array.isArray(m.xiTeamA)?m.xiTeamA:[]; matchXI.away=Array.isArray(m.xiTeamB)?m.xiTeamB:[];
-      $('tournament').value=broadcast.tournamentName; $('match').value=broadcast.matchName;
-      $('home').value=m.teamAName||'HOME'; $('away').value=m.teamBName||'AWAY';
-      localStorage.setItem('brklive19_activeFootballMatch',JSON.stringify({matchId:m.id,tournamentId:m.tournamentId,homeTeam:m.teamAName,awayTeam:m.teamBName,duration:m.footballDuration||90,halfMinutes:m.footballHalfMinutes||45,extraTime:m.footballExtraTime!==false}));
-    }
-  }catch(e){console.warn('Index football data load failed',e)}
-}
-loadIndexFootballDetails();
-// Use the saved active match only when no matchId was supplied by Index.
-if(active && !selectedMatchId){$('home').value=active.homeTeam||'HOME';$('away').value=active.awayTeam||'AWAY';}
-let saved={};try{saved=JSON.parse(localStorage.getItem('brklive19_football_state')||'{}')||{}}catch(e){}
-let s={home:Number(saved.home)||0,away:Number(saved.away)||0,hy:Number(saved.hy)||0,ay:Number(saved.ay)||0,hr:Number(saved.hr)||0,ar:Number(saved.ar)||0,sec:Number(saved.sec)||0,run:false,t:null,goal:null};
-let colors=JSON.parse(localStorage.getItem('brklive19_football_colors')||'{}');
-let bc=null;try{bc=new BroadcastChannel('BRKLIVE19_LIVE')}catch(e){}
-let cloudBusy=false, cloudQueued=false;
-function packet(){return{sport:'football',overlayDisplayMode,football:{homeTeam:$('home').value||'HOME',awayTeam:$('away').value||'AWAY',homeScore:s.home,awayScore:s.away,homeYellow:s.hy,awayYellow:s.ay,homeRed:s.hr,awayRed:s.ar,seconds:s.sec,running:!!s.run,period:$('period').value,addedTime:Number($('added').value)||0,updatedAt:Date.now(),colors:{primary:colors.primary||'#087d4b',accent:colors.accent||'#53e89a',score:colors.score||'#061b35',goal:colors.goal||'#16c784'},goal:s.goal||null,broadcast:{...broadcast,matchXI}}}}
-function publishLocal(){const d=packet();localStorage.setItem('brklive19_football',JSON.stringify(d.football));localStorage.setItem('brklive19_liveSport',JSON.stringify(d.football));localStorage.setItem('brklive19_football_state',JSON.stringify({...s,t:null}));try{bc&&bc.postMessage(d)}catch(e){}return d}
-async function publishCloud(){if(cloudBusy){cloudQueued=true;return}cloudBusy=true;try{const d=publishLocal();await set(live,{...d,updatedAt:Date.now()})}catch(e){console.warn('Football Firebase sync failed',e)}finally{cloudBusy=false;if(cloudQueued){cloudQueued=false;publishCloud()}}}
-function fillPlayerChangeLists(){const team=$('changeTeam').value;const arr=matchXI[team]||[];const out=$('playerOut'),inn=$('playerIn');out.innerHTML='<option value="">— Select Player —</option>'+arr.map(p=>`<option>${p}</option>`).join('');inn.innerHTML='<option value="">— Select Player —</option>'+arr.map(p=>`<option>${p}</option>`).join('')}
-function showPlayXI(){broadcast.graphic='playXI';broadcast.playXI={homeTeam:$('home').value||'HOME',awayTeam:$('away').value||'AWAY',homePlayers:matchXI.home,awayPlayers:matchXI.away};broadcast.playerChange=null;localStorage.setItem('brklive19_football_broadcast',JSON.stringify(broadcast));$('playerGraphicStatus').textContent=`Play XI: ${matchXI.home.length} + ${matchXI.away.length} players`;syncNow()}
-$('showPlayXI').onclick=showPlayXI; $('showPlayerChange').onclick=()=>{$('playerChangeForm').style.display='block';fillPlayerChangeLists();$('playerGraphicStatus').textContent='Select player IN/OUT';}; $('changeTeam').onchange=fillPlayerChangeLists; $('sendPlayerChange').onclick=()=>{const team=$('changeTeam').value,out=$('playerOut').value,inn=$('playerIn').value;if(!out||!inn){alert('Select Player OUT and Player IN');return} broadcast.graphic='playerChange';broadcast.playerChange={team,teamName:team==='home'?($('home').value||'HOME'):($('away').value||'AWAY'),playerOut:out,playerIn:inn};broadcast.playXI=null;localStorage.setItem('brklive19_football_broadcast',JSON.stringify(broadcast));$('playerGraphicStatus').textContent=`${broadcast.playerChange.teamName}: ${out} OUT → ${inn} IN`;syncNow()};
-function setGraphic(type){
-  broadcast.tournamentName=$('tournament').value.trim();
-  broadcast.matchName=$('match').value.trim();
-  broadcast.customText=$('customText').value.trim();
-  if(type==='custom'&&!broadcast.customText){$('graphicStatus').textContent='Enter custom text first';$('customText').focus();return;}
-  broadcast.graphic=type;
-  localStorage.setItem('brklive19_football_broadcast',JSON.stringify(broadcast));
-  $('graphicStatus').textContent=type==='tournament'?`Tournament: ${broadcast.tournamentName||'—'}`:type==='match'?`Match: ${broadcast.matchName||'—'}`:type==='custom'?`Custom: ${broadcast.customText||'—'}`:'No graphic selected';
-  syncNow();
-}
-['tournament','match','customText'].forEach(id=>$(id).addEventListener('input',()=>{broadcast.tournamentName=$('tournament').value;broadcast.matchName=$('match').value;broadcast.customText=$('customText').value;localStorage.setItem('brklive19_football_broadcast',JSON.stringify(broadcast));}));
-$('showTournament').onclick=()=>setGraphic('tournament');
-$('showMatch').onclick=()=>setGraphic('match');
-$('showCustom').onclick=()=>setGraphic('custom');
-$('hideGraphic').onclick=()=>setGraphic('none');
-try{const b=JSON.parse(localStorage.getItem('brklive19_football_broadcast')||'null');if(b){broadcast={...broadcast,...b};$('tournament').value=broadcast.tournamentName||'';$('match').value=broadcast.matchName||'';$('customText').value=broadcast.customText||'';}}catch(e){}
-
-function render(){ $('homeName').textContent=$('home').value.toUpperCase()||'HOME';$('awayName').textContent=$('away').value.toUpperCase()||'AWAY';$('homeScore').textContent=s.home;$('awayScore').textContent=s.away;$('timer').textContent=String(Math.floor(s.sec/60)).padStart(2,'0')+':'+String(s.sec%60).padStart(2,'0');$('status').textContent=$('period').value+' • +'+(Number($('added').value)||0)+' MIN • 🟨 '+s.hy+'-'+s.ay+' • 🟥 '+s.hr+'-'+s.ar}
-function syncNow(){render();publishLocal();publishCloud()}
-function bind(id,fn){$(id).onclick=()=>{fn();syncNow()}}
-bind('homeGoal',()=>{s.home++;s.goal={team:'home',name:$('home').value||'HOME',id:Date.now()}});bind('awayGoal',()=>{s.away++;s.goal={team:'away',name:$('away').value||'AWAY',id:Date.now()}});bind('homeYellow',()=>s.hy++);bind('awayYellow',()=>s.ay++);bind('homeRed',()=>s.hr++);bind('awayRed',()=>s.ar++);
-$('start').onclick=()=>{if(s.run)return;s.run=true;syncNow();s.t=setInterval(()=>{s.sec++;render();publishLocal();publishCloud()},1000)};
-$('pause').onclick=()=>{s.run=false;clearInterval(s.t);s.t=null;syncNow()};
-$('reset').onclick=()=>{s.run=false;clearInterval(s.t);s={home:0,away:0,hy:0,ay:0,hr:0,ar:0,sec:0,run:false,t:null,goal:null};syncNow()};
-async function send(){syncNow();$('status').textContent='LIVE SCORE UPDATED'}
-$('applyColors').onclick=()=>{colors={primary:$('primaryColor').value,accent:$('accentColor').value,score:$('scoreColor').value,goal:$('goalColor').value};localStorage.setItem('brklive19_football_colors',JSON.stringify(colors));syncNow()};
-$('save').onclick=send;
-['home','away','period','added'].forEach(id=>{$(id).addEventListener('change',syncNow);$(id).addEventListener('input',()=>{render();publishLocal()})});
-const overlayUrl=()=>{const u=new URL(location.href);u.pathname=u.pathname.replace(/[^/]*$/,'football-overlay.html');u.search='';u.hash='';return u.href};
-const overlayUrl2=()=>{const u=new URL(location.href);u.pathname=u.pathname.replace(/[^/]*$/,'football%20overlayer%202%20(1).html');u.search='';u.hash='';return u.href};
-$('openOverlay').onclick=()=>window.open(overlayUrl(),'_blank');
-$('copyOverlay').onclick=()=>navigator.clipboard.writeText(overlayUrl()).then(()=>alert('Overlay link 1 copied'));
-$('openOverlay2').onclick=()=>window.open(overlayUrl2(),'_blank');
-$('copyOverlay2').onclick=()=>navigator.clipboard.writeText(overlayUrl2()).then(()=>alert('Overlay link 2 copied'));
-render();publishLocal();publishCloud();
-</script><style>
-/* Shootout controls are visible immediately; the red button can collapse/reopen them. */
-#shootoutPanel{display:block!important;grid-column:1/-1!important;position:relative!important;inset:auto!important;z-index:5!important;max-height:none!important;overflow:visible!important;margin:8px 0!important;background:#07131f!important;border:2px solid #ff3158!important;border-radius:12px!important;padding:14px!important}
-#shootoutPanel[style*='display: none']{display:none!important}
-@media(min-width:1001px){html,body{height:auto!important;min-height:100%!important;overflow-y:auto!important}.wrap{height:auto!important;min-height:100vh!important;overflow:visible!important;grid-template-rows:auto!important}}
-@media(max-width:1000px){body{overflow-y:auto!important}.wrap{height:auto!important;overflow:visible!important}}
-</style>
-<style id="BRKLIVE19-SHOOTOUT-PANEL-VISIBILITY-FIX">
-/* Keep the shootout controller in normal page flow, immediately below the title. */
-html, body {
-  height:auto !important;
-  min-height:100% !important;
-  max-height:none !important;
-  overflow-x:hidden !important;
-  overflow-y:auto !important;
-}
-body { overflow-y:auto !important; }
-.wrap {
-  height:auto !important;
-  min-height:100vh !important;
-  max-height:none !important;
-  overflow:visible !important;
-  grid-template-rows:none !important;
-  align-content:start !important;
-}
-#shootoutPanel {
-  grid-column:1 / -1 !important;
-  position:relative !important;
-  inset:auto !important;
-  top:auto !important;
-  right:auto !important;
-  bottom:auto !important;
-  left:auto !important;
-  z-index:10 !important;
-  width:100% !important;
-  max-height:none !important;
-  overflow:visible !important;
-  margin:8px 0 12px !important;
-  display:block;
-  border:2px solid #ff3158 !important;
-  background:linear-gradient(135deg,#102b43,#07131f 65%,#25101d) !important;
-  box-shadow:0 10px 30px #0008,0 0 18px #ff315833 !important;
-}
-#shootoutPanel[style*="display: none"] { display:none !important; }
-#shootoutPanel h2 { color:#ff718c !important; }
-#shootoutPanel .grid { gap:7px !important; }
-#shootoutPanel input, #shootoutPanel select { min-width:0; }
-@media(min-width:1001px) {
-  .wrap { grid-template-columns:repeat(3,minmax(0,1fr)) !important; }
-  .wrap > h1, #shootoutPanel { grid-column:1 / -1 !important; }
-}
-@media(max-width:1000px) {
-  .wrap { height:auto !important; overflow:visible !important; }
-  #shootoutPanel { grid-column:1 / -1 !important; }
-}
-@media(max-width:620px) {
-  #shootoutPanel .grid { grid-template-columns:1fr 1fr !important; }
-  #shootoutPanel { padding:10px !important; }
-}
-</style>
-</div><script>
-(function(){
-  const normal=document.getElementById('normalControlPanel');
-  const penalty=document.getElementById('penaltyControlPanel');
-  const matchTab=document.getElementById('matchTab');
-  const penaltyTab=document.getElementById('penaltyTab');
-  const shootoutPanel=document.getElementById('shootoutPanel');
-  function show(which){
-    const isPenalty=which==='penalty';
-    normal.style.display=isPenalty?'none':'block';
-    penalty.style.display=isPenalty?'block':'none';
-    penalty.classList.toggle('active',isPenalty);
-    matchTab.classList.toggle('active',!isPenalty);
-    penaltyTab.classList.toggle('active',isPenalty);
-    if(isPenalty && shootoutPanel){
-      shootoutPanel.style.display='block';
-      shootoutPanel.dataset.open='true';
-    }
-    try{localStorage.setItem('brklive19_football_control_tab',which)}catch(e){}
-    window.scrollTo({top:0,behavior:'smooth'});
-  }
-  matchTab.addEventListener('click',()=>show('match'));
-  penaltyTab.addEventListener('click',()=>show('penalty'));
-  show('match');
-})();
-</script></body>
-<style id="BRKLIVE19-GLOBAL-SCROLL-FIX">
-
-/* =========================================================
-   BRKLIVE19 GLOBAL PAGE SCROLL FIX
-   All control/setup pages can scroll when content exceeds
-   the viewport. Broadcast overlays remain unchanged.
-   ========================================================= */
-html {
-  min-height: 100% !important;
-  height: auto !important;
-  overflow-x: hidden !important;
-  overflow-y: auto !important;
-  scroll-behavior: smooth;
-}
-body {
-  min-height: 100vh !important;
-  height: auto !important;
-  max-height: none !important;
-  overflow-x: hidden !important;
-  overflow-y: auto !important;
-  overscroll-behavior-y: auto;
-  padding-bottom: 48px !important;
-}
-/* Never let a full page be clipped by a fixed-height wrapper. */
-.page, .container, .wrap, .main, .content, .content-area,
-.dashboard, .app, .app-container, .main-content, .section,
-.sections, .settings, .form-container, .score-container {
-  max-height: none;
-}
-/* Long forms/tables remain reachable on small screens. */
-table {
-  max-width: 100%;
-}
-pre, textarea {
-  max-width: 100%;
-}
-@media (max-width: 700px) {
-  body { padding-left: 10px !important; padding-right: 10px !important; }
+<section><h2>Match result</h2>
+<label>Result message</label>
+<input id="resultText" placeholder="Example: Muding won 2–1">
+<label>Show result on overlay</label>
+<select id="showResult"><option value="yes">Show result</option><option value="no">Hide result</option></select>
+<div class="actions">
+<button class="good" onclick="setResultFromScore()">Generate result from score</button>
+<button class="secondary" onclick="clearResult()">Clear result</button>
+</div>
+<p class="muted">You can type a custom result or generate one from the current score. For a penalty shootout, the result uses the penalty score when it decides the winner.</p>
+</section>
+<section><h2>Penalty Shootout Score</h2>
+<p class="muted">Select Penalty Shootout in the Period menu. Record every attempt here.</p>
+<div class="row">
+ <div><label>Home penalties (scored / attempts)</label><div class="score" id="homePensDisplay">0 / 0</div>
+ <button class="good" onclick="recordPenalty('home',true)">HOME SCORED</button>
+ <button class="danger" onclick="recordPenalty('home',false)">HOME MISSED</button></div>
+ <div><label>Away penalties (scored / attempts)</label><div class="score" id="awayPensDisplay">0 / 0</div>
+ <button class="good" onclick="recordPenalty('away',true)">AWAY SCORED</button>
+ <button class="danger" onclick="recordPenalty('away',false)">AWAY MISSED</button></div>
+</div>
+<label>Next kicker</label><select id="nextKicker"><option value="home">Home team</option><option value="away">Away team</option></select>
+<button class="secondary" onclick="resetPenalties()">Reset penalty shootout</button>
+</section>
+<section><h2>Overlay appearance</h2>
+<label>Overall accent colour</label><input type="color" id="accent" value="#59dcff">
+<label>Overlay background style</label><select id="style"><option value="glass">Dark glass</option><option value="solid">Solid dark</option><option value="light">Light</option></select>
+<label>Custom text colour</label><input type="color" id="customColor" value="#ffffff">
+<label>Show tournament / match details</label><select id="showDetails"><option value="yes">Show</option><option value="no">Hide</option></select>
+<label>Show venue / match type</label><select id="showVenue"><option value="yes">Show</option><option value="no">Hide</option></select>
+<label>Show penalty score on overlay</label><select id="showPenalty"><option value="yes" selected>Show</option><option value="no">Hide</option></select>
+<button onclick="publish()">Apply appearance & details</button>
+</section>
+<section><h2>Overlay link</h2>
+<p class="muted">Copy this URL and paste it into OBS → Sources → Browser.</p>
+<div class="linkbox" id="overlayLink"></div>
+<div class="actions"><button onclick="copyLink()">Copy overlay link</button><button class="secondary" onclick="openOverlay()">Preview overlay</button></div>
+<p class="muted">If using another device, host these files on the same website and open the hosted overlay URL. Browser local storage sync works when controller and overlay are opened in the same browser profile.</p>
+</section>
+</div>
+<script>
+const ids=['tournament','match','venue','matchType','period','customText','home','homeColor','homeText','away','awayColor','awayText','accent','style','customColor','showDetails','showVenue','showPenalty','resultText','showResult'];
+let data={homeScore:0,awayScore:0,elapsed:0,running:false,event:null,homePens:0,awayPens:0,homeAttempts:0,awayAttempts:0,nextKicker:'home',showPenalty:'yes',showResult:'yes',resultText:''};
+let timer=null;
+function readForm(){ids.forEach(id=>data[id]=document.getElementById(id).value);save()}
+function save(){localStorage.setItem('brklive19FootballOverlay',JSON.stringify(data));updateUI()}
+function updateUI(){
+ document.getElementById('homeScore').textContent=data.homeScore||0;
+ document.getElementById('awayScore').textContent=data.awayScore||0;
+ document.getElementById('clock').textContent=fmt(data.elapsed||0);
+ document.getElementById('overlayLink').textContent=new URL('overlay.html',location.href).href;
+ const hp=document.getElementById('homePensDisplay'), ap=document.getElementById('awayPensDisplay');
+ if(hp)hp.textContent=(data.homePens||0)+' / '+(data.homeAttempts||0);
+ if(ap)ap.textContent=(data.awayPens||0)+' / '+(data.awayAttempts||0);
+ const nk=document.getElementById('nextKicker'); if(nk)nk.value=data.nextKicker||'home';
 }
 
-</style>
-<style id="BRKLIVE19-COMPACT-CONTROL">
-*{box-sizing:border-box}
-body{padding:7px!important;font-size:12px!important}
-.wrap{max-width:1600px!important;width:100%;margin:0 auto}
-h1{font-size:20px!important;margin:3px 0 7px!important}
-h2{font-size:14px!important;margin:2px 0 7px!important}
-h3{font-size:12px!important}
-.card{padding:8px!important;margin:0!important;border-radius:11px!important;box-shadow:0 5px 16px #0006!important}
-label{font-size:10px!important;margin-top:4px!important}
-input,select{padding:6px 8px!important;margin:2px 0!important;font-size:12px!important;min-height:29px}
-.btn{padding:7px 6px!important;margin-top:4px!important;font-size:11px!important;border-radius:7px!important;min-height:30px}
-.grid{gap:6px!important}
-.score{font-size:38px!important}
-.timer{font-size:30px!important}
-.status{padding:6px!important;margin-top:5px!important;font-size:10px}
-.links{gap:5px!important}
-.wrap{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;align-items:start}
-.wrap>h1{grid-column:1/-1}
-.wrap>.card:nth-of-type(1){grid-column:1}
-.wrap>.grid{grid-column:2}
-.wrap>.card:nth-of-type(3){grid-column:3}
-.wrap>.card:nth-of-type(4){grid-column:1}
-.wrap>.card:nth-of-type(5){grid-column:2}
-.wrap>.card:nth-of-type(6){grid-column:3}
-.wrap>.card:nth-of-type(7){grid-column:1/-1}
-#shootoutPanel{grid-column:1/-1}
-#shootoutPanel[style*="display: block"]{display:block!important;position:fixed;inset:10px;z-index:999;overflow:auto;max-height:calc(100vh - 20px);background:#07131f}
-#shootoutPanel .grid{gap:5px!important}
-#shootoutPanel input[type=color]{height:28px!important;padding:2px!important}
-@media(max-width:1000px){
- body{overflow-y:auto!important}
- .wrap{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}
- .wrap>h1{grid-column:1/-1}
- .wrap>.card,.wrap>.grid{grid-column:auto!important}
- .wrap>.card:nth-of-type(6),#shootoutPanel{grid-column:1/-1!important}
+function fmt(s){return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0')}
+function score(side,n){data[side+'Score']=Math.max(0,(data[side+'Score']||0)+n);readForm()}
+function resetScore(){data.homeScore=0;data.awayScore=0;readForm()}
+function tick(){data.elapsed++;save()}
+function startClock(){if(timer)return;data.running=true;timer=setInterval(tick,1000);save()}
+function pauseClock(){clearInterval(timer);timer=null;data.running=false;save()}
+function resetClock(){pauseClock();data.elapsed=0;save()}
+function setClock(){pauseClock();data.elapsed=Math.max(0,(+setMinutes.value||0)*60+(+setSeconds.value||0));save()}
+function fireEvent(type,team,player){data.event={type,team,player:player||'',stamp:Date.now()};save()}
+function goal(team){data[team+'Score']=(data[team+'Score']||0)+1;fireEvent('goal',team,player.value);readForm()}
+function card(type){fireEvent(type,cardTeam.value,player.value);readForm()}
+function eventClear(){data.event=null;save()}
+function recordPenalty(side,scored){
+ data[side+'Attempts']=(Number(data[side+'Attempts'])||0)+1;
+ if(scored)data[side+'Pens']=(Number(data[side+'Pens'])||0)+1;
+ if(!Array.isArray(data[side+'PenaltyResults']))data[side+'PenaltyResults']=[];
+ data[side+'PenaltyResults'].push(!!scored);
+ data.nextKicker=(side==='home'?'away':'home');
+ data.event={type:scored?'penalty-goal':'penalty-miss',team:side,player:'',stamp:Date.now()};
+ save();
 }
-@media(max-width:620px){.wrap{grid-template-columns:1fr}.wrap>h1,.wrap>.card,.wrap>.grid,#shootoutPanel{grid-column:1!important}}
-@media(min-width:1001px){html,body{height:100vh!important;overflow:hidden!important}.wrap{height:calc(100vh - 14px);grid-template-rows:auto auto auto auto;overflow:hidden}.wrap>.card{min-height:0;overflow:visible}.wrap>.grid{min-height:0}}
-</style>
-
-<style id="BRKLIVE19-PENALTY-CONTROLS-FULL-VISIBILITY">
-html, body {height:auto!important;min-height:100%!important;max-height:none!important;overflow-x:hidden!important;overflow-y:auto!important}
-body {display:block!important;padding:10px!important}
-.wrap {display:block!important;width:100%!important;max-width:1280px!important;height:auto!important;min-height:0!important;max-height:none!important;overflow:visible!important;margin:0 auto!important}
-#controlTabs {display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:8px!important;position:sticky!important;top:0!important;z-index:1000!important;padding:8px 0!important;background:#06111d!important}
-#normalControlPanel,#penaltyControlPanel {width:100%!important;max-width:100%!important;min-width:0!important;height:auto!important;max-height:none!important;overflow:visible!important}
-#normalControlPanel {display:block}
-#penaltyControlPanel {display:none}
-#penaltyControlPanel.active {display:block!important}
-#penaltyControlPanel #shootoutPanel,#penaltyControlPanel.active #shootoutPanel {display:block!important;position:relative!important;inset:auto!important;top:auto!important;right:auto!important;bottom:auto!important;left:auto!important;width:100%!important;max-width:100%!important;height:auto!important;min-height:0!important;max-height:none!important;overflow:visible!important;margin:8px 0 20px!important;padding:clamp(12px,2vw,22px)!important;transform:none!important}
-#penaltyControlPanel #shootoutPanel h2 {display:block!important;margin:0 0 14px!important;font-size:clamp(17px,2vw,24px)!important;line-height:1.35!important;overflow:visible!important}
-#penaltyControlPanel #shootoutPanel .grid {display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px!important;width:100%!important;overflow:visible!important}
-#penaltyControlPanel #shootoutPanel .grid>* {min-width:0!important;max-width:100%!important}
-#penaltyControlPanel #shootoutPanel label {display:block!important;margin:8px 0 4px!important;font-size:12px!important}
-#penaltyControlPanel #shootoutPanel input,#penaltyControlPanel #shootoutPanel select {display:block!important;width:100%!important;min-width:0!important;min-height:40px!important;height:auto!important;padding:8px 10px!important;font-size:14px!important}
-#penaltyControlPanel #shootoutPanel input[type=color] {height:42px!important;min-height:42px!important;padding:3px!important}
-#penaltyControlPanel #shootoutPanel .btn {display:block!important;width:100%!important;min-width:0!important;min-height:46px!important;height:auto!important;padding:12px 8px!important;margin:5px 0!important;font-size:13px!important;line-height:1.3!important;white-space:normal!important;overflow-wrap:anywhere!important}
-#penaltyControlPanel #shootoutPanel .status {display:block!important;width:100%!important;min-height:44px!important;height:auto!important;overflow:visible!important;white-space:normal!important;line-height:1.45!important;padding:12px!important;font-size:13px!important}
-#penaltyControlPanel #shootoutPanel>div[style*="margin-top"] {height:auto!important;max-height:none!important;overflow:visible!important}
-@media(max-width:620px){body{padding:7px!important}#penaltyControlPanel #shootoutPanel .grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:7px!important}#penaltyControlPanel #shootoutPanel .btn{min-height:48px!important;font-size:12px!important}}
-@media(max-width:360px){#penaltyControlPanel #shootoutPanel .grid{grid-template-columns:minmax(0,1fr)!important}}
-</style>
-
-</html>
+function resetPenalties(){
+ data.homePens=0;data.awayPens=0;data.homeAttempts=0;data.awayAttempts=0;
+ data.homePenaltyResults=[];data.awayPenaltyResults=[];
+ data.nextKicker='home';data.event=null;save();
+}
+function setResultFromScore(){
+ const h=Number(data.homeScore)||0, a=Number(data.awayScore)||0;
+ const hp=Number(data.homePens)||0, ap=Number(data.awayPens)||0;
+ const isPens=String(data.period||'').toLowerCase().includes('penalty') || (Number(data.homeAttempts)||0)>0 || (Number(data.awayAttempts)||0)>0;
+ let result;
+ if(h===a && isPens && hp!==ap){
+   result=(data.home||'HOME')+' won on penalties '+hp+'–'+ap;
+ } else if(h>a){
+   result=(data.home||'HOME')+' won '+h+'–'+a;
+ } else if(a>h){
+   result=(data.away||'AWAY')+' won '+a+'–'+h;
+ } else if(isPens && hp===ap){
+   result='Match drawn '+h+'–'+a+' • Penalties level '+hp+'–'+ap;
+ } else {
+   result='Match drawn '+h+'–'+a;
+ }
+ data.resultText=result;
+ const field=document.getElementById('resultText');if(field)field.value=result;
+ const show=document.getElementById('showResult');if(show){show.value='yes';data.showResult='yes'}
+ save();
+}
+function clearResult(){data.resultText='';data.showResult='no';const f=document.getElementById('resultText');if(f)f.value='';const s=document.getElementById('showResult');if(s)s.value='no';save()}
+function publish(){readForm()}
+function copyLink(){navigator.clipboard.writeText(new URL('overlay.html',location.href).href).then(()=>alert('Overlay link copied')).catch(()=>alert('Copy failed. Select and copy the link manually.'))}
+function openOverlay(){window.open('overlay.html','_blank')}
+ids.forEach(id=>document.getElementById(id).addEventListener('input',readForm));
+document.getElementById('nextKicker').addEventListener('change',e=>{data.nextKicker=e.target.value;save()});
+try{const old=JSON.parse(localStorage.getItem('brklive19FootballOverlay')||'{}');data={...data,...old};ids.forEach(id=>{if(data[id]!==undefined)document.getElementById(id).value=data[id]});}catch(e){}
+updateUI();if(data.running)startClock();window.addEventListener('storage',e=>{if(e.key==='brklive19FootballOverlay'){data={...data,...JSON.parse(e.newValue||'{}')};updateUI()}});
+</script></body></html>
