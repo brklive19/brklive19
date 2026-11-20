@@ -91,5 +91,5 @@ let big=e.type==='goal'?'⚽ GOAL!':e.type==='yellow'?'🟨 YELLOW CARD':e.type=
 document.getElementById('eventBig').textContent=big;document.getElementById('eventSub').textContent=[name,e.player].filter(Boolean).join(' • ');
 let el=document.getElementById('event');el.classList.remove('show');void el.offsetWidth;el.classList.add('show');
 }
-render();setInterval(render,250);window.addEventListener('storage',render);
+render();setInterval(render,250);window.addEventListener('storage',render);window.addEventListener('focus',render);document.addEventListener('visibilitychange',()=>{if(!document.hidden)render()});
 </script></body></html>
