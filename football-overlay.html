@@ -47,68 +47,10 @@
 </div></div>
 <div class="event" id="event"><div class="big" id="eventBig">⚽ GOAL!</div><div class="sub" id="eventSub"></div></div>
 </div>
-<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-database-compat.js"></script>
 <script>
-const firebaseConfig = {
-  apiKey: "AIzaSyBLWq1bqJ32F2cg3mqYQ0uwXcS32vTA3A4",
-  authDomain: "brklive19-2bab4.firebaseapp.com",
-  databaseURL: "https://brklive19-2bab4-default-rtdb.asia-southeast1.firebasedatabase.app",
-  projectId: "brklive19-2bab4",
-  storageBucket: "brklive19-2bab4.firebasestorage.app",
-  messagingSenderId: "294058533898",
-  appId: "1:294058533898:web:4996705937e969939cabf3",
-  measurementId: "G-RW18E7LVEX"
-};
-const firebaseApp = firebase.initializeApp(firebaseConfig);
-const footballDb = firebaseApp.database();
-const FOOTBALL_REF = footballDb.ref('brklive19/football/live');
-
-const KEY='brklive19FootballOverlay';let lastStamp=0;let liveData={};
+const DB_URL='https://brklive19-2bab4-default-rtdb.asia-southeast1.firebasedatabase.app/brklive19/football/live.json';let lastStamp=0,lastUpdatedAt=0;
 function fmt(s){return String(Math.floor((s||0)/60)).padStart(2,'0')+':'+String((s||0)%60).padStart(2,'0')}
-function render(remoteData){let d=remoteData||liveData||{};if(!remoteData){try{d=JSON.parse(localStorage.getItem(KEY)||'{}')}catch(e){}} liveData=d;
-const $=id=>document.getElementById(id);
-$('home').textContent=d.home||'HOME';$('away').textContent=d.away||'AWAY';$('hs').textContent=d.homeScore||0;$('as').textContent=d.awayScore||0;
-$('homeBox').style.background=d.homeColor||'#0878c9';$('homeBox').style.color=d.homeText||'#fff';$('awayBox').style.background=d.awayColor||'#d83b42';$('awayBox').style.color=d.awayText||'#fff';
-$('clock').firstChild.textContent=fmt(d.elapsed)+' ';$('period').textContent=(d.period||'1st Half').toUpperCase();
-$('meta').textContent=d.showDetails==='no'?'':[d.tournament,d.match].filter(Boolean).join('  •  ');
-$('details').textContent=d.showVenue==='no'?'':[d.venue,d.matchType].filter(Boolean).join('  •  ');
-$('custom').textContent=d.customText||'';$('custom').style.color=d.customColor||'#fff';
-const resultPanel=$('resultPanel');
-if(resultPanel){
- const resultText=String(d.resultText||'').trim();
- const showResult=d.showResult!=='no';
- resultPanel.style.display=(showResult && resultText)?'block':'none';
- resultPanel.textContent=(showResult && resultText)?'FULL TIME RESULT • '+resultText:'';
-}
-const panel=$('penaltyPanel');
-if(panel){
- const ptext=String(d.period||'').toLowerCase();
- const attemptsH=Number(d.homeAttempts)||0, attemptsA=Number(d.awayAttempts)||0;
- const isPenalty=ptext.includes('penalty')||attemptsH>0||attemptsA>0;
- const visible=d.showPenalty!=='no';
- panel.style.display=(isPenalty&&visible)?'block':'none';
- if(isPenalty&&visible){
-  $('penaltySummary').innerHTML='<span class="penalty-title">PENALTY SHOOTOUT</span> &nbsp; '+
-   (d.home||'HOME')+' <b>'+(Number(d.homePens)||0)+' / '+attemptsH+'</b> — '+
-   '<b>'+(Number(d.awayPens)||0)+' / '+attemptsA+'</b> '+(d.away||'AWAY')+
-   ' &nbsp; <span class="penalty-next">NEXT: '+((d.nextKicker||'home')==='home'?(d.home||'HOME'):(d.away||'AWAY'))+'</span>';
-  $('homePenaltyName').textContent=d.home||'HOME';$('awayPenaltyName').textContent=d.away||'AWAY';
-  const dotHTML=arr=>Array.isArray(arr)&&arr.length?arr.map(v=>'<span class="penalty-dot '+(v?'scored':'missed')+'" title="'+(v?'Scored':'Missed')+'"></span>').join(''):'<span class="penalty-empty">No attempts yet</span>';
-  $('homePenaltyDots').innerHTML=dotHTML(d.homePenaltyResults);
-  $('awayPenaltyDots').innerHTML=dotHTML(d.awayPenaltyResults);
- }
-}
-$('stage').style.setProperty('--accent',d.accent||'#59dcff');$('lower').className='lower style-'+(d.style||'glass');
-if(d.event&&d.event.stamp&&d.event.stamp!==lastStamp){lastStamp=d.event.stamp;showEvent(d.event)}
-}
-function showEvent(e){let team=e.team==='home'?'home':'away';let name=e.team==='home'?(liveData.home||'HOME'):(liveData.away||'AWAY');
-let big=e.type==='goal'?'⚽ GOAL!':e.type==='yellow'?'🟨 YELLOW CARD':e.type==='red'?'🟥 RED CARD':e.type==='penalty-goal'?'⚽ PENALTY SCORED!':e.type==='penalty-miss'?'✕ PENALTY MISSED':'🟥 RED CARD';
-document.getElementById('eventBig').textContent=big;document.getElementById('eventSub').textContent=[name,e.player].filter(Boolean).join(' • ');
-let el=document.getElementById('event');el.classList.remove('show');void el.offsetWidth;el.classList.add('show');
-}
-render();
-const overlayDb=firebase.database();
-overlayDb.ref('brklive19/football/live').on('value',snapshot=>{const d=snapshot.val()||{};liveData=d;localStorage.setItem(KEY,JSON.stringify(d));render(d)},err=>console.error('Firebase overlay read failed',err));
-window.addEventListener('storage',()=>render());
+function showEvent(e,d){let n=e.team==='home'?(d.home||'HOME'):(d.away||'AWAY'),b=e.type==='goal'?'⚽ GOAL!':e.type==='yellow'?'🟨 YELLOW CARD':e.type==='red'?'🟥 RED CARD':e.type==='penalty-goal'?'⚽ PENALTY SCORED!':e.type==='penalty-miss'?'✕ PENALTY MISSED':'🟥 RED CARD';eventBig.textContent=b;eventSub.textContent=[n,e.player].filter(Boolean).join(' • ');let el=document.getElementById('event');el.classList.remove('show');void el.offsetWidth;el.classList.add('show')}
+function render(d){if(!d||typeof d!=='object')return;let $=id=>document.getElementById(id);$('home').textContent=d.home||'HOME';$('away').textContent=d.away||'AWAY';$('hs').textContent=d.homeScore||0;$('as').textContent=d.awayScore||0;$('homeBox').style.background=d.homeColor||'#0878c9';$('homeBox').style.color=d.homeText||'#fff';$('awayBox').style.background=d.awayColor||'#d83b42';$('awayBox').style.color=d.awayText||'#fff';$('clock').firstChild.textContent=fmt(d.elapsed)+' ';$('period').textContent=(d.period||'1st Half').toUpperCase();$('meta').textContent=d.showDetails==='no'?'':[d.tournament,d.match].filter(Boolean).join('  •  ');$('details').textContent=d.showVenue==='no'?'':[d.venue,d.matchType].filter(Boolean).join('  •  ');$('custom').textContent=d.customText||'';$('custom').style.color=d.customColor||'#fff';let rt=String(d.resultText||'').trim(),sr=d.showResult!=='no';$('resultPanel').style.display=sr&&rt?'block':'none';$('resultPanel').textContent=sr&&rt?'FULL TIME RESULT • '+rt:'';let p=$('penaltyPanel'),pt=String(d.period||'').toLowerCase(),ah=+d.homeAttempts||0,aa=+d.awayAttempts||0,ip=pt.includes('penalty')||ah>0||aa>0,v=d.showPenalty!=='no';p.style.display=ip&&v?'block':'none';if(ip&&v){$('penaltySummary').innerHTML='<span class="penalty-title">PENALTY SHOOTOUT</span> &nbsp; '+(d.home||'HOME')+' <b>'+(+d.homePens||0)+' / '+ah+'</b> — <b>'+(+d.awayPens||0)+' / '+aa+'</b> '+(d.away||'AWAY')+' &nbsp; <span class="penalty-next">NEXT: '+((d.nextKicker||'home')==='home'?(d.home||'HOME'):(d.away||'AWAY'))+'</span>';$('homePenaltyName').textContent=d.home||'HOME';$('awayPenaltyName').textContent=d.away||'AWAY';let dots=a=>Array.isArray(a)&&a.length?a.map(v=>'<span class="penalty-dot '+(v?'scored':'missed')+'"></span>').join(''):'<span class="penalty-empty">No attempts yet</span>';$('homePenaltyDots').innerHTML=dots(d.homePenaltyResults);$('awayPenaltyDots').innerHTML=dots(d.awayPenaltyResults)}$('stage').style.setProperty('--accent',d.accent||'#59dcff');$('lower').className='lower style-'+(d.style||'glass');if(d.event&&d.event.stamp&&d.event.stamp!==lastStamp){lastStamp=d.event.stamp;showEvent(d.event,d)}}
+async function poll(){try{let r=await fetch(DB_URL+'?t='+Date.now(),{cache:'no-store'});if(!r.ok)throw Error('HTTP '+r.status);let d=await r.json();if(d&&Number(d.updatedAt||0)!==lastUpdatedAt){lastUpdatedAt=Number(d.updatedAt||0);render(d)}}catch(e){console.error('Firebase overlay read failed',e)}}poll();setInterval(poll,700);
 </script></body></html>
