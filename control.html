@@ -13,8 +13,17 @@ button.secondary{background:#2d405b;color:#edf4ff}button.good{background:#35d49a
 .actions{display:flex;flex-wrap:wrap;gap:5px;margin-top:10px}.score{font-size:28px;font-weight:900;text-align:center;margin:8px 0}.muted{color:#9fb0c7;font-size:12px}.linkbox{word-break:break-all;background:#0a1525;padding:10px;border-radius:8px;margin-top:8px;color:#bcecff}
 .status{display:inline-block;padding:5px 9px;border-radius:20px;background:#263c57;font-size:12px}
 @media(max-width:520px){.wrap{padding:10px}header{padding:14px}}
-</style></head><body><script>window.location.replace("./football-control.html"+location.search);</script><noscript>Open the secured <a href="football-control.html">football controller</a>.</noscript>
+</style></head><body>
 <header><div><div class="brand">BRKLIVE19 • FOOTBALL CONTROL</div><div class="muted">Live match controller</div></div><span class="status" id="connection">Overlay sync ready</span></header>
+<section id="authPanel" style="max-width:1200px;margin:16px auto 0;padding:14px 18px">
+  <h2 style="margin-bottom:8px">Firebase administrator login</h2>
+  <div id="authMessage" class="muted" style="margin-bottom:8px">Sign in with your existing Firebase Email/Password account to sync this match.</div>
+  <div class="row" style="grid-template-columns:1fr 1fr auto;align-items:end">
+    <div><label for="loginEmail">Email</label><input id="loginEmail" type="email" autocomplete="username" placeholder="Firebase account email"></div>
+    <div><label for="loginPassword">Password</label><input id="loginPassword" type="password" autocomplete="current-password" placeholder="Password"></div>
+    <div class="actions" style="margin:0"><button id="loginButton" type="button" onclick="loginFirebase()">Sign in</button><button id="logoutButton" type="button" class="secondary" onclick="logoutFirebase()" style="display:none">Sign out</button></div>
+  </div>
+</section>
 <div class="wrap">
 <section><h2>Match information</h2>
 <label>Tournament</label><input id="tournament" placeholder="Tournament name">
@@ -88,15 +97,32 @@ button.secondary{background:#2d405b;color:#edf4ff}button.good{background:#35d49a
 </section>
 </div>
 <script>
+const FIREBASE_API_KEY='AIzaSyBLWq1bqJ32F2cg3mqYQ0uwXcS3zvTA3A4';
 const DB_URL='https://brklive19-2bab4-default-rtdb.asia-southeast1.firebasedatabase.app/brklive19/football/live.json';
+const AUTH_BASE='https://identitytoolkit.googleapis.com/v1';
+const TOKEN_BASE='https://securetoken.googleapis.com/v1';
+let idToken=sessionStorage.getItem('brklive19_fb_idToken')||'';
+let refreshToken=sessionStorage.getItem('brklive19_fb_refreshToken')||'';
+let tokenExpiry=+(sessionStorage.getItem('brklive19_fb_tokenExpiry')||0);
+let currentUserEmail=sessionStorage.getItem('brklive19_fb_email')||'';
 const ids=['tournament','match','venue','matchType','period','customText','home','homeColor','homeText','away','awayColor','awayText','accent','style','customColor','showDetails','showVenue','showPenalty','resultText','showResult'];
 let data={homeScore:0,awayScore:0,elapsed:0,running:false,event:null,homePens:0,awayPens:0,homeAttempts:0,awayAttempts:0,nextKicker:'home',showPenalty:'yes',showResult:'yes',resultText:''},timer=null,ready=false,queue=Promise.resolve();
 function status(t,ok=false){let e=document.getElementById('connection');if(e){e.textContent=t;e.style.background=ok?'#14543f':'#6b3b26'}}
+function authMessage(t){const e=document.getElementById('authMessage');if(e)e.textContent=t}
+function saveAuthSession(){sessionStorage.setItem('brklive19_fb_idToken',idToken);sessionStorage.setItem('brklive19_fb_refreshToken',refreshToken);sessionStorage.setItem('brklive19_fb_tokenExpiry',String(tokenExpiry));sessionStorage.setItem('brklive19_fb_email',currentUserEmail)}
+function clearAuthSession(){idToken='';refreshToken='';tokenExpiry=0;currentUserEmail='';['brklive19_fb_idToken','brklive19_fb_refreshToken','brklive19_fb_tokenExpiry','brklive19_fb_email','brklive19_fb_uid'].forEach(k=>sessionStorage.removeItem(k));ready=false;document.getElementById('loginPassword').value='';}
+function showSignedIn(){document.getElementById('loginEmail').value=currentUserEmail;document.getElementById('loginEmail').disabled=true;document.getElementById('loginPassword').style.display='none';document.querySelector('label[for="loginPassword"]').style.display='none';document.getElementById('loginButton').style.display='none';document.getElementById('logoutButton').style.display='';authMessage('Signed in as '+currentUserEmail+'. Database access is controlled by your /admins UID permission.')}
+function showSignedOut(){document.getElementById('loginEmail').disabled=false;document.getElementById('loginPassword').style.display='';document.querySelector('label[for="loginPassword"]').style.display='';document.getElementById('loginButton').style.display='';document.getElementById('logoutButton').style.display='none'}
+function friendlyAuthError(message){const m=String(message||'');if(m.includes('EMAIL_NOT_FOUND')||m.includes('INVALID_PASSWORD')||m.includes('INVALID_LOGIN_CREDENTIALS'))return 'Email or password is incorrect.';if(m.includes('USER_DISABLED'))return 'This Firebase user account is disabled.';if(m.includes('OPERATION_NOT_ALLOWED'))return 'Enable Email/Password under Firebase Authentication → Sign-in method.';if(m.includes('API_KEY'))return 'Firebase API key is invalid or restricted.';return m.replaceAll('_',' ')}
+async function loginFirebase(){const email=document.getElementById('loginEmail').value.trim(),password=document.getElementById('loginPassword').value;if(!email||!password){authMessage('Enter your Firebase account email and password.');return}const b=document.getElementById('loginButton');b.disabled=true;authMessage('Signing in to Firebase…');try{const r=await fetch(AUTH_BASE+'/accounts:signInWithPassword?key='+FIREBASE_API_KEY,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email,password,returnSecureToken:true})});const result=await r.json();if(!r.ok)throw new Error(result.error?.message||'Firebase sign-in failed');idToken=result.idToken;refreshToken=result.refreshToken;tokenExpiry=Date.now()+(Number(result.expiresIn||3600)*1000)-60000;currentUserEmail=result.email||email;sessionStorage.setItem('brklive19_fb_uid',result.localId||'');saveAuthSession();showSignedIn();status('Checking database access…');await load()}catch(e){console.error(e);authMessage('Login failed: '+friendlyAuthError(e.message));status('Firebase login failed')}finally{b.disabled=false}}
+async function getFreshIdToken(){if(!idToken||!refreshToken)throw new Error('Please sign in with your Firebase account first.');if(Date.now()<tokenExpiry)return idToken;const r=await fetch(TOKEN_BASE+'/token?key='+FIREBASE_API_KEY,{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:new URLSearchParams({grant_type:'refresh_token',refresh_token:refreshToken})});const result=await r.json();if(!r.ok)throw new Error(result.error?.message||'Firebase session expired. Please sign in again.');idToken=result.id_token;refreshToken=result.refresh_token;tokenExpiry=Date.now()+(Number(result.expires_in||3600)*1000)-60000;saveAuthSession();return idToken}
+async function dbRequest(method,body){const token=await getFreshIdToken();let r=await fetch(DB_URL,{method,headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},body:body===undefined?undefined:JSON.stringify(body),cache:'no-store'});if(r.status===401){tokenExpiry=0;const fresh=await getFreshIdToken();r=await fetch(DB_URL,{method,headers:{'Content-Type':'application/json','Authorization':'Bearer '+fresh},body:body===undefined?undefined:JSON.stringify(body),cache:'no-store'})}if(!r.ok){let detail='HTTP '+r.status;try{const j=await r.json();if(j?.error)detail=String(j.error)}catch(_){}throw new Error(detail)}return r}
+async function logoutFirebase(){clearAuthSession();showSignedOut();status('Signed out');authMessage('Signed out. Sign in to enable live score updates.')}
 function fmt(s){return String(Math.floor((s||0)/60)).padStart(2,'0')+':'+String((s||0)%60).padStart(2,'0')}
 function updateUI(){const $=id=>document.getElementById(id);$('homeScore').textContent=data.homeScore||0;$('awayScore').textContent=data.awayScore||0;$('clock').textContent=fmt(data.elapsed||0);$('overlayLink').textContent=new URL('overlay.html',location.href).href;$('homePensDisplay').textContent=(data.homePens||0)+' / '+(data.homeAttempts||0);$('awayPensDisplay').textContent=(data.awayPens||0)+' / '+(data.awayAttempts||0);$('nextKicker').value=data.nextKicker||'home'}
-function save(){updateUI();if(!ready)return;let payload={...data,updatedAt:Date.now()};queue=queue.then(()=>fetch(DB_URL,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload),cache:'no-store'})).then(r=>{if(!r.ok)throw Error('HTTP '+r.status);status('Firebase connected',true)}).catch(e=>{console.error(e);status('Firebase write failed — check database rules')})}
+function save(){updateUI();if(!ready||!idToken)return;let payload={...data,updatedAt:Date.now()};queue=queue.then(()=>dbRequest('PUT',payload)).then(()=>status('Firebase connected',true)).catch(e=>{console.error(e);status('Firebase write failed: '+e.message);authMessage('Database write failed. Confirm this signed-in account UID has value true under /admins in Realtime Database.')})}
 function readForm(){ids.forEach(id=>data[id]=document.getElementById(id).value);save()}
-async function load(){status('Connecting to Firebase…');try{let r=await fetch(DB_URL,{cache:'no-store'});if(!r.ok)throw Error('HTTP '+r.status);let remote=await r.json();if(remote){data={...data,...remote};ids.forEach(id=>{if(data[id]!==undefined)document.getElementById(id).value=data[id]})}ready=true;updateUI();status('Firebase connected',true);if(data.running)startClock()}catch(e){console.error(e);status('Firebase connection failed — check database rules')}}
+async function load(){status('Connecting to Firebase…');try{let r=await dbRequest('GET');let remote=await r.json();if(remote){data={...data,...remote};ids.forEach(id=>{if(data[id]!==undefined)document.getElementById(id).value=data[id]})}ready=true;updateUI();status('Firebase connected',true);authMessage('Signed in as '+currentUserEmail+'. Live database sync is active.');if(data.running)startClock()}catch(e){console.error(e);ready=false;status('Firebase access denied: '+e.message);authMessage('Authentication succeeded, but database access failed. Make sure this account UID is set to true under /admins in Realtime Database.')}}
 function score(side,n){data[side+'Score']=Math.max(0,(+data[side+'Score']||0)+n);readForm()}
 function resetScore(){data.homeScore=0;data.awayScore=0;readForm()}
 function tick(){data.elapsed++;save()}
@@ -115,5 +141,5 @@ function clearResult(){data.resultText='';data.showResult='no';document.getEleme
 function publish(){readForm()}
 function copyLink(){navigator.clipboard.writeText(new URL('overlay.html',location.href).href).then(()=>alert('Overlay link copied')).catch(()=>alert('Copy failed. Select and copy manually.'))}
 function openOverlay(){window.open('overlay.html','_blank')}
-ids.forEach(id=>document.getElementById(id).addEventListener('input',readForm));document.getElementById('nextKicker').addEventListener('change',e=>{data.nextKicker=e.target.value;save()});updateUI();load();
+ids.forEach(id=>document.getElementById(id).addEventListener('input',readForm));document.getElementById('nextKicker').addEventListener('change',e=>{data.nextKicker=e.target.value;save()});updateUI();showSignedOut();if(idToken&&refreshToken){showSignedIn();getFreshIdToken().then(()=>load()).catch(e=>{console.warn(e);clearAuthSession();showSignedOut();status('Please sign in');authMessage('Your Firebase session expired. Sign in again to continue.')})}else{status('Please sign in to sync')}
 </script></body></html>
