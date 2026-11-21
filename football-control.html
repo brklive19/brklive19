@@ -15,6 +15,15 @@ button.secondary{background:#2d405b;color:#edf4ff}button.good{background:#35d49a
 @media(max-width:520px){.wrap{padding:10px}header{padding:14px}}
 </style></head><body>
 <header><div><div class="brand">BRKLIVE19 • FOOTBALL CONTROL</div><div class="muted">Live match controller</div></div><span class="status" id="connection">Overlay sync ready</span></header>
+<section id="authPanel" style="max-width:1200px;margin:16px auto 0;padding:14px 18px">
+  <h2 style="margin-bottom:8px">Firebase administrator login</h2>
+  <div id="authMessage" class="muted" style="margin-bottom:8px">Sign in with your existing Firebase Email/Password account to sync this match.</div>
+  <div class="row" style="grid-template-columns:1fr 1fr auto;align-items:end">
+    <div><label for="loginEmail">Email</label><input id="loginEmail" type="email" autocomplete="username" placeholder="Firebase account email"></div>
+    <div><label for="loginPassword">Password</label><input id="loginPassword" type="password" autocomplete="current-password" placeholder="Password"></div>
+    <div class="actions" style="margin:0"><button id="loginButton" type="button" onclick="loginFirebase()">Sign in</button><button id="logoutButton" type="button" class="secondary" onclick="logoutFirebase()" style="display:none">Sign out</button></div>
+  </div>
+</section>
 <div class="wrap">
 <section><h2>Match information</h2>
 <label>Tournament</label><input id="tournament" placeholder="Tournament name">
@@ -84,136 +93,67 @@ button.secondary{background:#2d405b;color:#edf4ff}button.good{background:#35d49a
 <p class="muted">Copy this URL and paste it into OBS → Sources → Browser.</p>
 <div class="linkbox" id="overlayLink"></div>
 <div class="actions"><button onclick="copyLink()">Copy overlay link</button><button class="secondary" onclick="openOverlay()">Preview overlay</button></div>
-<p class="muted">If using another device, host these files on the same website and open the hosted overlay URL. Firebase Realtime Database syncs this controller with OBS and other devices in real time.</p>
+<p class="muted">If using another device, host these files on the same website and open the hosted overlay URL. Firebase Realtime Database sync lets OBS receive updates independently of Chrome.</p>
 </section>
 </div>
-<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-database-compat.js"></script>
 <script>
-const firebaseConfig = {
-  apiKey: "AIzaSyBLWq1bqJ32F2cg3mqYQ0uwXcS32vTA3A4",
-  authDomain: "brklive19-2bab4.firebaseapp.com",
-  databaseURL: "https://brklive19-2bab4-default-rtdb.asia-southeast1.firebasedatabase.app",
-  projectId: "brklive19-2bab4",
-  storageBucket: "brklive19-2bab4.firebasestorage.app",
-  messagingSenderId: "294058533898",
-  appId: "1:294058533898:web:4996705937e969939cabf3",
-  measurementId: "G-RW18E7LVEX"
-};
-const firebaseApp = firebase.initializeApp(firebaseConfig);
-const footballDb = firebaseApp.database();
-const FOOTBALL_REF = footballDb.ref('brklive19/football/live');
-
+const FIREBASE_API_KEY='AIzaSyBLWq1bqJ32F2cg3mqYQ0uwXcS32vTA3A4';
+const DB_URL='https://brklive19-2bab4-default-rtdb.asia-southeast1.firebasedatabase.app/brklive19/football/live.json';
+const AUTH_BASE='https://identitytoolkit.googleapis.com/v1';
+const TOKEN_BASE='https://securetoken.googleapis.com/v1';
+let idToken=sessionStorage.getItem('brklive19_fb_idToken')||'';
+let refreshToken=sessionStorage.getItem('brklive19_fb_refreshToken')||'';
+let tokenExpiry=+(sessionStorage.getItem('brklive19_fb_tokenExpiry')||0);
+let currentUserEmail=sessionStorage.getItem('brklive19_fb_email')||'';
+let currentUserUid=sessionStorage.getItem('brklive19_fb_uid')||'';
+let isAdmin=false;
 const ids=['tournament','match','venue','matchType','period','customText','home','homeColor','homeText','away','awayColor','awayText','accent','style','customColor','showDetails','showVenue','showPenalty','resultText','showResult'];
-let data={homeScore:0,awayScore:0,elapsed:0,running:false,event:null,homePens:0,awayPens:0,homeAttempts:0,awayAttempts:0,nextKicker:'home',showPenalty:'yes',showResult:'yes',resultText:''};
-let timer=null;
-function readForm(){ids.forEach(id=>data[id]=document.getElementById(id).value);save()}
-function save(){localStorage.setItem('brklive19FootballOverlay',JSON.stringify(data));updateUI();FOOTBALL_REF.set(data).then(()=>{const s=document.getElementById('connection');if(s){s.textContent='Firebase connected • Live sync';s.style.background='#14543f'}}).catch(err=>{const s=document.getElementById('connection');if(s){s.textContent='Firebase error: '+err.message;s.style.background='#702b36'}console.error('Firebase write failed',err)})}
-function updateUI(){
- document.getElementById('homeScore').textContent=data.homeScore||0;
- document.getElementById('awayScore').textContent=data.awayScore||0;
- document.getElementById('clock').textContent=fmt(data.elapsed||0);
- document.getElementById('overlayLink').textContent=new URL('overlay.html',location.href).href;
- const hp=document.getElementById('homePensDisplay'), ap=document.getElementById('awayPensDisplay');
- if(hp)hp.textContent=(data.homePens||0)+' / '+(data.homeAttempts||0);
- if(ap)ap.textContent=(data.awayPens||0)+' / '+(data.awayAttempts||0);
- const nk=document.getElementById('nextKicker'); if(nk)nk.value=data.nextKicker||'home';
+let data={homeScore:0,awayScore:0,elapsed:0,running:false,event:null,homePens:0,awayPens:0,homeAttempts:0,awayAttempts:0,nextKicker:'home',showPenalty:'yes',showResult:'yes',resultText:''},timer=null,ready=false,queue=Promise.resolve();
+function status(t,ok=false){let e=document.getElementById('connection');if(e){e.textContent=t;e.style.background=ok?'#14543f':'#6b3b26'}}
+function authMessage(t){const e=document.getElementById('authMessage');if(e)e.textContent=t}
+function saveAuthSession(){sessionStorage.setItem('brklive19_fb_idToken',idToken);sessionStorage.setItem('brklive19_fb_refreshToken',refreshToken);sessionStorage.setItem('brklive19_fb_tokenExpiry',String(tokenExpiry));sessionStorage.setItem('brklive19_fb_email',currentUserEmail)}
+function clearAuthSession(){idToken='';refreshToken='';tokenExpiry=0;currentUserEmail='';currentUserUid='';isAdmin=false;['brklive19_fb_idToken','brklive19_fb_refreshToken','brklive19_fb_tokenExpiry','brklive19_fb_email','brklive19_fb_uid'].forEach(k=>sessionStorage.removeItem(k));ready=false;document.getElementById('loginPassword').value='';}
+function showSignedIn(){document.getElementById('loginEmail').value=currentUserEmail;document.getElementById('loginEmail').disabled=true;document.getElementById('loginPassword').style.display='none';document.querySelector('label[for="loginPassword"]').style.display='none';document.getElementById('loginButton').style.display='none';document.getElementById('logoutButton').style.display='';authMessage('Signed in as '+currentUserEmail+' (UID: '+(currentUserUid||'checking…')+'). Checking /admins permission…')}
+function showSignedOut(){document.getElementById('loginEmail').disabled=false;document.getElementById('loginPassword').style.display='';document.querySelector('label[for="loginPassword"]').style.display='';document.getElementById('loginButton').style.display='';document.getElementById('logoutButton').style.display='none'}
+function friendlyAuthError(message){const m=String(message||'');if(m.includes('EMAIL_NOT_FOUND')||m.includes('INVALID_PASSWORD')||m.includes('INVALID_LOGIN_CREDENTIALS'))return 'Email or password is incorrect.';if(m.includes('USER_DISABLED'))return 'This Firebase user account is disabled.';if(m.includes('OPERATION_NOT_ALLOWED'))return 'Enable Email/Password under Firebase Authentication → Sign-in method.';if(m.includes('API_KEY'))return 'Firebase API key is invalid or restricted.';return m.replaceAll('_',' ')}
+async function loginFirebase(){const email=document.getElementById('loginEmail').value.trim(),password=document.getElementById('loginPassword').value;if(!email||!password){authMessage('Enter your Firebase account email and password.');return}const b=document.getElementById('loginButton');b.disabled=true;authMessage('Signing in to Firebase…');try{const r=await fetch(AUTH_BASE+'/accounts:signInWithPassword?key='+FIREBASE_API_KEY,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email,password,returnSecureToken:true})});const result=await r.json();if(!r.ok)throw new Error(result.error?.message||'Firebase sign-in failed');idToken=result.idToken;refreshToken=result.refreshToken;tokenExpiry=Date.now()+(Number(result.expiresIn||3600)*1000)-60000;currentUserEmail=result.email||email;currentUserUid=result.localId||'';sessionStorage.setItem('brklive19_fb_uid',currentUserUid);saveAuthSession();showSignedIn();status('Checking database access…');await load()}catch(e){console.error(e);authMessage('Login failed: '+friendlyAuthError(e.message));status('Firebase login failed')}finally{b.disabled=false}}
+async function getFreshIdToken(){if(!idToken||!refreshToken)throw new Error('Please sign in with your Firebase account first.');if(Date.now()<tokenExpiry)return idToken;const r=await fetch(TOKEN_BASE+'/token?key='+FIREBASE_API_KEY,{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:new URLSearchParams({grant_type:'refresh_token',refresh_token:refreshToken})});const result=await r.json();if(!r.ok)throw new Error(result.error?.message||'Firebase session expired. Please sign in again.');idToken=result.id_token;refreshToken=result.refresh_token;tokenExpiry=Date.now()+(Number(result.expires_in||3600)*1000)-60000;saveAuthSession();return idToken}
+async function checkAdminPermission(){
+  const uid=currentUserUid||sessionStorage.getItem('brklive19_fb_uid')||'';
+  if(!uid)throw new Error('Firebase returned no user UID. Sign out and sign in again.');
+  const token=await getFreshIdToken();
+  const adminUrl=DB_URL.slice(0,DB_URL.indexOf('/brklive19/'))+'/admins/'+encodeURIComponent(uid)+'.json';
+  const r=await fetch(adminUrl,{headers:{'Authorization':'Bearer '+token},cache:'no-store'});
+  if(!r.ok)throw new Error('Could not read /admins/'+uid+' (HTTP '+r.status+'). Check that database read permission allows this check.');
+  const allowed=await r.json();
+  if(allowed!==true)throw new Error('This login is not an administrator. Set /admins/'+uid+' to boolean true in Realtime Database. Do not use the email or a different UID as the key.');
+  isAdmin=true;
+  return true;
 }
-
-function fmt(s){return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0')}
-function score(side,n){data[side+'Score']=Math.max(0,(data[side+'Score']||0)+n);readForm()}
+async function dbRequest(method,body){const token=await getFreshIdToken();let r=await fetch(DB_URL,{method,headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},body:body===undefined?undefined:JSON.stringify(body),cache:'no-store'});if(r.status===401){tokenExpiry=0;const fresh=await getFreshIdToken();r=await fetch(DB_URL,{method,headers:{'Content-Type':'application/json','Authorization':'Bearer '+fresh},body:body===undefined?undefined:JSON.stringify(body),cache:'no-store'})}if(!r.ok){let detail='HTTP '+r.status;try{const j=await r.json();if(j?.error)detail=String(j.error)}catch(_){}throw new Error(detail)}return r}
+async function logoutFirebase(){clearAuthSession();showSignedOut();status('Signed out');authMessage('Signed out. Sign in to enable live score updates.')}
+function fmt(s){return String(Math.floor((s||0)/60)).padStart(2,'0')+':'+String((s||0)%60).padStart(2,'0')}
+function updateUI(){const $=id=>document.getElementById(id);$('homeScore').textContent=data.homeScore||0;$('awayScore').textContent=data.awayScore||0;$('clock').textContent=fmt(data.elapsed||0);$('overlayLink').textContent=new URL('football-overlay.html',location.href).href;$('homePensDisplay').textContent=(data.homePens||0)+' / '+(data.homeAttempts||0);$('awayPensDisplay').textContent=(data.awayPens||0)+' / '+(data.awayAttempts||0);$('nextKicker').value=data.nextKicker||'home'}
+function save(){updateUI();if(!ready||!idToken||!isAdmin)return;let payload={...data,updatedAt:Date.now()};queue=queue.then(()=>dbRequest('PUT',payload)).then(()=>status('Firebase connected',true)).catch(e=>{console.error(e);status('Firebase write failed: '+e.message);authMessage('Database write failed. Confirm this signed-in account UID has value true under /admins in Realtime Database.')})}
+function readForm(){ids.forEach(id=>data[id]=document.getElementById(id).value);save()}
+async function load(){status('Checking Firebase administrator permission…');ready=false;isAdmin=false;try{await checkAdminPermission();status('Administrator verified. Loading match…');let r=await dbRequest('GET');let remote=await r.json();if(remote){data={...data,...remote};ids.forEach(id=>{if(data[id]!==undefined)document.getElementById(id).value=data[id]})}ready=true;updateUI();status('Firebase connected • Admin verified',true);authMessage('Signed in as '+currentUserEmail+'. Admin UID verified: '+currentUserUid+'. Live database sync is active.');if(data.running)startClock()}catch(e){console.error(e);ready=false;isAdmin=false;status('Firebase access denied');authMessage(e.message+" Firebase Rules must use: root.child('admins').child(auth.uid).val() == true");}}
+function score(side,n){data[side+'Score']=Math.max(0,(+data[side+'Score']||0)+n);readForm()}
 function resetScore(){data.homeScore=0;data.awayScore=0;readForm()}
 function tick(){data.elapsed++;save()}
 function startClock(){if(timer)return;data.running=true;timer=setInterval(tick,1000);save()}
 function pauseClock(){clearInterval(timer);timer=null;data.running=false;save()}
 function resetClock(){pauseClock();data.elapsed=0;save()}
-function setClock(){pauseClock();data.elapsed=Math.max(0,(+setMinutes.value||0)*60+(+setSeconds.value||0));save()}
+function setClock(){pauseClock();data.elapsed=Math.max(0,(+document.getElementById('setMinutes').value||0)*60+(+document.getElementById('setSeconds').value||0));save()}
 function fireEvent(type,team,player){data.event={type,team,player:player||'',stamp:Date.now()};save()}
-function goal(team){data[team+'Score']=(data[team+'Score']||0)+1;fireEvent('goal',team,player.value);readForm()}
-function card(type){fireEvent(type,cardTeam.value,player.value);readForm()}
+function goal(team){data[team+'Score']=(+data[team+'Score']||0)+1;fireEvent('goal',team,document.getElementById('player').value);readForm()}
+function card(type){fireEvent(type,document.getElementById('cardTeam').value,document.getElementById('player').value);readForm()}
 function eventClear(){data.event=null;save()}
-function recordPenalty(side,scored){
- data[side+'Attempts']=(Number(data[side+'Attempts'])||0)+1;
- if(scored)data[side+'Pens']=(Number(data[side+'Pens'])||0)+1;
- if(!Array.isArray(data[side+'PenaltyResults']))data[side+'PenaltyResults']=[];
- data[side+'PenaltyResults'].push(!!scored);
- data.nextKicker=(side==='home'?'away':'home');
- data.event={type:scored?'penalty-goal':'penalty-miss',team:side,player:'',stamp:Date.now()};
- save();
-}
-function resetPenalties(){
- data.homePens=0;data.awayPens=0;data.homeAttempts=0;data.awayAttempts=0;
- data.homePenaltyResults=[];data.awayPenaltyResults=[];
- data.nextKicker='home';data.event=null;save();
-}
-function setResultFromScore(){
- const h=Number(data.homeScore)||0, a=Number(data.awayScore)||0;
- const hp=Number(data.homePens)||0, ap=Number(data.awayPens)||0;
- const isPens=String(data.period||'').toLowerCase().includes('penalty') || (Number(data.homeAttempts)||0)>0 || (Number(data.awayAttempts)||0)>0;
- let result;
- if(h===a && isPens && hp!==ap){
-   result=(data.home||'HOME')+' won on penalties '+hp+'–'+ap;
- } else if(h>a){
-   result=(data.home||'HOME')+' won '+h+'–'+a;
- } else if(a>h){
-   result=(data.away||'AWAY')+' won '+a+'–'+h;
- } else if(isPens && hp===ap){
-   result='Match drawn '+h+'–'+a+' • Penalties level '+hp+'–'+ap;
- } else {
-   result='Match drawn '+h+'–'+a;
- }
- data.resultText=result;
- const field=document.getElementById('resultText');if(field)field.value=result;
- const show=document.getElementById('showResult');if(show){show.value='yes';data.showResult='yes'}
- save();
-}
-function clearResult(){data.resultText='';data.showResult='no';const f=document.getElementById('resultText');if(f)f.value='';const s=document.getElementById('showResult');if(s)s.value='no';save()}
+function recordPenalty(side,scored){data[side+'Attempts']=(+data[side+'Attempts']||0)+1;if(scored)data[side+'Pens']=(+data[side+'Pens']||0)+1;if(!Array.isArray(data[side+'PenaltyResults']))data[side+'PenaltyResults']=[];data[side+'PenaltyResults'].push(!!scored);data.nextKicker=side==='home'?'away':'home';data.event={type:scored?'penalty-goal':'penalty-miss',team:side,player:'',stamp:Date.now()};save()}
+function resetPenalties(){data.homePens=data.awayPens=data.homeAttempts=data.awayAttempts=0;data.homePenaltyResults=[];data.awayPenaltyResults=[];data.nextKicker='home';data.event=null;save()}
+function setResultFromScore(){let h=+data.homeScore||0,a=+data.awayScore||0,hp=+data.homePens||0,ap=+data.awayPens||0,p=String(data.period||'').toLowerCase().includes('penalty')||(+data.homeAttempts||0)>0||(+data.awayAttempts||0)>0;let r=h===a&&p&&hp!==ap?(data.home||'HOME')+' won on penalties '+hp+'–'+ap:h>a?(data.home||'HOME')+' won '+h+'–'+a:a>h?(data.away||'AWAY')+' won '+a+'–'+h:p?'Match drawn '+h+'–'+a+' • Penalties level '+hp+'–'+ap:'Match drawn '+h+'–'+a;data.resultText=r;document.getElementById('resultText').value=r;document.getElementById('showResult').value='yes';data.showResult='yes';save()}
+function clearResult(){data.resultText='';data.showResult='no';document.getElementById('resultText').value='';document.getElementById('showResult').value='no';save()}
 function publish(){readForm()}
-function copyLink(){navigator.clipboard.writeText(new URL('overlay.html',location.href).href).then(()=>alert('Overlay link copied')).catch(()=>alert('Copy failed. Select and copy the link manually.'))}
-function openOverlay(){window.open('overlay.html','_blank')}
-ids.forEach(id=>document.getElementById(id).addEventListener('input',readForm));
-document.getElementById('nextKicker').addEventListener('change',e=>{data.nextKicker=e.target.value;save()});
-// Load the selected football match created in index.html, without overwriting an
-// already-saved live controller session for that same match.
-const params=new URLSearchParams(location.search);
-const requestedMatchId=params.get('matchId');
-let indexMatch=null, indexTournament=null;
-try{
-  const allMatches=JSON.parse(localStorage.getItem('brklive_matches')||'[]');
-  indexMatch=requestedMatchId?allMatches.find(m=>String(m.id)===String(requestedMatchId)):null;
-  if(indexMatch){
-    const allTours=JSON.parse(localStorage.getItem('brklive_tournaments')||'[]');
-    indexTournament=allTours.find(t=>String(t.id)===String(indexMatch.tournamentId))||{};
-  }
-}catch(e){}
-try{
-  const old=JSON.parse(localStorage.getItem('brklive19FootballOverlay')||'{}');
-  data={...data,...old};
-  if(requestedMatchId && String(old.matchId||'')!==String(requestedMatchId)){
-    data.matchId=requestedMatchId;
-    data.tournament=indexTournament?.name||indexMatch?.tournamentName||data.tournament||'';
-    data.match=indexMatch?.matchName||`${indexMatch?.teamAName||'HOME'} vs ${indexMatch?.teamBName||'AWAY'}`;
-    data.venue=indexMatch?.venue||indexTournament?.venue||data.venue||'';
-    data.matchType=indexMatch?.matchType||'Football';
-    data.home=indexMatch?.teamAName||data.home||'HOME';
-    data.away=indexMatch?.teamBName||data.away||'AWAY';
-    data.homeScore=0; data.awayScore=0; data.elapsed=0; data.event=null;
-  }
-  data.matchId=requestedMatchId||data.matchId||'';
-  ids.forEach(id=>{if(data[id]!==undefined)document.getElementById(id).value=data[id]});
-}catch(e){}
-save();
-if(data.running)startClock();
-FOOTBALL_REF.on('value', snapshot=>{
-  const remote=snapshot.val();
-  if(remote){
-    data={...data,...remote};
-    ids.forEach(id=>{const el=document.getElementById(id);if(el && data[id]!==undefined)el.value=data[id]});
-    updateUI();
-    if(data.running){if(!timer)startClockLocal()}else{clearInterval(timer);timer=null;}
-    localStorage.setItem('brklive19FootballOverlay',JSON.stringify(data));
-  }
-}, err=>{const s=document.getElementById('connection');if(s){s.textContent='Firebase connection error';s.style.background='#702b36'}console.error(err)});
-function startClockLocal(){if(timer)return;timer=setInterval(tick,1000)}
-window.addEventListener('storage',e=>{if(e.key==='brklive19FootballOverlay'){data={...data,...JSON.parse(e.newValue||'{}')};updateUI()}});
+function copyLink(){navigator.clipboard.writeText(new URL('football-overlay.html',location.href).href).then(()=>alert('Overlay link copied')).catch(()=>alert('Copy failed. Select and copy manually.'))}
+function openOverlay(){window.open('football-overlay.html','_blank')}
+ids.forEach(id=>document.getElementById(id).addEventListener('input',readForm));document.getElementById('nextKicker').addEventListener('change',e=>{data.nextKicker=e.target.value;save()});updateUI();showSignedOut();if(idToken&&refreshToken){currentUserUid=sessionStorage.getItem('brklive19_fb_uid')||'';showSignedIn();getFreshIdToken().then(()=>load()).catch(e=>{console.warn(e);clearAuthSession();showSignedOut();status('Please sign in');authMessage('Your Firebase session expired. Sign in again to continue.')})}else{status('Please sign in to sync')}
 </script></body></html>
