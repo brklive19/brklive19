@@ -31,6 +31,23 @@ body{display:flex;align-items:flex-end;justify-content:center}
 .event.show{display:block;animation:pop 1.8s ease both}@keyframes pop{0%{opacity:0;scale:.75}15%,75%{opacity:1;scale:1}100%{opacity:0;scale:1.05}}
 .live{position:fixed;right:1.5vw;top:1.5vh;color:white;font-size:clamp(10px,1vw,16px);font-weight:900;text-shadow:0 2px 4px #000}.live i{display:inline-block;width:9px;height:9px;border-radius:50%;background:#ff253c;margin-right:5px;animation:pulse 1s infinite}@keyframes pulse{50%{opacity:.35}}
 @media(max-width:600px){#overlay{padding-bottom:3vh}.bar{grid-template-columns:minmax(0,1fr) 38px 65px 38px minmax(0,1fr);min-height:48px}.team{font-size:clamp(11px,3vw,17px);white-space:normal;line-height:1.05}.tournament{max-width:90%;font-size:11px}.meta{gap:6px}}
+
+.result-screen{display:none;position:relative;overflow:hidden;text-align:center;margin:0 auto;
+  padding:clamp(8px,1.2vw,18px) 12px clamp(9px,1.35vw,20px);
+  border:2px solid var(--accent);border-radius:14px;
+  background:linear-gradient(105deg,#071426 0%,#123b68 48%,#071426 100%);
+  color:#fff;box-shadow:0 5px 18px #000b}
+.result-screen:before{content:"";position:absolute;inset:0 auto 0 0;width:7px;background:var(--accent)}
+.result-kicker{font-size:clamp(10px,1.1vw,17px);font-weight:1000;letter-spacing:.18em;color:var(--accent);margin-bottom:3px}
+.result-winner{font-size:clamp(24px,4.1vw,66px);line-height:1.02;font-weight:1000;text-transform:uppercase;
+  text-shadow:0 3px 0 #0008,0 0 18px #ffffff55;overflow-wrap:anywhere}
+.result-score{font-size:clamp(17px,2.3vw,36px);font-weight:1000;margin-top:3px;color:#fff}
+.result-message{font-size:clamp(10px,1.15vw,18px);font-weight:800;margin-top:3px;color:#dcecff}
+#overlay.result-mode .tournament,#overlay.result-mode .details,#overlay.result-mode .bar,
+#overlay.result-mode .meta,#overlay.result-mode .penalties,#overlay.result-mode .custom{display:none!important}
+#overlay.result-mode{padding-bottom:4vh}
+@media(max-width:600px){.result-screen{border-radius:9px;padding:8px 8px 10px}.result-winner{font-size:clamp(22px,7vw,38px)}}
+
 </style></head><body>
 <div class="live"><i></i>LIVE</div>
 <div id="overlay"><div class="tournament" id="tournament"></div><div class="details" id="details"></div>
@@ -38,7 +55,7 @@ body{display:flex;align-items:flex-end;justify-content:center}
 <div class="meta" id="meta"></div><div class="penalties" id="pens">
 <div class="pen-team"><span class="pen-name" id="homePenName">HOME</span><span class="pen-count" id="homePenCount">0/0</span><span class="pen-dots" id="homePenDots"></span></div>
 <div class="pen-team"><span class="pen-name" id="awayPenName">AWAY</span><span class="pen-count" id="awayPenCount">0/0</span><span class="pen-dots" id="awayPenDots"></span></div>
-</div><div class="custom" id="custom"></div><div class="result" id="result"></div></div>
+</div><div class="custom" id="custom"></div><div class="result-screen" id="resultScreen"><div class="result-kicker">🏆 MATCH RESULT</div><div class="result-winner" id="resultWinner">WINNER</div><div class="result-score" id="resultScore"></div><div class="result-message" id="resultMessage"></div></div></div>
 <div class="event" id="event"></div>
 <script>
 const DB='https://brklive19-2bab4-default-rtdb.asia-southeast1.firebasedatabase.app/brklive19/football/live.json';
@@ -86,7 +103,40 @@ function drawPenaltyDots(target,results,attempts){
 drawPenaltyDots($('homePenDots'),homeResults,d.homeAttempts);
 drawPenaltyDots($('awayPenDots'),awayResults,d.awayAttempts);
 $('pens').style.display=d.showPenalty==='no'?'none':((Number(d.homeAttempts)||0)+(Number(d.awayAttempts)||0)>0?'grid':'none');
-$('result').textContent=d.resultText||'';$('result').style.display=d.showResult==='yes'&&d.resultText?'block':'none';
+
+const resultActive=d.showResult==='yes'&&String(d.resultText||'').trim().length>0;
+const homeName=txt(d.home,'HOME'), awayName=txt(d.away,'AWAY');
+const hs=Number(d.homeScore)||0, as=Number(d.awayScore)||0;
+const hp=Number(d.homePens)||0, ap=Number(d.awayPens)||0;
+const homeAttempts=Number(d.homeAttempts)||0, awayAttempts=Number(d.awayAttempts)||0;
+const resultText=String(d.resultText||'').trim();
+let winner='MATCH DRAWN', scoreLine=hs+' - '+as;
+
+// Use the explicit winner saved by the controller when the result button is pressed.
+// Fallback is retained for older Firebase records that do not contain these fields.
+if(d.resultWinnerSide==='home'){
+  winner=txt(d.resultWinnerName,homeName);
+}else if(d.resultWinnerSide==='away'){
+  winner=txt(d.resultWinnerName,awayName);
+}else if(d.resultWinnerSide==='draw'){
+  winner='MATCH DRAWN';
+}else if(hs>as){
+  winner=homeName;
+}else if(as>hs){
+  winner=awayName;
+}else if((homeAttempts+awayAttempts)>0 && hp>ap){
+  winner=homeName; scoreLine+='  •  Penalties '+hp+' - '+ap;
+}else if((homeAttempts+awayAttempts)>0 && ap>hp){
+  winner=awayName; scoreLine+='  •  Penalties '+ap+' - '+hp;
+}else if(homeAttempts+awayAttempts>0){
+  scoreLine+='  •  Penalties '+hp+' - '+ap;
+}
+$('overlay').classList.toggle('result-mode',resultActive);
+$('resultScreen').style.display=resultActive?'block':'none';
+$('resultWinner').textContent=winner;
+$('resultScore').textContent=scoreLine;
+$('resultMessage').textContent=resultText;
+
 showEvent(d.event);
 }catch(e){console.warn('Overlay sync error',e)}}
 refresh();setInterval(refresh,700);
