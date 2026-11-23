@@ -17,7 +17,7 @@
 <script>
 const DB_URL='https://brklive19-2bab4-default-rtdb.asia-southeast1.firebasedatabase.app/brklive19/football/live.json';
 const ids=['tournament','match','venue','matchType','period','customText','home','homeColor','homeText','away','awayColor','awayText','accent','style','customColor','showDetails','showVenue','showPenalty','resultText','showResult'];
-let data={homeScore:0,awayScore:0,elapsed:0,running:false,event:null,homePens:0,awayPens:0,homeAttempts:0,awayAttempts:0,nextKicker:'home',showPenalty:'yes',showResult:'yes',resultText:''};let timer=null,ready=false,writeQueue=Promise.resolve(),lastWrite=0;
+let data={homeScore:0,awayScore:0,elapsed:0,running:false,event:null,homePens:0,awayPens:0,homeAttempts:0,awayAttempts:0,nextKicker:'home',showPenalty:'yes',showResult:'yes',resultText:'',resultWinnerSide:'',resultWinnerName:''};let timer=null,ready=false,writeQueue=Promise.resolve(),lastWrite=0;
 const $=id=>document.getElementById(id);
 function status(t,ok=false){$('connection').textContent=t;$('connection').style.background=ok?'#14543f':'#6b3b26'}
 function fmt(s){s=Math.max(0,Number(s)||0);return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0')}
@@ -39,8 +39,35 @@ function card(type){fireEvent(type,$('cardTeam').value,$('player').value)}
 function eventClear(){data.event=null;save()}
 function recordPenalty(side,scored){data[side+'Attempts']=(+data[side+'Attempts']||0)+1;if(scored)data[side+'Pens']=(+data[side+'Pens']||0)+1;if(!Array.isArray(data[side+'PenaltyResults']))data[side+'PenaltyResults']=[];data[side+'PenaltyResults'].push(!!scored);data.nextKicker=side==='home'?'away':'home';fireEvent(scored?'penalty-goal':'penalty-miss',side,'')}
 function resetPenalties(){data.homePens=data.awayPens=data.homeAttempts=data.awayAttempts=0;data.homePenaltyResults=[];data.awayPenaltyResults=[];data.nextKicker='home';data.event=null;save()}
-function setResultFromScore(){const h=+data.homeScore||0,a=+data.awayScore||0,hp=+data.homePens||0,ap=+data.awayPens||0,p=String(data.period||'').toLowerCase().includes('penalty')||(+data.homeAttempts||0)>0||(+data.awayAttempts||0)>0;data.resultText=h===a&&p&&hp!==ap?(data.home||'HOME')+' won on penalties '+hp+'–'+ap:h>a?(data.home||'HOME')+' won '+h+'–'+a:a>h?(data.away||'AWAY')+' won '+a+'–'+h:p?'Match drawn '+h+'–'+a+' • Penalties level '+hp+'–'+ap:'Match drawn '+h+'–'+a;data.showResult='yes';$('resultText').value=data.resultText;$('showResult').value='yes';save()}
-function clearResult(){data.resultText='';data.showResult='no';$('resultText').value='';$('showResult').value='no';save()}
+function setResultFromScore(){
+ const h=Number(data.homeScore)||0, a=Number(data.awayScore)||0;
+ const hp=Number(data.homePens)||0, ap=Number(data.awayPens)||0;
+ const ha=Number(data.homeAttempts)||0, aa=Number(data.awayAttempts)||0;
+ const home=String(data.home||'HOME').trim(), away=String(data.away||'AWAY').trim();
+ data.resultWinnerSide='';
+ data.resultWinnerName='';
+ if(h>a){
+   data.resultWinnerSide='home'; data.resultWinnerName=home;
+   data.resultText=home+' WON • '+h+' - '+a;
+ }else if(a>h){
+   data.resultWinnerSide='away'; data.resultWinnerName=away;
+   data.resultText=away+' WON • '+a+' - '+h;
+ }else if((ha+aa)>0 && hp>ap){
+   data.resultWinnerSide='home'; data.resultWinnerName=home;
+   data.resultText=home+' WON ON PENALTIES • '+hp+' - '+ap;
+ }else if((ha+aa)>0 && ap>hp){
+   data.resultWinnerSide='away'; data.resultWinnerName=away;
+   data.resultText=away+' WON ON PENALTIES • '+ap+' - '+hp;
+ }else{
+   data.resultWinnerSide='draw'; data.resultWinnerName='MATCH DRAWN';
+   data.resultText='MATCH DRAWN • '+h+' - '+a+(ha+aa>0?' • PENALTIES '+hp+' - '+ap:'');
+ }
+ data.showResult='yes';
+ $('resultText').value=data.resultText;
+ $('showResult').value='yes';
+ save();
+}
+function clearResult(){data.resultText='';data.resultWinnerSide='';data.resultWinnerName='';data.showResult='no';$('resultText').value='';$('showResult').value='no';save()}
 function publish(){readForm()}
 function copyLink(){navigator.clipboard.writeText(new URL('football-overlay.html',location.href).href).then(()=>alert('Overlay link copied')).catch(()=>alert('Copy failed. Copy the link shown above manually.'))}
 function openOverlay(){window.open('football-overlay.html','_blank')}
