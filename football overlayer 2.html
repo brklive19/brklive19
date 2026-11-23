@@ -1,95 +1,93 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>BRKLIVE19 Football Overlay</title>
+<title>BRKLIVE19 Football Live Overlay</title>
 <style>
-*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:transparent;font-family:Arial,Helvetica,sans-serif;color:white}
-#stage{position:absolute;inset:0;pointer-events:none}.lower{position:absolute;left:50%;bottom:5.5%;transform:translateX(-50%);width:min(92%,1500px);filter:drop-shadow(0 7px 15px #0009)}
-.meta{text-align:center;font-size:clamp(12px,1.25vw,22px);font-weight:800;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:7px;text-shadow:0 2px 5px #000}
-.scorebar{display:grid;grid-template-columns:1fr auto 1fr;align-items:stretch;min-height:76px;border-radius:10px;overflow:hidden;border:2px solid #ffffff33}
-.team{display:flex;align-items:center;gap:14px;padding:12px 22px;font-size:clamp(18px,2.3vw,38px);font-weight:900;text-transform:uppercase;min-width:0}
-.team span:first-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.home{justify-content:flex-end}.away{justify-content:flex-start}
-.numbers{display:flex;align-items:center;gap:10px;background:#081321;color:#fff;padding:8px 22px;font-size:clamp(28px,3.2vw,52px);font-weight:900;white-space:nowrap}
-.separator{font-size:.55em;color:#8fa6bd}.details{background:#07111feF;text-align:center;padding:7px 12px;font-size:clamp(10px,1vw,17px);font-weight:700;letter-spacing:.4px}
-
-.result-panel{display:none;background:#0b1a2c;color:#fff;text-align:center;padding:9px 12px;border-top:2px solid #f3c75b;font-size:clamp(15px,1.55vw,25px);font-weight:900;letter-spacing:.5px;text-transform:uppercase;text-shadow:0 2px 4px #000}
-.penalty-panel{display:none;background:#061426;color:#fff;text-align:center;padding:9px 14px;border-top:2px solid #59dcff;font-size:clamp(13px,1.35vw,22px);font-weight:900;letter-spacing:.4px;text-shadow:0 2px 4px #000}
-.penalty-summary{margin-bottom:7px}
-.penalty-attempts{display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:center;margin-top:5px}
-.penalty-team-row{display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap}
-.penalty-team-name{font-size:.82em;opacity:.9}
-.penalty-dots{display:inline-flex;gap:6px;align-items:center;min-height:17px;flex-wrap:wrap}
-.penalty-dot{width:13px;height:13px;border-radius:50%;display:inline-block;border:1px solid #ffffff88;box-shadow:0 0 6px currentColor}
-.penalty-dot.scored{background:#20d66b;color:#20d66b}
-.penalty-dot.missed{background:#f04452;color:#f04452}
-.penalty-empty{font-size:.75em;color:#9fb2c9;font-weight:500}
-.penalty-title{color:#59dcff}.penalty-next{font-size:.72em;color:#b9d5eb}
-
-.custom{position:absolute;right:2.5%;top:3%;font-weight:900;font-size:clamp(12px,1.3vw,22px);text-shadow:0 2px 5px #000;max-width:45%;text-align:right}
-.clock{position:absolute;left:2.5%;top:3%;background:#07111feF;border:1px solid #ffffff55;border-radius:6px;padding:7px 12px;font-weight:900;font-size:clamp(17px,2vw,30px)}
-.period{font-size:.48em;color:#b8d8ed;margin-left:7px}
-.event{position:absolute;left:50%;top:47%;transform:translate(-50%,-50%) scale(.65);opacity:0;background:linear-gradient(110deg,#061321ee,#14304dee);border:3px solid var(--accent);border-radius:18px;padding:22px 42px;text-align:center;min-width:min(70%,420px);box-shadow:0 0 35px #000b}
-.event.show{animation:pop 3s ease forwards}.event .big{font-size:clamp(40px,7vw,100px);font-weight:1000;line-height:1.05}.event .sub{font-size:clamp(17px,2vw,28px);font-weight:900;margin-top:5px;text-transform:uppercase}
-@keyframes pop{0%{opacity:0;transform:translate(-50%,-50%) scale(.45)}12%{opacity:1;transform:translate(-50%,-50%) scale(1.08)}22%{transform:translate(-50%,-50%) scale(1)}82%{opacity:1}100%{opacity:0;transform:translate(-50%,-50%) scale(.95)}}
-.style-solid .scorebar,.style-solid .details{background:#07111f}.style-light .numbers{background:#fff;color:#102033}.style-light .details{background:#fff;color:#102033}
-</style></head><body><div id="stage">
-<div class="clock" id="clock">00:00 <span class="period" id="period">1ST HALF</span></div><div class="custom" id="custom"></div>
-<div class="lower" id="lower"><div class="meta" id="meta"></div><div class="scorebar">
-<div class="team home" id="homeBox"><span id="home">HOME</span></div>
-<div class="numbers"><span id="hs">0</span><span class="separator">:</span><span id="as">0</span></div>
-<div class="team away" id="awayBox"><span id="away">AWAY</span></div>
-</div><div class="details" id="details">VENUE • MATCH TYPE</div><div class="result-panel" id="resultPanel"></div>
-<div class="penalty-panel" id="penaltyPanel">
- <div id="penaltySummary"></div>
- <div class="penalty-attempts">
-  <div class="penalty-team-row"><span class="penalty-team-name" id="homePenaltyName">HOME</span><span class="penalty-dots" id="homePenaltyDots"></span></div>
-  <div class="penalty-team-row"><span class="penalty-team-name" id="awayPenaltyName">AWAY</span><span class="penalty-dots" id="awayPenaltyDots"></span></div>
- </div>
-</div></div>
-<div class="event" id="event"><div class="big" id="eventBig">⚽ GOAL!</div><div class="sub" id="eventSub"></div></div>
-</div>
+:root{--accent:#7fffd4;--head:linear-gradient(180deg,#087b68,#062e3b);--detail:linear-gradient(90deg,#123e46,#25164b);--base:#071b28;--home:linear-gradient(100deg,#064d42,#12a889);--away:linear-gradient(100deg,#35145f,#853bd1);--scorebg:linear-gradient(135deg,#e4fff7,#72e8c5);--scorefg:#062c28;--mid:linear-gradient(180deg,#102d36,#160d2d);--custombg:#174b50;--customfg:#fff;--resultbg:#261346;--event:#55249b}
+*{box-sizing:border-box}
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:transparent;font-family:Arial,Helvetica,sans-serif}
+body{display:flex;align-items:flex-end;justify-content:center}
+#overlay{width:100%;padding:0 1.2vw 4vh;filter:drop-shadow(0 4px 7px #0009);position:relative}
+.tournament{width:max-content;max-width:76%;margin:0 auto -1px;padding:5px 22px 6px;border:2px solid var(--accent);border-bottom:0;border-radius:16px 16px 0 0;background:var(--head);color:#fff;text-align:center;font-weight:900;font-size:clamp(12px,1.45vw,25px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.details{display:none;text-align:center;color:#fff;background:var(--detail);font-size:clamp(9px,.9vw,15px);font-weight:700;padding:3px 8px}
+.bar{min-height:clamp(48px,5.1vw,88px);display:grid;grid-template-columns:minmax(0,1fr) clamp(52px,7vw,110px) clamp(74px,10vw,150px) clamp(52px,7vw,110px) minmax(0,1fr);border:2px solid var(--accent);border-radius:15px;overflow:hidden;background:var(--base)}
+.team{display:flex;align-items:center;justify-content:center;min-width:0;padding:5px 1vw;color:white;font-size:clamp(15px,2.25vw,38px);font-weight:1000;text-shadow:0 2px 4px #000;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.home{background:var(--home)}.away{background:var(--away)}
+.score{display:flex;align-items:center;justify-content:center;background:var(--scorebg);color:var(--scorefg);font-size:clamp(25px,3.7vw,62px);font-weight:1000}
+.mid{display:flex;flex-direction:column;align-items:center;justify-content:center;background:var(--mid);color:#fff;border-left:1px solid var(--accent);border-right:1px solid var(--accent);padding:3px}
+.period{font-size:clamp(9px,1vw,16px);font-weight:900;text-align:center}.clock{font-size:clamp(16px,2vw,31px);font-weight:1000;font-variant-numeric:tabular-nums}
+.meta{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;background:var(--detail);color:#fff;padding:3px 8px;font-size:clamp(9px,.95vw,15px);font-weight:800}
+.custom{display:none;text-align:center;background:var(--custombg);color:var(--customfg);font-weight:900;font-size:clamp(10px,1vw,16px);padding:3px 8px}
+.result{display:none;text-align:center;background:var(--resultbg);color:#fff;font-weight:1000;font-size:clamp(13px,1.5vw,24px);padding:5px 8px;border:2px solid var(--accent);border-top:0}
+.penalties{display:none;grid-template-columns:1fr 1fr;gap:8px;background:var(--detail);padding:5px 10px;border:1px solid var(--accent);border-top:0}
+.pen-team{display:flex;align-items:center;justify-content:center;gap:7px;min-width:0;color:#fff;font-size:clamp(9px,.95vw,15px);font-weight:900}
+.pen-name{max-width:38%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pen-count{white-space:nowrap;color:#fff}
+.pen-dots{display:flex;align-items:center;justify-content:center;gap:4px;flex-wrap:wrap}
+.pen-dot{width:clamp(10px,1.05vw,15px);height:clamp(10px,1.05vw,15px);border-radius:50%;display:inline-block;border:1px solid #ffffffa8;box-shadow:0 0 4px #0008}
+.pen-dot.scored{background:#20dc70;box-shadow:0 0 7px #20dc70a8}
+.pen-dot.missed{background:#ff334f;box-shadow:0 0 7px #ff334fa8}
+.pen-empty{font-size:9px;color:#c7d5e6}
+.event{position:fixed;left:50%;top:38%;transform:translate(-50%,-50%);display:none;padding:14px 30px;border-radius:14px;background:var(--event);border:3px solid var(--accent);color:white;font-size:clamp(28px,6vw,90px);font-weight:1000;text-shadow:0 3px 6px #000;white-space:nowrap}
+.event.show{display:block;animation:pop 1.8s ease both}@keyframes pop{0%{opacity:0;scale:.75}15%,75%{opacity:1;scale:1}100%{opacity:0;scale:1.05}}
+.live{position:fixed;right:1.5vw;top:1.5vh;color:white;font-size:clamp(10px,1vw,16px);font-weight:900;text-shadow:0 2px 4px #000}.live i{display:inline-block;width:9px;height:9px;border-radius:50%;background:#ff253c;margin-right:5px;animation:pulse 1s infinite}@keyframes pulse{50%{opacity:.35}}
+@media(max-width:600px){#overlay{padding-bottom:3vh}.bar{grid-template-columns:minmax(0,1fr) 38px 65px 38px minmax(0,1fr);min-height:48px}.team{font-size:clamp(11px,3vw,17px);white-space:normal;line-height:1.05}.tournament{max-width:90%;font-size:11px}.meta{gap:6px}}
+</style></head><body>
+<div class="live"><i></i>LIVE</div>
+<div id="overlay"><div class="tournament" id="tournament"></div><div class="details" id="details"></div>
+<div class="bar"><div class="team home" id="home"></div><div class="score" id="hs">0</div><div class="mid"><div class="period" id="period">1st Half</div><div class="clock" id="clock">00:00</div></div><div class="score" id="as">0</div><div class="team away" id="away"></div></div>
+<div class="meta" id="meta"></div><div class="penalties" id="pens">
+<div class="pen-team"><span class="pen-name" id="homePenName">HOME</span><span class="pen-count" id="homePenCount">0/0</span><span class="pen-dots" id="homePenDots"></span></div>
+<div class="pen-team"><span class="pen-name" id="awayPenName">AWAY</span><span class="pen-count" id="awayPenCount">0/0</span><span class="pen-dots" id="awayPenDots"></span></div>
+</div><div class="custom" id="custom"></div><div class="result" id="result"></div></div>
+<div class="event" id="event"></div>
 <script>
-const KEY='brklive19FootballOverlay';let lastStamp=0;
-function fmt(s){return String(Math.floor((s||0)/60)).padStart(2,'0')+':'+String((s||0)%60).padStart(2,'0')}
-function render(){let d={};try{d=JSON.parse(localStorage.getItem(KEY)||'{}')}catch(e){}
-const $=id=>document.getElementById(id);
-$('home').textContent=d.home||'HOME';$('away').textContent=d.away||'AWAY';$('hs').textContent=d.homeScore||0;$('as').textContent=d.awayScore||0;
-$('homeBox').style.background=d.homeColor||'#0878c9';$('homeBox').style.color=d.homeText||'#fff';$('awayBox').style.background=d.awayColor||'#d83b42';$('awayBox').style.color=d.awayText||'#fff';
-$('clock').firstChild.textContent=fmt(d.elapsed)+' ';$('period').textContent=(d.period||'1st Half').toUpperCase();
-$('meta').textContent=d.showDetails==='no'?'':[d.tournament,d.match].filter(Boolean).join('  •  ');
-$('details').textContent=d.showVenue==='no'?'':[d.venue,d.matchType].filter(Boolean).join('  •  ');
-$('custom').textContent=d.customText||'';$('custom').style.color=d.customColor||'#fff';
-const resultPanel=$('resultPanel');
-if(resultPanel){
- const resultText=String(d.resultText||'').trim();
- const showResult=d.showResult!=='no';
- resultPanel.style.display=(showResult && resultText)?'block':'none';
- resultPanel.textContent=(showResult && resultText)?'FULL TIME RESULT • '+resultText:'';
+const DB='https://brklive19-2bab4-default-rtdb.asia-southeast1.firebasedatabase.app/brklive19/football/live.json';
+const $=id=>document.getElementById(id);let lastEvent='';
+function txt(v,fallback=''){return v===undefined||v===null||v===''?fallback:String(v)}
+function fmt(v){v=Math.max(0,Number(v)||0);return String(Math.floor(v/60)).padStart(2,'0')+':'+String(v%60).padStart(2,'0')}
+function showEvent(e){if(!e||!e.stamp||String(e.stamp)===lastEvent)return;lastEvent=String(e.stamp);let names={'goal':'GOAL!','yellow':'YELLOW CARD','red':'RED CARD','penalty-goal':'PENALTY SCORED!','penalty-miss':'PENALTY MISSED'};let label=names[e.type]||String(e.type||'').toUpperCase();if(e.player)label+=' · '+e.player;$('event').textContent=label;$('event').classList.remove('show');void $('event').offsetWidth;$('event').classList.add('show')}
+async function refresh(){try{let r=await fetch(DB+'?t='+Date.now(),{cache:'no-store'});if(!r.ok)return;let d=await r.json()||{};
+const root=document.documentElement;
+if(d.accent)root.style.setProperty('--accent',d.accent);
+if(d.homeColor)root.style.setProperty('--home',`linear-gradient(100deg,${d.homeColor},${d.homeColor})`);
+if(d.awayColor)root.style.setProperty('--away',`linear-gradient(100deg,${d.awayColor},${d.awayColor})`);
+if(d.homeText) $('home').style.color=d.homeText;
+if(d.awayText) $('away').style.color=d.awayText;
+if(d.customColor)root.style.setProperty('--customfg',d.customColor);
+if(d.style==='solid'){root.style.setProperty('--detail','#071522');root.style.setProperty('--base','#071522')}
+else if(d.style==='light'){root.style.setProperty('--detail','#dce8f4');root.style.setProperty('--base','#dce8f4');$('details').style.color='#102033';$('meta').style.color='#102033'}
+
+$('tournament').textContent=txt(d.tournament,'Football Tournament');
+$('home').textContent=txt(d.home,'HOME');$('away').textContent=txt(d.away,'AWAY');
+$('hs').textContent=Number(d.homeScore)||0;$('as').textContent=Number(d.awayScore)||0;
+$('period').textContent=txt(d.period,'1st Half');$('clock').textContent=fmt(d.elapsed);
+$('tournament').style.display=d.showDetails==='no'?'none':'block';
+let detail=[];if(d.match)detail.push(d.match);if(d.showVenue!=='no'&&d.venue)detail.push(d.venue);if(d.showVenue!=='no'&&d.matchType)detail.push(d.matchType);
+$('details').textContent=detail.join('  •  ');$('details').style.display=d.showDetails==='no'||!detail.length?'none':'block';
+$('meta').textContent=d.customText||'';$('meta').style.display='none';
+$('custom').textContent=d.customText||'';$('custom').style.display=d.customText?'block':'none';
+const homeResults=Array.isArray(d.homePenaltyResults)?d.homePenaltyResults:[];
+const awayResults=Array.isArray(d.awayPenaltyResults)?d.awayPenaltyResults:[];
+$('homePenName').textContent=txt(d.home,'HOME');
+$('awayPenName').textContent=txt(d.away,'AWAY');
+$('homePenCount').textContent=(Number(d.homePens)||0)+'/'+(Number(d.homeAttempts)||0);
+$('awayPenCount').textContent=(Number(d.awayPens)||0)+'/'+(Number(d.awayAttempts)||0);
+function drawPenaltyDots(target,results,attempts){
+  target.innerHTML='';
+  const total=Math.max(results.length,Number(attempts)||0);
+  for(let i=0;i<total;i++){
+    const dot=document.createElement('span');
+    dot.className='pen-dot '+(results[i]===true?'scored':results[i]===false?'missed':'');
+    dot.title=results[i]===true?'Scored':results[i]===false?'Missed':'Attempt';
+    target.appendChild(dot);
+  }
+  if(!total){const empty=document.createElement('span');empty.className='pen-empty';empty.textContent='No kicks yet';target.appendChild(empty)}
 }
-const panel=$('penaltyPanel');
-if(panel){
- const ptext=String(d.period||'').toLowerCase();
- const attemptsH=Number(d.homeAttempts)||0, attemptsA=Number(d.awayAttempts)||0;
- const isPenalty=ptext.includes('penalty')||attemptsH>0||attemptsA>0;
- const visible=d.showPenalty!=='no';
- panel.style.display=(isPenalty&&visible)?'block':'none';
- if(isPenalty&&visible){
-  $('penaltySummary').innerHTML='<span class="penalty-title">PENALTY SHOOTOUT</span> &nbsp; '+
-   (d.home||'HOME')+' <b>'+(Number(d.homePens)||0)+' / '+attemptsH+'</b> — '+
-   '<b>'+(Number(d.awayPens)||0)+' / '+attemptsA+'</b> '+(d.away||'AWAY')+
-   ' &nbsp; <span class="penalty-next">NEXT: '+((d.nextKicker||'home')==='home'?(d.home||'HOME'):(d.away||'AWAY'))+'</span>';
-  $('homePenaltyName').textContent=d.home||'HOME';$('awayPenaltyName').textContent=d.away||'AWAY';
-  const dotHTML=arr=>Array.isArray(arr)&&arr.length?arr.map(v=>'<span class="penalty-dot '+(v?'scored':'missed')+'" title="'+(v?'Scored':'Missed')+'"></span>').join(''):'<span class="penalty-empty">No attempts yet</span>';
-  $('homePenaltyDots').innerHTML=dotHTML(d.homePenaltyResults);
-  $('awayPenaltyDots').innerHTML=dotHTML(d.awayPenaltyResults);
- }
-}
-$('stage').style.setProperty('--accent',d.accent||'#59dcff');$('lower').className='lower style-'+(d.style||'glass');
-if(d.event&&d.event.stamp&&d.event.stamp!==lastStamp){lastStamp=d.event.stamp;showEvent(d.event)}
-}
-function showEvent(e){let team=e.team==='home'?'home':'away';let name=e.team==='home'?(JSON.parse(localStorage.getItem(KEY)||'{}').home||'HOME'):(JSON.parse(localStorage.getItem(KEY)||'{}').away||'AWAY');
-let big=e.type==='goal'?'⚽ GOAL!':e.type==='yellow'?'🟨 YELLOW CARD':e.type==='red'?'🟥 RED CARD':e.type==='penalty-goal'?'⚽ PENALTY SCORED!':e.type==='penalty-miss'?'✕ PENALTY MISSED':'🟥 RED CARD';
-document.getElementById('eventBig').textContent=big;document.getElementById('eventSub').textContent=[name,e.player].filter(Boolean).join(' • ');
-let el=document.getElementById('event');el.classList.remove('show');void el.offsetWidth;el.classList.add('show');
-}
-render();setInterval(render,250);window.addEventListener('storage',render);
+drawPenaltyDots($('homePenDots'),homeResults,d.homeAttempts);
+drawPenaltyDots($('awayPenDots'),awayResults,d.awayAttempts);
+$('pens').style.display=d.showPenalty==='no'?'none':((Number(d.homeAttempts)||0)+(Number(d.awayAttempts)||0)>0?'grid':'none');
+$('result').textContent=d.resultText||'';$('result').style.display=d.showResult==='yes'&&d.resultText?'block':'none';
+showEvent(d.event);
+}catch(e){console.warn('Overlay sync error',e)}}
+refresh();setInterval(refresh,700);
 </script></body></html>
