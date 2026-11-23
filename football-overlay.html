@@ -1,71 +1,93 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>BRKLIVE19 Football Overlay</title>
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BRKLIVE19 Football Live Overlay</title>
 <style>
-*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:transparent;font-family:Arial,Helvetica,sans-serif;color:#fff}#stage{position:relative;width:100vw;height:100vh;background:transparent}.lower{position:absolute;left:3.5%;right:3.5%;bottom:5.5%;display:flex;align-items:stretch;min-height:72px;filter:drop-shadow(0 5px 14px #0009);opacity:0;transform:translateY(16px);transition:opacity .25s,transform .25s}.lower.show{opacity:1;transform:translateY(0)}.brand{background:#071525;border:2px solid var(--accent,#56dcff);border-right:0;border-radius:10px 0 0 10px;padding:6px 11px;min-width:155px;display:flex;flex-direction:column;justify-content:center}.brand b{font-size:19px;letter-spacing:2px;color:var(--accent,#5bdcff)}.brand small{font-size:10px;color:#d5e8f5;margin-top:5px;letter-spacing:1px}.main{flex:1;min-width:0;background:linear-gradient(110deg,#10233b,#071321);border:2px solid var(--accent,#56dcff);display:flex;align-items:stretch}.info{flex:1;min-width:0;padding:5px 10px;display:flex;flex-direction:column;justify-content:center}.tournament{font-size:13px;font-weight:800;color:#8ceaff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-transform:uppercase;text-align:center;width:100%;align-self:center}.match{font-size:11px;color:#d7e5f4;margin-top:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.teams{display:flex;align-items:center;justify-content:center;gap:14px;margin-top:6px;width:100%;}.team-block{min-width:0;max-width:38%;display:flex;flex-direction:column;align-items:center;gap:5px;flex:1 1 0}.team{padding:4px 8px;border-radius:5px;font-size:clamp(30px,3.2vw,38px);font-weight:900;min-width:0;width:100%;max-width:100%;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.05}.penalty-dots{display:flex;justify-content:center;align-items:center;gap:6px;min-height:19px;min-width:24px;flex-wrap:wrap;margin-top:2px}.penalty-dot{width:16px;height:16px;flex:0 0 16px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;border:2px solid #fff;box-shadow:0 0 0 1px #071321,0 0 7px #000;position:relative}.penalty-dot:after{content:'';width:5px;height:5px;border-radius:50%;background:#fff;box-shadow:0 0 0 1px #172334}.penalty-dot.scored{background:#12c95b}.penalty-dot.missed{background:#ef3340}.penalty-label{font-size:9px;font-weight:900;letter-spacing:.5px;color:#fff;text-shadow:0 1px 3px #000;margin-right:2px}.custom-center{display:none;text-align:center;margin-top:5px;font-size:15px;font-weight:900;letter-spacing:.4px;color:var(--custom-color,#fff);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-shadow:0 2px 5px #000;max-width:100%}.score{font-size:28px;font-weight:900;white-space:nowrap}.clock{margin-left:auto;background:#06101d;padding:0 14px 6px;display:flex;align-items:center;justify-content:center;min-width:88px;font-size:21px;font-weight:900;color:#ffe07a;border-left:1px solid #314964;transform:translateY(-5px)}.footer{background:#071525;border:2px solid var(--accent,#56dcff);border-left:0;border-radius:0 10px 10px 0;padding:5px 10px;min-width:125px;display:flex;flex-direction:column;justify-content:center;text-align:center}.footer strong{font-size:12px;color:var(--custom-color,#fff)}.footer span{font-size:10px;color:var(--accent,#8ceaff);margin-top:5px}.event{position:absolute;left:50%;top:28%;transform:translate(-50%,-50%) scale(.8);padding:18px 36px;border-radius:14px;background:#071525ee;border:3px solid var(--accent,#5bdcff);font-size:38px;font-weight:1000;letter-spacing:2px;opacity:0;transition:.2s;text-align:center;text-shadow:0 3px 8px #000}.event.show{opacity:1;transform:translate(-50%,-50%) scale(1)}#status{position:absolute;right:18px;top:14px;background:#071525cc;color:#8ceaff;padding:5px 9px;border-radius:5px;font-size:11px}#result{position:absolute;left:50%;bottom:20%;transform:translateX(-50%);padding:12px 25px;background:#071525ee;border:2px solid #ffe07a;border-radius:9px;font-size:23px;font-weight:900;display:none;white-space:nowrap}.result-mode .lower,.result-mode .event,.result-mode #status{display:none!important}.result-mode #result{display:flex!important;position:absolute;left:3.5%;right:3.5%;bottom:5.5%;top:auto;width:auto;min-height:72px;align-items:center;justify-content:center;transform:none;max-width:none;white-space:normal;text-align:center;padding:10px 22px;font-size:clamp(18px,2.4vw,30px);line-height:1.15;box-shadow:0 5px 18px #000b;border:2px solid #ffe07a;border-radius:10px;background:#071525ee}@media(max-width:900px){.lower{left:2%;right:2%;bottom:3%;min-height:58px}.brand{min-width:105px;padding:4px}.brand b{font-size:14px}.brand small{font-size:9px}.info{padding:4px 7px}.tournament{font-size:10px}.match{font-size:9px}.teams{gap:7px;margin-top:5px;justify-content:center}.team-block{min-width:0;max-width:40%;}.penalty-dots{gap:3px}.penalty-dot{width:12px;height:12px;flex-basis:12px}.penalty-dot:after{width:4px;height:4px}.penalty-label{font-size:8px}.custom-center{font-size:11px;margin-top:4px}.team{font-size:clamp(24px,5vw,30px);min-width:0;padding:3px 4px}.score{font-size:19px}.clock{min-width:58px;padding:0 6px 5px;font-size:15px;transform:translateY(-3px)}.footer{min-width:88px;padding:4px}.footer strong{font-size:9px}.footer span{font-size:8px}}
-.result-mode #result{left:2%;right:2%;bottom:3%;min-height:58px;padding:8px 12px;font-size:clamp(16px,4vw,23px)}
-
-/* BRKLIVE19 blue background theme */
-.brand,.footer{background:#063b78 !important;border-color:#42a5ff !important}
-.main{background:linear-gradient(110deg,#0878d1 0%,#064a91 55%,#032d5c 100%) !important;border-color:#42a5ff !important}
-.clock{background:#032b57 !important;border-left-color:#4b9be8 !important}
-.event{background:#0756a5ee !important;border-color:#70c5ff !important}
-#result,.result-mode #result{background:linear-gradient(110deg,#0878d1,#032d5c) !important;border-color:#8acbff !important}
-.tournament{color:#ffffff !important}
-
-/* BRKLIVE19 display entrance animations + visibility improvements */
-@keyframes lowerReveal{0%{opacity:0;transform:translateY(42px) scale(.96);filter:blur(5px)}65%{opacity:1;transform:translateY(-4px) scale(1.005);filter:blur(0)}100%{opacity:1;transform:translateY(0) scale(1)}}
-@keyframes panelReveal{0%{opacity:0;clip-path:inset(0 50% 0 50%)}100%{opacity:1;clip-path:inset(0 0 0 0)}}
-@keyframes resultReveal{0%{opacity:0;transform:translateY(30px) scale(.92);filter:blur(4px)}70%{opacity:1;transform:translateY(-3px) scale(1.01);filter:blur(0)}100%{opacity:1;transform:translateY(0) scale(1)}}
-@keyframes eventPop{0%{opacity:0;transform:translate(-50%,-50%) scale(.55) rotate(-2deg)}70%{opacity:1;transform:translate(-50%,-50%) scale(1.06)}100%{opacity:1;transform:translate(-50%,-50%) scale(1)}}
-.lower{min-height:98px;align-items:stretch;gap:0}
-.lower.show{animation:lowerReveal .72s cubic-bezier(.2,.8,.2,1) both}
-.lower.show .brand{animation:panelReveal .65s .08s both}
-.lower.show .main{animation:panelReveal .65s .16s both}
-.lower.show .footer{animation:panelReveal .65s .24s both}
-.info{padding:7px 12px;gap:1px}
-.tournament{font-size:15px;line-height:1.2;white-space:normal;overflow-wrap:anywhere;text-overflow:clip}
-.match{font-size:12px;line-height:1.2;white-space:normal;overflow-wrap:anywhere;text-overflow:clip;margin-top:3px}
-.teams{gap:10px;margin-top:5px;align-items:center}
-.team-block{max-width:40%;gap:3px}
-.team{font-size:clamp(25px,3vw,36px);white-space:normal;overflow-wrap:anywhere;text-overflow:clip;line-height:1.02;padding:3px 5px}
-.score{font-size:clamp(22px,2.3vw,30px)}
-.custom-center{white-space:normal;overflow-wrap:anywhere;line-height:1.1}
-.footer{min-width:120px}
-.event.show{animation:eventPop .42s cubic-bezier(.2,.8,.2,1) both}
-.result-mode #result{animation:resultReveal .7s cubic-bezier(.2,.8,.2,1) both;white-space:normal;overflow-wrap:anywhere}
-@media(max-width:900px){
- .lower{min-height:86px;left:1.5%;right:1.5%;bottom:2.5%}
- .brand{min-width:82px;padding:4px}
- .brand b{font-size:12px;letter-spacing:1px}
- .brand small{font-size:8px;letter-spacing:.4px}
- .info{padding:4px 5px}
- .tournament{font-size:11px;line-height:1.1}
- .match{font-size:9px;line-height:1.1;margin-top:2px}
- .teams{gap:4px;margin-top:3px}
- .team-block{max-width:42%;gap:2px}
- .team{font-size:clamp(19px,4.2vw,27px);padding:2px;line-height:1.0}
- .score{font-size:clamp(16px,3vw,22px)}
- .clock{min-width:52px;padding:0 4px 3px;font-size:14px}
- .footer{min-width:68px;padding:3px}
- .footer strong{font-size:8px}.footer span{font-size:7px}
- .custom-center{font-size:10px;margin-top:2px}
- .penalty-dots{min-height:13px;margin-top:1px}
-}
-@media(prefers-reduced-motion:reduce){.lower.show,.lower.show .brand,.lower.show .main,.lower.show .footer,.event.show,.result-mode #result{animation:none!important}}
-
-</style></head><body><div id="stage"><div id="status">BRKLIVE19 • CONNECTING</div><div class="event" id="event"></div><div id="result"></div><div class="lower" id="lower"><div class="brand"><b>BRKLIVE19</b><small>LIVE FOOTBALL</small></div><div class="main"><div class="info"><div class="tournament" id="tournament">FOOTBALL TOURNAMENT</div><div class="match" id="match">MATCH</div><div class="teams"><div class="team-block"><div class="team" id="home">HOME</div><div class="penalty-dots" id="homePenaltyDots"></div></div><div class="score"><span id="hs">0</span> - <span id="as">0</span></div><div class="team-block"><div class="team" id="away">AWAY</div><div class="penalty-dots" id="awayPenaltyDots"></div></div></div><div class="custom-center" id="customCenter"></div></div><div class="clock" id="clock">00:00</div></div><div class="footer"><strong id="period">1ST HALF</strong><span id="venue">BRKLIVE19</span><span id="pens"></span></div></div></div>
+:root{--accent:#7fffd4;--head:linear-gradient(180deg,#087b68,#062e3b);--detail:linear-gradient(90deg,#123e46,#25164b);--base:#071b28;--home:linear-gradient(100deg,#064d42,#12a889);--away:linear-gradient(100deg,#35145f,#853bd1);--scorebg:linear-gradient(135deg,#e4fff7,#72e8c5);--scorefg:#062c28;--mid:linear-gradient(180deg,#102d36,#160d2d);--custombg:#174b50;--customfg:#fff;--resultbg:#261346;--event:#55249b}
+*{box-sizing:border-box}
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:transparent;font-family:Arial,Helvetica,sans-serif}
+body{display:flex;align-items:flex-end;justify-content:center}
+#overlay{width:100%;padding:0 1.2vw 4vh;filter:drop-shadow(0 4px 7px #0009);position:relative}
+.tournament{width:max-content;max-width:76%;margin:0 auto -1px;padding:5px 22px 6px;border:2px solid var(--accent);border-bottom:0;border-radius:16px 16px 0 0;background:var(--head);color:#fff;text-align:center;font-weight:900;font-size:clamp(12px,1.45vw,25px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.details{display:none;text-align:center;color:#fff;background:var(--detail);font-size:clamp(9px,.9vw,15px);font-weight:700;padding:3px 8px}
+.bar{min-height:clamp(48px,5.1vw,88px);display:grid;grid-template-columns:minmax(0,1fr) clamp(52px,7vw,110px) clamp(74px,10vw,150px) clamp(52px,7vw,110px) minmax(0,1fr);border:2px solid var(--accent);border-radius:15px;overflow:hidden;background:var(--base)}
+.team{display:flex;align-items:center;justify-content:center;min-width:0;padding:5px 1vw;color:white;font-size:clamp(15px,2.25vw,38px);font-weight:1000;text-shadow:0 2px 4px #000;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.home{background:var(--home)}.away{background:var(--away)}
+.score{display:flex;align-items:center;justify-content:center;background:var(--scorebg);color:var(--scorefg);font-size:clamp(25px,3.7vw,62px);font-weight:1000}
+.mid{display:flex;flex-direction:column;align-items:center;justify-content:center;background:var(--mid);color:#fff;border-left:1px solid var(--accent);border-right:1px solid var(--accent);padding:3px}
+.period{font-size:clamp(9px,1vw,16px);font-weight:900;text-align:center}.clock{font-size:clamp(16px,2vw,31px);font-weight:1000;font-variant-numeric:tabular-nums}
+.meta{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;background:var(--detail);color:#fff;padding:3px 8px;font-size:clamp(9px,.95vw,15px);font-weight:800}
+.custom{display:none;text-align:center;background:var(--custombg);color:var(--customfg);font-weight:900;font-size:clamp(10px,1vw,16px);padding:3px 8px}
+.result{display:none;text-align:center;background:var(--resultbg);color:#fff;font-weight:1000;font-size:clamp(13px,1.5vw,24px);padding:5px 8px;border:2px solid var(--accent);border-top:0}
+.penalties{display:none;grid-template-columns:1fr 1fr;gap:8px;background:var(--detail);padding:5px 10px;border:1px solid var(--accent);border-top:0}
+.pen-team{display:flex;align-items:center;justify-content:center;gap:7px;min-width:0;color:#fff;font-size:clamp(9px,.95vw,15px);font-weight:900}
+.pen-name{max-width:38%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pen-count{white-space:nowrap;color:#fff}
+.pen-dots{display:flex;align-items:center;justify-content:center;gap:4px;flex-wrap:wrap}
+.pen-dot{width:clamp(10px,1.05vw,15px);height:clamp(10px,1.05vw,15px);border-radius:50%;display:inline-block;border:1px solid #ffffffa8;box-shadow:0 0 4px #0008}
+.pen-dot.scored{background:#20dc70;box-shadow:0 0 7px #20dc70a8}
+.pen-dot.missed{background:#ff334f;box-shadow:0 0 7px #ff334fa8}
+.pen-empty{font-size:9px;color:#c7d5e6}
+.event{position:fixed;left:50%;top:38%;transform:translate(-50%,-50%);display:none;padding:14px 30px;border-radius:14px;background:var(--event);border:3px solid var(--accent);color:white;font-size:clamp(28px,6vw,90px);font-weight:1000;text-shadow:0 3px 6px #000;white-space:nowrap}
+.event.show{display:block;animation:pop 1.8s ease both}@keyframes pop{0%{opacity:0;scale:.75}15%,75%{opacity:1;scale:1}100%{opacity:0;scale:1.05}}
+.live{position:fixed;right:1.5vw;top:1.5vh;color:white;font-size:clamp(10px,1vw,16px);font-weight:900;text-shadow:0 2px 4px #000}.live i{display:inline-block;width:9px;height:9px;border-radius:50%;background:#ff253c;margin-right:5px;animation:pulse 1s infinite}@keyframes pulse{50%{opacity:.35}}
+@media(max-width:600px){#overlay{padding-bottom:3vh}.bar{grid-template-columns:minmax(0,1fr) 38px 65px 38px minmax(0,1fr);min-height:48px}.team{font-size:clamp(11px,3vw,17px);white-space:normal;line-height:1.05}.tournament{max-width:90%;font-size:11px}.meta{gap:6px}}
+</style></head><body>
+<div class="live"><i></i>LIVE</div>
+<div id="overlay"><div class="tournament" id="tournament"></div><div class="details" id="details"></div>
+<div class="bar"><div class="team home" id="home"></div><div class="score" id="hs">0</div><div class="mid"><div class="period" id="period">1st Half</div><div class="clock" id="clock">00:00</div></div><div class="score" id="as">0</div><div class="team away" id="away"></div></div>
+<div class="meta" id="meta"></div><div class="penalties" id="pens">
+<div class="pen-team"><span class="pen-name" id="homePenName">HOME</span><span class="pen-count" id="homePenCount">0/0</span><span class="pen-dots" id="homePenDots"></span></div>
+<div class="pen-team"><span class="pen-name" id="awayPenName">AWAY</span><span class="pen-count" id="awayPenCount">0/0</span><span class="pen-dots" id="awayPenDots"></span></div>
+</div><div class="custom" id="custom"></div><div class="result" id="result"></div></div>
+<div class="event" id="event"></div>
 <script>
-const DB_URL='https://brklive19-2bab4-default-rtdb.asia-southeast1.firebasedatabase.app/brklive19/football/live.json';const $=id=>document.getElementById(id);let lastEventStamp=0;
-function time(s){s=Math.max(0,Number(s)||0);return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0')}
-function showEvent(ev){if(!ev||!ev.stamp||ev.stamp===lastEventStamp)return;lastEventStamp=ev.stamp;const labels={goal:'GOAL!',yellow:'YELLOW CARD',red:'RED CARD','penalty-goal':'PENALTY GOAL!','penalty-miss':'PENALTY MISSED'};let t=labels[ev.type]||String(ev.type||'').replaceAll('-',' ').toUpperCase();if(ev.team)t+=' • '+(ev.team==='home'?'HOME':'AWAY');if(ev.player)t+=' • '+ev.player;$('event').textContent=t;$('event').classList.add('show');setTimeout(()=>$('event').classList.remove('show'),3500)}
-function renderPenaltyDots(side,d){
- const box=$(side+'PenaltyDots');box.replaceChildren();
- if(d.showPenalty==='no')return;
- const raw=d[side+'PenaltyResults'];
- const results=Array.isArray(raw)?raw:(raw&&typeof raw==='object'?Object.keys(raw).sort((a,b)=>Number(a)-Number(b)).map(k=>raw[k]):[]);
- if(!results.length)return;
- const label=document.createElement('span');label.className='penalty-label';label.textContent='PEN';box.appendChild(label);
- results.forEach((value,i)=>{const scored=value===true||value===1||value==='true';const ball=document.createElement('span');ball.className='penalty-dot '+(scored?'scored':'missed');ball.title='Penalty '+(i+1)+': '+(scored?'Scored':'Missed');ball.setAttribute('aria-label',scored?'Penalty scored':'Penalty missed');box.appendChild(ball)});
+const DB='https://brklive19-2bab4-default-rtdb.asia-southeast1.firebasedatabase.app/brklive19/football/live.json';
+const $=id=>document.getElementById(id);let lastEvent='';
+function txt(v,fallback=''){return v===undefined||v===null||v===''?fallback:String(v)}
+function fmt(v){v=Math.max(0,Number(v)||0);return String(Math.floor(v/60)).padStart(2,'0')+':'+String(v%60).padStart(2,'0')}
+function showEvent(e){if(!e||!e.stamp||String(e.stamp)===lastEvent)return;lastEvent=String(e.stamp);let names={'goal':'GOAL!','yellow':'YELLOW CARD','red':'RED CARD','penalty-goal':'PENALTY SCORED!','penalty-miss':'PENALTY MISSED'};let label=names[e.type]||String(e.type||'').toUpperCase();if(e.player)label+=' · '+e.player;$('event').textContent=label;$('event').classList.remove('show');void $('event').offsetWidth;$('event').classList.add('show')}
+async function refresh(){try{let r=await fetch(DB+'?t='+Date.now(),{cache:'no-store'});if(!r.ok)return;let d=await r.json()||{};
+const root=document.documentElement;
+if(d.accent)root.style.setProperty('--accent',d.accent);
+if(d.homeColor)root.style.setProperty('--home',`linear-gradient(100deg,${d.homeColor},${d.homeColor})`);
+if(d.awayColor)root.style.setProperty('--away',`linear-gradient(100deg,${d.awayColor},${d.awayColor})`);
+if(d.homeText) $('home').style.color=d.homeText;
+if(d.awayText) $('away').style.color=d.awayText;
+if(d.customColor)root.style.setProperty('--customfg',d.customColor);
+if(d.style==='solid'){root.style.setProperty('--detail','#071522');root.style.setProperty('--base','#071522')}
+else if(d.style==='light'){root.style.setProperty('--detail','#dce8f4');root.style.setProperty('--base','#dce8f4');$('details').style.color='#102033';$('meta').style.color='#102033'}
+
+$('tournament').textContent=txt(d.tournament,'Football Tournament');
+$('home').textContent=txt(d.home,'HOME');$('away').textContent=txt(d.away,'AWAY');
+$('hs').textContent=Number(d.homeScore)||0;$('as').textContent=Number(d.awayScore)||0;
+$('period').textContent=txt(d.period,'1st Half');$('clock').textContent=fmt(d.elapsed);
+$('tournament').style.display=d.showDetails==='no'?'none':'block';
+let detail=[];if(d.match)detail.push(d.match);if(d.showVenue!=='no'&&d.venue)detail.push(d.venue);if(d.showVenue!=='no'&&d.matchType)detail.push(d.matchType);
+$('details').textContent=detail.join('  •  ');$('details').style.display=d.showDetails==='no'||!detail.length?'none':'block';
+$('meta').textContent=d.customText||'';$('meta').style.display='none';
+$('custom').textContent=d.customText||'';$('custom').style.display=d.customText?'block':'none';
+const homeResults=Array.isArray(d.homePenaltyResults)?d.homePenaltyResults:[];
+const awayResults=Array.isArray(d.awayPenaltyResults)?d.awayPenaltyResults:[];
+$('homePenName').textContent=txt(d.home,'HOME');
+$('awayPenName').textContent=txt(d.away,'AWAY');
+$('homePenCount').textContent=(Number(d.homePens)||0)+'/'+(Number(d.homeAttempts)||0);
+$('awayPenCount').textContent=(Number(d.awayPens)||0)+'/'+(Number(d.awayAttempts)||0);
+function drawPenaltyDots(target,results,attempts){
+  target.innerHTML='';
+  const total=Math.max(results.length,Number(attempts)||0);
+  for(let i=0;i<total;i++){
+    const dot=document.createElement('span');
+    dot.className='pen-dot '+(results[i]===true?'scored':results[i]===false?'missed':'');
+    dot.title=results[i]===true?'Scored':results[i]===false?'Missed':'Attempt';
+    target.appendChild(dot);
+  }
+  if(!total){const empty=document.createElement('span');empty.className='pen-empty';empty.textContent='No kicks yet';target.appendChild(empty)}
 }
-function render(d){d=d||{};const accent=d.accent||'#56dcff';document.documentElement.style.setProperty('--accent',accent);document.documentElement.style.setProperty('--custom-color',d.customColor||'#ffffff');$('tournament').textContent=d.showDetails==='no'?'':(d.tournament||'FOOTBALL TOURNAMENT');$('match').textContent=d.showDetails==='no'?'':[d.match,d.showVenue==='no'?'':d.venue].filter(Boolean).join(' • ');$('home').textContent=d.home||'HOME';$('away').textContent=d.away||'AWAY';$('hs').textContent=d.homeScore??0;$('as').textContent=d.awayScore??0;$('clock').textContent=time(d.elapsed);$('period').textContent=d.period||'1ST HALF';$('venue').textContent=d.venue||'BRKLIVE19';$('venue').style.display=(d.showVenue==='no'||!d.venue)?'none':'';$('customCenter').textContent=d.customText||'';$('customCenter').style.display=d.customText?'block':'none';$('home').style.background=d.homeColor||'#0878c9';$('home').style.color=d.homeText||'#ffffff';$('away').style.background=d.awayColor||'#d83b42';$('away').style.color=d.awayText||'#ffffff';const hasPens=(Number(d.homeAttempts)||Number(d.awayAttempts));$('pens').textContent=d.showPenalty==='no'||!hasPens?'':'PEN '+(d.homePens||0)+'-'+(d.awayPens||0);renderPenaltyDots('home',d);renderPenaltyDots('away',d);$('lower').classList.add('show');const resultDeclared=d.showResult==='yes'&&String(d.resultText||'').trim().length>0;if(resultDeclared){$('result').textContent=d.resultText;$('result').style.display='block';$('stage').classList.add('result-mode');$('event').classList.remove('show')}else{$('result').style.display='none';$('stage').classList.remove('result-mode');showEvent(d.event)}}
-async function poll(){try{const r=await fetch(DB_URL+'?t='+Date.now(),{cache:'no-store'});if(!r.ok)throw new Error('HTTP '+r.status);const d=await r.json();render(d);$('status').textContent='BRKLIVE19 • LIVE DATA CONNECTED';$('status').style.color='#72f0b2'}catch(e){$('status').textContent='BRKLIVE19 • WAITING FOR DATA';$('status').style.color='#ffd36a';console.warn('Firebase read failed:',e)}}poll();setInterval(poll,1000);
+drawPenaltyDots($('homePenDots'),homeResults,d.homeAttempts);
+drawPenaltyDots($('awayPenDots'),awayResults,d.awayAttempts);
+$('pens').style.display=d.showPenalty==='no'?'none':((Number(d.homeAttempts)||0)+(Number(d.awayAttempts)||0)>0?'grid':'none');
+$('result').textContent=d.resultText||'';$('result').style.display=d.showResult==='yes'&&d.resultText?'block':'none';
+showEvent(d.event);
+}catch(e){console.warn('Overlay sync error',e)}}
+refresh();setInterval(refresh,700);
 </script></body></html>
